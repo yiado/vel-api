@@ -1,0 +1,1851 @@
+App.InfraStructure.copiedNodes = new Array();
+
+App.InfraStructure.allowRootGui = true;
+
+App.InfraStructure.OtrosDatosComboTotal = 0;
+App.InfraStructure.OtrosDatosLoadMask = null;
+
+App.InfraStructure.treeSearchToolBar = 
+    [{
+        xtype: 'textfield',
+        id: 'App.InfraStructure.Search.TextBox',
+        name: 'node_name',
+        enableKeyEvents: true,
+        listeners: 
+        {
+            'keyup': function(tf, e)
+            {
+                if (e.keyCode == 13) 
+                {
+                    App.InfraStructure.Search.Store.setBaseParam('node_id', App.Interface.selectedNodeId);
+                    App.InfraStructure.Search.Store.setBaseParam('node_name', tf.getValue());
+                    App.InfraStructure.Search.Store.load();
+                    App.InfraStructure.searchWindowObject.form.hide();
+                    App.InfraStructure.searchWindowObject.resultGrid.show();
+                    App.InfraStructure.searchWindowObject.resultGrid.doLayout();
+                    App.InfraStructure.searchWindowObject.show();
+                }
+            }
+        }
+    }, {
+        xtype: 'spacer',
+        width: 5
+    }, {
+        xtype: 'button',
+        ref: '../filter_button',
+        text: App.Language.General.filters,
+        iconCls: 'filter_icon',
+        handler: function(b)
+        {
+            App.InfraStructure.searchWindowObject.show();
+        }
+    }];
+
+App.Interface.addToModuleMenu('infra', 
+{
+    xtype: 'button',
+    text: App.Language.Infrastructure.infrastructure,
+    iconCls: 'infrastructure_icon_32',
+    scale: 'large',
+    module: 'InfraStructure',
+    iconAlign: 'top'
+});
+
+App.InfraStructure.Principal = Ext.extend(Ext.TabPanel, 
+{
+    activeTab: 0,
+    border: false,
+    id: 'App.InfraStructure.Principal',
+    listeners: 
+    {
+        'tabchange': function(t, p)
+        {
+            p.doLayout();
+        }
+    },
+    initComponent: function()
+    {
+        this.selModel = new Ext.grid.CheckboxSelectionModel
+        ({
+            checkOnly: false
+        });
+        this.items = 
+        [{
+            xtype: 'grid',
+            ref: 'grid',
+            title: App.Language.Infrastructure.infrastructure,
+            border: false,
+            loadMask: true,
+            selModel: this.selModel,
+            viewConfig: 
+            {
+                forceFit: true
+            },
+            store: App.InfraStructure.Store.Principal,
+            listeners: 
+            {
+                'render': function(g)
+                {
+                    g.getStore().load();
+                },
+                'rowdblclick': function(grid, rowIndex)
+                {
+                    if (App.Security.Actions['5003']) {
+						App.InfraStructure.editNode(grid.getStore().getAt(rowIndex).data);
+					}
+                }
+            },
+            tbar: 
+            [{
+                text: App.Language.Infrastructure.root,
+                iconCls: 'root_up_icon',
+                handler: function()
+                {
+                    App.InfraStructure.Principal.expand('root');
+                }
+            }, {
+                xtype: 'spacer',
+                width: 5
+            }, {
+                text: App.Language.Infrastructure.level_up,
+                iconCls: 'level_up_icon',
+                handler: function()
+                {
+                    node = Ext.getCmp('App.StructureTree.Tree').getNodeById(App.Interface.selectedNodeId);
+                    if (node.parentNode) 
+                        App.InfraStructure.Principal.expand(node.parentNode.id);
+                }
+            }, {
+                xtype: 'tbseparator',
+                width: 10
+            }, App.ModuleActions[5005], 
+            {
+                xtype: 'spacer',
+                width: 5
+            }, App.ModuleActions[5003], 
+            {
+                xtype: 'spacer',
+                width: 5
+            }, App.ModuleActions[5002], 
+            {
+                xtype: 'spacer',
+                width: 5
+            }, {
+                xtype: 'tbseparator',
+                width: 10
+            }, 
+            App.ModuleActions[5008]
+            ],
+            columns: [this.selModel, 
+            {
+                header: App.Language.General.name,
+                sortable: true,
+                dataIndex: 'node_name',
+                renderer: function(value, metaData, record)
+                {
+                    return "<div style='background-image: url(" + record.data.icon + "); background-repeat: no-repeat; height: 16; width: 16; float: left; padding-left: 20; padding-top: 2'><a href='javascript: App.InfraStructure.Principal.expand(" + record.data.node_id + ")'>" + value + "</a></div>";
+                }
+            }, {
+                header: App.Language.General.category,
+                sortable: true,
+                dataIndex: 'node_type_category_name'
+            }, {
+                header: App.Language.General.type,
+                sortable: true,
+                dataIndex: 'node_type_name'
+            }]
+        }, {
+            xtype: 'form',
+            ref: 'otherdata',
+            labelWidth: 300,
+            title: 'Datos',
+            padding: 5,
+            border: false,
+            bodyStyle: 'overflowY: auto',
+            listeners: 
+            {
+                'render': function()
+                {
+                    App.InfraStructure.OtrosDatos.Store.on('beforeload', function(){
+                        Ext.getCmp('App.InfraStructure.Principal').otherdata.getTopToolbar().hide();
+                        App.InfraStructure.OtrosDatosLoadMask = new Ext.LoadMask(Ext.getCmp('App.InfraStructure.Principal').otherdata.getEl(), 
+                        {
+                            msg: App.Language.General.message_loading_information,
+                            store: App.InfraStructure.OtrosDatos.Store
+                        });
+                        App.InfraStructure.OtrosDatosLoadMask.show();
+                    });
+                },
+                'destroy': function()
+                {
+                    App.InfraStructure.OtrosDatos.Store.purgeListeners();
+                }
+            },
+            tbar: 
+            {
+                xtype: 'toolbar',
+                hidden: true,
+                items: [App.ModuleActions[5004]]
+            }
+        }, {
+            xtype: 'gmappanel',
+            ref: 'map',
+            title: App.Language.Infrastructure.map,
+            zoomLevel: parseFloat(infra_default_zoomLevel),
+            gmapType: 'map',
+            mapTypeId: eval(infra_default_map),
+            mapConfOpts: ['enableScrollWheelZoom', 'enableDoubleClickZoom', 'enableDragging'],
+            mapControls: ['GSmallMapControl', 'GMapTypeControl', 'NonExistantControl'],
+            setCenter: 
+            {
+                geoCodeAddr: infra_default_start
+            },
+            listeners: 
+            {
+                'render': function()
+                {
+                    App.InfraStructure.Coordinate.Store.on('beforeload', function()
+                    {
+                        new Ext.LoadMask(Ext.getCmp('App.InfraStructure.Principal').map.getEl(), 
+                        {
+                            msg: App.Language.General.message_loading_information,
+                            store: App.InfraStructure.Coordinate.Store
+                        }).show();
+                    });
+                },
+                'destroy': function()
+                {
+                    App.InfraStructure.Info.Store.purgeListeners();
+                }
+            },
+            tbar: App.ModuleActions[5006]
+        }
+    ]
+        App.InfraStructure.Principal.superclass.initComponent.call(this);
+    }
+});
+
+App.InfraStructure.Principal.listener = function(node)
+{
+    if (node && node.id) 
+    {
+        App.InfraStructure.Store.Principal.setBaseParam('node', node.id);
+        App.InfraStructure.OtrosDatos.Store.setBaseParam('node_id', node.id);
+        App.InfraStructure.Coordinate.Store.setBaseParam('node_id', node.id);        
+    }
+    
+    Ext.getCmp('App.InfraStructure.Principal').otherdata.removeAll();
+    Ext.getCmp('App.InfraStructure.Principal').otherdata.doLayout();
+    App.InfraStructure.Store.Principal.load();
+    
+    App.InfraStructure.OtrosDatos.Store.load
+    ({
+        callback: function()
+        {
+            if (typeof Ext.getCmp('App.InfraStructure.Principal') != "undefined") 
+            { 
+                
+                 Ext.Ajax.request({
+                    url: 'index.php/infra/infrainfo/get',
+                    params: {
+                        node_id: node.id
+                    },
+                    success: function(response) {
+
+                        response = Ext.decode(response.responseText);
+
+                        aux = new Ext.form.FieldSet({
+                            title: App.Language.Infrastructure.structural_data,
+                            layout: 'form',
+                            collapsible: true,
+                            labelWidth: 150
+                        });
+
+                        for (i in response.resultsInfraInfo) {
+
+                            record = response.resultsInfraInfo[i];
+
+                            if (typeof record === 'object') {
+
+                                field = App.InfraStructure.Info.fields[record.field];
+                                //El fieldLabel se setea en la variable field(infraestructure/base.js).
+                                if (field.xtype == 'combo' && parseInt(record.value, 10) > 0) {
+                                    field.disabled = false;
+                                }
+                                field.value = record.value;
+                                aux.add(field);
+
+                            }
+
+                        }
+                        if (node.id != 'root'){
+                             if (response.resultsInfraInfo.length) 
+                            {
+                                Ext.getCmp('App.InfraStructure.Principal').otherdata.add(aux);
+                                Ext.getCmp('App.InfraStructure.Principal').otherdata.doLayout();
+                            }
+                            
+                        }
+                       
+
+                        for (i in response.resultsInfraOtherData) {
+
+                            if (typeof response.resultsInfraOtherData[i] === 'object') {
+                                aux = new Ext.form.FieldSet({
+                                    title: response.resultsInfraOtherData[i].infra_grupo_nombre,
+                                    layout: 'form',
+                                    collapsible: true,
+                                    labelWidth: 150
+                                });
+
+                                for (x in response.resultsInfraOtherData[i].InfraOtherDataAttribute) {
+
+                                    record = response.resultsInfraOtherData[i].InfraOtherDataAttribute[x];
+                                    if (typeof record === 'object') {
+
+                                        field = App.InfraStructure.OtrosDatos.fields[record.infra_other_data_attribute_type];
+                                        if (record.InfraOtherDataValue[0]){
+                                            if (record.InfraOtherDataValue[0].infra_other_data_option_id != null){ //Tipo Combo
+                                                field.value = record.InfraOtherDataValue[0].infra_other_data_option_id;
+                                            } else {
+                                                field.value = (record.InfraOtherDataValue[0] ? record.InfraOtherDataValue[0].infra_other_data_value_value : null);
+                                            }
+                                        } else {
+                                            field.value = (record.InfraOtherDataValue[0] ? record.InfraOtherDataValue[0].infra_other_data_value_value : null);
+                                        }
+
+                                        field.fieldLabel = record.infra_other_data_attribute_name;
+                                        field.name = record.infra_other_data_attribute_id;
+                                        field.hiddenName = record.infra_other_data_attribute_id;
+
+                                        aux.add(field);
+                                    }
+
+                                }
+
+                                Ext.getCmp('App.InfraStructure.Principal').otherdata.add(aux);
+                                Ext.getCmp('App.InfraStructure.Principal').otherdata.doLayout();
+
+                            }
+
+                        }
+
+                        if (response.total > 0) {
+                                Ext.getCmp('App.InfraStructure.Principal').otherdata.getTopToolbar().show();
+                        }
+
+                    }
+                });
+            }
+        }
+    });
+    
+    App.InfraStructure.Coordinate.Store.load
+    ({
+        callback: function(records)
+        {
+            if (typeof Ext.getCmp('App.InfraStructure.Principal') !== "undefined") 
+            { //Fix
+                if (Ext.getCmp('App.InfraStructure.Principal').map) 
+                { //Fix
+                    mapRef = Ext.getCmp('App.InfraStructure.Principal').map;
+                    if (App.InfraStructure.Coordinate.Store.getTotalCount()) 
+                    {
+                        if (mapRef.loaded) 
+                        {
+                            record = records[0];
+                            mapRef.zoomLevel = 18;
+                            mapRef.addMarker(new GLatLng(record.data.node_latitude, record.data.node_longitude), {
+                                icon: G_DEFAULT_ICON,
+                                draggable: true,
+                                bouncy: true
+                            }, 
+                            true, 
+                            true, 
+                            {
+                                'dragend': function(LatLng)
+                                {
+                                    App.InfraStructure.Coordinate.updateCoordinate(LatLng.lat(), LatLng.lng());
+                                }
+                            });
+                            mapRef.zoomLevel = parseFloat(infra_default_zoomLevel);
+                        }else {
+                            mapRef.onMapReady = function()
+                            {
+                                record = records[0];
+                                mapRef.zoomLevel = 18;
+                                mapRef.addMarker(new GLatLng(record.data.node_latitude, record.data.node_longitude), 
+                                {
+                                    icon: G_DEFAULT_ICON,
+                                    draggable: true,
+                                    bouncy: true
+                                }, 
+                                true, 
+                                true, 
+                                {
+                                    'dragend': function(LatLng)
+                                    {
+                                        App.InfraStructure.Coordinate.updateCoordinate(LatLng.lat(), LatLng.lng());
+                                    }
+                                });
+                                mapRef.zoomLevel = parseFloat(infra_default_zoomLevel);
+                            }
+                        }
+                    }else {
+                        if (mapRef.loaded) 
+                        {
+                            mapRef.clearOverlays();
+                            mapRef.geoCodeLookup(infra_default_start);
+                        }
+                    }
+//                    if (App.InfraStructure.Coordinate.Store.getTotalCount()) 
+//                    {
+//                        mapRef.getTopToolbar().get(0).hide();
+//                        mapRef.getTopToolbar().get(2).show();
+//                    } else if (App.InfraStructure.Coordinate.Store.getTotalCount() == 0 && App.Interface.selectedNodeId != 'root') 
+//{
+//                        mapRef.getTopToolbar().get(0).show();
+//                        mapRef.getTopToolbar().get(2).hide();
+//                    }
+                }
+            }
+        }
+    });
+
+    if (node && node.id) // && node.found_search == false) 
+    {
+        node.expand();
+        Ext.getCmp('App.StructureTree.Tree').getSelectionModel().select(node);
+        App.StructureTree.Tree.refreshPathBar(node);
+    }
+};
+
+App.InfraStructure.Principal.expand = function(node_id)
+{
+    App.Interface.selectedNodeId = node_id;
+    node = Ext.getCmp('App.StructureTree.Tree').getNodeById(node_id);
+    App.Security.checkNodeAccess(node);
+}
+
+App.InfraStructure.addNodeWindow = Ext.extend(Ext.Window, 
+{
+    title: App.Language.Infrastructure.add_items,
+    width: 400,
+    height: 350,
+    layout: 'accordion',
+    padding: 1,
+    activeItem: 0,
+    modal: true,
+    resizable: false,
+    initComponent: function()
+    {
+        this.items = 
+        [{
+            xtype: 'form',
+            title: App.Language.Infrastructure.simple_mode,
+            padding: 5,
+            items: 
+            [{
+                xtype: 'textfield',
+                fieldLabel: App.Language.General.name,
+                anchor: '100%',
+                editable: false,
+                allowBlank: false,
+                name: 'node_name'
+            }, {
+                xtype: 'combo',
+                fieldLabel: App.Language.General.category,
+                anchor: '100%',
+                triggerAction: 'all',
+                hiddenName: 'node_type_category_id',
+                store: App.NodeTypeCategory.Store,
+                displayField: 'node_type_category_name',
+                valueField: 'node_type_category_id',
+                editable: true,
+                typeAhead: true,
+                selectOnFocus:true,
+                forceSelection:true,
+                mode: 'remote',
+                minChars: 0,
+                allowBlank: false,
+                listeners: 
+                {
+                    'select': function(cb)
+                    {
+                        App.NodeType.Store.setBaseParam('node_type_category_id', cb.getValue());
+                        App.NodeType.Store.load();
+                    }
+                }
+            }, {
+                xtype: 'combo',
+                fieldLabel: App.Language.General.type,
+                anchor: '100%',
+                store: App.NodeType.Store,
+                hiddenName: 'node_type_id',
+                triggerAction: 'all',
+                displayField: 'node_type_name',
+                valueField: 'node_type_id',
+                editable: true,
+                typeAhead: true,
+                selectOnFocus:true,
+                forceSelection:true,
+                mode: 'remote',
+                minChars: 0,
+                allowBlank: false,
+                listeners: 
+                {
+                    'afterrender': function(cb)
+                    {
+                        cb.__value = cb.value;
+                        cb.setValue('');
+                        cb.getStore().load
+                        ({
+                            callback: function()
+                            {
+                                cb.setValue(cb.__value);
+                            }
+                        });
+                    }
+                }
+            }]
+        }, {
+            xtype: 'form',
+            title: App.Language.Infrastructure.advanced_mode,
+            bodyStyle:'padding: 20px',
+            padding: 5,
+            items: [{
+                xtype: 'textfield',
+                fieldLabel: App.Language.General.code,
+                anchor: '100%',
+                name: 'node_prefix'
+            }, {
+                xtype: 'numberfield',
+                fieldLabel: App.Language.General.quantity,
+                allowDecimals: false,
+                anchor: '50%',
+                name: 'node_cantity'
+            }, {
+                xtype: 'combo',
+                fieldLabel: App.Language.General.category,
+                anchor: '100%',
+                triggerAction: 'all',
+                hiddenName: 'node_type_category_id',
+                store: App.NodeTypeCategory.Store,
+                displayField: 'node_type_category_name',
+                valueField: 'node_type_category_id',
+                editable: true,
+                mode: 'remote',
+                minChars: 0,
+                typeAhead: true,
+                selectOnFocus:true,
+                forceSelection:true,
+                allowBlank: false,
+                listeners: 
+                {
+                    'select': function(cb)
+                    {
+                        App.NodeType.Store.setBaseParam('node_type_category_id', cb.getValue());
+                        App.NodeType.Store.load();
+                    }
+                }
+            }, {
+                xtype: 'combo',
+                fieldLabel: App.Language.General.type,
+                anchor: '100%',
+                store: App.NodeType.Store,
+                hiddenName: 'node_type_id',
+                triggerAction: 'all',
+                displayField: 'node_type_name',
+                valueField: 'node_type_id',
+                editable: true,
+                mode: 'remote',
+                typeAhead: true,
+                selectOnFocus:true,
+                forceSelection:true,
+                minChars: 0,
+                allowBlank: false,
+                listeners: 
+                {
+                    'afterrender': function(cb)
+                    {
+                        cb.__value = cb.value;
+                        cb.setValue('');
+                        cb.getStore().load
+                        ({
+                            callback: function()
+                            {
+                                cb.setValue(cb.__value);
+                            }
+                        });
+                    }
+                }
+            }]
+        }];
+        this.fbar = 
+        {
+            xtype: 'toolbar',
+            items: 
+            [{
+                xtype: 'button',
+                text: App.Language.General.close,
+                handler: function(b)
+                {
+                    b.ownerCt.ownerCt.hide();
+                }
+            }, {
+                xtype: 'button',
+                text: App.Language.General.add,
+                handler: function(b)
+                {
+                    w = b.ownerCt.ownerCt;
+                    form = w.layout.activeItem.getForm();
+                    if (form.isValid()) 
+                    {
+                        form.submit
+                        ({
+                            clientValidation: true,
+                            url: 'index.php/core/nodecontroller/addSibling',
+                            params: 
+                            {
+                                node_parent_id: App.Interface.selectedNodeId
+                            },
+                            success: function(form, response)
+                            {
+                                nodes = response.result.node;
+                                for (i = 0; i < nodes.length; i++) 
+                                {
+                                    node = nodes[i];
+                                    var newNode = new Ext.tree.TreeNode(node);
+                                    Ext.getCmp('App.StructureTree.Tree').getNodeById(App.Interface.selectedNodeId).appendChild(newNode);
+                                }
+                                App.InfraStructure.Principal.expand(App.Interface.selectedNodeId);
+                                b.ownerCt.ownerCt.hide();
+                            },
+                            failure: function(form, action)
+                            {
+                                switch (action.failureType) 
+                                {
+                                    case Ext.form.Action.CLIENT_INVALID:
+                                        Ext.Msg.alert(App.Language.General.error, App.Language.General.message_extjs_client_invalid);
+                                        break;
+                                    case Ext.form.Action.CONNECT_FAILURE:
+                                        Ext.Msg.alert(App.Language.General.error, App.Language.General.message_extjs_failed_connection);
+                                        break;
+                                    case Ext.form.Action.SERVER_INVALID:
+                                        Ext.FlashMessage.alert(action.result.msg);
+                                }
+                            }
+                        });
+                    }
+                }
+            }]
+        };
+        App.InfraStructure.addNodeWindow.superclass.initComponent.call(this);
+    }
+});
+
+App.InfraStructure.editNode = function(node)
+{
+    w = new App.InfraStructure.editNodeWindow
+    ({
+        node: node
+    });
+    w.show();
+}
+
+App.InfraStructure.exportListWindow = Ext.extend(Ext.Window, 
+{
+    title: App.Language.General.eexport_list,
+    width: 400,
+    height: 250,
+    layout: 'fit',
+    modal: true,
+    resizable: false,
+    padding: 1,
+    initComponent: function()
+    {
+        this.items = 
+        [{
+            xtype: 'form',
+            padding: 5,
+            items: 
+            [{
+                xtype: 'textfield',
+                fieldLabel: App.Language.General.file_name,
+                anchor: '100%',
+                name: 'file_name',
+                maskRe: /^[a-zA-Z0-9_]/,
+                regex: /^[a-zA-Z0-9_]/,
+                allowBlank: false
+            }, {
+                xtype: 'radiogroup',
+                fieldLabel: App.Language.General.output_type,
+                columns: 1,
+                items: 
+                [{
+                    boxLabel: 'Excel',
+                    name: 'output_type',
+                    inputValue: 'e',
+                    height: 25,
+                    checked: true
+                }, {
+                    boxLabel: 'PDF',
+                    name: 'output_type',
+                    inputValue: 'p',
+                    height: 25
+                }]
+            }],
+            buttons: 
+            [{
+                xtype: 'button',
+                text: App.Language.General.close,
+                handler: function(b)
+                {
+                    b.ownerCt.ownerCt.ownerCt.hide();
+                }
+            }, {
+                xtype: 'button',
+                text: App.Language.General.eexport,
+                handler: function(b)
+                {
+                    fp = b.ownerCt.ownerCt;
+                    form = b.ownerCt.ownerCt.getForm();
+                    if (form.isValid()) 
+                    {
+                        form.submit
+                        ({
+                            clientValidation: true,
+                            waitTitle: App.Language.General.message_please_wait,
+                            waitMsg: App.Language.General.message_generating_file,
+                            url: 'index.php/infra/infrastructurecontroller/exportList',
+                            params: 
+                            {
+                                node_id: App.Interface.selectedNodeId
+                            },
+                            success: function(form, response)
+                            {
+                                document.location = 'index.php/app/download/' + response.result.file;
+                                b.ownerCt.ownerCt.ownerCt.hide();
+                            },
+                            failure: function(form, action)
+                            {
+                                switch (action.failureType) 
+                                {
+                                    case Ext.form.Action.CLIENT_INVALID:
+                                        Ext.Msg.alert(App.Language.General.error, App.Language.General.message_extjs_client_invalid);
+                                        break;
+                                    case Ext.form.Action.CONNECT_FAILURE:
+                                        Ext.Msg.alert(App.Language.General.error, App.Language.General.message_extjs_failed_connection);
+                                        break;
+                                    case Ext.form.Action.SERVER_INVALID:
+                                        Ext.Msg.alert(App.Language.General.error, action.result.msg);
+                                }
+                            }
+                        });
+                    }
+                }
+            }]
+        }];
+        App.InfraStructure.exportListWindow.superclass.initComponent.call(this);
+    }
+});
+
+App.InfraStructure.editNodeWindow = Ext.extend(Ext.Window, 
+{
+    title: App.Language.Infrastructure.edit_title_node,
+    width: 400,
+    height: 250,
+    modal: true,
+    resizable: false,
+    layout: 'fit',
+    padding: 1,
+    initComponent: function()
+    {
+        this.items = 
+        [{
+            xtype: 'form',
+            padding: 5,
+            items: 
+            [{
+                xtype: 'textfield',
+                fieldLabel: App.Language.General.name,
+                anchor: '100%',
+                name: 'node_name',
+                value: this.node.node_name
+            }, {
+                xtype: 'hidden',
+                name: 'node_id',
+                value: this.node.node_id
+            }],
+            buttons: 
+            [{
+                xtype: 'button',
+                text: App.Language.General.close,
+                handler: function(b)
+                {
+                    b.ownerCt.ownerCt.ownerCt.hide();
+                }
+            }, {
+                xtype: 'button',
+                text: App.Language.General.edit,
+                handler: function(b)
+                {
+                    form = b.ownerCt.ownerCt.getForm();
+                    if (form.isValid()) 
+                    {
+                        form.submit
+                        ({
+                            clientValidation: true,
+                            url: 'index.php/core/nodecontroller/edit',
+                            params: 
+                            {
+                                action: 'update'
+                            },
+                            success: function(form, response)
+                            {
+                                nodes = response.result.node;
+                                for (i = 0; i < nodes.length; i++) 
+                                {
+                                    node = nodes[i];
+                                    nodeRow = App.InfraStructure.Store.Principal.getById(node.id);
+                                    nodeRow.set('node_name', node.text);
+                                    nodeRow.commit();
+                                    Ext.getCmp('App.StructureTree.Tree').getNodeById(node.id).setText(node.text);
+                                    b.ownerCt.ownerCt.ownerCt.hide();
+                                }
+                            },
+                            failure: function(form, action)
+                            {
+                                switch (action.failureType) 
+                                {
+                                    case Ext.form.Action.CLIENT_INVALID:
+                                        Ext.Msg.alert(App.Language.General.error, App.Language.General.message_extjs_client_invalid);
+                                        break;
+                                    case Ext.form.Action.CONNECT_FAILURE:
+                                        Ext.Msg.alert(App.Language.General.error, App.Language.General.message_extjs_failed_connection);
+                                        break;
+                                    case Ext.form.Action.SERVER_INVALID:
+                                        Ext.Msg.alert(App.Language.General.error, action.result.msg);
+                                }
+                            }
+                        });
+                    }
+                }
+            }]
+        }];
+        App.InfraStructure.editNodeWindow.superclass.initComponent.call(this);
+    }
+});
+
+App.InfraStructure.searchWindow = Ext.extend(Ext.Window, 
+{
+    title: App.Language.General.search,
+    width: 780,
+    height: 560,
+    layout: 'fit',
+    modal: true,
+    resizable: false,
+    padding: 1,
+    closeAction: 'hide',
+    listeners: {
+        'beforerender': function()
+        {
+            App.NodeType.Store.load();
+            //Poblamos los filtros de los datos dinamicos 
+            App.InfraStructure.DatosDinamicos.SearchStore.load({
+                callback: function()
+                {
+                    App.InfraStructure.DatosDinamicos.SearchStore.each(function(record)
+                    {
+                        //Label
+                        label = 
+                        {
+                            xtype: 'label',
+                            text: record.data.infra_other_data_attribute_name,
+                            columnWidth: 0.3
+                        };
+                        //Separador
+                        var spacer = 
+                        {
+                            xtype: 'spacer',
+                            columnWidth: 0.05,
+                            height: 5
+                        };
+                        //Field
+                        var xtype_object = new App.InfraStructure.OtrosDatos.classFields[record.data.infra_other_data_attribute_type]
+                        ({
+                            name: record.data.infra_other_data_attribute_id,
+                            columnWidth: 0.47
+                        });
+                        field = xtype_object;
+                        //Combo Operadores
+                        var combo_operador = 
+                        {
+                            xtype: 'combo',
+                            name: record.data.infra_other_data_attribute_id + '_cb',
+                            hiddenName: record.data.infra_other_data_attribute_id + '_cb',
+                            columnWidth: 0.1,
+                            store: App.Core.Operators.Store,
+                            editable: false,
+                            triggerAction: 'all',
+                            displayField: 'value',
+                            valueField: 'value',
+                            mode: 'local'
+                        }
+                        if (xtype_object.xtype == 'combo') 
+                        {
+                            combo_operador.value = '=';
+                            combo_operador.disabled = true;
+                            App.InfraStructure.searchWindowObject.form.dinamicDataFilterParent.add
+                            ({
+                                xtype: 'hidden',
+                                name: record.data.infra_other_data_attribute_id + '_cb',
+                                value: '='
+                            });
+                        }
+                        var tbseparator = 
+                        {
+                            xtype: 'tbseparator',
+                            height: 30
+                        }
+                        App.InfraStructure.searchWindowObject.form.dinamicDataFilterParent.add(label);
+                        App.InfraStructure.searchWindowObject.form.dinamicDataFilterParent.add(combo_operador);
+                        App.InfraStructure.searchWindowObject.form.dinamicDataFilterParent.add(spacer);
+                        App.InfraStructure.searchWindowObject.form.dinamicDataFilterParent.add(field);
+                        App.InfraStructure.searchWindowObject.form.dinamicDataFilterParent.add(tbseparator);
+                    });
+                    App.InfraStructure.searchWindowObject.form.dinamicDataFilterParent.doLayout();
+                }
+            });
+        }
+    },
+    initComponent: function()
+    {
+        this.items = 
+        [{
+            xtype: 'form',
+            ref: 'form',
+            layout: 'border',
+            border: true,
+            items: 
+            [{
+                xtype: 'tabpanel',
+                border: false,
+                ref: 'tabPanel',
+                region: 'center',
+                activeTab: 0,
+                items: 
+                [{
+                    xtype: 'grid',
+                    title: App.Language.Infrastructure.node_type,
+                    columnWidth: 1,
+                    bbodyStyle: 'padding:20px 40px 10',
+                    ref: 'listviewNodeTypes',
+                    store: App.NodeType.Store,
+                    multiSelect: true,
+                    region: 'center',
+                    emptyText: App.Language.Infrastructure.node_types_show,
+                    anchor: '100%',
+                    sm: new Ext.grid.CheckboxSelectionModel(),
+                    viewConfig: 
+                    {
+                        forceFit: true
+                    },
+                    columns: [new Ext.grid.CheckboxSelectionModel(), 
+                    {
+                        header: App.Language.General.type,
+                        width: .25,
+                        dataIndex: 'node_type_name'
+                    }, {
+                        header: App.Language.General.category,
+                        align: 'center',
+                        width: .25,
+                        dataIndex: 'node_type_category_name'
+                    }]
+                }, {
+                    xtype: 'panel',
+                    columnWidth: 1,
+                    title: App.Language.Infrastructure.structural_data,
+                    bodyStyle: 'padding:20px 40px 10',
+                    autoScroll: true,
+                    layout: 'column',
+                    items: 
+                    [{
+                        xtype: 'label',
+                        text: App.Language.Infrastructure.infra_info_usable_area,
+                        columnWidth: 0.3
+                    }, {
+                        xtype: 'combo',
+                        name: 'infra_info_usable_area_cb',
+                        columnWidth: 0.1,
+                        store: App.Core.Operators.Store,
+                        editable: false,
+                        triggerAction: 'all',
+                        displayField: 'value',
+                        valueField: 'value',
+                        mode: 'local'
+                    }, {
+                        xtype: 'spacer',
+                        columnWidth: 0.05,
+                        height: 5
+                    }, {
+                        xtype: 'numberfield',
+                        name: 'infra_info_usable_area_txt',
+                        columnWidth: 0.47
+                    }, {
+                        xtype: 'tbseparator',
+                        height: 30
+                    }, {
+                        xtype: 'label',
+                        text: App.Language.Infrastructure.infra_info_usable_area_total,
+                        columnWidth: 0.3
+                    }, {
+                        xtype: 'combo',
+                        name: 'infra_info_usable_area_total_cb',
+                        columnWidth: 0.1,
+                        store: App.Core.Operators.Store,
+                        editable: false,
+                        triggerAction: 'all',
+                        displayField: 'value',
+                        valueField: 'value',
+                        mode: 'local'
+                    }, {
+                        xtype: 'spacer',
+                        columnWidth: 0.05,
+                        height: 5
+                    }, {
+                        xtype: 'numberfield',
+                        name: 'infra_info_usable_area_total_txt',
+                        columnWidth: 0.47
+                    }, {
+                        xtype: 'tbseparator',
+                        height: 30
+                    }, {
+                        xtype: 'label',
+                        text: App.Language.Infrastructure.infra_info_area,
+                        columnWidth: 0.3
+                    }, {
+                        xtype: 'combo',
+                        name: 'infra_info_area_cb',
+                        columnWidth: 0.1,
+                        store: App.Core.Operators.Store,
+                        editable: false,
+                        triggerAction: 'all',
+                        displayField: 'value',
+                        valueField: 'value',
+                        mode: 'local'
+                    }, {
+                        xtype: 'spacer',
+                        columnWidth: 0.05,
+                        height: 5
+                    }, {
+                        xtype: 'numberfield',
+                        name: 'infra_info_area_txt',
+                        columnWidth: 0.47
+                    }, {
+                        xtype: 'tbseparator',
+                        height: 30
+                    }, {
+                        xtype: 'label',
+                        text: App.Language.Infrastructure.infra_info_area_total,
+                        columnWidth: 0.3
+                    }, {
+                        xtype: 'combo',
+                        name: 'infra_info_area_total_cb',
+                        columnWidth: 0.1,
+                        store: App.Core.Operators.Store,
+                        editable: false,
+                        triggerAction: 'all',
+                        displayField: 'value',
+                        valueField: 'value',
+                        mode: 'local'
+                    }, {
+                        xtype: 'spacer',
+                        columnWidth: 0.05,
+                        height: 5
+                    }, {
+                        xtype: 'numberfield',
+                        name: 'infra_info_area_total_txt',
+                        columnWidth: 0.47
+                    }, {
+                        xtype: 'tbseparator',
+                        height: 30
+                    }, {
+                        xtype: 'label',
+                        text: App.Language.Infrastructure.infra_info_volume,
+                        columnWidth: 0.3
+                    }, {
+                        xtype: 'combo',
+                        name: 'infra_info_volume_cb',
+                        columnWidth: 0.1,
+                        store: App.Core.Operators.Store,
+                        editable: false,
+                        triggerAction: 'all',
+                        displayField: 'value',
+                        valueField: 'value',
+                        mode: 'local'
+                    }, {
+                        xtype: 'spacer',
+                        columnWidth: 0.05,
+                        height: 5
+                    }, {
+                        xtype: 'numberfield',
+                        name: 'infra_info_volume_txt',
+                        columnWidth: 0.47
+                    }, {
+                        xtype: 'tbseparator',
+                        height: 30
+                    }, {
+                        xtype: 'label',
+                        text: App.Language.Infrastructure.infra_info_volume_total,
+                        columnWidth: 0.3
+                    }, {
+                        xtype: 'combo',
+                        name: 'infra_info_volume_total_cb',
+                        columnWidth: 0.1,
+                        store: App.Core.Operators.Store,
+                        editable: false,
+                        triggerAction: 'all',
+                        displayField: 'value',
+                        valueField: 'value',
+                        mode: 'local'
+                    }, {
+                        xtype: 'spacer',
+                        columnWidth: 0.05,
+                        height: 5
+                    }, {
+                        xtype: 'numberfield',
+                        name: 'infra_info_volume_total_txt',
+                        columnWidth: 0.47
+                    }, {
+                        xtype: 'tbseparator',
+                        height: 30
+                    }, {
+                        xtype: 'label',
+                        text: App.Language.Infrastructure.infra_info_length,
+                        columnWidth: 0.3
+                    }, {
+                        xtype: 'combo',
+                        name: 'infra_info_length_cb',
+                        columnWidth: 0.1,
+                        store: App.Core.Operators.Store,
+                        editable: false,
+                        triggerAction: 'all',
+                        displayField: 'value',
+                        valueField: 'value',
+                        mode: 'local'
+                    }, {
+                        xtype: 'spacer',
+                        columnWidth: 0.05,
+                        height: 5
+                    }, {
+                        xtype: 'numberfield',
+                        name: 'infra_info_length_txt',
+                        columnWidth: 0.47
+                    }, {
+                        xtype: 'tbseparator',
+                        height: 30
+                    }, {
+                        xtype: 'label',
+                        text: App.Language.Infrastructure.infra_info_width,
+                        columnWidth: 0.3
+                    }, {
+                        xtype: 'combo',
+                        name: 'infra_info_width_cb',
+                        columnWidth: 0.1,
+                        store: App.Core.Operators.Store,
+                        editable: false,
+                        triggerAction: 'all',
+                        displayField: 'value',
+                        valueField: 'value',
+                        mode: 'local'
+                    }, {
+                        xtype: 'spacer',
+                        columnWidth: 0.05,
+                        height: 5
+                    }, {
+                        xtype: 'numberfield',
+                        name: 'infra_info_width_txt',
+                        columnWidth: 0.47
+                    }, {
+                        xtype: 'tbseparator',
+                        height: 30
+                    }, {
+                        xtype: 'label',
+                        text: App.Language.Infrastructure.infra_info_height,
+                        columnWidth: 0.3
+                    }, {
+                        xtype: 'combo',
+                        name: 'infra_info_height_cb',
+                        columnWidth: 0.1,
+                        store: App.Core.Operators.Store,
+                        editable: false,
+                        triggerAction: 'all',
+                        displayField: 'value',
+                        valueField: 'value',
+                        mode: 'local'
+                    }, {
+                        xtype: 'spacer',
+                        columnWidth: 0.05,
+                        height: 5
+                    }, {
+                        xtype: 'numberfield',
+                        name: 'infra_info_height_txt',
+                        columnWidth: 0.47
+                    }, {
+                        xtype: 'tbseparator',
+                        height: 30
+                    }, {
+                        xtype: 'label',
+                        text: App.Language.Infrastructure.infra_info_capacity,
+                        columnWidth: 0.3
+                    }, {
+                        xtype: 'combo',
+                        name: 'infra_info_capacity_cb',
+                        columnWidth: 0.1,
+                        store: App.Core.Operators.Store,
+                        editable: false,
+                        triggerAction: 'all',
+                        displayField: 'value',
+                        valueField: 'value',
+                        mode: 'local'
+                    }, {
+                        xtype: 'spacer',
+                        columnWidth: 0.05,
+                        height: 5
+                    }, {
+                        xtype: 'numberfield',
+                        name: 'infra_info_capacity_txt',
+                        columnWidth: 0.47
+                    }, {
+                        xtype: 'tbseparator',
+                        height: 30
+                    }, {
+                        xtype: 'label',
+                        text: App.Language.Infrastructure.infra_info_capacity_total,
+                        columnWidth: 0.3
+                    }, {
+                        xtype: 'combo',
+                        name: 'infra_info_capacity_total_cb',
+                        columnWidth: 0.1,
+                        store: App.Core.Operators.Store,
+                        editable: false,
+                        triggerAction: 'all',
+                        displayField: 'value',
+                        valueField: 'value',
+                        mode: 'local'
+                    }, {
+                        xtype: 'spacer',
+                        columnWidth: 0.05,
+                        height: 5
+                    }, {
+                        xtype: 'numberfield',
+                        name: 'infra_info_capacity_total_txt',
+                        columnWidth: 0.47
+                    }, {
+                        xtype: 'tbseparator',
+                        height: 30
+                    }, {
+                        xtype: 'label',
+                        text: App.Language.Infrastructure.infra_info_additional_1,
+                        columnWidth: 0.3
+                    }, {
+                        xtype: 'combo',
+                        name: 'infra_info_additional_1_cb',
+                        columnWidth: 0.1,
+                        store: App.Core.Operators.Store,
+                        editable: false,
+                        triggerAction: 'all',
+                        displayField: 'value',
+                        valueField: 'value',
+                        mode: 'local'
+                    }, {
+                        xtype: 'spacer',
+                        columnWidth: 0.05,
+                        height: 5
+                    }, {
+                        xtype: 'textfield',
+                        name: 'infra_info_additional_1_txt',
+                        columnWidth: 0.47
+                    }, {
+                        xtype: 'tbseparator',
+                        height: 30
+                    }, {
+                        xtype: 'label',
+                        text: App.Language.Infrastructure.infra_info_additional_2,
+                        columnWidth: 0.3
+                    }, {
+                        xtype: 'combo',
+                        name: 'infra_info_additional_2_cb',
+                        columnWidth: 0.1,
+                        store: App.Core.Operators.Store,
+                        editable: false,
+                        triggerAction: 'all',
+                        displayField: 'value',
+                        valueField: 'value',
+                        mode: 'local'
+                    }, {
+                        xtype: 'spacer',
+                        columnWidth: 0.05,
+                        height: 5
+                    }, {
+                        xtype: 'textfield',
+                        name: 'infra_info_additional_3_txt',
+                        columnWidth: 0.47
+                    }, {
+                        xtype: 'tbseparator',
+                        height: 30
+                    }, {
+                        xtype: 'label',
+                        text: App.Language.Infrastructure.infra_info_additional_3,
+                        columnWidth: 0.3
+                    }, {
+                        xtype: 'combo',
+                        name: 'infra_info_additional_3_cb',
+                        columnWidth: 0.1,
+                        store: App.Core.Operators.Store,
+                        editable: false,
+                        triggerAction: 'all',
+                        displayField: 'value',
+                        valueField: 'value',
+                        mode: 'local'
+                    }, {
+                        xtype: 'spacer',
+                        columnWidth: 0.05,
+                        height: 5
+                    }, {
+                        xtype: 'textfield',
+                        name: 'infra_info_additional_4_txt',
+                        columnWidth: 0.47
+                    }, {
+                        xtype: 'tbseparator',
+                        height: 30
+                    }, {
+                        xtype: 'label',
+                        text: App.Language.Infrastructure.infra_info_additional_4,
+                        columnWidth: 0.3
+                    }, {
+                        xtype: 'combo',
+                        name: 'infra_info_additional_4_cb',
+                        columnWidth: 0.1,
+                        store: App.Core.Operators.Store,
+                        editable: false,
+                        triggerAction: 'all',
+                        displayField: 'value',
+                        valueField: 'value',
+                        mode: 'local'
+                    }, {
+                        xtype: 'spacer',
+                        columnWidth: 0.05,
+                        height: 5
+                    }, {
+                        xtype: 'textfield',
+                        name: 'infra_info_additional_4_txt',
+                        columnWidth: 0.47
+                    }, {
+                        xtype: 'tbseparator',
+                        height: 30
+                    }]
+                }, {
+                    xtype: 'panel',
+                    columnWidth: 1,
+                    bodyStyle: 'padding:20px 40px 10',
+                    ref: '../dinamicDataFilterParent',
+                    title: App.Language.Infrastructure.dynamic_data,
+                    autoScroll: true,
+                    layout: 'column'
+                }]
+            }, {
+                xtype: 'panel',
+                region: 'south',
+                columnWidth: 1,
+                hidden: true,
+                autoHeight: true,
+                bodyStyle: 'padding:5px 10px 0',
+                title: App.Language.Infrastructure.depth,
+                layout: 'column',
+                items: 
+                [{
+                    xtype: 'spacer',
+                    height: 35
+                }, {
+                    xtype: 'radio',
+                    name: 'depth',
+                    anchor: '100%',
+                    inputValue: '0',
+                    checked: true,
+                    columnWidth: 0.02
+                }, {
+                    xtype: 'label',
+                    text: App.Language.Infrastructure.complete_branch_selected_node,
+                    columnWidth: 0.48
+                }, {
+                    xtype: 'radio',
+                    name: 'depth',
+                    anchor: '100%',
+                    inputValue: '1',
+                    columnWidth: 0.02
+                }, {
+                    xtype: 'label',
+                    text: App.Language.Infrastructure.direct_nodes,
+                    columnWidth: 0.48
+                }]
+            }],
+            buttons: 
+            [{
+                xtype: 'button',
+                text: App.Language.General.close,
+                handler: function(b)
+                {
+                    b.ownerCt.ownerCt.ownerCt.hide();
+                }
+            }, {
+                text: App.Language.General.search,
+                handler: function(b)
+                {
+                    form = App.InfraStructure.searchWindowObject.form.getForm();
+                    App.InfraStructure.Search.Store.baseParams = form.getFieldValues();
+                    var node_name_to_search = Ext.getCmp('App.InfraStructure.Search.TextBox').getValue();
+                    App.InfraStructure.Search.Store.setBaseParam('node_name', node_name_to_search);
+                    App.InfraStructure.Search.Store.setBaseParam('node_id', App.Interface.selectedNodeId);
+                    var node_type_id = [];
+                    var selectedItems = App.InfraStructure.searchWindowObject.form.tabPanel.listviewNodeTypes.getSelectionModel().getSelections();
+                    Ext.each(selectedItems, function(r)
+                    {
+                        node_type_id.push(r.data['node_type_id']);
+                    });
+                    if (node_type_id.length > 0) 
+                    {
+                        App.InfraStructure.Search.Store.setBaseParam('node_type_id', node_type_id.join(','));
+                    }
+                    App.InfraStructure.Search.Store.load();
+                    App.InfraStructure.searchWindowObject.form.hide();
+                    App.InfraStructure.searchWindowObject.resultGrid.show();
+                    App.InfraStructure.searchWindowObject.resultGrid.doLayout();
+                }
+            }, {
+                text: App.Language.General.clean,
+                handler: function(b)
+                {
+                    form = App.InfraStructure.searchWindowObject.form.getForm();
+                    form.reset();
+                    App.InfraStructure.searchWindowObject.form.tabPanel.listviewNodeTypes.getSelectionModel().clearSelections();
+                }
+            }]
+        }, {
+            xtype: 'grid',
+            store: App.InfraStructure.Search.Store,
+            height: 525,
+            hidden: true,
+            ref: 'resultGrid',
+            viewConfig: 
+            {
+                forceFit: true
+            },
+            loadMask: true,
+            fbar: 
+            [{
+                text: App.Language.General.back_to_search,
+                handler: function()
+                {
+                    App.InfraStructure.searchWindowObject.resultGrid.hide();
+                    App.InfraStructure.searchWindowObject.form.show();
+                    App.InfraStructure.searchWindowObject.resultGrid.doLayout();
+                }
+            }],
+            columns: 
+            [{
+                header: App.Language.General.name,
+                sortable: true,
+                width: 40,
+                dataIndex: 'node_name',
+                renderer: function(value, metaData, record)
+                {
+                    return "<div style='background-image: url(" + record.data.icon + "); background-repeat: no-repeat; height: 16; width: 16; float: left; padding-left: 20; padding-top: 2'><a href='javascript: App.InfraStructure.searchWindowObject.hide();App.InfraStructure.expandDeepNode(" + record.data.node_id + ")'>" + value + "</a></div>";
+                }
+            }, {
+                header: App.Language.General.type,
+                sortable: true,
+                width: 30,
+                dataIndex: 'node_type_name'
+            }, {
+                header: App.Language.Core.location,
+                sortable: true,
+                dataIndex: 'node_root',
+                renderer: function(value, metadata, record, rowIndex, colIndex, store)
+                {
+                    metadata.attr = 'ext:qtip="' + value + '"';
+                    return value;
+                }
+            }]
+        }];
+        App.InfraStructure.searchWindow.superclass.initComponent.call(this);
+    }
+});
+
+App.InfraStructure.searchWindowObject = new App.InfraStructure.searchWindow();
+
+App.InfraStructure.expandDeepNode = function(node_id)
+{
+    Ext.Ajax.request
+    ({
+        url: 'index.php/core/nodecontroller/expanddeep',
+        params: 
+        {
+            node_id: node_id
+        },
+        success: function(response)
+        {
+            response = Ext.decode(response.responseText);
+            App.InfraStructure.expandDeepNodeCallback(node_id, response);
+        }
+    });
+}
+
+App.InfraStructure.expandDeepNodeCallback = function(node_id, children)
+{
+    for (var i = 0; i < children.length; i++) 
+    {
+        node = children[i];
+        treeNode = Ext.getCmp('App.StructureTree.Tree').getNodeById(node.id);
+        if (node.id == node_id) 
+        {
+            Ext.getCmp('App.StructureTree.Tree').getSelectionModel().select(Ext.getCmp('App.StructureTree.Tree').getNodeById(node_id));
+            Ext.getCmp('App.StructureTree.Tree').fireEvent('click', Ext.getCmp('App.StructureTree.Tree').getNodeById(node_id));
+            return;
+        }
+        if (treeNode && treeNode.isExpanded() == false && node.expanded == true) 
+        {
+        
+            if (App.Security.Session.user_type == 'A' || App.Security.Session.user_tree_full == 1) 
+            {
+            
+                treeNode.expand(false, true, function(nd)
+                {
+                    nd.removeAll(true);
+                    nd.appendChild(children[i].children);
+                    Ext.getCmp('App.StructureTree.Tree').getSelectionModel().select(Ext.getCmp('App.StructureTree.Tree').getNodeById(node_id));
+                    Ext.getCmp('App.StructureTree.Tree').fireEvent('click', Ext.getCmp('App.StructureTree.Tree').getNodeById(node_id));
+                });
+                
+            }else {
+                treeNode.expand();
+                App.StructureTree.Tree.XML.expanddeep(node_id, treeNode, children[i].children);
+                
+            }
+            return;
+        }
+        if (children[i].children) 
+        {
+            App.InfraStructure.expandDeepNodeCallback(node_id, children[i].children);
+        }
+    }
+}
+
+App.InfraStructure.Info.fields = 
+{
+    'node_id': 
+    {
+        xtype: 'hidden',
+        name: 'node_id'
+    },
+    'infra_info_area': 
+    {
+        xtype: 'numberfield',
+        name: 'infra_info_area',
+        fieldLabel: App.Language.Infrastructure.infra_info_area,
+        allowNegative: false
+    },
+    'infra_info_area_total': 
+    {
+        xtype: 'displayfield',
+        name: 'infra_info_area_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_area_total,
+        setValue: function(v)
+        {
+            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            return this;
+        }
+    },
+    'infra_info_usable_area': 
+    {
+        xtype: 'numberfield',
+        name: 'infra_info_usable_area',
+        fieldLabel: App.Language.Infrastructure.infra_info_usable_area,
+        allowNegative: false
+    },
+    'infra_info_usable_area_total': 
+    {
+        xtype: 'displayfield',
+        name: 'infra_info_usable_area_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_usable_area_total,
+        setValue: function(v)
+        {
+            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            return this;
+        }
+    },
+    'infra_info_volume': 
+    {
+        xtype: 'numberfield',
+        name: 'infra_info_volume',
+        fieldLabel: App.Language.Infrastructure.infra_info_volume,
+        allowNegative: false
+    },
+    'infra_info_volume_total': 
+    {
+        xtype: 'displayfield',
+        name: 'infra_info_volume_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_volume_total,
+        setValue: function(v)
+        {
+            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            return this;
+        }
+    },
+    'infra_info_length': 
+    {
+        xtype: 'numberfield',
+        name: 'infra_info_length',
+        fieldLabel: App.Language.Infrastructure.infra_info_length,
+        allowNegative: false
+    },
+    'infra_info_width': 
+    {
+        xtype: 'numberfield',
+        name: 'infra_info_width',
+        fieldLabel: App.Language.Infrastructure.infra_info_width,
+        allowNegative: false
+    },
+    'infra_info_height': 
+    {
+        xtype: 'numberfield',
+        name: 'infra_info_height',
+        fieldLabel: App.Language.Infrastructure.infra_info_height,
+        allowNegative: false
+    },
+    'infra_info_capacity': 
+    {
+        xtype: 'numberfield',
+        name: 'infra_info_capacity',
+        fieldLabel: App.Language.Infrastructure.infra_info_capacity,
+        allowNegative: false,
+        allowDecimals: false
+    },
+    'infra_info_capacity_total': 
+    {
+        xtype: 'displayfield',
+        name: 'infra_info_capacity_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_capacity_total,
+        setValue: function(v)
+        {
+            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            return this;
+        }
+    },
+    'infra_info_terrain_area': 
+    {
+        xtype: 'numberfield',
+        name: 'infra_info_terrain_area',
+        fieldLabel: App.Language.Infrastructure.infra_info_terrain_area,
+        allowNegative: false
+    },
+    'infra_info_terrain_area_total': 
+    {
+        xtype: 'displayfield',
+        name: 'infra_info_terrain_area_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_terrain_area_total,
+        setValue: function(v)
+        {
+            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            return this;
+        }
+    },
+    'infra_info_additional_1': 
+    {
+        xtype: 'textfield',
+        fieldLabel: App.Language.Infrastructure.infra_info_additional_1,
+        name: 'infra_info_additional_1'
+    },
+    'infra_info_additional_2': 
+    {
+        xtype: 'textfield',
+        fieldLabel: App.Language.Infrastructure.infra_info_additional_2,
+        name: 'infra_info_additional_2'
+    },
+    'infra_info_additional_3': 
+    {
+        xtype: 'textfield',
+        fieldLabel: App.Language.Infrastructure.infra_info_additional_3,
+        name: 'infra_info_additional_3'
+    },
+    'infra_info_additional_4': 
+    {
+        xtype: 'textfield',
+        fieldLabel: App.Language.Infrastructure.infra_info_additional_4,
+        name: 'infra_info_additional_4'
+    },
+    'infra_info_option_id_1': 
+    {
+        xtype: 'combo',
+        ref: 'infra_info_option_id_1',
+        triggerAction: 'all',
+        fieldLabel: App.Language.Infrastructure.infra_info_option_id_1,
+        store: App.InfraStructure.InfoOptionCombosAnidados1.Store,
+        hiddenName: 'infra_info_option_id_1',
+        displayField: 'infra_info_option_name',
+        valueField: 'infra_info_option_id',
+        editable: false,
+        mode: 'remote',
+        minChars: 0,
+        listeners: 
+        {
+            'beforerender': function(cb)
+            {
+                var value_parent = null;
+                cb.getStore().setBaseParam('infra_info_option_parent_id', value_parent);
+            },
+            'afterrender': function(cb)
+            {
+                cb.__value = cb.value;
+                cb.setValue('');
+                cb.getStore().load();
+            },
+            'select': function(cb, record)
+            {
+                Ext.getCmp('App.InfraStructure.Principal').info.infra_info_option_id_2.clearValue();
+                Ext.getCmp('App.InfraStructure.Principal').info.infra_info_option_id_2.enable();
+                Ext.getCmp('App.InfraStructure.Principal').info.infra_info_option_id_3.clearValue();
+                Ext.getCmp('App.InfraStructure.Principal').info.infra_info_option_id_3.disable();
+                Ext.getCmp('App.InfraStructure.Principal').info.infra_info_option_id_4.clearValue();
+                Ext.getCmp('App.InfraStructure.Principal').info.infra_info_option_id_4.disable();
+                var store = cb.ownerCt.infra_info_option_id_2.getStore();
+                store.setBaseParam('infra_info_option_parent_id', cb.getValue());
+                store.load();
+            }
+        }
+    },
+    'infra_info_option_id_2': 
+    {
+        xtype: 'combo',
+        ref: 'infra_info_option_id_2',
+        disabled: true,
+        triggerAction: 'all',
+        fieldLabel: App.Language.Infrastructure.infra_info_option_id_2,
+        store: App.InfraStructure.InfoOptionCombosAnidados2.Store,
+        hiddenName: 'infra_info_option_id_2',
+        displayField: 'infra_info_option_name',
+        valueField: 'infra_info_option_id',
+        editable: false,
+        mode: 'remote',
+        minChars: 0,
+        listeners: 
+        {
+            'beforerender': function(cb)
+            {
+                var value_parent = cb.ownerCt.infra_info_option_id_1.__value;
+                cb.getStore().setBaseParam('infra_info_option_parent_id', value_parent);
+            },
+            'afterrender': function(cb)
+            {
+                cb.__value = cb.value;
+                cb.setValue('');
+                cb.getStore().load
+                ({
+                    callback: function()
+                    {
+                        cb.setValue(cb.__value);
+                    }
+                });
+            },
+            'select': function(cb, record)
+            {
+                Ext.getCmp('App.InfraStructure.Principal').info.infra_info_option_id_3.clearValue();
+                Ext.getCmp('App.InfraStructure.Principal').info.infra_info_option_id_3.enable();
+                Ext.getCmp('App.InfraStructure.Principal').info.infra_info_option_id_4.clearValue();
+                Ext.getCmp('App.InfraStructure.Principal').info.infra_info_option_id_4.disable();
+                var store = cb.ownerCt.infra_info_option_id_3.getStore();
+                store.setBaseParam('infra_info_option_parent_id', cb.getValue());
+                store.load();
+            }
+        }
+    },
+    'infra_info_option_id_3': 
+    {
+        xtype: 'combo',
+        ref: 'infra_info_option_id_3',
+        disabled: true,
+        triggerAction: 'all',
+        fieldLabel: App.Language.Infrastructure.infra_info_option_id_3,
+        store: App.InfraStructure.InfoOptionCombosAnidados3.Store,
+        hiddenName: 'infra_info_option_id_3',
+        displayField: 'infra_info_option_name',
+        valueField: 'infra_info_option_id',
+        editable: false,
+        mode: 'remote',
+        minChars: 0,
+        listeners: 
+        {
+            'beforerender': function(cb)
+            {
+                var value_parent = cb.ownerCt.infra_info_option_id_2.__value;
+                cb.getStore().setBaseParam('infra_info_option_parent_id', value_parent);
+            },
+            'afterrender': function(cb)
+            {
+                cb.__value = cb.value;
+                cb.setValue('');
+                cb.getStore().load
+                ({
+                    callback: function()
+                    {
+                        cb.setValue(cb.__value);
+                    }
+                });
+            },
+            'select': function(cb, record)
+            {
+                Ext.getCmp('App.InfraStructure.Principal').info.infra_info_option_id_4.clearValue();
+                Ext.getCmp('App.InfraStructure.Principal').info.infra_info_option_id_4.enable();
+                var store = cb.ownerCt.infra_info_option_id_4.getStore();
+                store.setBaseParam('infra_info_option_parent_id', cb.getValue());
+                store.load();
+            }
+        }
+    },
+    'infra_info_option_id_4': 
+    {
+        xtype: 'combo',
+        ref: 'infra_info_option_id_4',
+        disabled: true,
+        triggerAction: 'all',
+        fieldLabel: App.Language.Infrastructure.infra_info_option_id_4,
+        store: App.InfraStructure.InfoOptionCombosAnidados4.Store,
+        hiddenName: 'infra_info_option_id_4',
+        displayField: 'infra_info_option_name',
+        valueField: 'infra_info_option_id',
+        editable: false,
+        mode: 'remote',
+        minChars: 0,
+        listeners: 
+        {
+            'beforerender': function(cb)
+            {
+                var value_parent = cb.ownerCt.infra_info_option_id_3.__value;
+                cb.getStore().setBaseParam('infra_info_option_parent_id', value_parent);
+            },
+            'afterrender': function(cb)
+            {
+                cb.__value = cb.value;
+                cb.setValue('');
+                cb.getStore().load
+                ({
+                    callback: function()
+                    {
+                        cb.setValue(cb.__value);
+                    }
+                });
+            }
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "name": "centos/desarrollo",
+    "autoload": {
+        "psr-4": {
+            "PhpOffice\\": "lib/"
+        }
+    },
+    "require": {
+        "phpoffice/phpspreadsheet": "^1.6"
+    }
+}

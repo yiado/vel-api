@@ -1,0 +1,60 @@
+<?php
+
+class administrator extends APP_Controller {
+
+    function index() {
+        $data_session = $this->auth->get_user_data();
+        $user = Doctrine_Core::getTable('User')->find($data_session['user_id']);
+        $language = Doctrine_Core::getTable('LanguageTag')->findByLanguage($data_session['language_id']);
+
+        if ($this->auth->get_user_data('user_type') == 'P') {
+            $gui_files = array();
+            $gui_cfgs = array();
+
+            foreach (array('mtn', 'request') as $module) {
+                $this->load->config('module/' . $module);
+                $gui_files[$module] = $this->config->item($module . '_prov_gui_files');
+
+                if ($this->config->item($module . '_gui_confgs')) {
+                    foreach ($this->config->item($module . '_gui_confgs') as $confg => $confg_value) {
+                        $gui_cfgs[$confg] = $confg_value;
+                    }
+                }
+            }
+        } else {
+            $gui_files = array();
+            $gui_cfgs = array();
+
+            foreach ($user->getUserModules() as $module) {
+
+                $this->load->config('module/' . $module->module_abbreviation);
+                $gui_files[$module->module_abbreviation] = $this->config->item($module->module_abbreviation . '_gui_files');
+
+                if ($this->config->item($module->module_abbreviation . '_gui_confgs')) {
+                    foreach ($this->config->item($module->module_abbreviation . '_gui_confgs') as $confg => $confg_value) {
+                        $gui_cfgs[$confg] = $confg_value;
+                    }
+                }
+            }
+        }
+
+
+
+
+        $data['session'] = $data_session;
+        $data['language'] = $language;
+        $data['user_modules'] = DoctrineObjectToArray($user->getUserModulesAdmin()->toArray(), 'module_abbreviation');
+        $data['user_modules_menu'] = DoctrineObjectToArray($user->getUserModules()->toArray(), 'module_abbreviation');
+        $data['user_modules_gui'] = $user->getUserModulesAdmin();
+        $data['gui_files'] = $gui_files;
+        
+
+        $this->load->view('gui/administrator', $data);
+    }
+
+    function getModule() {
+        $_SESSION['module'] = $this->input->post('module');
+        $_SESSION['moduleName'] = $this->input->post('moduleName');
+    }
+
+}
