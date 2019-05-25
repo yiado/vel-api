@@ -2,7 +2,7 @@
 plans/*.svg
 plans/*.ifc
 plans/*.png
-plan/*.gltf
+plans/*.gltf
 docs/
 temp/*.pdf
 temp/*.xls
