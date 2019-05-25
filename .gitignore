@@ -7,6 +7,9 @@ plans/*.pdf
 docs/
 temp/*.pdf
 temp/*.xls
+temp/*.xlsx
+temp/*.png
+temp/*.jpg
 temp/*.csv
 temp/treexml/*.xml
 asset_doc/
