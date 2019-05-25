@@ -1,1 +1,9 @@
 /nbproject/private/
+plans/*.svg
+docs/
+temp/*.pdf
+temp/*.xls
+temp/*.csv
+temp/treexml/*.xml
+asset_doc/
+system/logs/*.php
