@@ -1,5 +1,6 @@
 /nbproject/private/
 plans/*.svg
+plans/*.ifc
 docs/
 temp/*.pdf
 temp/*.xls
