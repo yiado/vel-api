@@ -14,3 +14,4 @@ temp/*.csv
 temp/treexml/*.xml
 asset_doc/
 system/logs/*.php
+vendor/
