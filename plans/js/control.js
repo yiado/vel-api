@@ -15,7 +15,7 @@ function setOver(evt) {
 
     var ParenTag = oo.parentNode
 
-    if (evt.target.tagName == 'path' && oo.getAttribute("fill")!= 'none' && oo.getAttribute("fill")!= null ) {
+    if (evt.target.tagName == 'path' && oo.getAttribute("fill") != 'none' && oo.getAttribute("fill") != null) {
 
         oo.setAttribute("fill", 'red');
         oo.setAttribute("fill-opacity", '0.5');
@@ -62,9 +62,9 @@ function setOver(evt) {
 }
 
 function setOut(evt) {
-var oo = evt.target;
+    var oo = evt.target;
 
-   if (evt.target.tagName == 'path' && oo.getAttribute("fill")!= 'none' && oo.getAttribute("fill")!= null) {
+    if (evt.target.tagName == 'path' && oo.getAttribute("fill") != 'none' && oo.getAttribute("fill") != null) {
 
         oo.setAttribute("fill", 'white');
         oo.setAttribute("fill-opacity", '0');
@@ -105,14 +105,14 @@ function setClick(evt) {
     var y = event.clientY;
     var oo = evt.target;
     var ParenTag = oo.parentNode
- 
+
     //  VALIDACION ANTERIOR
     //    if ((parent.App.Plan.ViewConfig.EnableSelect && oo.hasAttribute("id") && evt.button != 2) ) {
     // VALIDACION ACTUAL
 
     if (evt.button != 2 && !parent.panZoom.isClickZoomEnabled() && !parent.panZoom.isDblclickZoomOut()) {
         if ((oo.nodeName == 'path' && ParenTag.nodeName == 'g' && ParenTag.hasAttribute("id")) || (oo.nodeName == 'path' && oo.hasAttribute("id"))) {
-          
+
 
             if (!oo.hasAttribute("ostroke-width")) { // no marc line
 
@@ -123,6 +123,7 @@ function setClick(evt) {
                 oo.setAttribute("stroke-width", oo.getAttribute("stroke-width") * lw);
                 oo.setAttribute("ostroke", oo.getAttribute("stroke"));
                 oo.setAttribute("stroke", cl);
+                
                 addHandle(oo.getAttribute("id"));
                 if (oo.hasAttribute("over"))
                     oo.removeAttribute("over");
@@ -224,15 +225,16 @@ function StopMenu() {
 function addHandle(ele) {
 
     var handles = parent.lastobj;
+    if (handles != null) {
+        obj = handles.split(",");
 
-    obj = handles.split(",");
+        obj[obj.length] = ele;
 
-    obj[obj.length] = ele;
-
-    if (obj.length) {
-        parent.lastobj = obj.join(',');
+        if (obj.length) {
+            parent.lastobj = obj.join(',');
+        }
     }
-
+    
 //    parent.Ext.getCmp('App.Plan.Principal').getActiveTab().save_select_tool.enable();
 
 }
@@ -240,19 +242,20 @@ function addHandle(ele) {
 function removeHandle(ele) {
 
     var handles = parent.lastobj;
-    obj = handles.split(",");
-    tmp = new Array();
-    var cnt = 0;
+    if (handles != null) {
+        obj = handles.split(",");
+        tmp = new Array();
+        var cnt = 0;
 
-    for (var i = 0; i < obj.length; i++) {
-        if (obj[i] != ele) {
-            tmp[cnt] = obj[i];
-            cnt++;
+        for (var i = 0; i < obj.length; i++) {
+            if (obj[i] != ele) {
+                tmp[cnt] = obj[i];
+                cnt++;
+            }
         }
+
+        parent.lastobj = tmp.join(',');
     }
-
-    parent.lastobj = tmp.join(',');
-
 }
 
 

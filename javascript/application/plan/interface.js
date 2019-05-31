@@ -19,6 +19,9 @@ App.Plan.NodeZoom = '';
 App.Plan.colorSection = '';
 App.Plan.NodePlan = 0;
 App.Plan.tabId = 0;
+App.Plan.OriginalNodeSection = '';
+App.Plan.TextSelect = '';
+
 
 App.Plan.ViewConfig = {
     Color: 'FF0000',
@@ -1061,7 +1064,8 @@ function hasClass(element, className) {
     return element.className && new RegExp("(^|\\s)" + className + "(\\s|$)").test(element.className);
 }
 function changeText(id, event) {
-    // console.log(event);
+    
+     App.Plan.TextSelect= '';
     //se obtiene el id del campo hidden
     var idText = document.getElementById('rect_hidden_' + id);
     var textFont = document.getElementById('text_font_' + id);
@@ -1070,15 +1074,36 @@ function changeText(id, event) {
     var enterText = document.getElementById('text_content_' + id);
 
 
+
     var idElement = 'plan_embed_' + id;
     var embElement = document.getElementById(idElement);
     var svgElement = embElement.getSVGDocument().documentElement;
     var text = svgElement.getElementById(idText.value);
 
+
+    if (enterText.value.length == 0) {
+        var allText = svgElement.getElementById(idText.value).children;
+       
+        for (i = 0; i < allText.length; i++)
+        {
+            App.Plan.TextSelect += allText[i].textContent;
+            if(i != (allText.length-1)){
+                App.Plan.TextSelect += '\n';
+            }    
+       
+        }
+        
+        
+        
+    } else {
+        App.Plan.TextSelect = enterText.value;
+        
+    }
+
     text.setAttribute("font-family", textFont.value);
     text.setAttribute("font-size", textSize.value);
     text.setAttribute("fill", textColor.value);
-    var textContent = document.createTextNode(enterText.value);
+    var textContent = document.createTextNode(App.Plan.TextSelect);
 
 
     var leng = Number(text.getBoundingClientRect().width) + (Number(textSize.value));
@@ -1116,7 +1141,7 @@ function changeText(id, event) {
 
     }
 
-    array_text = enterText.value.split('\n');
+    array_text = App.Plan.TextSelect.split('\n');
     var inicio = 0;
     var max_leng = 0;
     array_text.forEach(function (entry) {
@@ -1142,6 +1167,7 @@ function changeText(id, event) {
 
         text.appendChild(svgtspan);
         var long = svgtspan.getComputedTextLength();
+        
         if (Number(long) > max_leng) {
             max_leng = long;
         }
@@ -1157,7 +1183,7 @@ function changeText(id, event) {
 
 //    var long = text.getComputedTextLength();
 
-    if (enterText.textLength === 0) {
+    if (App.Plan.TextSelect.length === 0) {
         polyline.setAttribute("points", leng_polyline[0] + " " + leng_polyline[1] + " " + (parseFloat(var_polyline2[0]) + parseFloat(30)) + "," + var_polyline[1]);
     } else {
         polyline.setAttribute("points", leng_polyline[0] + " " + leng_polyline[1] + " " + (parseFloat(var_polyline3[0]) + Number(max_leng)) + "," + var_polyline[1]);
