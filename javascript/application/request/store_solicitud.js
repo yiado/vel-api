@@ -1,34 +1,24 @@
-
-
-App.Request.Solicitudes.Store = new Ext.data.JsonStore
-({
-    proxy: new Ext.data.HttpProxy
-    ({
-        api: 
-        {
-            read:       'index.php/request/solicitud/get',
-            create :    'index.php/request/solicitud/add',
-            update: 	'index.php/request/solicitud/update',
+App.Request.Solicitudes.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
+            read: 'index.php/request/solicitud/get',
+            create: 'index.php/request/solicitud/add',
+            update: 'index.php/request/solicitud/update',
         },
-        listeners : 
-        {
-            'exception' : function ( DataProxy, type, action, options, response, arg ) 
-            {
-                if (type == 'remote') 
-                {
+        listeners: {
+            'exception': function(DataProxy, type, action, options, response, arg) {
+                if (type == 'remote') {
                     Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
                 }
-            if (type == 'response')
-            {
-                response = Ext.decode(response.responseText);
-                if (response.success == false)
-                    alert(response.msg);
-            }                                        
+                if (type == 'response') {
+                    response = Ext.decode(response.responseText);
+                    if (response.success == false)
+                        alert(response.msg);
+                }
             }
         }
     }),
-    writer: new Ext.data.JsonWriter
-    ({
+    writer: new Ext.data.JsonWriter({
         encode: true,
         writeAllFields: true,
         encodeDelete: true
@@ -37,9 +27,8 @@ App.Request.Solicitudes.Store = new Ext.data.JsonStore
     root: 'results',
     totalProperty: 'total',
     idProperty: 'solicitud_id',
-    fields: 
-    [
-        'solicitud_id', 
+    fields: [
+        'solicitud_id',
         'user_id',
         'solicitud_type_id',
         'solicitud_estado_id',
@@ -55,36 +44,27 @@ App.Request.Solicitudes.Store = new Ext.data.JsonStore
         'SolicitudType',
         'User'
     ],
-    listeners: 
-    {
-        'save': function()
-        {
+    listeners: {
+        'save': function() {
             this.load();
         }
     }
 });
 
-App.Request.SolicitudEstados.Store = new Ext.data.JsonStore
-({
-    proxy: new Ext.data.HttpProxy
-    ({
-        api: 
-        {
+App.Request.SolicitudEstados.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
             read: 'index.php/request/estado/get'
         },
-        listeners : 
-        {
-            'exception' : function ( DataProxy, type, action, options, response, arg ) 
-            {
-                if (type == 'remote') 
-                {
+        listeners: {
+            'exception': function(DataProxy, type, action, options, response, arg) {
+                if (type == 'remote') {
                     Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
                 }
             }
         }
     }),
-    writer: new Ext.data.JsonWriter
-    ({
+    writer: new Ext.data.JsonWriter({
         encode: true,
         writeAllFields: true,
         encodeDelete: true
@@ -93,32 +73,25 @@ App.Request.SolicitudEstados.Store = new Ext.data.JsonStore
     root: 'results',
     totalProperty: 'total',
     idProperty: 'solicitud_estado_id',
-    fields: 
-    [
-        'solicitud_estado_id', 
+    fields: [
+        'solicitud_estado_id',
         'solicitud_estado_nombre',
         'solicitud_estado_comentario'
     ],
-    listeners: 
-    {
-        'save': function()
-        {
+    listeners: {
+        'save': function() {
             this.load();
         }
     }
 });
 
-App.Request.SolicitudTipos.Store = new Ext.data.JsonStore
-({
-    proxy: new Ext.data.HttpProxy
-    ({
-        api: 
-        {
+App.Request.SolicitudTipos.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
             read: 'index.php/request/tipo/get'
         }
     }),
-    writer: new Ext.data.JsonWriter
-    ({
+    writer: new Ext.data.JsonWriter({
         encode: true,
         writeAllFields: true,
         encodeDelete: true
@@ -127,48 +100,37 @@ App.Request.SolicitudTipos.Store = new Ext.data.JsonStore
     root: 'results',
     totalProperty: 'total',
     idProperty: 'solicitud_type_id',
-    fields: 
-    [
-        'solicitud_type_id', 
+    fields: [
+        'solicitud_type_id',
         'solicitud_type_nombre',
         'solicitud_type_comentario'
     ],
-    listeners: 
-    {
-        'save': function()
-        {
+    listeners: {
+        'save': function() {
             this.load();
         }
     }
 });
 
-App.Request.SolicitudLog.Store = new Ext.data.JsonStore
-({
-    proxy: new Ext.data.HttpProxy
-    ({
-        api: 
-        {
-            read:       'index.php/request/log/get'
+App.Request.SolicitudLog.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
+            read: 'index.php/request/log/get'
         },
-        listeners : 
-        {
-            'exception' : function ( DataProxy, type, action, options, response, arg ) 
-            {
-                if (type == 'remote') 
-                {
+        listeners: {
+            'exception': function(DataProxy, type, action, options, response, arg) {
+                if (type == 'remote') {
                     Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
                 }
-            if (type == 'response')
-            {
-                response = Ext.decode(response.responseText);
-                if (response.success == false)
-                    alert(response.msg);
-            }                                        
+                if (type == 'response') {
+                    response = Ext.decode(response.responseText);
+                    if (response.success == false)
+                        alert(response.msg);
+                }
             }
         }
     }),
-    writer: new Ext.data.JsonWriter
-    ({
+    writer: new Ext.data.JsonWriter({
         encode: true,
         writeAllFields: true,
         encodeDelete: true
@@ -177,22 +139,18 @@ App.Request.SolicitudLog.Store = new Ext.data.JsonStore
     root: 'results',
     totalProperty: 'total',
     idProperty: 'solicitud_log_id',
-    fields: 
-    [
+    fields: [
         'solicitud_log_id',
-        'solicitud_id', 
+        'solicitud_id',
         'user_id',
         'solicitud_log_fecha',
         'solicitud_log_detalle',
         'User',
         'Solicitud'
     ],
-    listeners: 
-    {
-        'save': function()
-        {
+    listeners: {
+        'save': function() {
             this.load();
         }
     }
 });
-

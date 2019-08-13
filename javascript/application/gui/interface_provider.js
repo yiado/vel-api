@@ -4,17 +4,17 @@ App.Interface.activeModule = null;
 App.Interface.selectedNodeId = 'root';
 App.Interface.ModuleMenu = new Array();
 
-App.Interface.addToModuleMenu = function(ns, button){
+App.Interface.addToModuleMenu = function(ns, button) {
     App.Interface.ModuleMenu[App.Interface.ModuleMenu.length] = button;
 }
 
-App.Interface.getUserModuleMenu = function(){
+App.Interface.getUserModuleMenu = function() {
     return App.Interface.ModuleMenu;
 }
 
 App.Interface.ViewPort = Ext.extend(Ext.Viewport, {
     layout: 'border',
-    initComponent: function(){
+    initComponent: function() {
         this.items = [{
             xtype: 'panel',
             region: 'center',
@@ -78,15 +78,15 @@ App.Interface.ViewPort = Ext.extend(Ext.Viewport, {
                     pressed: false,
                     toggleGroup: 'App.ActiveModule',
                     allowDepress: false,
-                    toggleHandler: function(btn, state){
+                    toggleHandler: function(btn, state) {
                         if (state == false) {
                             return;
                         }
-                        
+
                         Ext.getCmp('App.PrincipalPanel').removeAll();
                         App.Interface.activeModule = btn.module;
                         App.Interface.ViewPort.displayModuleGui(null);
-                        
+
                         // tree toolbar search
                         Ext.getCmp('App.StructureTree.ToolBarSearch').removeAll();
                         Ext.getCmp('App.StructureTree.ToolBarSearch').hide();
@@ -95,7 +95,7 @@ App.Interface.ViewPort = Ext.extend(Ext.Viewport, {
                             Ext.getCmp('App.StructureTree.ToolBarSearch').show();
                             Ext.getCmp('App.StructureTree.ToolBarSearch').doLayout();
                         }
-                        
+
                     }
                 },
                 baseCls: 'app-module-panel-admin',
@@ -130,25 +130,25 @@ App.Interface.ViewPort = Ext.extend(Ext.Viewport, {
     }
 });
 
-App.Interface.ViewPort.displayModuleGui = function(node){
-    if (App.Interface.activeModule == null) 
+App.Interface.ViewPort.displayModuleGui = function(node) {
+    if (App.Interface.activeModule == null)
         return;
-    
+
     Ext.getCmp('App.PrincipalPanel').removeAll();
     Ext.getCmp('App.PrincipalPanel').add(eval("new App." + App.Interface.activeModule + ".Principal()"));
     Ext.getCmp('App.PrincipalPanel').doLayout();
-    
+
 };
 
-Ext.onReady(function(){
+Ext.onReady(function() {
     Ext.QuickTips.init();
     vp = new App.Interface.ViewPort();
     // tree loading mask
-    
+
     var arrayTB = [{
         text: App.Language.General.set_vista,
         iconCls: 'zoomfit_icon',
-        handler: function(b){
+        handler: function(b) {
             alert(b.ownerCt.ownerCt.title);
         }
     }, {
@@ -167,11 +167,11 @@ Ext.onReady(function(){
         text: App.Language.General.layers,
         iconCls: 'layer_icon'
     }];
-    
+
     vp.render();
-    
+
     App.Security.loadActions();
-    
-/*App.Mtn.Wo.OpenEditMode(547);*/
+
+    /*App.Mtn.Wo.OpenEditMode(547);*/
 
 });

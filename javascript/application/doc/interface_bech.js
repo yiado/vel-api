@@ -20,120 +20,118 @@ App.Document.Principal = Ext.extend(Ext.TabPanel, {
             plugins: [new Ext.ux.OOSubmit()],
             region: 'center',
             loadMask: true,
-            tbar: [ App.ModuleActions[2002], {
-                    xtype: 'spacer',
-                    width: 10
-                }, {
-                    text: App.Language.General.restore,
-                    iconCls: 'restore_icon',
-                    handler: function(b) {
-                        grid = Ext.getCmp('App.Document.GridPapelera');
-                        if (grid.getSelectionModel().getCount()) {
-                            records = Ext.getCmp('App.Document.GridPapelera').getSelectionModel().getSelections();
-                            aux = new Array();
-                            for (var i = 0; i < records.length; i++) {
-                                aux.push(records[i].data.doc_document_id);
+            tbar: [App.ModuleActions[2002], {
+                xtype: 'spacer',
+                width: 10
+            }, {
+                text: App.Language.General.restore,
+                iconCls: 'restore_icon',
+                handler: function(b) {
+                    grid = Ext.getCmp('App.Document.GridPapelera');
+                    if (grid.getSelectionModel().getCount()) {
+                        records = Ext.getCmp('App.Document.GridPapelera').getSelectionModel().getSelections();
+                        aux = new Array();
+                        for (var i = 0; i < records.length; i++) {
+                            aux.push(records[i].data.doc_document_id);
+                        }
+                        doc_document_id = (aux.join(','));
+
+                        Ext.MessageBox.confirm(App.Language.General.confirmation, App.Language.Documentt.this_sure_restore_or_document, function(b) {
+                            if (b == 'yes') {
+                                Ext.Ajax.request({
+                                    waitMsg: App.Language.General.message_generating_file,
+                                    url: 'index.php/doc/document/sacarPapelera',
+                                    timeout: 10000000000,
+                                    params: {
+                                        doc_document_id: doc_document_id
+                                    },
+                                    success: function(response) {
+                                        response = Ext.decode(response.responseText);
+                                        //ACTUALIZA LOS THUMB (GALLERY)
+                                        App.Document.Store.setBaseParam('node_id', App.Interface.selectedNodeId);
+                                        App.Document.Store.load();
+                                        Ext.getCmp('App.Document.GridPapelera').fireEvent('beforerender', Ext.getCmp('App.Document.GridPapelera'));
+                                        Ext.getCmp('App.Document.GridDoc').fireEvent('beforerender', Ext.getCmp('App.Document.GridDoc'));
+                                        Ext.FlashMessage.alert(response.msg);
+
+                                    },
+                                    failure: function(response) {
+                                        Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
+                                    }
+                                });
+
+                            } else {
+                                Ext.FlashMessage.alert(App.Language.General.you_must_select_at_least_one_record);
                             }
-                            doc_document_id = (aux.join(','));
-
-                            Ext.MessageBox.confirm(App.Language.General.confirmation, App.Language.Documentt.this_sure_restore_or_document, function(b) {
-                                if (b == 'yes') {
-                                    Ext.Ajax.request({
-                                        waitMsg: App.Language.General.message_generating_file,
-                                        url: 'index.php/doc/document/sacarPapelera',
-                                        timeout: 10000000000,
-                                        params: {
-                                            doc_document_id: doc_document_id
-                                        },
-                                        success: function(response) {
-                                            response = Ext.decode(response.responseText);
-                                            //ACTUALIZA LOS THUMB (GALLERY)
-                                            App.Document.Store.setBaseParam('node_id', App.Interface.selectedNodeId);
-                                            App.Document.Store.load();
-                                            Ext.getCmp('App.Document.GridPapelera').fireEvent('beforerender', Ext.getCmp('App.Document.GridPapelera'));
-                                            Ext.getCmp('App.Document.GridDoc').fireEvent('beforerender', Ext.getCmp('App.Document.GridDoc'));
-                                            Ext.FlashMessage.alert(response.msg);
-
-                                        },
-                                        failure: function(response) {
-                                            Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
-                                        }
-                                    });
-
-                                }
-                                else {
-                                    Ext.FlashMessage.alert(App.Language.General.you_must_select_at_least_one_record);
-                                }
-                            });
+                        });
 
 
-                        }
-                        else {
-                            Ext.FlashMessage.alert(App.Language.General.you_must_select_at_least_one_record);
-                        }
+                    } else {
+                        Ext.FlashMessage.alert(App.Language.General.you_must_select_at_least_one_record);
                     }
-                }],
-                listeners: {
-                    'beforerender': function(w) {
-                        App.Document.Papelera.Store.load();
-                    }
-                },
-                viewConfig: {
-                    forceFit: true
-                },
-                store: App.Document.Papelera.Store,
-                columns: [new Ext.grid.CheckboxSelectionModel(), {
-                    header: App.Language.General.file_name,
-                    sortable: true,
-                    dataIndex: 'doc_document_filename',
-                    renderer: function(val, metadata, record) {
-                        return "<a href='index.php/doc/document/download/" + record.data.doc_current_version_id + "'>" + val + "</a>";
-                    }
-                }, {
-                    header: App.Language.General.version,
-                    sortable: true,
-                    width: 50,
-                    dataIndex: 'doc_version_code_client'
+                }
+            }],
+            listeners: {
+                'beforerender': function(w) {
+                    App.Document.Papelera.Store.load();
+                }
+            },
+            viewConfig: {
+                forceFit: true
+            },
+            store: App.Document.Papelera.Store,
+            columns: [new Ext.grid.CheckboxSelectionModel(), {
+                header: App.Language.General.file_name,
+                sortable: true,
+                dataIndex: 'doc_document_filename',
+                renderer: function(val, metadata, record) {
+                    return "<a href='index.php/doc/document/download/" + record.data.doc_current_version_id + "'>" + val + "</a>";
+                }
+            }, {
+                header: App.Language.General.version,
+                sortable: true,
+                width: 50,
+                dataIndex: 'doc_version_code_client'
 
-                }, {
-                    header: App.Language.Document.document_type,
-                    sortable: true,
-                    dataIndex: 'doc_extension_name',
-                    width: 70
-                }, {
-                    header: App.Language.General.category,
-                    sortable: true,
-                    dataIndex: 'doc_category_name',
-                    width: 50
-                }, {
-                    xtype: 'datecolumn',
-                    header: App.Language.Plan.upload_date,
-                    sortable: true,
-                    dataIndex: 'doc_document_creation',
-                    width: 60,
-                    format: App.General.DefaultDateTimeFormat,
-                    align: 'center'
-                }, {
-                    xtype: 'datecolumn',
-                    header: App.Language.General.expiration_date,
-                    sortable: true,
-                    renderer: App.Document.ColorRowStatusUser,
-                    dataIndex: 'doc_version_expiration',
-                    width: 60,
-                    format: App.General.DatPatterns.DefaultDateFormat,
-                    aling: 'center'
-                }, {
-                    dataIndex: 'doc_path',
-                    header: App.Language.Core.location,
-                    sortable: true,
-                    width: 100,
-                    renderer: function(doc_path, metadata, record, rowIndex, colIndex, store) {
-                        metadata.attr = 'ext:qtip="' + doc_path + '"';
-                        return doc_path;
-                    }
-                }],
-                sm: new Ext.grid.CheckboxSelectionModel()
-            }];
+            }, {
+                header: App.Language.Document.document_type,
+                sortable: true,
+                dataIndex: 'doc_extension_name',
+                width: 70
+            }, {
+                header: App.Language.General.category,
+                sortable: true,
+                dataIndex: 'doc_category_name',
+                width: 50
+            }, {
+                xtype: 'datecolumn',
+                header: App.Language.Plan.upload_date,
+                sortable: true,
+                dataIndex: 'doc_document_creation',
+                width: 60,
+                format: App.General.DefaultDateTimeFormat,
+                align: 'center'
+            }, {
+                xtype: 'datecolumn',
+                header: App.Language.General.expiration_date,
+                sortable: true,
+                renderer: App.Document.ColorRowStatusUser,
+                dataIndex: 'doc_version_expiration',
+                width: 60,
+                format: App.General.DatPatterns.DefaultDateFormat,
+                aling: 'center'
+            }, {
+                dataIndex: 'doc_path',
+                header: App.Language.Core.location,
+                sortable: true,
+                width: 100,
+                renderer: function(doc_path, metadata, record, rowIndex, colIndex, store) {
+                    metadata.attr = 'ext:qtip="' + doc_path + '"';
+                    return doc_path;
+                }
+            }],
+            sm: new Ext.grid.CheckboxSelectionModel()
+        }];
         App.Document.Principal.superclass.initComponent.call(this);
     }
 });
@@ -144,45 +142,45 @@ App.Document.TBar = [App.ModuleActions[2001], {
     }, App.ModuleActions[2008], {
         xtype: 'spacer',
         width: 10
-    }, 
-//    {
-//        text: 'Editar Categoría',
-//        iconCls: 'edit_icon',
-//        handler: function()
-//        {
-//            grid = Ext.getCmp('App.Document.GridDoc');
-//            if (grid === undefined) {
-//                //ENTRA CUANDO ES XTEMPLATE
-//    
-//            } else {//ENTRA CUANDO ES GRILLA
-//                if (grid.getSelectionModel().getCount()) {
-//                    records = Ext.getCmp('App.Document.GridDoc').getSelectionModel().getSelections();
-//                    aux = new Array();
-////                    App.InfraStructure.copiedNodes = new Array();
-//                    for (var i = 0; i < records.length; i++) {
-//                        aux.push(records[i].data.doc_document_id);
-////                        App.InfraStructure.copiedNodes.push(Ext.getCmp('App.StructureTree.Tree').getNodeById(records[i].data.node_id));
-//                    }
-//                    doc_document_id = (aux.join(','));
-//                    
-//                    if ( aux.length == 1 ){
-//                        w = new App.Document.updateCategoryWindow();
-//                        w.show();
-//                    } else {
-//                        Ext.FlashMessage.alert('Solo se puede cambiar 1 categoría a la vez');
-//                    }
-//
-////                    App.Document.CutProxy(doc_document_id, function(){});
-//                } else {
-//                    Ext.FlashMessage.alert(App.Language.General.you_must_select_at_least_one_record);
-//                }
-//            }
-//            
-//        }
-//    }, {
-//        xtype: 'spacer',
-//        width: 10
-//    }, 
+    },
+    //    {
+    //        text: 'Editar Categoría',
+    //        iconCls: 'edit_icon',
+    //        handler: function()
+    //        {
+    //            grid = Ext.getCmp('App.Document.GridDoc');
+    //            if (grid === undefined) {
+    //                //ENTRA CUANDO ES XTEMPLATE
+    //    
+    //            } else {//ENTRA CUANDO ES GRILLA
+    //                if (grid.getSelectionModel().getCount()) {
+    //                    records = Ext.getCmp('App.Document.GridDoc').getSelectionModel().getSelections();
+    //                    aux = new Array();
+    ////                    App.InfraStructure.copiedNodes = new Array();
+    //                    for (var i = 0; i < records.length; i++) {
+    //                        aux.push(records[i].data.doc_document_id);
+    ////                        App.InfraStructure.copiedNodes.push(Ext.getCmp('App.StructureTree.Tree').getNodeById(records[i].data.node_id));
+    //                    }
+    //                    doc_document_id = (aux.join(','));
+    //                    
+    //                    if ( aux.length == 1 ){
+    //                        w = new App.Document.updateCategoryWindow();
+    //                        w.show();
+    //                    } else {
+    //                        Ext.FlashMessage.alert('Solo se puede cambiar 1 categoría a la vez');
+    //                    }
+    //
+    ////                    App.Document.CutProxy(doc_document_id, function(){});
+    //                } else {
+    //                    Ext.FlashMessage.alert(App.Language.General.you_must_select_at_least_one_record);
+    //                }
+    //            }
+    //            
+    //        }
+    //    }, {
+    //        xtype: 'spacer',
+    //        width: 10
+    //    }, 
     {
         text: App.Language.General.send_to_trash,
         iconCls: 'bin_icon',
@@ -192,7 +190,7 @@ App.Document.TBar = [App.ModuleActions[2001], {
                 //ENTRA CUANDO ES XTEMPLATE
                 gallery = Ext.getCmp('App.Document.Gallery');
                 records = gallery.getSelectedRecords();
-                
+
                 aux = new Array();
                 for (var i = 0; i < records.length; i++) {
                     aux.push(records[i].data.doc_document_id);
@@ -210,7 +208,7 @@ App.Document.TBar = [App.ModuleActions[2001], {
                             },
                             success: function(response) {
                                 response = Ext.decode(response.responseText);
-                                
+
                                 //ACTUALIZA LOS THUMB (GALLERY)
                                 App.Document.Store.setBaseParam('node_id', App.Interface.selectedNodeId);
                                 App.Document.Store.load();
@@ -225,7 +223,7 @@ App.Document.TBar = [App.ModuleActions[2001], {
                         });
                     }
                 });
-            } else {//ENTRA CUANDO ES GRILLA
+            } else { //ENTRA CUANDO ES GRILLA
                 if (grid.getSelectionModel().getCount()) {
                     records = Ext.getCmp('App.Document.GridDoc').getSelectionModel().getSelections();
                     aux = new Array();
@@ -264,7 +262,8 @@ App.Document.TBar = [App.ModuleActions[2001], {
     }, {
         xtype: 'tbseparator',
         width: 10
-    }, App.ModuleActions[2007], {
+    },
+    App.ModuleActions[2007], {
         xtype: 'spacer',
         width: 10
     },
@@ -273,8 +272,7 @@ App.Document.TBar = [App.ModuleActions[2001], {
         iconCls: 'old_version_icon',
         handler: function(b) {
             grid = Ext.getCmp('App.Document.GridDoc');
-            if (grid.getSelectionModel().getCount())
-            {
+            if (grid.getSelectionModel().getCount()) {
                 App.Document.selectedDocumentId = grid.getSelectionModel().getSelected().data.doc_document_id;
                 App.Document.CategoryName = grid.getSelectionModel().getSelected().data.doc_category_name;
                 App.Document.Version.Store.setBaseParam('doc_document_id', App.Document.selectedDocumentId);
@@ -299,8 +297,7 @@ App.Document.TBar = [App.ModuleActions[2001], {
         handler: function(b) {
             if (b.ownerCt.ownerCt.form.isVisible()) {
                 b.ownerCt.ownerCt.form.hide();
-            }
-            else {
+            } else {
                 b.ownerCt.ownerCt.form.show();
             }
 
@@ -313,7 +310,7 @@ App.Document.TBar = [App.ModuleActions[2001], {
         text: App.Language.General.img,
         iconCls: 'img_icon',
         handler: function(b) {
-            App.Document.Store.load({params: {node_id: App.Interface.selectedNodeId, doc_extension_id: 2}});
+            App.Document.Store.load({ params: { node_id: App.Interface.selectedNodeId, doc_extension_id: 2 } });
         }
     }, {
         xtype: 'spacer',
@@ -322,7 +319,7 @@ App.Document.TBar = [App.ModuleActions[2001], {
         text: App.Language.General.doc,
         iconCls: 'doc_icon',
         handler: function(b) {
-            App.Document.Store.load({params: {node_id: App.Interface.selectedNodeId, doc_extension_id: 100}});
+            App.Document.Store.load({ params: { node_id: App.Interface.selectedNodeId, doc_extension_id: 100 } });
         }
     }, {
         xtype: 'spacer',
@@ -331,7 +328,7 @@ App.Document.TBar = [App.ModuleActions[2001], {
         text: 'dwg',
         iconCls: 'img_icon',
         handler: function(b) {
-            App.Document.Store.load({params: {node_id: App.Interface.selectedNodeId, doc_extension_id: 101}});
+            App.Document.Store.load({ params: { node_id: App.Interface.selectedNodeId, doc_extension_id: 101 } });
         }
     }, {
         xtype: 'spacer',
@@ -351,8 +348,7 @@ App.Document.TBar = [App.ModuleActions[2001], {
     }, {
         text: App.Language.General.eexport,
         iconCls: 'export_icon',
-        handler: function()
-        {
+        handler: function() {
             w = new App.Document.exportListWindow();
             w.show();
         }
@@ -362,8 +358,8 @@ App.Document.TBar = [App.ModuleActions[2001], {
     }, {
         xtype: 'tbseparator',
         width: 10
-    }, 
-//    '->', 
+    },
+    //    '->', 
     {
         text: App.Language.General.list,
         iconCls: 'list_icon',
@@ -380,27 +376,24 @@ App.Document.TBar = [App.ModuleActions[2001], {
             Ext.getCmp('App.Document.Principal').Principal.add(new App.Document.ThumbView());
             Ext.getCmp('App.Document.Principal').Principal.doLayout();
         }
-    }];
+    }
+];
 
-App.Document.exportListWindow = Ext.extend(Ext.Window, 
-{
+App.Document.exportListWindow = Ext.extend(Ext.Window, {
     title: App.Language.General.eexport_list,
     width: 400,
     height: 150,
     layout: 'fit',
     modal: true,
     resizable: false,
-    
+
     padding: 1,
-    initComponent: function()
-    {
-        this.items = 
-        [{
+    initComponent: function() {
+        this.items = [{
             xtype: 'form',
             padding: 5,
             labelWidth: 150,
-            items: 
-            [{
+            items: [{
                 xtype: 'textfield',
                 fieldLabel: App.Language.General.file_name,
                 anchor: '100%',
@@ -409,39 +402,31 @@ App.Document.exportListWindow = Ext.extend(Ext.Window,
                 regex: /^[a-zA-Z0-9_]/,
                 allowBlank: false
             }],
-            buttons: 
-            [{
+            buttons: [{
                 xtype: 'button',
                 text: App.Language.General.close,
-                handler: function(b)
-                {
+                handler: function(b) {
                     b.ownerCt.ownerCt.ownerCt.hide();
                 }
             }, {
                 xtype: 'button',
                 text: App.Language.General.eexport,
-                handler: function(b)
-                {
+                handler: function(b) {
                     fp = b.ownerCt.ownerCt;
                     form = b.ownerCt.ownerCt.getForm();
-                    if (form.isValid()) 
-                    {
-                        form.submit
-                        ({
+                    if (form.isValid()) {
+                        form.submit({
                             clientValidation: true,
                             waitTitle: App.Language.General.message_please_wait,
                             waitMsg: App.Language.General.message_generating_file,
                             url: 'index.php/doc/document/exportList',
                             params: App.Document.Store.baseParams,
-                            success: function(form, response)
-                            {
+                            success: function(form, response) {
                                 document.location = 'index.php/app/download/' + response.result.file;
                                 b.ownerCt.ownerCt.ownerCt.close();
                             },
-                            failure: function(form, action)
-                            {
-                                switch (action.failureType) 
-                                {
+                            failure: function(form, action) {
+                                switch (action.failureType) {
                                     case Ext.form.Action.CLIENT_INVALID:
                                         Ext.Msg.alert(App.Language.General.error, App.Language.General.message_extjs_client_invalid);
                                         break;
@@ -723,12 +708,12 @@ App.Document.GridView = Ext.extend(Ext.grid.GridPanel, {
             App.Document.Store.load();
         },
         'rowdblclick': function(grid, rowIndex) {
-           
+
             App.Document.doc_version_filename = grid.getStore().getAt(rowIndex).data.doc_version_filename;
             App.Document.doc_image_web = grid.getStore().getAt(rowIndex).data.DocCurrentVersion.doc_image_web;
             //VENTANA AMPLIADA CON SUS VERSIONES
             App.Document.currentPosition = rowIndex;
-//            doc_version_filename = grid.getStore().getAt(rowIndex).data.doc_version_filename;
+            //            doc_version_filename = grid.getStore().getAt(rowIndex).data.doc_version_filename;
             w = new App.Document.VersionImagenWindow();
             w.show();
 
@@ -738,7 +723,7 @@ App.Document.GridView = Ext.extend(Ext.grid.GridPanel, {
             App.Document.Version.Store.setBaseParam('doc_document_id', App.Document.selectedDocumentId);
             App.Document.Version.Store.setBaseParam('doc_category_name', App.Document.CategoryName);
             App.Document.Version.Store.load();
-//            App.Document.doc_version_filename = grid.getStore().getAt(rowIndex).data.doc_version_filename;
+            //            App.Document.doc_version_filename = grid.getStore().getAt(rowIndex).data.doc_version_filename;
         }
     },
     viewConfig: {
@@ -747,80 +732,80 @@ App.Document.GridView = Ext.extend(Ext.grid.GridPanel, {
     store: App.Document.Store,
     initComponent: function() {
         this.columns = [new Ext.grid.CheckboxSelectionModel(), {
-            header: App.Language.General.file_name,
-            sortable: true,
-            dataIndex: 'doc_document_filename',
-            renderer: function(val, metadata, record) {
-                return "<a href='index.php/doc/document/download/" + record.data.doc_current_version_id + "'>" + val + "</a>";
-            }
-        }, {
-            header: App.Language.General.version,
-            sortable: true,
-            width: 50,
-            dataIndex: 'doc_version_code_client'
+                header: App.Language.General.file_name,
+                sortable: true,
+                dataIndex: 'doc_document_filename',
+                renderer: function(val, metadata, record) {
+                    return "<a href='index.php/doc/document/download/" + record.data.doc_current_version_id + "'>" + val + "</a>";
+                }
+            }, {
+                header: App.Language.General.version,
+                sortable: true,
+                width: 50,
+                dataIndex: 'doc_version_code_client'
 
-        }, {
-            header: App.Language.Document.document_type,
-            sortable: true,
-            dataIndex: 'doc_extension_name',
-            width: 70
-        }, {
-            header: App.Language.General.category,
-            sortable: true,
-            dataIndex: 'doc_category_name',
-            width: 50
-        }, {
-            header: App.Language.Document.keywords,
-            sortable: true,
-            dataIndex: 'doc_version_keyword',
-            width: 50
-        }, {
-            header: App.Language.General.comment,
-            sortable: true,
-            dataIndex: 'doc_version_comments',
-            width: 50
-        }, {
-            xtype: 'datecolumn',
-            header: 'Fecha Documento',
-            sortable: true,
-            dataIndex: 'doc_version_internal',
-            format: App.General.DatPatterns.DefaultDateFormat,
-            width: 60,
-            aling: 'center'
-        }, {
-            xtype: 'datecolumn',
-            header: App.Language.Plan.upload_date,
-            sortable: true,
-            dataIndex: 'doc_document_creation',
-            width: 60,
-            format: App.General.DefaultDateTimeFormat,
-            align: 'center'
-        }, {
-            xtype: 'datecolumn',
-            header: App.Language.General.expiration_date,
-            sortable: true,
-            renderer: App.Document.ColorRowStatusUser,
-            dataIndex: 'doc_version_expiration',
-            width: 60,
-            format: App.General.DatPatterns.DefaultDateFormat,
-            aling: 'center'
-        }, {
-            xtype: 'gridcolumn',
-            header: App.Language.General.uploaded_by,
-            dataIndex: 'user_name',
-            width: 70,
-            sortable: true
-        }, {
-            dataIndex: 'doc_path',
-            header: App.Language.Core.location,
-            sortable: true,
-            width: 100,
-            renderer: function(doc_path, metadata, record, rowIndex, colIndex, store) {
-                metadata.attr = 'ext:qtip="' + doc_path + '"';
-                return doc_path;
-            }
-        }],
-        this.sm = new Ext.grid.CheckboxSelectionModel(), App.Document.GridView.superclass.initComponent.call(this);
+            }, {
+                header: App.Language.Document.document_type,
+                sortable: true,
+                dataIndex: 'doc_extension_name',
+                width: 70
+            }, {
+                header: App.Language.General.category,
+                sortable: true,
+                dataIndex: 'doc_category_name',
+                width: 50
+            }, {
+                header: App.Language.Document.keywords,
+                sortable: true,
+                dataIndex: 'doc_version_keyword',
+                width: 50
+            }, {
+                header: App.Language.General.comment,
+                sortable: true,
+                dataIndex: 'doc_version_comments',
+                width: 50
+            }, {
+                xtype: 'datecolumn',
+                header: 'Fecha Documento',
+                sortable: true,
+                dataIndex: 'doc_version_internal',
+                format: App.General.DatPatterns.DefaultDateFormat,
+                width: 60,
+                aling: 'center'
+            }, {
+                xtype: 'datecolumn',
+                header: App.Language.Plan.upload_date,
+                sortable: true,
+                dataIndex: 'doc_document_creation',
+                width: 60,
+                format: App.General.DefaultDateTimeFormat,
+                align: 'center'
+            }, {
+                xtype: 'datecolumn',
+                header: App.Language.General.expiration_date,
+                sortable: true,
+                renderer: App.Document.ColorRowStatusUser,
+                dataIndex: 'doc_version_expiration',
+                width: 60,
+                format: App.General.DatPatterns.DefaultDateFormat,
+                aling: 'center'
+            }, {
+                xtype: 'gridcolumn',
+                header: App.Language.General.uploaded_by,
+                dataIndex: 'user_name',
+                width: 70,
+                sortable: true
+            }, {
+                dataIndex: 'doc_path',
+                header: App.Language.Core.location,
+                sortable: true,
+                width: 100,
+                renderer: function(doc_path, metadata, record, rowIndex, colIndex, store) {
+                    metadata.attr = 'ext:qtip="' + doc_path + '"';
+                    return doc_path;
+                }
+            }],
+            this.sm = new Ext.grid.CheckboxSelectionModel(), App.Document.GridView.superclass.initComponent.call(this);
     }
 
 });
@@ -838,7 +823,7 @@ App.Document.GridView2 = Ext.extend(Ext.grid.GridPanel, {
             App.Document.Store.load();
         },
         'rowdblclick': function(grid, rowIndex) {
-            
+
             //VENTANA AMPLIADA CON SUS VERSIONES
             App.Document.currentPosition = rowIndex;
             w = new App.Document.VersionImagenWindow();
@@ -859,28 +844,28 @@ App.Document.GridView2 = Ext.extend(Ext.grid.GridPanel, {
     store: App.Document.Store,
     initComponent: function() {
         this.columns = [new Ext.grid.CheckboxSelectionModel(), {
-            header: App.Language.General.file_name,
-            sortable: true,
-            dataIndex: 'doc_document_filename',
-            renderer: function(val, metadata, record) {
-                return "<a href='index.php/doc/document/download/" + record.data.doc_current_version_id + "'>" + val + "</a>";
-            }
-        }, {
-            xtype: 'datecolumn',
-            header: App.Language.Plan.upload_date,
-            dataIndex: 'doc_document_creation',
-            width: 60,
-            format: App.General.DefaultDateTimeFormat,
-            aling: 'center'
+                header: App.Language.General.file_name,
+                sortable: true,
+                dataIndex: 'doc_document_filename',
+                renderer: function(val, metadata, record) {
+                    return "<a href='index.php/doc/document/download/" + record.data.doc_current_version_id + "'>" + val + "</a>";
+                }
+            }, {
+                xtype: 'datecolumn',
+                header: App.Language.Plan.upload_date,
+                dataIndex: 'doc_document_creation',
+                width: 60,
+                format: App.General.DefaultDateTimeFormat,
+                aling: 'center'
             }],
-        this.sm = new Ext.grid.CheckboxSelectionModel(), App.Document.GridView2.superclass.initComponent.call(this);
+            this.sm = new Ext.grid.CheckboxSelectionModel(), App.Document.GridView2.superclass.initComponent.call(this);
     }
 
 });
 
 App.Document.AbrirImagen = function(doc_document_id, position) {
     App.Document.selectedDocumentId = doc_document_id;
-    App.Document.currentPosition = position - 1;// SE RESTA 1 PORQUE EL STORE PARTE EN 0 Y EL XTemplate PARTE EN 1 
+    App.Document.currentPosition = position - 1; // SE RESTA 1 PORQUE EL STORE PARTE EN 0 Y EL XTemplate PARTE EN 1 
     //VENTANA AMPLIADA CON SUS VERSIONES
     w = new App.Document.VersionImagenWindow();
     w.show();
@@ -894,18 +879,18 @@ App.Document.ThumbView = Ext.extend(Ext.DataView, {
     multiSelect: true,
     store: App.Document.Store,
     tpl: new Ext.XTemplate('<tpl for=".">',
-    '<div class="thumb-wrap" id="{doc_document_id}">',
-    '<tpl if="values.DocCurrentVersion.doc_image_web == \'0\'">',
-    '<div class="thumb"   ><img  src="docs/thumb/not_image_icon.png" ondblclick="App.Document.AbrirImagen({doc_document_id}, {#})" class="thumb-img"/></div>',
-    '<span class="thumb-wrap-span">{doc_document_filename}</span></div>',
-    '</tpl>',
-    '<tpl if="values.DocCurrentVersion.doc_image_web == \'1\'">',
-    '<div class="thumb"   ><img src="docs/thumb/{doc_version_filename}?id={[new Date().getTime()]}" ondblclick="App.Document.AbrirImagen({doc_document_id}, {#})" class="thumb-img"/></div>',
-    '<span class="thumb-wrap-span">{doc_document_filename}</span></div>',
-    '</tpl>',
-    '</div>',
-    '</tpl>',
-    '<div class="x-clear"></div>'),
+        '<div class="thumb-wrap" id="{doc_document_id}">',
+        '<tpl if="values.DocCurrentVersion.doc_image_web == \'0\'">',
+        '<div class="thumb"   ><img  src="docs/thumb/not_image_icon.png" ondblclick="App.Document.AbrirImagen({doc_document_id}, {#})" class="thumb-img"/></div>',
+        '<span class="thumb-wrap-span">{doc_document_filename}</span></div>',
+        '</tpl>',
+        '<tpl if="values.DocCurrentVersion.doc_image_web == \'1\'">',
+        '<div class="thumb"   ><img src="docs/thumb/{doc_version_filename}?id={[new Date().getTime()]}" ondblclick="App.Document.AbrirImagen({doc_document_id}, {#})" class="thumb-img"/></div>',
+        '<span class="thumb-wrap-span">{doc_document_filename}</span></div>',
+        '</tpl>',
+        '</div>',
+        '</tpl>',
+        '<div class="x-clear"></div>'),
     listeners: {
         'beforerender': function(w) {
             App.Document.Store.load();
@@ -913,8 +898,7 @@ App.Document.ThumbView = Ext.extend(Ext.DataView, {
     }
 });
 
-App.Document.VersionImagenWindow = Ext.extend(Ext.Window,
-{
+App.Document.VersionImagenWindow = Ext.extend(Ext.Window, {
     title: App.Language.General.versions_of_stock,
     width: 1000,
     height: 600,
@@ -925,8 +909,7 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window,
     layout: 'border',
     border: false,
     enableKeyEvents: true,
-    tbar:
-    [{
+    tbar: [{
         xtype: 'button',
         iconCls: 'previous_icon',
         handler: function(b) {
@@ -945,8 +928,7 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window,
         width: 5
     }, {
         iconCls: 'next_icon',
-        handler: function(b)
-        {
+        handler: function(b) {
             App.Document.currentPosition = App.Document.currentPosition + 1;
             record = App.Document.Store.getAt(App.Document.currentPosition);
             //VALIDA QUE NO SEA MAYOR AL TOTAL
@@ -964,8 +946,7 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window,
         iconCls: 'download_icon',
         handler: function(b) {
             grid = Ext.getCmp('App.Document.GridDocVersion');
-            if (grid.getSelectionModel().getCount())
-            {
+            if (grid.getSelectionModel().getCount()) {
                 window.location = 'index.php/doc/document/download/' + grid.getSelectionModel().getSelected().data.doc_version_id;
             } else {
                 Ext.FlashMessage.alert(App.Language.General.you_have_to_select_an_item_to_set);
@@ -980,7 +961,7 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window,
         handler: function(b) {
             grid = Ext.getCmp('App.Document.GridDoc');
             if (grid === undefined) {
-                
+
                 Ext.Ajax.request({
                     waitTitle: App.Language.General.message_please_wait,
                     waitMsg: App.Language.Document.rotating_picture,
@@ -993,7 +974,7 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window,
                         response = Ext.decode(response.responseText);
 
                         doc_version_filename = response.data.DocVersion[0].doc_version_filename;
-                        
+
                         var msg = Ext.MessageBox.wait(App.Language.General.please_wait, "Rotando Imagen");
                         Ext.Ajax.request({
                             url: 'index.php/doc/document/rotacion1',
@@ -1013,11 +994,11 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window,
                             failure: function(response) {
                                 Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
                             },
-                            callback: function () {
+                            callback: function() {
                                 msg.hide()
                             }
                         });
-						
+
                     },
                     failure: function(response) {
                         Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
@@ -1033,23 +1014,23 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window,
                     },
                     success: function(response) {
                         response = Ext.decode(response.responseText);
-                        
+
                         Ext.getCmp('App.Document.VersionImagenWindow').updateImage(response.data.DocCurrentVersion.doc_version_filename, response.data.DocCurrentVersion.doc_image_web);
                         Ext.getCmp('App.Document.VersionImagenWindow').fireEvent('beforerender', Ext.getCmp('App.Document.VersionImagenWindow'));
-			App.Document.Store.load();
-						
+                        App.Document.Store.load();
+
                     },
                     failure: function(response) {
                         Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
                     },
-                    callback: function () {
+                    callback: function() {
                         msg.hide()
                     }
                 });
             }
         }
     }, {
-        text:  App.Language.Document.rotate_right,
+        text: App.Language.Document.rotate_right,
         iconCls: 'arrow-rotate-2',
         handler: function(b) {
             grid = Ext.getCmp('App.Document.GridDoc');
@@ -1066,8 +1047,8 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window,
                         response = Ext.decode(response.responseText);
 
                         doc_version_filename = response.data.DocVersion[0].doc_version_filename;
-                        
-                        var msg = Ext.MessageBox.wait(App.Language.General.please_wait,  App.Language.Document.rotating_picture);
+
+                        var msg = Ext.MessageBox.wait(App.Language.General.please_wait, App.Language.Document.rotating_picture);
                         Ext.Ajax.request({
                             url: 'index.php/doc/document/rotacion2',
                             method: 'POST',
@@ -1086,18 +1067,18 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window,
                             failure: function(response) {
                                 Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
                             },
-                            callback: function () {
+                            callback: function() {
                                 msg.hide()
                             }
                         });
-						
+
                     },
                     failure: function(response) {
                         Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
                     }
                 });
             } else {
-                var msg = Ext.MessageBox.wait(App.Language.General.please_wait,  App.Language.Document.rotating_picture);
+                var msg = Ext.MessageBox.wait(App.Language.General.please_wait, App.Language.Document.rotating_picture);
                 Ext.Ajax.request({
                     url: 'index.php/doc/document/rotacion2',
                     method: 'POST',
@@ -1109,33 +1090,33 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window,
 
                         Ext.getCmp('App.Document.VersionImagenWindow').updateImage(response.data.DocCurrentVersion.doc_version_filename, response.data.DocCurrentVersion.doc_image_web);
                         Ext.getCmp('App.Document.VersionImagenWindow').fireEvent('beforerender', Ext.getCmp('App.Document.VersionImagenWindow'));
-			App.Document.Store.load();
-						
+                        App.Document.Store.load();
+
                     },
                     failure: function(response) {
                         Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
                     },
-                    callback: function () {
+                    callback: function() {
                         msg.hide()
                     }
                 });
             }
         }
-        
+
     }],
     updateImage: function(doc_version_filename, doc_image_web) {
         //ACTUALIZA LA IMAGEN       
-       
-       var d = new Date();
-       var n = d.getTime();
-        
+
+        var d = new Date();
+        var n = d.getTime();
+
         this.imagepanel.removeAll();
-       
+
         this.imagepanel.add(new Ext.Panel({
             layout: 'fit',
             overflowY: 'scroll',
             html: (doc_image_web == 1 ? '<img width=100% src="docs/' + doc_version_filename + '?id=' + n + '" />' : '<div align="center"><br><br><br><br><br><br><br><br><br><br><br><br><img  src="docs/thumb/not_image_icon.png" /></div>')
-            //html: (doc_image_web == 1 ? '<img width=100% src="docs/' + doc_version_filename + '" />' : '<div align="center"><br><br><br><br><br><br><br><br><br><br><br><br><img  src="docs/thumb/not_image_icon.png" /></div>')
+                //html: (doc_image_web == 1 ? '<img width=100% src="docs/' + doc_version_filename + '" />' : '<div align="center"><br><br><br><br><br><br><br><br><br><br><br><br><img  src="docs/thumb/not_image_icon.png" /></div>')
         }));
         this.imagepanel.doLayout();
         record = App.Document.Store.getAt(App.Document.currentPosition);
@@ -1147,7 +1128,7 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window,
     },
     keys: [{
         key: Ext.EventObject.RIGHT,
-        fn: function(){
+        fn: function() {
             App.Document.currentPosition = App.Document.currentPosition + 1;
             record = App.Document.Store.getAt(App.Document.currentPosition);
             //VALIDA QUE NO SEA MAYOR AL TOTAL
@@ -1157,10 +1138,10 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window,
                 App.Document.currentPosition = App.Document.currentPosition - 1;
             }
         }
-     },{
+    }, {
         key: Ext.EventObject.LEFT,
-        fn: function(){
-            
+        fn: function() {
+
             App.Document.currentPosition = App.Document.currentPosition - 1;
             record = App.Document.Store.getAt(App.Document.currentPosition);
             // VALIDA QUE NO SE MENOR A CERO
@@ -1170,17 +1151,15 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window,
                 App.Document.currentPosition = App.Document.currentPosition + 1;
             }
         }
-     }],
+    }],
     listeners: {
         'beforerender': function(w) {
             record = App.Document.Store.getAt(App.Document.currentPosition);
             w.updateImage(record.data.doc_version_filename, record.data.doc_image_web);
         }
     },
-    initComponent: function()
-    {
-        this.items =
-        [{
+    initComponent: function() {
+        this.items = [{
             //ESTA ES LA IMAGEN AMPLIADA
             xtype: 'panel',
             id: 'App.Document.PanelImagen',
@@ -1227,32 +1206,30 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window,
                     width: 5
                 }, App.ModuleActions[2005]]
             },
-            viewConfig:
-            {
+            viewConfig: {
                 forceFit: true,
                 folderSort: true
             },
             columns: [new Ext.grid.CheckboxSelectionModel(),
-            {
-                header: App.Language.General.version,
-                sortable: true,
-                width: 150,
-                dataIndex: 'doc_version_code_client'
-            }, {
-                header: App.Language.General.file_name,
-                sortable: true,
-                width: 60,
-                dataIndex: 'DocDocument',
-                renderer: function(val, metadata, record)
                 {
-                    var class_expiration = '';
-                    if (App.Document.ExpirationDocument(val, record) == true)
-                    {
-                        class_expiration = "style='color:red'";
+                    header: App.Language.General.version,
+                    sortable: true,
+                    width: 150,
+                    dataIndex: 'doc_version_code_client'
+                }, {
+                    header: App.Language.General.file_name,
+                    sortable: true,
+                    width: 60,
+                    dataIndex: 'DocDocument',
+                    renderer: function(val, metadata, record) {
+                        var class_expiration = '';
+                        if (App.Document.ExpirationDocument(val, record) == true) {
+                            class_expiration = "style='color:red'";
+                        }
+                        return "<a href='index.php/doc/document/download/" + record.data.doc_version_id + "' " + class_expiration + ">" + val.doc_document_filename + "</a>";
                     }
-                    return "<a href='index.php/doc/document/download/" + record.data.doc_version_id + "' " + class_expiration + ">" + val.doc_document_filename + "</a>";
                 }
-            }],
+            ],
             sm: new Ext.grid.CheckboxSelectionModel({ singleSelect: true })
         }];
         App.Document.VersionImagenWindow.superclass.initComponent.call(this);
@@ -1280,116 +1257,114 @@ App.Document.Version.Window = Ext.extend(Ext.Window, {
             checkOnly: false
         });
         this.items = [{
-                xtype: 'grid',
-                id: 'App.Document.VersionGrid',
-                viewConfig: {
-                    forceFit: true
+            xtype: 'grid',
+            id: 'App.Document.VersionGrid',
+            viewConfig: {
+                forceFit: true
+            },
+            listeners: {
+                'beforerender': function() {
+                    App.Document.Version.Store.load();
                 },
-                listeners: {
-                    'beforerender': function() {
-                        App.Document.Version.Store.load();
-                    },
-                    'rowdblclick' : function ( grid, rowIndex ) 
-                    {
-                        record = grid.getStore().getAt(rowIndex);
-                        App.Document.editionNewVersion(record);
+                'rowdblclick': function(grid, rowIndex) {
+                    record = grid.getStore().getAt(rowIndex);
+                    App.Document.editionNewVersion(record);
+                }
+            },
+            store: App.Document.Version.Store,
+            tbar: {
+                xtype: 'toolbar',
+                padding: 5,
+                plugins: [new Ext.ux.OOSubmit()],
+                items: [App.ModuleActions[2003], {
+                    xtype: 'spacer',
+                    width: 5
+                }, App.ModuleActions[2005]]
+            },
+            columns: [this.selModel, {
+                header: App.Language.General.file_name,
+                sortable: true,
+                width: 160,
+                dataIndex: 'DocDocument',
+                renderer: function(val, metadata, record) {
+                    var class_expiration = '';
+                    if (App.Document.ExpirationDocument(val, record) == true) {
+                        class_expiration = "style='color:red'";
                     }
-                },
-                store: App.Document.Version.Store,
-                tbar: {
-                    xtype: 'toolbar',
-                    padding: 5,
-                    plugins: [new Ext.ux.OOSubmit()],
-                    items: [App.ModuleActions[2003], {
-                            xtype: 'spacer',
-                            width: 5
-                        }, App.ModuleActions[2005]]
-                },
-                columns: [this.selModel, {
-                    header: App.Language.General.file_name,
-                    sortable: true,
-                    width: 160,
-                    dataIndex: 'DocDocument',
-                    renderer: function(val, metadata, record) {
-                        var class_expiration = '';
-                        if (App.Document.ExpirationDocument(val, record) == true) {
-                            class_expiration = "style='color:red'";
-                        }
-                        return "<a href='index.php/doc/document/download/" + record.data.doc_version_id + "' " + class_expiration + ">" + val.doc_document_filename + "</a>";
-                    }
-                }, {
-                    header: App.Language.General.version,
-                    sortable: true,
-                    width: 50,
-                    dataIndex: 'doc_version_code_client'
-                }, {
-                    header: App.Language.Document.keywords,
-                    sortable: true,
-                    dataIndex: 'doc_version_keyword',
-                    width: 50
-                }, {
-                    header: App.Language.General.comment,
-                    renderer: App.Document.ColorRowStatusUser,
-                    sortable: true,
-                    width: 50,
-                    dataIndex: 'doc_version_comments'
-                }, {
-                    xtype: 'datecolumn',
-                    header: 'Fecha Documento',
-                    sortable: true,
-                    dataIndex: 'doc_version_internal',
-                    format: App.General.DatPatterns.DefaultDateFormat,
-                    width: 60,
-                    aling: 'center'
-                }, {
-                    xtype: 'datecolumn',
-                    header: App.Language.Plan.upload_date,
-                    renderer: App.Document.ColorRowStatusUser,
-                    dataIndex: 'doc_version_creation',
-                    sortable: true,
-                    width: 60,
-                    format: App.General.DefaultDateTimeFormat,
-                    aling: 'center'
-                }, {
-                    xtype: 'datecolumn',
-                    header: App.Language.General.expiration_date,
-                    renderer: App.Document.ColorRowStatusUser,
-                    dataIndex: 'doc_version_expiration',
-                    width: 60,
-                    format: App.General.DatPatterns.DefaultDateFormat,
-                    aling: 'center'
-                }, {
-                    xtype: 'gridcolumn',
-                    header: App.Language.General.uploaded_by,
-                    renderer: App.Document.ColorRowStatusUser,
-                    dataIndex: 'user_name',
-                    width: 70,
-                    sortable: true
-                }, {
-                    dataIndex: 'DocDocument',
-                    header: App.Language.Core.location,
-                    sortable: true,
-                    width: 100,
-                    renderer: function(DocDocument, metadata, record, rowIndex, colIndex, store) {
-                        metadata.attr = 'ext:qtip="' + DocDocument.doc_path + '"';
-                        return DocDocument.doc_path;
-                    }
-                }],
-                buttons: [{
-                    xtype: 'button',
-                    text: App.Language.General.close,
-                    handler: function(b) {
-                        App.Document.Store.load();
-                        b.ownerCt.ownerCt.ownerCt.close();
-                    }
-                }]
-            }];
+                    return "<a href='index.php/doc/document/download/" + record.data.doc_version_id + "' " + class_expiration + ">" + val.doc_document_filename + "</a>";
+                }
+            }, {
+                header: App.Language.General.version,
+                sortable: true,
+                width: 50,
+                dataIndex: 'doc_version_code_client'
+            }, {
+                header: App.Language.Document.keywords,
+                sortable: true,
+                dataIndex: 'doc_version_keyword',
+                width: 50
+            }, {
+                header: App.Language.General.comment,
+                renderer: App.Document.ColorRowStatusUser,
+                sortable: true,
+                width: 50,
+                dataIndex: 'doc_version_comments'
+            }, {
+                xtype: 'datecolumn',
+                header: 'Fecha Documento',
+                sortable: true,
+                dataIndex: 'doc_version_internal',
+                format: App.General.DatPatterns.DefaultDateFormat,
+                width: 60,
+                aling: 'center'
+            }, {
+                xtype: 'datecolumn',
+                header: App.Language.Plan.upload_date,
+                renderer: App.Document.ColorRowStatusUser,
+                dataIndex: 'doc_version_creation',
+                sortable: true,
+                width: 60,
+                format: App.General.DefaultDateTimeFormat,
+                aling: 'center'
+            }, {
+                xtype: 'datecolumn',
+                header: App.Language.General.expiration_date,
+                renderer: App.Document.ColorRowStatusUser,
+                dataIndex: 'doc_version_expiration',
+                width: 60,
+                format: App.General.DatPatterns.DefaultDateFormat,
+                aling: 'center'
+            }, {
+                xtype: 'gridcolumn',
+                header: App.Language.General.uploaded_by,
+                renderer: App.Document.ColorRowStatusUser,
+                dataIndex: 'user_name',
+                width: 70,
+                sortable: true
+            }, {
+                dataIndex: 'DocDocument',
+                header: App.Language.Core.location,
+                sortable: true,
+                width: 100,
+                renderer: function(DocDocument, metadata, record, rowIndex, colIndex, store) {
+                    metadata.attr = 'ext:qtip="' + DocDocument.doc_path + '"';
+                    return DocDocument.doc_path;
+                }
+            }],
+            buttons: [{
+                xtype: 'button',
+                text: App.Language.General.close,
+                handler: function(b) {
+                    App.Document.Store.load();
+                    b.ownerCt.ownerCt.ownerCt.close();
+                }
+            }]
+        }];
         App.Document.Version.Window.superclass.initComponent.call(this);
     }
 });
 
-App.Document.updateCategoryWindow = Ext.extend(Ext.Window,
-{
+App.Document.updateCategoryWindow = Ext.extend(Ext.Window, {
     title: 'Edición de la Categoría del Documento',
     resizable: false,
     modal: true,
@@ -1397,16 +1372,13 @@ App.Document.updateCategoryWindow = Ext.extend(Ext.Window,
     height: 140,
     layout: 'fit',
     padding: 1,
-    initComponent: function ()
-    {
-        this.items =
-        [{
+    initComponent: function() {
+        this.items = [{
             xtype: 'form',
             ref: 'form',
             labelWidth: 150,
             padding: 5,
-            items:
-            [{
+            items: [{
                 xtype: 'combo',
                 fieldLabel: App.Language.General.category,
                 anchor: '100%',
@@ -1435,38 +1407,31 @@ App.Document.updateCategoryWindow = Ext.extend(Ext.Window,
                     }
                 }
             }],
-            buttons:
-            [{
+            buttons: [{
                 text: App.Language.General.close,
-                handler: function (b)
-                {
+                handler: function(b) {
                     b.ownerCt.ownerCt.ownerCt.close();
                 }
             }, {
                 text: App.Language.General.add,
-                handler: function (b)
-                {
-//                    console.log(Ext.getCmp('App.Document.updateCate').getValue());
-                     if (Ext.getCmp('App.Document.updateCate').getValue() != '') {
-                        Ext.Ajax.request
-                        ({
+                handler: function(b) {
+                    //                    console.log(Ext.getCmp('App.Document.updateCate').getValue());
+                    if (Ext.getCmp('App.Document.updateCate').getValue() != '') {
+                        Ext.Ajax.request({
                             waitMsg: App.Language.General.message_generating_file,
                             url: 'index.php/doc/document/updateCategory',
-                            params: 
-                            {
+                            params: {
                                 doc_document_id: doc_document_id,
                                 doc_category_id: Ext.getCmp('App.Document.updateCate').getValue()
                             },
-                            success: function(response)
-                            {
+                            success: function(response) {
                                 response = Ext.decode(response.responseText);
                                 App.Document.Store.load();
                                 b.ownerCt.ownerCt.ownerCt.close();
                                 Ext.FlashMessage.alert(response.msg);
 
                             },
-                            failure: function(response)
-                            {
+                            failure: function(response) {
                                 Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
                             }
                         });
@@ -1484,7 +1449,7 @@ App.Document.addDocumentWindow = Ext.extend(Ext.Window, {
     title: App.Language.Document.add_document_title,
     resizable: false,
     modal: true,
-    width:  (screen.width < 400) ? screen.width : 500,
+    width: (screen.width < 400) ? screen.width : 500,
     height: 500,
     maximizable: true,
     layout: 'fit',
@@ -1815,7 +1780,7 @@ App.Document.addMasiveZipExcelWindow = Ext.extend(Ext.Window, {
     title: App.Language.Document.bulk_upload_documents,
     resizable: false,
     modal: true,
-    width:  (screen.width < 500) ? screen.width : 500,
+    width: (screen.width < 500) ? screen.width : 500,
     height: 200,
     maximizable: true,
     layout: 'fit',
@@ -1833,23 +1798,23 @@ App.Document.addMasiveZipExcelWindow = Ext.extend(Ext.Window, {
                 padding: 5,
                 plugins: [new Ext.ux.OOSubmit()],
                 items: [{
-                        text: App.Language.Document.download_excel_format,
-                        iconCls: 'export_icon',
-                        handler: function() {
-                            Ext.Ajax.request({
-                                waitMsg: App.Language.General.message_generating_file,
-                                url: 'index.php/doc/document/formatoExcelDetalle',
-                                method: 'POST',
-                                success: function(response) {
-                                    response = Ext.decode(response.responseText);
-                                    document.location = response.file;
-                                },
-                                failure: function(response) {
-                                    Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
-                                }
-                            });
-                        }
-                    }]
+                    text: App.Language.Document.download_excel_format,
+                    iconCls: 'export_icon',
+                    handler: function() {
+                        Ext.Ajax.request({
+                            waitMsg: App.Language.General.message_generating_file,
+                            url: 'index.php/doc/document/formatoExcelDetalle',
+                            method: 'POST',
+                            success: function(response) {
+                                response = Ext.decode(response.responseText);
+                                document.location = response.file;
+                            },
+                            failure: function(response) {
+                                Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
+                            }
+                        });
+                    }
+                }]
             },
             items: [{
                 xtype: 'fileuploadfield',
@@ -1985,10 +1950,10 @@ App.Document.addVersionDocumentWindow = Ext.extend(Ext.Window, {
                     labelWidth: '100%',
                     layout: 'form',
                     items: [{
-                            xtype: 'label',
-                            text: App.Language.General.version,
-                            anchor: '100%'
-                        }]
+                        xtype: 'label',
+                        text: App.Language.General.version,
+                        anchor: '100%'
+                    }]
                 }, {
                     columnWidth: .68,
                     ref: 'form_asset',
@@ -1996,10 +1961,10 @@ App.Document.addVersionDocumentWindow = Ext.extend(Ext.Window, {
                     border: false,
                     layout: 'form',
                     items: [{
-                            xtype: 'displayfield',
-                            id: 'App.Document.VersionDisplay',
-                            anchor: '100%'
-                        }]
+                        xtype: 'displayfield',
+                        id: 'App.Document.VersionDisplay',
+                        anchor: '100%'
+                    }]
                 }]
             }, {
                 xtype: 'textfield',
@@ -2277,26 +2242,26 @@ App.Document.addUsersWindow = Ext.extend(Ext.Window, {
                     }
                 },
                 columns: [new Ext.grid.CheckboxSelectionModel(), {
-                        dataIndex: 'user_name',
-                        header: App.Language.Core.username,
-                        sortable: true
-                    }, {
-                        dataIndex: 'user_username',
-                        header: App.Language.Core.english_username,
-                        sortable: true
-                    }, {
-                        dataIndex: 'user_email',
-                        header: App.Language.Core.email,
-                        sortable: true
-                    }, {
-                        dataIndex: 'user_type_name',
-                        header: App.Language.General.user_type,
-                        sortable: true
-                    }, {
-                        dataIndex: 'user_string_groups',
-                        header: App.Language.Core.groups,
-                        sortable: true
-                    }],
+                    dataIndex: 'user_name',
+                    header: App.Language.Core.username,
+                    sortable: true
+                }, {
+                    dataIndex: 'user_username',
+                    header: App.Language.Core.english_username,
+                    sortable: true
+                }, {
+                    dataIndex: 'user_email',
+                    header: App.Language.Core.email,
+                    sortable: true
+                }, {
+                    dataIndex: 'user_type_name',
+                    header: App.Language.General.user_type,
+                    sortable: true
+                }, {
+                    dataIndex: 'user_string_groups',
+                    header: App.Language.Core.groups,
+                    sortable: true
+                }],
                 sm: new Ext.grid.CheckboxSelectionModel()
             }]
         }]

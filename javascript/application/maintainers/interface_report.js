@@ -1,5 +1,4 @@
-App.Maintainers.addToModuleMenu('report', 
-{
+App.Maintainers.addToModuleMenu('report', {
     xtype: 'button',
     text: App.Language.Report.reports,
     iconCls: 'reports_icon_32',

@@ -1,7 +1,6 @@
 App.PermissionEnableSelect = false;
 
-App.Maintainers.addToModuleMenu('permissions', 
-{
+App.Maintainers.addToModuleMenu('permissions', {
     xtype: 'button',
     text: App.Language.Core.permissions,
     iconCls: 'permission_icon_32',
@@ -10,25 +9,20 @@ App.Maintainers.addToModuleMenu('permissions',
     module: 'Permission'
 });
 
-App.Maintainers.Permission.Principal = Ext.extend(Ext.TabPanel, 
-{
+App.Maintainers.Permission.Principal = Ext.extend(Ext.TabPanel, {
     activeTab: 0,
     border: false,
-    initComponent: function()
-    {
-        this.items = 
-        [{
+    initComponent: function() {
+        this.items = [{
             xtype: 'form',
             layout: 'fit',
             title: App.Language.Core.access_tree,
             border: false,
-            items: 
-            [{
+            items: [{
                 xtype: 'treegrid',
                 ref: 'treeGridNodes',
                 border: false,
-                tbar: 
-                [{
+                tbar: [{
                     xtype: 'label',
                     text: App.Language.Core.group
                 }, {
@@ -47,43 +41,36 @@ App.Maintainers.Permission.Principal = Ext.extend(Ext.TabPanel,
                     editable: true,
                     selecOnFocus: true,
                     typeAhead: true,
-                    selectOnFocus:true,
+                    selectOnFocus: true,
                     minChars: 0,
                     allowBlank: false,
-                    listeners: 
-                    {
-                        'select': function(cb, record)
-                        {
-                            
-                            cb.ownerCt.ownerCt.getLoader().baseParams = 
-                            {
+                    listeners: {
+                        'select': function(cb, record) {
+
+                            cb.ownerCt.ownerCt.getLoader().baseParams = {
                                 user_group_id: record.data.user_group_id
                             };
                             cb.ownerCt.ownerCt.getLoader().load(cb.ownerCt.ownerCt.getRootNode());
-                            
-                          
+
+
                         }
                     }
                 }, {
                     xtype: 'spacer',
                     width: 10
-                },{
+                }, {
                     text: App.Language.General.maintain_the_configuration,
                     iconCls: 'keep_add_icon',
                     tooltip: App.Language.General.leaving_the_existing_configuration_and_adding_the_change,
-                   
-                   // hidden: true,
+
+                    // hidden: true,
                     enableToggle: true,
-                    toggleHandler: function(b, state)
-                    {
+                    toggleHandler: function(b, state) {
                         App.PermissionEnableSelect = state;
                     },
-                    listeners: 
-                    {
-                        'show': function(b)
-                        {
-                            if (App.PermissionEnableSelect) 
-                            {
+                    listeners: {
+                        'show': function(b) {
+                            if (App.PermissionEnableSelect) {
                                 b.toggle(true);
                             }
                         }
@@ -94,50 +81,41 @@ App.Maintainers.Permission.Principal = Ext.extend(Ext.TabPanel,
                 }, {
                     text: App.Language.General.save,
                     iconCls: 'save_icon',
-                    handler: function(b)
-                    {
+                    handler: function(b) {
                         form = b.ownerCt.ownerCt.ownerCt.getForm();
-                        if (form.isValid()) 
-                        {
+                        if (form.isValid()) {
                             b.setDisabled(true);
-                            
-                            form.submit
-                            ({
+
+                            form.submit({
                                 url: 'index.php/core/permissions/setTree',
-                                params: 
-                                {
-                                    type_save:  App.PermissionEnableSelect 
-                               
+                                params: {
+                                    type_save: App.PermissionEnableSelect
+
                                 },
                                 waitTitle: App.Language.General.message_please_wait,
                                 waitMsg: App.Language.General.message_guarding_information,
-                                success: function(fp, o)
-                                {
+                                success: function(fp, o) {
                                     //Habilitar el boton
                                     b.setDisabled(false);
-                                    
+
                                     Ext.FlashMessage.alert(o.result.msg);
                                 },
-                                failure: function(fp, o)
-                                {
+                                failure: function(fp, o) {
                                     alert('Error:\n' + o.result.msg);
                                 }
                             });
                         }
                     }
                 }],
-                loader: 
-                {
+                loader: {
                     dataUrl: 'index.php/core/permissions/expand',
                     preloadChildren: true,
                     autoLoad: false
                 },
-                viewConfig: 
-                {
+                viewConfig: {
                     forceFit: true
                 },
-                columns: 
-                [{
+                columns: [{
                     dataIndex: 'text',
                     header: App.Language.General.name,
                     sortable: false,

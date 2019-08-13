@@ -1,5 +1,4 @@
-App.Maintainers.addToModuleMenu('doc', 
-{
+App.Maintainers.addToModuleMenu('doc', {
     xtype: 'button',
     text: App.Language.General.documents,
     iconCls: 'document_icon_32',
@@ -8,44 +7,34 @@ App.Maintainers.addToModuleMenu('doc',
     module: 'Document'
 });
 
-App.Maintainers.Document.Principal = Ext.extend(Ext.TabPanel, 
-{
+App.Maintainers.Document.Principal = Ext.extend(Ext.TabPanel, {
     activeTab: 0,
     border: false,
-    initComponent: function()
-    {
-        this.items = 
-        [{
+    initComponent: function() {
+        this.items = [{
             xtype: 'grid',
             title: App.Language.General.category,
             store: App.Document.Categoria.Store,
             height: '100%',
-            viewConfig: 
-            {
+            viewConfig: {
                 forceFit: true
             },
-            listeners: 
-            {
-                'rowdblclick': function(grid, rowIndex)
-                {
+            listeners: {
+                'rowdblclick': function(grid, rowIndex) {
                     record = grid.getStore().getAt(rowIndex);
                     App.Maintainers.Document.OpenEditMode(record);
                 },
-                'beforerender': function()
-                {
+                'beforerender': function() {
                     App.Document.Categoria.Store.load();
                 }
             },
-            tbar: 
-            {
+            tbar: {
                 xtype: 'toolbar',
-                items: 
-                [{
+                items: [{
                     xtype: 'button',
                     text: App.Language.General.add,
                     iconCls: 'add_icon',
-                    handler: function()
-                    {
+                    handler: function() {
                         w = new App.Maintainers.Document.addCategoryDocumentWindow();
                         w.show();
                     }
@@ -55,16 +44,12 @@ App.Maintainers.Document.Principal = Ext.extend(Ext.TabPanel,
                     xtype: 'button',
                     text: App.Language.General.ddelete,
                     iconCls: 'delete_icon',
-                    handler: function(b)
-                    {
+                    handler: function(b) {
                         grid = b.ownerCt.ownerCt;
-                        if (grid.getSelectionModel().getCount()) 
-                        {
-                            Ext.MessageBox.confirm(App.Language.General.confirmation, App.Language.General.message_really_want_delete_option, function(b){
-                                if (b == 'yes') 
-                                {
-                                    grid.getSelectionModel().each(function(record)
-                                    {
+                        if (grid.getSelectionModel().getCount()) {
+                            Ext.MessageBox.confirm(App.Language.General.confirmation, App.Language.General.message_really_want_delete_option, function(b) {
+                                if (b == 'yes') {
+                                    grid.getSelectionModel().each(function(record) {
                                         App.Document.Categoria.Store.remove(record);
                                     });
                                 }
@@ -75,52 +60,46 @@ App.Maintainers.Document.Principal = Ext.extend(Ext.TabPanel,
                     }
                 }]
             },
-            columns: [new Ext.grid.CheckboxSelectionModel(), 
-            {
-                xtype: 'gridcolumn',
-                dataIndex: 'doc_category_name',
-                header: App.Language.General.name,
-                sortable: true,
-                width: 100
-            }, {
-                xtype: 'gridcolumn',
-                dataIndex: 'doc_category_description',
-                header: App.Language.General.description,
-                sortable: true,
-                width: 100
-            }],
+            columns: [new Ext.grid.CheckboxSelectionModel(),
+                {
+                    xtype: 'gridcolumn',
+                    dataIndex: 'doc_category_name',
+                    header: App.Language.General.name,
+                    sortable: true,
+                    width: 100
+                }, {
+                    xtype: 'gridcolumn',
+                    dataIndex: 'doc_category_description',
+                    header: App.Language.General.description,
+                    sortable: true,
+                    width: 100
+                }
+            ],
             sm: new Ext.grid.CheckboxSelectionModel()
         }, {
             xtype: 'grid',
             title: App.Language.Document.extensions,
             store: App.Document.Extension.Store,
             height: 900,
-            viewConfig: 
-            {
+            viewConfig: {
                 forceFit: true
             },
-            listeners: 
-            {
-                'rowdblclick': function(grid, rowIndex)
-                {
+            listeners: {
+                'rowdblclick': function(grid, rowIndex) {
                     record = grid.getStore().getAt(rowIndex);
                     App.Maintainers.Document.ExtensionOpenEditMode(record);
                 },
-                'beforerender': function()
-                {
+                'beforerender': function() {
                     App.Document.Extension.Store.load();
                 }
             },
-            tbar: 
-            {
+            tbar: {
                 xtype: 'toolbar',
-                items: 
-                [{
+                items: [{
                     xtype: 'button',
                     text: App.Language.General.add,
                     iconCls: 'add_icon',
-                    handler: function()
-                    {
+                    handler: function() {
                         w = new App.Maintainers.Document.addDocumentExtensionWindow();
                         w.show();
                     }
@@ -130,17 +109,12 @@ App.Maintainers.Document.Principal = Ext.extend(Ext.TabPanel,
                     xtype: 'button',
                     text: App.Language.General.ddelete,
                     iconCls: 'delete_icon',
-                    handler: function(b)
-                    {
+                    handler: function(b) {
                         grid = b.ownerCt.ownerCt;
-                        if (grid.getSelectionModel().getCount()) 
-                        {
-                            Ext.MessageBox.confirm(App.Language.General.confirmation, App.Language.General.message_really_want_delete_option, function(b)
-                            {
-                                if (b == 'yes') 
-                                {
-                                    grid.getSelectionModel().each(function(record)
-                                    {
+                        if (grid.getSelectionModel().getCount()) {
+                            Ext.MessageBox.confirm(App.Language.General.confirmation, App.Language.General.message_really_want_delete_option, function(b) {
+                                if (b == 'yes') {
+                                    grid.getSelectionModel().each(function(record) {
                                         App.Document.Extension.Store.remove(record);
                                     });
                                 }
@@ -151,28 +125,28 @@ App.Maintainers.Document.Principal = Ext.extend(Ext.TabPanel,
                     }
                 }]
             },
-            columns: [new Ext.grid.CheckboxSelectionModel(), 
-            {
-                xtype: 'gridcolumn',
-                dataIndex: 'doc_extension_name',
-                header: App.Language.General.name,
-                sortable: true,
-                width: 100
-            }, {
-                xtype: 'gridcolumn',
-                dataIndex: 'doc_extension_extension',
-                header: App.Language.Document.extensions,
-                sortable: true,
-                width: 100
-            }],
+            columns: [new Ext.grid.CheckboxSelectionModel(),
+                {
+                    xtype: 'gridcolumn',
+                    dataIndex: 'doc_extension_name',
+                    header: App.Language.General.name,
+                    sortable: true,
+                    width: 100
+                }, {
+                    xtype: 'gridcolumn',
+                    dataIndex: 'doc_extension_extension',
+                    header: App.Language.Document.extensions,
+                    sortable: true,
+                    width: 100
+                }
+            ],
             sm: new Ext.grid.CheckboxSelectionModel()
         }];
         App.Maintainers.Document.Principal.superclass.initComponent.call(this);
     }
 });
 
-App.Maintainers.Document.addCategoryDocumentWindow = Ext.extend(Ext.Window, 
-{
+App.Maintainers.Document.addCategoryDocumentWindow = Ext.extend(Ext.Window, {
     title: App.Language.Document.add_category_document,
     resizable: false,
     modal: true,
@@ -180,16 +154,13 @@ App.Maintainers.Document.addCategoryDocumentWindow = Ext.extend(Ext.Window,
     height: 180,
     layout: 'fit',
     padding: 1,
-    initComponent: function()
-    {
-        this.items = 
-        [{
+    initComponent: function() {
+        this.items = [{
             xtype: 'form',
             ref: 'form',
             labelWidth: 150,
             padding: 5,
-            items: 
-            [{
+            items: [{
                 xtype: 'textfield',
                 fieldLabel: App.Language.General.name,
                 name: 'doc_category_name',
@@ -202,32 +173,25 @@ App.Maintainers.Document.addCategoryDocumentWindow = Ext.extend(Ext.Window,
                 anchor: '100%',
                 name: 'doc_category_description'
             }],
-            buttons: 
-            [{
+            buttons: [{
                 text: App.Language.General.close,
-                handler: function(b)
-                {
+                handler: function(b) {
                     b.ownerCt.ownerCt.ownerCt.close();
                 }
             }, {
                 text: App.Language.General.add,
                 ref: '../saveButton',
-                handler: function(b)
-                {
+                handler: function(b) {
                     form = b.ownerCt.ownerCt.getForm();
-                    if (form.isValid()) 
-                    {
-                        form.submit
-                        ({
+                    if (form.isValid()) {
+                        form.submit({
                             url: 'index.php/doc/doccategory/add',
-                            success: function(fp, o)
-                            {
+                            success: function(fp, o) {
                                 App.Document.Categoria.Store.load();
                                 b.ownerCt.ownerCt.ownerCt.close();
                                 Ext.FlashMessage.alert(o.result.msg);
                             },
-                            failure: function(fp, o)
-                            {
+                            failure: function(fp, o) {
                                 alert('Error:\n' + o.result.msg);
                             }
                         });
@@ -239,19 +203,15 @@ App.Maintainers.Document.addCategoryDocumentWindow = Ext.extend(Ext.Window,
     }
 });
 
-App.Maintainers.Document.OpenEditMode = function(record)
-{
-    w = new App.Maintainers.Document.addCategoryDocumentWindow
-    ({
+App.Maintainers.Document.OpenEditMode = function(record) {
+    w = new App.Maintainers.Document.addCategoryDocumentWindow({
         title: App.Language.Document.edit_category_documents
     });
     w.form.saveButton.setText(App.Language.General.edit);
     w.form.record = record;
-    w.form.saveButton.handler = function()
-    {
+    w.form.saveButton.handler = function() {
         form = w.form.getForm();
-        if (form.isValid()) 
-        {
+        if (form.isValid()) {
             form.updateRecord(w.form.record);
             w.close();
         }
@@ -260,8 +220,7 @@ App.Maintainers.Document.OpenEditMode = function(record)
     w.show();
 }
 
-App.Maintainers.Document.addDocumentExtensionWindow = Ext.extend(Ext.Window, 
-{
+App.Maintainers.Document.addDocumentExtensionWindow = Ext.extend(Ext.Window, {
     title: App.Language.Document.add_extensions_document,
     resizable: false,
     modal: true,
@@ -269,16 +228,13 @@ App.Maintainers.Document.addDocumentExtensionWindow = Ext.extend(Ext.Window,
     height: 180,
     layout: 'fit',
     padding: 1,
-    initComponent: function()
-    {
-        this.items = 
-        [{
+    initComponent: function() {
+        this.items = [{
             xtype: 'form',
             ref: 'form',
             labelWidth: 150,
             padding: 5,
-            items: 
-            [{
+            items: [{
                 xtype: 'textfield',
                 fieldLabel: App.Language.General.name,
                 name: 'doc_extension_name',
@@ -291,32 +247,25 @@ App.Maintainers.Document.addDocumentExtensionWindow = Ext.extend(Ext.Window,
                 anchor: '100%',
                 name: 'doc_extension_extension'
             }],
-            buttons: 
-            [{
+            buttons: [{
                 text: App.Language.General.close,
-                handler: function(b)
-                {
+                handler: function(b) {
                     b.ownerCt.ownerCt.ownerCt.close();
                 }
             }, {
                 text: App.Language.General.add,
                 ref: '../saveButton',
-                handler: function(b)
-                {
+                handler: function(b) {
                     form = b.ownerCt.ownerCt.getForm();
-                    if (form.isValid()) 
-                    {
-                        form.submit
-                        ({
+                    if (form.isValid()) {
+                        form.submit({
                             url: 'index.php/doc/docextension/add',
-                            success: function(fp, o)
-                            {
+                            success: function(fp, o) {
                                 App.Document.Extension.Store.load();
                                 b.ownerCt.ownerCt.ownerCt.close();
                                 Ext.FlashMessage.alert(o.result.msg);
                             },
-                            failure: function(fp, o)
-                            {
+                            failure: function(fp, o) {
                                 alert('Error:\n' + o.result.msg);
                             }
                         });
@@ -328,19 +277,15 @@ App.Maintainers.Document.addDocumentExtensionWindow = Ext.extend(Ext.Window,
     }
 });
 
-App.Maintainers.Document.ExtensionOpenEditMode = function(record)
-{
-    w = new App.Maintainers.Document.addDocumentExtensionWindow
-    ({
+App.Maintainers.Document.ExtensionOpenEditMode = function(record) {
+    w = new App.Maintainers.Document.addDocumentExtensionWindow({
         title: App.Language.Document.edit_document_extensions
     });
     w.form.saveButton.setText(App.Language.General.edit);
     w.form.record = record;
-    w.form.saveButton.handler = function()
-    {
+    w.form.saveButton.handler = function() {
         form = w.form.getForm();
-        if (form.isValid()) 
-        {
+        if (form.isValid()) {
             form.updateRecord(w.form.record);
             w.close();
         }

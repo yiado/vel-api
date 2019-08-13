@@ -2,12 +2,9 @@ Ext.namespace('App.Report.Store');
 Ext.namespace('App.Report.UserGroup.Store');
 Ext.namespace('App.Report.UserGroupPermitted.Store');
 
-App.Report.Store = new Ext.data.JsonStore
-({
-    proxy: new Ext.data.HttpProxy
-    ({
-        api: 
-        {
+App.Report.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
             read: 'index.php/report/report/get'
         }
     }),
@@ -15,25 +12,21 @@ App.Report.Store = new Ext.data.JsonStore
     autoLoad: false,
     idProperty: 'report_id',
     totalProperty: 'total',
-    fields: 
-    [
-    'report_id', 
-    'report_name', 
-    'report_url', 
-    {
-        name: 'module_name',
-        mapping: 'Module.module_name'
-    }
+    fields: [
+        'report_id',
+        'report_name',
+        'report_url',
+        {
+            name: 'module_name',
+            mapping: 'Module.module_name'
+        }
     ]
 });
 
 
-App.Report.UserGroup.Store = new Ext.data.JsonStore
-({
-    proxy: new Ext.data.HttpProxy
-    ({
-        api: 
-        {
+App.Report.UserGroup.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
             read: 'index.php/report/report/getReportUserGroup'
         }
     }),
@@ -41,19 +34,15 @@ App.Report.UserGroup.Store = new Ext.data.JsonStore
     autoLoad: false,
     idProperty: 'report_id',
     totalProperty: 'total',
-    fields: 
-    [
+    fields: [
         'user_group_id',
         'user_group_name'
     ]
 });
 
-App.Report.UserGroupPermitted.Store = new Ext.data.JsonStore
-({
-    proxy: new Ext.data.HttpProxy
-    ({
-        api: 
-        {
+App.Report.UserGroupPermitted.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
             read: 'index.php/report/report/getReportUserGroupPermitted'
         }
     }),
@@ -61,11 +50,9 @@ App.Report.UserGroupPermitted.Store = new Ext.data.JsonStore
     autoLoad: false,
     idProperty: 'report_id',
     totalProperty: 'total',
-    fields: 
-    [
-        'report_id', 
+    fields: [
+        'report_id',
         'user_group_id',
-        'user_group_name'      
+        'user_group_name'
     ]
 });
-

@@ -1,105 +1,100 @@
 App.Mtn.Wo.CurrentWoData = null;
 
-App.Mtn.Wo.Interface = Ext.extend(Ext.Panel, 
-{
+App.Mtn.Wo.Interface = Ext.extend(Ext.Panel, {
     title: App.Language.Maintenance.maintenance,
     border: false,
     loadMask: true,
     layout: 'border',
     tbar: [
-    App.ModuleActions[7001], 
-    {
-        xtype: 'tbseparator',
-        width: 10
-    }, App.ModuleActions[7003], 
-    {
-        xtype: 'tbseparator',
-        width: 10
-    }, {
-        text: App.Language.General.search,
-        iconCls: 'search_icon_16',
-        enableToggle: true,
-        handler: function(b){
-            if (b.ownerCt.ownerCt.formSearchWo.isVisible()) {
-                b.ownerCt.ownerCt.formSearchWo.hide();
-            } else {
-                b.ownerCt.ownerCt.formSearchWo.show();
-            }
-            b.ownerCt.ownerCt.doLayout();
-        }
-    }],
-    listeners: 
-    {
-        'beforerender': function()
+        App.ModuleActions[7001],
         {
+            xtype: 'tbseparator',
+            width: 10
+        },
+        App.ModuleActions[7003],
+        {
+            xtype: 'tbseparator',
+            width: 10
+        }, {
+            text: App.Language.General.search,
+            iconCls: 'search_icon_16',
+            enableToggle: true,
+            handler: function(b) {
+                if (b.ownerCt.ownerCt.formSearchWo.isVisible()) {
+                    b.ownerCt.ownerCt.formSearchWo.hide();
+                } else {
+                    b.ownerCt.ownerCt.formSearchWo.show();
+                }
+                b.ownerCt.ownerCt.doLayout();
+            }
+        }
+    ],
+    listeners: {
+        'beforerender': function() {
             node = Ext.getCmp('App.StructureTree.Tree').getNodeById(App.Interface.selectedNodeId);
             App.Mtn.Principal.listener(node);
             App.Mtn.WoTypes.Store.setBaseParam('show_predictive_ot', 1);
         }
     },
-    initComponent: function()
-    {
-        this.items = 
-        [{
+    initComponent: function() {
+        this.items = [{
             xtype: 'grid',
             id: 'App.Mtn.Wo.Grid',
             margins: '5 5 5 5',
             border: true,
             region: 'center',
             loadMask: true,
-            viewConfig: 
-            {
+            viewConfig: {
                 forceFit: true
             },
-            listeners: 
-            {
-                'rowdblclick': function(grid, rowIndex)
-                {
+            listeners: {
+                'rowdblclick': function(grid, rowIndex) {
                     record = grid.getStore().getAt(rowIndex);
                     App.Mtn.Wo.OpenEditMode(record.data.mtn_work_order_id);
                 }
             },
             store: App.Mtn.Wo.Store,
-            columns: [new Ext.grid.CheckboxSelectionModel(), 
-            {
-                dataIndex: 'mtn_work_order_folio',
-                header: App.Language.Maintenance.folio,
-                sortable: true
-            }, {
-                xtype: 'datecolumn',
-                header: App.Language.General.creation_date,
-                dataIndex: 'mtn_work_order_date',
-                sortable: true,
-                align: 'center'
-            }, {
-                dataIndex: 'mtn_system_work_order_status_name',
-                header: App.Language.General.state,
-                sortable: true
-            }, {
-                dataIndex: 'provider_name',
-                header: App.Language.General.provider,
-                sortable: true
-            }, {
-                dataIndex: 'asset_name',
-                header: App.Language.General.asset,
-                sortable: true
-            }, {
-                dataIndex: 'mtn_work_order_type_name',
-                header: App.Language.Maintenance.type_ot,
-                sortable: true
-            }, {
-                dataIndex: 'mtn_work_order_requested_by',
-                header: App.Language.General.requested_by,
-                sortable: true
-            }, {
-                dataIndex: 'asset_path',
-                header: App.Language.General.route,
-                sortable: true,
-                renderer: function(value, metadata, record, rowIndex, colIndex, store){
-                    metadata.attr = 'ext:qtip="' + value + '"';
-                    return value;
+            columns: [new Ext.grid.CheckboxSelectionModel(),
+                {
+                    dataIndex: 'mtn_work_order_folio',
+                    header: App.Language.Maintenance.folio,
+                    sortable: true
+                }, {
+                    xtype: 'datecolumn',
+                    header: App.Language.General.creation_date,
+                    dataIndex: 'mtn_work_order_date',
+                    sortable: true,
+                    align: 'center'
+                }, {
+                    dataIndex: 'mtn_system_work_order_status_name',
+                    header: App.Language.General.state,
+                    sortable: true
+                }, {
+                    dataIndex: 'provider_name',
+                    header: App.Language.General.provider,
+                    sortable: true
+                }, {
+                    dataIndex: 'asset_name',
+                    header: App.Language.General.asset,
+                    sortable: true
+                }, {
+                    dataIndex: 'mtn_work_order_type_name',
+                    header: App.Language.Maintenance.type_ot,
+                    sortable: true
+                }, {
+                    dataIndex: 'mtn_work_order_requested_by',
+                    header: App.Language.General.requested_by,
+                    sortable: true
+                }, {
+                    dataIndex: 'asset_path',
+                    header: App.Language.General.route,
+                    sortable: true,
+                    renderer: function(value, metadata, record, rowIndex, colIndex, store) {
+                        metadata.attr = 'ext:qtip="' + value + '"';
+                        return value;
+                    }
                 }
-            }],
+            ],
             sm: new Ext.grid.CheckboxSelectionModel()
         }, {
             xtype: 'form',
@@ -112,11 +107,9 @@ App.Mtn.Wo.Interface = Ext.extend(Ext.Panel,
             region: 'north',
             height: 220,
             frame: true,
-            fbar: 
-            [{
+            fbar: [{
                 text: App.Language.General.search,
-                handler: function(b)
-                {
+                handler: function(b) {
                     form = b.ownerCt.ownerCt.getForm();
                     App.Mtn.Wo.Store.baseParams = form.getValues();
                     App.Mtn.Wo.Store.setBaseParam('node_id', App.Interface.selectedNodeId);
@@ -125,223 +118,203 @@ App.Mtn.Wo.Interface = Ext.extend(Ext.Panel,
                 }
             }, {
                 text: App.Language.General.clean,
-                handler: function(b)
-                {
+                handler: function(b) {
                     form = b.ownerCt.ownerCt.getForm();
-//                    temp = Ext.getCmp('App.Mtn.SearchForm').path_search.getValue();
+                    //                    temp = Ext.getCmp('App.Mtn.SearchForm').path_search.getValue();
                     form.reset();
                     Ext.getCmp('Start_Date').update();
-//                    Ext.getCmp('App.Mtn.SearchForm').path_search.setValue(temp);
+                    //                    Ext.getCmp('App.Mtn.SearchForm').path_search.setValue(temp);
                     App.Mtn.Wo.Store.baseParams = [];
                     App.Mtn.Wo.Store.load();
                 }
             }],
-            items: 
-            [
-        {
-                xtype: 'displayfield',
-                fieldLabel: App.Language.General.searching,
-//                id: 'lbl_search_in',
-                hiddenName: 'node_id'
-//                ref: 'path_search'
-            }, 
-            {
-                layout: 'column',
-                items: 
-                [{
-                    columnWidth: .5,
-                    layout: 'form',
-                    items: 
-                    [{
-                        xtype: 'textfield',
-                        fieldLabel: App.Language.Maintenance.folio,
-                        name: 'mtn_work_order_folio',
-                        anchor: '60%'
-                    }, {
-                        xtype: 'combo',
-                        fieldLabel: App.Language.General.state,
-                        anchor: '95%',
-                        store: App.Mtn.PossibleStatus.Store,
-                        hiddenName: 'mtn_system_work_order_status_id',
-                        displayField: 'mtn_system_work_order_status_name',
-                        valueField: 'mtn_system_work_order_status_id',
-                        selecOnFocus: true,
-                        typeAhead: true,
-                        selectOnFocus:true,
-                        forceSelection:true,
-                        typeAhead: true,
-                        triggerAction: 'all',
-                        mode: 'remote',
-                        minChars: 0
-                    }, {
-                        xtype: 'combo',
-                        fieldLabel: App.Language.General.provider,
-                        anchor: '95%',
-                        selecOnFocus: true,
-                        typeAhead: true,
-                        forceSelection:true,
-                        triggerAction: 'all',
-                        store: App.Core.Provider.Store,
-                        hiddenName: 'provider_id',
-                        displayField: 'provider_name',
-                        valueField: 'provider_id',
-                        mode: 'remote',
-                        minChars: 0
-                    }, {
-                        xtype: 'combo',
-                        fieldLabel: App.Language.Maintenance.type_ot,
-                        anchor: '95%',
-                        typeAhead: true,
-                        selectOnFocus:true,
-                        forceSelection:true,
-                        store: App.Mtn.WoTypesAll.Store,
-                        hiddenName: 'mtn_work_order_type_id',
-                        displayField: 'mtn_work_order_type_name',
-                        valueField: 'mtn_work_order_type_id',
-                        triggerAction: 'all',
-                        mode: 'remote',
-                        minChars: 0,
-                        editable: true
-                    }, {
-                        xtype: 'checkbox',
-                        hideLabel: true,
-                        boxLabel: App.Language.Maintenance.include_closed_orders,
-                        name: 'include_closed_wo',
-                        inputValue: 1
-                    }, {
-                        xtype: 'checkbox',
-                        hideLabel: true,
-                        boxLabel: App.Language.General.perform_internal_search,
-                        name: 'search_branch',
-                        inputValue: 1
-                    }]
-                }, {
-                    columnWidth: .5,
-                    layout: 'form',
-                    items: 
-                    [{
-                        hiddenName: 'node_id'
-                    }, {
-                        columnWidth: .2,
+            items: [{
+                    xtype: 'displayfield',
+                    fieldLabel: App.Language.General.searching,
+                    //                id: 'lbl_search_in',
+                    hiddenName: 'node_id'
+                        //                ref: 'path_search'
+                },
+                {
+                    layout: 'column',
+                    items: [{
+                        columnWidth: .5,
                         layout: 'form',
-                        anchor: '90%',
-                        items: 
-                        [{
-                            xtype: 'label',
-                            text: App.Language.Maintenance.select_range_of_dates_of_creation_of_the_ot
+                        items: [{
+                            xtype: 'textfield',
+                            fieldLabel: App.Language.Maintenance.folio,
+                            name: 'mtn_work_order_folio',
+                            anchor: '60%'
+                        }, {
+                            xtype: 'combo',
+                            fieldLabel: App.Language.General.state,
+                            anchor: '95%',
+                            store: App.Mtn.PossibleStatus.Store,
+                            hiddenName: 'mtn_system_work_order_status_id',
+                            displayField: 'mtn_system_work_order_status_name',
+                            valueField: 'mtn_system_work_order_status_id',
+                            selecOnFocus: true,
+                            typeAhead: true,
+                            selectOnFocus: true,
+                            forceSelection: true,
+                            typeAhead: true,
+                            triggerAction: 'all',
+                            mode: 'remote',
+                            minChars: 0
+                        }, {
+                            xtype: 'combo',
+                            fieldLabel: App.Language.General.provider,
+                            anchor: '95%',
+                            selecOnFocus: true,
+                            typeAhead: true,
+                            forceSelection: true,
+                            triggerAction: 'all',
+                            store: App.Core.Provider.Store,
+                            hiddenName: 'provider_id',
+                            displayField: 'provider_name',
+                            valueField: 'provider_id',
+                            mode: 'remote',
+                            minChars: 0
+                        }, {
+                            xtype: 'combo',
+                            fieldLabel: App.Language.Maintenance.type_ot,
+                            anchor: '95%',
+                            typeAhead: true,
+                            selectOnFocus: true,
+                            forceSelection: true,
+                            store: App.Mtn.WoTypesAll.Store,
+                            hiddenName: 'mtn_work_order_type_id',
+                            displayField: 'mtn_work_order_type_name',
+                            valueField: 'mtn_work_order_type_id',
+                            triggerAction: 'all',
+                            mode: 'remote',
+                            minChars: 0,
+                            editable: true
+                        }, {
+                            xtype: 'checkbox',
+                            hideLabel: true,
+                            boxLabel: App.Language.Maintenance.include_closed_orders,
+                            name: 'include_closed_wo',
+                            inputValue: 1
+                        }, {
+                            xtype: 'checkbox',
+                            hideLabel: true,
+                            boxLabel: App.Language.General.perform_internal_search,
+                            name: 'search_branch',
+                            inputValue: 1
                         }]
                     }, {
-                        columnWidth: .4,
-                        layout: 'column',
-                        anchor: '95%',
-                        frame: true,
-                        items: 
-                        [{
-                            columnWidth: .5,
+                        columnWidth: .5,
+                        layout: 'form',
+                        items: [{
+                            hiddenName: 'node_id'
+                        }, {
+                            columnWidth: .2,
                             layout: 'form',
-                            items: 
-                            [{
-                                xtype: 'datefield',
-                                ref: '../start_date',
-                                id: 'Start_Date',
-                                fieldLabel: App.Language.General.start_date,
-                                name: 'start_date',
-                                anchor: '95%',
-                                listeners: 
-                                {
-                                    'select': function(fd, date)
-                                    {
-                                        fd.ownerCt.ownerCt.end_date.setMinValue(date);
-                                    }
-                                }
+                            anchor: '90%',
+                            items: [{
+                                xtype: 'label',
+                                text: App.Language.Maintenance.select_range_of_dates_of_creation_of_the_ot
                             }]
                         }, {
-                            columnWidth: .5,
-                            layout: 'form',
-                            items: 
-                            [{
-                                xtype: 'datefield',
-                                ref: '../end_date',
-                                fieldLabel: App.Language.General.end_date,
-                                name: 'end_date',
-                                anchor: '95%',
-                                listeners: 
-                                {
-                                    'select': function(fd, date)
-                                    {
-                                        fd.ownerCt.ownerCt.start_date.setMaxValue(date);
+                            columnWidth: .4,
+                            layout: 'column',
+                            anchor: '95%',
+                            frame: true,
+                            items: [{
+                                columnWidth: .5,
+                                layout: 'form',
+                                items: [{
+                                    xtype: 'datefield',
+                                    ref: '../start_date',
+                                    id: 'Start_Date',
+                                    fieldLabel: App.Language.General.start_date,
+                                    name: 'start_date',
+                                    anchor: '95%',
+                                    listeners: {
+                                        'select': function(fd, date) {
+                                            fd.ownerCt.ownerCt.end_date.setMinValue(date);
+                                        }
                                     }
-                                }
+                                }]
+                            }, {
+                                columnWidth: .5,
+                                layout: 'form',
+                                items: [{
+                                    xtype: 'datefield',
+                                    ref: '../end_date',
+                                    fieldLabel: App.Language.General.end_date,
+                                    name: 'end_date',
+                                    anchor: '95%',
+                                    listeners: {
+                                        'select': function(fd, date) {
+                                            fd.ownerCt.ownerCt.start_date.setMaxValue(date);
+                                        }
+                                    }
+                                }]
                             }]
+                        }, {
+                            xtype: 'spacer',
+                            height: 15
+                        }, {
+                            xtype: 'combo',
+                            fieldLabel: App.Language.Asset.asset_type,
+                            anchor: '95%',
+                            store: App.Asset.Type.Store,
+                            hiddenName: 'asset_type_id',
+                            displayField: 'asset_type_name',
+                            valueField: 'asset_type_id',
+                            triggerAction: 'all',
+                            mode: 'remote',
+                            typeAhead: true,
+                            selectOnFocus: true,
+                            forceSelection: true,
+                            minChars: 0
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: App.Language.General.requested_by,
+                            name: 'mtn_work_order_requested_by',
+                            anchor: '95%'
                         }]
-                    }, {
-                        xtype: 'spacer',
-                        height: 15
-                    }, {
-                        xtype: 'combo',
-                        fieldLabel: App.Language.Asset.asset_type,
-                        anchor: '95%',
-                        store: App.Asset.Type.Store,
-                        hiddenName: 'asset_type_id',
-                        displayField: 'asset_type_name',
-                        valueField: 'asset_type_id',
-                        triggerAction: 'all',
-                        mode: 'remote',
-                        typeAhead: true,
-                        selectOnFocus:true,
-                        forceSelection:true,
-                        minChars: 0
-                    }, {
-                        xtype: 'textfield',
-                        fieldLabel: App.Language.General.requested_by,
-                        name: 'mtn_work_order_requested_by',
-                        anchor: '95%'
                     }]
-                }]
-            }]
+                }
+            ]
         }];
         App.Mtn.Wo.Interface.superclass.initComponent.call(this);
     }
 });
 
-App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window, 
-{
+App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window, {
     title: App.Language.Maintenance.new_work_order,
     width: 780,
     height: 600,
     layout: 'fit',
     padding: 1,
-    maximizable : true,
+    maximizable: true,
     modal: true,
     id: 'App.Mtn.Wo.WinWo',
-    listeners: 
-    {
-        'beforerender': function(w)
-        {
-            if (App.Security.Actions[7002] === undefined) 
-            {
+    listeners: {
+        'beforerender': function(w) {
+            if (App.Security.Actions[7002] === undefined) {
                 App.Asset.Store.setBaseParam('node_id', App.Interface.selectedNodeId);
-                w.panel.form_wo.getForm().load
-                ({
+                w.panel.form_wo.getForm().load({
                     url: 'index.php/mtn/wo/getOne',
-                    params: 
-                    {
+                    params: {
                         mtn_work_order_id: w.mtn_work_order_id
                     },
-                    success: function(fp, o)
-                    {
+                    success: function(fp, o) {
                         record = o.result;
-						
+
                         App.Mtn.Wo.CurrentWoData = record.data;
-						
+
                         App.Mtn.Wo.Id = record.data.mtn_work_order_id;
                         asset_id = record.data.asset_id;
                         mtn_work_order_comment = record.data.mtn_work_order_comment;
-						
+
                         total_task = record.data.total_task;
                         total_other_costs = record.data.total_other_costs;
                         total_work_order = record.data.total_work_order;
-						
+
                         w.setHeight(600);
                         w.setWidth(780);
                         w.panel.form_wo.tab_panel.panel_comment.comment.setValue(mtn_work_order_comment);
@@ -349,74 +322,73 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                         w.panel.form_wo.panel4.colum_11.form_11.total_other_costs_dd.setValue(total_other_costs);
                         w.panel.form_wo.panel4.colum_11.form_11.total_work_order_dd.setValue(total_work_order);
                         w.setTitle(App.Language.Maintenance.work_order_number + record.data.mtn_work_order_folio);
-						
+
                         App.Mtn.ConfigStateAsociados.Store.setBaseParam('mtn_config_state_id', record.data.MtnConfigState.mtn_config_state_id);
-						
+
                         App.Mtn.ConfigStateAsociados.Store.load();
                         Ext.getCmp('App.Mtn.Wo.TypeId').setVisible(false);
                         Ext.getCmp('App.Mtn.Wo.TypeId').setDisabled(true);
                         Ext.getCmp('App.Mtn.Wo.Type1').setVisible(false);
-						
+
                         Ext.getCmp('App.Mtn.StateDisplay').setValue(record.data.MtnConfigState.MtnSystemWorkOrderStatus.mtn_system_work_order_status_name);
                         Ext.getCmp('App.Mtn.ColumState').setVisible(true);
-						
+
                         Ext.getCmp('App.Mtn.Wo.Type2').setVisible(true);
                         Ext.getCmp('App.Mtn.Wo.Label1').setVisible(false);
                         Ext.getCmp('App.Mtn.Wo.TextOt').setVisible(true);
                         Ext.getCmp('App.Mtn.Wo.TextOt').setValue(record.data.MtnConfigState.MtnWorkOrderType.mtn_work_order_type_name);
-						
+
                         App.Mtn.ConfigStateAsociados.Store.setBaseParam('mtn_work_order_type_id', record.data.MtnConfigState.mtn_work_order_type_id);
                         App.Mtn.ConfigStateAsociados.Store.load();
-						
-						
+
+
                         Ext.getCmp('App.Mtn.WoStateLabel1').setVisible(false);
                         Ext.getCmp('App.Mtn.WoStateCombo').setVisible(false);
-						
+
                         Ext.getCmp('App.Mtn.Wo.Botton').setVisible(false);
                         Ext.getCmp('App.Mtn.Wo.Date').setDisabled(true);
-						
+
                         Ext.getCmp('App.Mtn.Wo.Root').setValue(record.data.Asset.asset_path);
                         Ext.getCmp('App.Mtn.Wo.AssetDisplay').setValue(record.data.Asset.asset_name);
-						
-						
+
+
                         Ext.getCmp('App.Mtn.HiddenPanel').setVisible(true);
                         Ext.getCmp('App.Mtn.PanelTotales').setVisible(true);
                         Ext.getCmp('App.Mtn.Wo.TbarState').setDisabled(false);
                         Ext.getCmp('App.Mtn.Wo.TbarPrintIcon').setDisabled(false);
                         Ext.getCmp('App.Mtn.Wo.TbaDetail').setDisabled(false);
-						
+
                         //Cargamos las tareas de la OT   
                         App.Mtn.WoTask.Store.setBaseParam('mtn_work_order_id', App.Mtn.Wo.Id);
                         App.Mtn.WoTask.Store.load();
-						
+
                         //Cargamos los otros costos asociados a la OT
                         App.Mtn.OtherCostsWo.Store.setBaseParam('mtn_work_order_id', App.Mtn.Wo.Id);
                         App.Mtn.OtherCostsWo.Store.load();
-						
+
                         //Cargamos la tabla de los Log
                         App.Mtn.Log.Store.setBaseParam('mtn_work_order_id', App.Mtn.Wo.Id);
                         App.Mtn.Log.Store.load()
-						
+
                         //Seteamos un flag para identificar que la ot en ediciÃ³n saliÃ³ de la grid. (solo para actualizar la grid del buscador de OT)
                         App.Mtn.Wo.EditModeFromGrid = true;
-						
+
                         //Escondemos los Botones para hacer funcionar el Permiso
                         App.Mtn.Wo.CurrentWoData.mtn_work_order_closed = 1;
-						
+
                         // deshabilitando botones de cambio cuando estah cerrada
-                        if (App.Mtn.Wo.CurrentWoData.mtn_work_order_closed == 1) 
-                        {
+                        if (App.Mtn.Wo.CurrentWoData.mtn_work_order_closed == 1) {
                             w.panel.form_wo.tab_panel.taskgrid.getTopToolbar().hide();
                             w.panel.form_wo.tab_panel.taskgrid.doLayout();
-							
+
                             w.panel.form_wo.tab_panel.othercostgrid.getTopToolbar().hide();
                             w.panel.form_wo.tab_panel.othercostgrid.doLayout();
-							
+
                             Ext.getCmp('App.Mtn.Wo.FormWo.BtnSaveWo').hide();
                             Ext.getCmp('App.Mtn.Wo.TbarState').hide();
-							
+
                         }
-						
+
                         // creator user
                         Ext.getCmp('App.Mtn.Wo.CreatorUser').setText(App.Mtn.Wo.CurrentWoData.User.user_name);
                         App.Mtn.Wo.Store.load();
@@ -424,27 +396,24 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                 })
             } else {
                 App.Asset.Store.setBaseParam('node_id', App.Interface.selectedNodeId);
-                w.panel.form_wo.getForm().load
-                ({
+                w.panel.form_wo.getForm().load({
                     url: 'index.php/mtn/wo/getOne',
-                    params: 
-                    {
+                    params: {
                         mtn_work_order_id: w.mtn_work_order_id
                     },
-                    success: function(fp, o)
-                    {
+                    success: function(fp, o) {
                         record = o.result;
-						
+
                         App.Mtn.Wo.CurrentWoData = record.data;
-						
+
                         App.Mtn.Wo.Id = record.data.mtn_work_order_id;
                         asset_id = record.data.asset_id;
                         mtn_work_order_comment = record.data.mtn_work_order_comment;
-						
+
                         total_task = record.data.total_task;
                         total_other_costs = record.data.total_other_costs;
                         total_work_order = record.data.total_work_order;
-						
+
                         w.setHeight(600);
                         w.setWidth(780);
                         w.panel.form_wo.tab_panel.panel_comment.comment.setValue(mtn_work_order_comment);
@@ -452,71 +421,70 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                         w.panel.form_wo.panel4.colum_11.form_11.total_other_costs_dd.setValue(total_other_costs);
                         w.panel.form_wo.panel4.colum_11.form_11.total_work_order_dd.setValue(total_work_order);
                         w.setTitle(App.Language.Maintenance.work_order_number + record.data.mtn_work_order_folio);
-						
+
                         App.Mtn.ConfigStateAsociados.Store.setBaseParam('mtn_config_state_id', record.data.MtnConfigState.mtn_config_state_id);
-						
+
                         App.Mtn.ConfigStateAsociados.Store.load();
                         Ext.getCmp('App.Mtn.Wo.TypeId').setVisible(false);
                         Ext.getCmp('App.Mtn.Wo.TypeId').setDisabled(true);
                         Ext.getCmp('App.Mtn.Wo.Type1').setVisible(false);
-						
+
                         Ext.getCmp('App.Mtn.StateDisplay').setValue(record.data.MtnConfigState.MtnSystemWorkOrderStatus.mtn_system_work_order_status_name);
                         Ext.getCmp('App.Mtn.ColumState').setVisible(true);
-						
+
                         Ext.getCmp('App.Mtn.Wo.Type2').setVisible(true);
                         Ext.getCmp('App.Mtn.Wo.Label1').setVisible(false);
                         Ext.getCmp('App.Mtn.Wo.TextOt').setVisible(true);
                         Ext.getCmp('App.Mtn.Wo.TextOt').setValue(record.data.MtnConfigState.MtnWorkOrderType.mtn_work_order_type_name);
-						
+
                         App.Mtn.ConfigStateAsociados.Store.setBaseParam('mtn_work_order_type_id', record.data.MtnConfigState.mtn_work_order_type_id);
                         App.Mtn.ConfigStateAsociados.Store.load();
-						
-						
+
+
                         Ext.getCmp('App.Mtn.WoStateLabel1').setVisible(false);
                         Ext.getCmp('App.Mtn.WoStateCombo').setVisible(false);
-						
+
                         Ext.getCmp('App.Mtn.Wo.Botton').setVisible(false);
                         Ext.getCmp('App.Mtn.Wo.Date').setDisabled(true);
-						
+
                         Ext.getCmp('App.Mtn.Wo.Root').setValue(record.data.Asset.asset_path);
                         Ext.getCmp('App.Mtn.Wo.AssetDisplay').setValue(record.data.Asset.asset_name);
-						
-						
+
+
                         Ext.getCmp('App.Mtn.HiddenPanel').setVisible(true);
                         Ext.getCmp('App.Mtn.PanelTotales').setVisible(true);
                         Ext.getCmp('App.Mtn.Wo.TbarState').setDisabled(false);
                         Ext.getCmp('App.Mtn.Wo.TbarPrintIcon').setDisabled(false);
                         Ext.getCmp('App.Mtn.Wo.TbaDetail').setDisabled(false);
-						
+
                         //Cargamos las tareas de la OT   
                         App.Mtn.WoTask.Store.setBaseParam('mtn_work_order_id', App.Mtn.Wo.Id);
                         App.Mtn.WoTask.Store.load();
-						
+
                         //Cargamos los otros costos asociados a la OT
                         App.Mtn.OtherCostsWo.Store.setBaseParam('mtn_work_order_id', App.Mtn.Wo.Id);
                         App.Mtn.OtherCostsWo.Store.load();
-						
+
                         //Cargamos la tabla de los Log
                         App.Mtn.Log.Store.setBaseParam('mtn_work_order_id', App.Mtn.Wo.Id);
                         App.Mtn.Log.Store.load()
-						
+
                         //Seteamos un flag para identificar que la ot en ediciÃ³n saliÃ³ de la grid. (solo para actualizar la grid del buscador de OT)
                         App.Mtn.Wo.EditModeFromGrid = true;
-						
+
                         // deshabilitando botones de cambio cuando estah cerrada
-                        if (App.Mtn.Wo.CurrentWoData.mtn_work_order_closed == 1) 
-                        {
+                        if (App.Mtn.Wo.CurrentWoData.mtn_work_order_closed == 1) {
                             w.panel.form_wo.tab_panel.taskgrid.getTopToolbar().hide();
                             w.panel.form_wo.tab_panel.taskgrid.doLayout();
-							
+
                             w.panel.form_wo.tab_panel.othercostgrid.getTopToolbar().hide();
                             w.panel.form_wo.tab_panel.othercostgrid.doLayout();
-							
+
                             Ext.getCmp('App.Mtn.Wo.FormWo.BtnSaveWo').hide();
                             Ext.getCmp('App.Mtn.Wo.TbarState').hide();
-							
+
                         }
-						
+
                         // creator user
                         Ext.getCmp('App.Mtn.Wo.CreatorUser').setText(App.Mtn.Wo.CurrentWoData.User.user_name);
                         App.Mtn.Wo.Store.load();
@@ -524,103 +492,92 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                 })
             }
         },
-        'close': function()
-        {
+        'close': function() {
             App.Mtn.Wo.resetWo();
         }
     },
-    initComponent: function(){
-        this.items = 
-        [{
+    initComponent: function() {
+        this.items = [{
             xtype: 'panel',
             padding: 0,
             layout: 'fit',
             border: false,
             ref: 'panel',
-            tbar: 
-            {
+            tbar: {
                 xtype: 'toolbar',
                 height: 26,
-                items: 
-                [{
-                    xtype: 'button',
-                    text: App.Language.Maintenance.change_of_status,
-                    id: 'App.Mtn.Wo.TbarState',
-                    iconCls: 'changeState_icon',
-                    disabled: true,
-                    handler: function()
-                    {
-                        w = new App.Mtn.ChangeStateWindow();
-                        App.Mtn.ConfigStateAsociados.Store.setBaseParam('mtn_work_order_type_id', App.Mtn.Wo.CurrentWoData.MtnConfigState.mtn_work_order_type_id);
-                        App.Mtn.WoStateForm.Store.setBaseParam('mtn_work_order_id', App.Mtn.Wo.CurrentWoData.mtn_work_order_id);
-                        w.wo_type.setValue(App.Mtn.Wo.CurrentWoData.MtnConfigState.MtnWorkOrderType.mtn_work_order_type_name);
-                        w.current_state.setValue(App.Mtn.Wo.CurrentWoData.MtnConfigState.MtnSystemWorkOrderStatus.mtn_system_work_order_status_name);
-                        w.show();
-                    }
-                }, {
-                    xtype: 'spacer',
-                    width: 10
-                }, {
-                    xtype: 'button',
-                    id: 'App.Mtn.Wo.TbarPrintIcon',
-                    text: App.Language.General.printer,
-                    iconCls: 'print_icon',
-                    disabled: true,
-                    handler: function()
-                    {
-                        document.location = mtn_export_wordorder + App.Mtn.Wo.Id;
-                    }
-                }, {
-                    xtype: 'spacer',
-                    width: 10
-                }, {
-                    xtype: 'button',
-                    id: 'App.Mtn.Wo.TbaDetail',
-                    iconCls: 'information_icon',
-                    text: App.Language.Asset.asset_details,
-                    disabled: true,
-                    handler: function()
-                    {
-                        w = new App.Mtn.AssetdetailsAssetWindow();
-                        App.Asset.Store.setBaseParam('asset_id', asset_id);
-                        App.Asset.Store.load({params: {node_id: App.Interface.selectedNodeId,start: 0, limit: App.GridLimitAsset}});
-                        App.Asset.OtrosDatos.Store.setBaseParam('asset_id', asset_id);
-                        App.Asset.OtrosDatos.Store.load
-                        ({
-                            callback: function()
-                            {
-                                App.Asset.OtrosDatos.Store.each(function(record)
-                                {
-                                    field = new Ext.form.DisplayField
-                                    ({
-                                        xtype: 'label',
-                                        width: 270,
-                                        fieldLabel: record.data.label,
-                                        value: record.data.value,
-                                        name: record.data.asset_other_data_attribute_id
+                items: [{
+                        xtype: 'button',
+                        text: App.Language.Maintenance.change_of_status,
+                        id: 'App.Mtn.Wo.TbarState',
+                        iconCls: 'changeState_icon',
+                        disabled: true,
+                        handler: function() {
+                            w = new App.Mtn.ChangeStateWindow();
+                            App.Mtn.ConfigStateAsociados.Store.setBaseParam('mtn_work_order_type_id', App.Mtn.Wo.CurrentWoData.MtnConfigState.mtn_work_order_type_id);
+                            App.Mtn.WoStateForm.Store.setBaseParam('mtn_work_order_id', App.Mtn.Wo.CurrentWoData.mtn_work_order_id);
+                            w.wo_type.setValue(App.Mtn.Wo.CurrentWoData.MtnConfigState.MtnWorkOrderType.mtn_work_order_type_name);
+                            w.current_state.setValue(App.Mtn.Wo.CurrentWoData.MtnConfigState.MtnSystemWorkOrderStatus.mtn_system_work_order_status_name);
+                            w.show();
+                        }
+                    }, {
+                        xtype: 'spacer',
+                        width: 10
+                    }, {
+                        xtype: 'button',
+                        id: 'App.Mtn.Wo.TbarPrintIcon',
+                        text: App.Language.General.printer,
+                        iconCls: 'print_icon',
+                        disabled: true,
+                        handler: function() {
+                            document.location = mtn_export_wordorder + App.Mtn.Wo.Id;
+                        }
+                    }, {
+                        xtype: 'spacer',
+                        width: 10
+                    }, {
+                        xtype: 'button',
+                        id: 'App.Mtn.Wo.TbaDetail',
+                        iconCls: 'information_icon',
+                        text: App.Language.Asset.asset_details,
+                        disabled: true,
+                        handler: function() {
+                            w = new App.Mtn.AssetdetailsAssetWindow();
+                            App.Asset.Store.setBaseParam('asset_id', asset_id);
+                            App.Asset.Store.load({ params: { node_id: App.Interface.selectedNodeId, start: 0, limit: App.GridLimitAsset } });
+                            App.Asset.OtrosDatos.Store.setBaseParam('asset_id', asset_id);
+                            App.Asset.OtrosDatos.Store.load({
+                                callback: function() {
+                                    App.Asset.OtrosDatos.Store.each(function(record) {
+                                        field = new Ext.form.DisplayField({
+                                            xtype: 'label',
+                                            width: 270,
+                                            fieldLabel: record.data.label,
+                                            value: record.data.value,
+                                            name: record.data.asset_other_data_attribute_id
+                                        });
+                                        w.uno.tabpanel.otherdata.add(field);
+                                        w.uno.tabpanel.otherdata.doLayout();
                                     });
-                                    w.uno.tabpanel.otherdata.add(field);
-                                    w.uno.tabpanel.otherdata.doLayout();
-                                });
-                            }
-                        });
-                        w.show();
+                                }
+                            });
+                            w.show();
+                        }
+                    },
+                    '->',
+                    {
+                        xtype: 'label',
+                        text: App.Language.Maintenance.created_by
+                    }, {
+                        xtype: 'spacer',
+                        width: 10
+                    }, {
+                        xtype: 'label',
+                        id: 'App.Mtn.Wo.CreatorUser'
                     }
-                }, 
-                '->', 
-                {
-                    xtype: 'label',
-                    text: App.Language.Maintenance.created_by
-                }, {
-                    xtype: 'spacer',
-                    width: 10
-                }, {
-                    xtype: 'label',
-                    id: 'App.Mtn.Wo.CreatorUser'
-                }]
+                ]
             },
-            items: 
-            [{
+            items: [{
                 xtype: 'form',
                 id: 'App.Mtn.Wo.FormWo',
                 plugins: [new Ext.ux.OOSubmit()],
@@ -629,8 +586,7 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                 width: '100%',
                 border: false,
                 layout: 'border',
-                items: 
-                [{
+                items: [{
                     /** formulario **/
                     xtype: 'panel',
                     region: 'north',
@@ -640,17 +596,14 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                     ref: 'url_action',
                     border: false,
                     height: 150,
-                    items: 
-                    [{
+                    items: [{
                         layout: 'column',
                         border: true,
                         ref: 'colum_buscador',
-                        items: 
-                        [{
+                        items: [{
                             ref: 'form_buscador_1',
                             layout: 'form',
-                            items: 
-                            [{
+                            items: [{
                                 xtype: 'displayfield',
                                 fieldLabel: App.Language.General.route,
                                 name: 'asset_path',
@@ -662,22 +615,18 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                     }, {
                         layout: 'column',
                         ref: 'colum_general',
-                        items: 
-                        [{
+                        items: [{
                             columnWidth: .6,
                             ref: 'form_general',
                             layout: 'form',
-                            items: 
-                            [{
+                            items: [{
                                 layout: 'column',
                                 ref: 'colum_asset',
-                                items: 
-                                [{
+                                items: [{
                                     columnWidth: .80,
                                     ref: 'form_asset',
                                     layout: 'form',
-                                    items: 
-                                    [{
+                                    items: [{
                                         xtype: 'displayfield',
                                         fieldLabel: App.Language.General.asset,
                                         id: 'App.Mtn.Wo.AssetDisplay',
@@ -689,8 +638,7 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                                     columnWidth: .20,
                                     layout: 'form',
                                     ref: 'form_asset_button',
-                                    items: 
-                                    [{
+                                    items: [{
                                         xtype: 'button',
                                         id: 'App.Mtn.Wo.Botton',
                                         iconCls: 'search_icon_16',
@@ -698,8 +646,7 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                                         value: '0',
                                         pressed: 'false',
                                         anchor: '53%',
-                                        handler: function(b)
-                                        {
+                                        handler: function(b) {
                                             w = new App.Mtn.Wo.AddAssetWindow();
                                             b.ownerCt.ownerCt.ownerCt.ownerCt.ownerCt.ownerCt.ownerCt.ownerCt.close();
                                             w.show();
@@ -711,13 +658,11 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                                 labelWidth: 80,
                                 id: 'App.Mtn.Wo.Type1',
                                 hidden: false,
-                                items: 
-                                [{
+                                items: [{
                                     columnWidth: .2,
                                     ref: 'form_combo_type_ot',
                                     layout: 'form',
-                                    items: 
-                                    [{
+                                    items: [{
                                         xtype: 'label',
                                         text: App.Language.Maintenance.type_ot,
                                         ref: 'tipo_ot_label1',
@@ -729,8 +674,7 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                                     layout: 'form',
                                     labelWidth: 30,
                                     ref: 'form_text_type_ot',
-                                    items: 
-                                    [{
+                                    items: [{
                                         xtype: 'combo',
                                         id: 'App.Mtn.Wo.TypeId',
                                         store: App.Mtn.WoTypesAllByAssetSolo.Store,
@@ -747,25 +691,21 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                                         hidden: false,
                                         mode: 'remote',
                                         minChars: 0,
-                                        listeners: 
-                                        {
-//                                            'beforerender': function(w)
-//                                            {
-//                                                Ext.getCmp('App.Mtn.Wo.Type2').setVisible(false);
-//                                            },
-                                            'afterrender': function(cb)
-                                            {
+                                        listeners: {
+                                            //                                            'beforerender': function(w)
+                                            //                                            {
+                                            //                                                Ext.getCmp('App.Mtn.Wo.Type2').setVisible(false);
+                                            //                                            },
+                                            'afterrender': function(cb) {
                                                 cb.__value = cb.value;
                                                 cb.setValue('');
-                                                cb.getStore().load
-                                                ({
-                                                    callback: function()
-                                                    {
+                                                cb.getStore().load({
+                                                    callback: function() {
                                                         cb.setValue(cb.__value);
                                                     }
                                                 });
                                             },
-                                            'select': function(cb, record){
+                                            'select': function(cb, record) {
                                                 Ext.getCmp('App.Mtn.WoStateCombo').enable();
                                                 App.Mtn.ConfigStateAsociados.Store.setBaseParam('mtn_work_order_type_id', record.data.mtn_work_order_type_id);
                                                 App.Mtn.ConfigStateAsociados.Store.load();
@@ -778,12 +718,10 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                                 labelWidth: 80,
                                 ref: 'colum_combo_type_ot',
                                 id: 'App.Mtn.Wo.Type2',
-                                items: 
-                                [{
+                                items: [{
                                     columnWidth: .2,
                                     layout: 'form',
-                                    items: 
-                                    [{
+                                    items: [{
                                         xtype: 'label',
                                         text: App.Language.Maintenance.type_ot,
                                         id: 'App.Mtn.Wo.Label2'
@@ -792,8 +730,7 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                                     columnWidth: .8,
                                     labelWidth: 30,
                                     layout: 'form',
-                                    items: 
-                                    [{
+                                    items: [{
                                         xtype: 'displayfield',
                                         anchor: '88%',
                                         name: 'mtn_work_order_type_name',
@@ -819,8 +756,7 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                             columnWidth: .4,
                             ref: 'form_data',
                             layout: 'form',
-                            items: 
-                            [{
+                            items: [{
                                 xtype: 'datefield',
                                 fieldLabel: App.Language.General.date,
                                 id: 'App.Mtn.Wo.Date',
@@ -835,12 +771,10 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                                 labelWidth: 80,
                                 id: 'App.Mtn.WoState1',
                                 hidden: false,
-                                items: 
-                                [{
+                                items: [{
                                     columnWidth: .2,
                                     layout: 'form',
-                                    items: 
-                                    [{
+                                    items: [{
                                         xtype: 'label',
                                         text: App.Language.General.state,
                                         id: 'App.Mtn.WoStateLabel1',
@@ -850,8 +784,7 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                                     columnWidth: .8,
                                     layout: 'form',
                                     labelWidth: 60,
-                                    items: 
-                                    [{
+                                    items: [{
                                         xtype: 'combo',
                                         id: 'App.Mtn.WoStateCombo',
                                         store: App.Mtn.ConfigStateAsociados.Store,
@@ -874,12 +807,10 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                             }, {
                                 layout: 'column',
                                 labelWidth: 80,
-                                items: 
-                                [{
+                                items: [{
                                     columnWidth: .2,
                                     layout: 'form',
-                                    items: 
-                                    [{
+                                    items: [{
                                         xtype: 'label',
                                         hidden: true,
                                         id: 'App.Mtn.ColumState',
@@ -889,8 +820,7 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                                     columnWidth: .8,
                                     labelWidth: 60,
                                     layout: 'form',
-                                    items: 
-                                    [{
+                                    items: [{
                                         xtype: 'displayfield',
                                         anchor: '100%',
                                         name: 'mtn_system_work_order_status_name',
@@ -916,21 +846,17 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                     id: 'App.Mtn.HiddenPanel',
                     padding: 1,
                     margins: '0 5 5 5',
-                    items: 
-                    [{
+                    items: [{
                         xtype: 'grid',
                         title: App.Language.General.task,
                         ref: 'taskgrid',
-                        tbar: 
-                        {
+                        tbar: {
                             xtype: 'toolbar',
-                            items: 
-                            [{
+                            items: [{
                                 xtype: 'button',
                                 text: App.Language.General.add,
                                 iconCls: 'add_icon',
-                                handler: function()
-                                {
+                                handler: function() {
                                     w = new App.Mtn.addTaskWindow();
                                     w.show();
                                 }
@@ -941,16 +867,12 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                                 xtype: 'button',
                                 text: App.Language.General.ddelete,
                                 iconCls: 'delete_icon',
-                                handler: function(b)
-                                {
+                                handler: function(b) {
                                     grid = Ext.getCmp('App.Mtn.WoTaskGrid');
-                                    if (grid.getSelectionModel().getCount()) 
-                                    {
-                                        Ext.MessageBox.confirm(App.Language.General.confirmation, App.Language.General.are_you_sure_you_want_to_delete, function(b){
-                                            if (b == 'yes') 
-                                            {
-                                                grid.getSelectionModel().each(function(record)
-                                                {
+                                    if (grid.getSelectionModel().getCount()) {
+                                        Ext.MessageBox.confirm(App.Language.General.confirmation, App.Language.General.are_you_sure_you_want_to_delete, function(b) {
+                                            if (b == 'yes') {
+                                                grid.getSelectionModel().each(function(record) {
                                                     App.Mtn.WoTask.Store.remove(record);
                                                     Ext.getCmp('App.Mtn.Wo.WinWo').fireEvent('beforerender', Ext.getCmp('App.Mtn.Wo.WinWo'));
                                                 });
@@ -966,58 +888,53 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                         store: App.Mtn.WoTask.Store,
                         padding: 2,
                         border: true,
-                        viewConfig: 
-                        {
+                        viewConfig: {
                             forceFit: true
                         },
-                        listeners: 
-                        {
-                            'rowdblclick': function(grid, rowIndex){
+                        listeners: {
+                            'rowdblclick': function(grid, rowIndex) {
                                 record = grid.getStore().getAt(rowIndex);
                                 App.Mtn.WoTask.OpenEditMode(record);
                             }
                         },
-                        columns: [new Ext.grid.CheckboxSelectionModel(), 
-                        {
-                            dataIndex: 'MtnTask',
-                            header: App.Language.General.task_name,
-                            sortable: true,
-                            renderer: function(MtnTask)
+                        columns: [new Ext.grid.CheckboxSelectionModel(),
                             {
-                                return MtnTask.mtn_task_name;
+                                dataIndex: 'MtnTask',
+                                header: App.Language.General.task_name,
+                                sortable: true,
+                                renderer: function(MtnTask) {
+                                    return MtnTask.mtn_task_name;
+                                }
+                            }, {
+                                dataIndex: 'mtn_work_order_task_price',
+                                header: App.Language.General.price,
+                                sortable: true
+                            }, {
+                                dataIndex: 'mtn_amount_component_in_task',
+                                header: App.Language.Maintenance.input,
+                                sortable: true
+                            }, {
+                                header: App.Language.General.time,
+                                dataIndex: 'mtn_work_order_task_time_job',
+                                sortable: true
+                            }, {
+                                header: App.Language.General.comment,
+                                dataIndex: 'mtn_work_order_task_comment',
+                                sortable: true
                             }
-                        }, {
-                            dataIndex: 'mtn_work_order_task_price',
-                            header: App.Language.General.price,
-                            sortable: true
-                        }, {
-                            dataIndex: 'mtn_amount_component_in_task',
-                            header: App.Language.Maintenance.input,
-                            sortable: true
-                        }, {
-                            header: App.Language.General.time,
-                            dataIndex: 'mtn_work_order_task_time_job',
-                            sortable: true
-                        }, {
-                            header: App.Language.General.comment,
-                            dataIndex: 'mtn_work_order_task_comment',
-                            sortable: true
-                        }],
+                        ],
                         sm: new Ext.grid.CheckboxSelectionModel()
                     }, {
                         xtype: 'grid',
                         title: App.Language.Maintenance.other_costs,
                         ref: 'othercostgrid',
-                        tbar: 
-                        {
+                        tbar: {
                             xtype: 'toolbar',
-                            items: 
-                            [{
+                            items: [{
                                 xtype: 'button',
                                 text: App.Language.General.add,
                                 iconCls: 'add_icon',
-                                handler: function()
-                                {
+                                handler: function() {
                                     w = new App.Mtn.addOtherCostsWindow();
                                     w.show();
                                 }
@@ -1028,16 +945,12 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                                 xtype: 'button',
                                 text: App.Language.General.ddelete,
                                 iconCls: 'delete_icon',
-                                handler: function(b)
-                                {
+                                handler: function(b) {
                                     grid = Ext.getCmp('App.Mtn.WoOtherCostsGrid');
-                                    if (grid.getSelectionModel().getCount()) 
-                                    {
-                                        Ext.MessageBox.confirm(App.Language.General.confirmation, App.Language.General.are_you_sure_you_want_to_delete, function(b){
-                                            if (b == 'yes') 
-                                            {
-                                                grid.getSelectionModel().each(function(record)
-                                                {
+                                    if (grid.getSelectionModel().getCount()) {
+                                        Ext.MessageBox.confirm(App.Language.General.confirmation, App.Language.General.are_you_sure_you_want_to_delete, function(b) {
+                                            if (b == 'yes') {
+                                                grid.getSelectionModel().each(function(record) {
                                                     App.Mtn.OtherCostsWo.Store.remove(record);
                                                     Ext.getCmp('App.Mtn.Wo.WinWo').fireEvent('beforerender', Ext.getCmp('App.Mtn.Wo.WinWo'));
                                                 });
@@ -1053,35 +966,33 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                         store: App.Mtn.OtherCostsWo.Store,
                         border: true,
                         padding: 2,
-                        viewConfig: 
-                        {
+                        viewConfig: {
                             forceFit: true
                         },
-                        listeners: 
-                        {
-                            'rowdblclick': function(grid, rowIndex)
-                            {
+                        listeners: {
+                            'rowdblclick': function(grid, rowIndex) {
                                 record = grid.getStore().getAt(rowIndex);
                                 App.Mtn.OtherCosts.OpenEditMode(record);
                             }
                         },
-                        columns: [new Ext.grid.CheckboxSelectionModel(), 
-                        {
-                            dataIndex: 'mtn_other_costs_name',
-                            header: App.Language.Maintenance.name_costs,
-                            sortable: true,
-                            width: 100
-                        }, {
-                            header: App.Language.General.value,
-                            dataIndex: 'mtn_work_order_other_costs_costs',
-                            sortable: true,
-                            width: 100
-                        }, {
-                            header: App.Language.General.comment,
-                            dataIndex: 'mtn_work_order_other_costs_comment',
-                            sortable: true,
-                            width: 100
-                        }],
+                        columns: [new Ext.grid.CheckboxSelectionModel(),
+                            {
+                                dataIndex: 'mtn_other_costs_name',
+                                header: App.Language.Maintenance.name_costs,
+                                sortable: true,
+                                width: 100
+                            }, {
+                                header: App.Language.General.value,
+                                dataIndex: 'mtn_work_order_other_costs_costs',
+                                sortable: true,
+                                width: 100
+                            }, {
+                                header: App.Language.General.comment,
+                                dataIndex: 'mtn_work_order_other_costs_comment',
+                                sortable: true,
+                                width: 100
+                            }
+                        ],
                         stripeRows: true,
                         sm: new Ext.grid.CheckboxSelectionModel()
                     }, {
@@ -1089,26 +1000,21 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                         title: App.Language.Asset.tracking,
                         store: App.Mtn.Log.Store,
                         border: true,
-                        viewConfig: 
-                        {
+                        viewConfig: {
                             forceFit: true
                         },
-                        listeners: 
-                        {
-                            'beforerender': function()
-                            {
+                        listeners: {
+                            'beforerender': function() {
                                 App.Mtn.Log.Store.setBaseParam('mtn_work_order_id', App.Mtn.Wo.Id);
                                 App.Mtn.Log.Store.load();
                             }
                         },
-                        columns: 
-                        [{
+                        columns: [{
                             header: App.Language.Maintenance.state,
                             dataIndex: 'mtn_system_work_order_status_name',
                             sortable: true,
                             width: 35,
-                            renderer: function(mtn_system_work_order_status_name, p, record)
-                            {
+                            renderer: function(mtn_system_work_order_status_name, p, record) {
                                 return String.format('<b>{0}</b><br>{1}', mtn_system_work_order_status_name, record.data.mtn_status_log_datetime.dateFormat(App.General.DefaultDateTimeFormat));
                             }
                         }, {
@@ -1122,8 +1028,7 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                             sortable: true,
                             css: 'white-space:normal;',
                             cls: 'x-grid33-cell-inner',
-                            renderer: function(value, p, record)
-                            {
+                            renderer: function(value, p, record) {
                                 return String.format('{0}', value);
                             }
                         }]
@@ -1133,8 +1038,7 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                         ref: 'panel_comment',
                         padding: 2,
                         border: true,
-                        items: 
-                        [{
+                        items: [{
                             xtype: 'textarea',
                             id: 'App.Mtn.Wo.OrderComment',
                             ref: 'comment',
@@ -1154,20 +1058,17 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                     height: 100,
                     border: false,
                     frame: true,
-                    items: 
-                    [{
+                    items: [{
                         layout: 'column',
                         border: false,
                         ref: 'colum_11',
-                        items: 
-                        [{
+                        items: [{
                             columnWidth: .5,
                             layout: 'form',
                             ref: 'form_11',
                             labelWidth: 150,
                             border: false,
-                            items: 
-                            [{
+                            items: [{
                                 xtype: 'displayfield',
                                 fieldLabel: App.Language.Maintenance.value_service,
                                 ref: 'total_task_dd',
@@ -1190,46 +1091,35 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                     }]
                 }]
             }],
-            buttons: 
-            [{
+            buttons: [{
                 xtype: 'button',
                 text: App.Language.General.close,
-                handler: function(b)
-                {
+                handler: function(b) {
                     b.ownerCt.ownerCt.ownerCt.close();
                 }
             }, {
                 xtype: 'button',
                 text: App.Language.General.save,
                 id: 'App.Mtn.Wo.FormWo.BtnSaveWo',
-                handler: function(b)
-                {
-                    if (undefined == window.asset_id && undefined == window.App.Mtn.Wo.Id) 
-                    {
+                handler: function(b) {
+                    if (undefined == window.asset_id && undefined == window.App.Mtn.Wo.Id) {
                         Ext.Msg.alert(App.Language.Core.notification, App.Language.Maintenance.do_not_believe_the_ot_you_must_first_select_an_asset);
                         b.ownerCt.ownerCt.ownerCt.close();
                     } else {
                         form = Ext.getCmp('App.Mtn.Wo.FormWo').getForm();
-                        if (form.isValid() && App.Interface.selectedNodeId != 'root') 
-                        {
-                            form.submit
-                            ({
+                        if (form.isValid() && App.Interface.selectedNodeId != 'root') {
+                            form.submit({
                                 clientValidation: true,
                                 url: (App.Mtn.Wo.Id != null ? 'index.php/mtn/wo/update' : 'index.php/mtn/wo/addCorrective'),
-                                params: 
-                                {
+                                params: {
                                     asset_id: asset_id,
                                     node_id: App.Interface.selectedNodeId
                                 },
                                 waitMsg: App.Language.General.message_guarding_information,
-                                success: function(form, response)
-                                {
-                                    if (response.result.success == 'true') 
-                                    {
-                                        App.Mtn.Wo.Store.load
-                                        ({
-                                            callback: function()
-                                            {
+                                success: function(form, response) {
+                                    if (response.result.success == 'true') {
+                                        App.Mtn.Wo.Store.load({
+                                            callback: function() {
                                                 mtn_work_order_id = response.result.mtn_work_order_id;
                                                 App.Mtn.Wo.OpenEditMode(mtn_work_order_id);
                                                 total_task = response.result.total_task;
@@ -1243,10 +1133,8 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
                                         alert(App.Language.Maintenance.error_creating_ot);
                                     }
                                 },
-                                failure: function(form, action)
-                                {
-                                    switch (action.failureType) 
-                                    {
+                                failure: function(form, action) {
+                                    switch (action.failureType) {
                                         case Ext.form.Action.CLIENT_INVALID:
                                             Ext.Msg.alert(App.Language.General.error, App.Language.General.message_extjs_client_invalid);
                                             break;
@@ -1267,27 +1155,22 @@ App.Mtn.generateWorkOrderWindow = Ext.extend(Ext.Window,
     }
 });
 
-App.Mtn.addTaskWindow = Ext.extend(Ext.Window, 
-{
+App.Mtn.addTaskWindow = Ext.extend(Ext.Window, {
     title: App.Language.Maintenance.add_task,
     width: 600,
     loadMask: true,
     padding: 1,
-    viewConfig: 
-    {
+    viewConfig: {
         forceFit: true
     },
     modal: true,
-    listeners: 
-    {
-        'beforerender': function()
-        {
+    listeners: {
+        'beforerender': function() {
             App.Mtn.PriceListComponent.Store.setBaseParam('current_price_list', 'true');
             App.Mtn.PriceListComponent.Store.setBaseParam('mtn_work_order_id', App.Mtn.Wo.Id);
             App.Mtn.PriceListComponent.Store.load();
         },
-        'close': function()
-        {
+        'close': function() {
             App.Mtn.WoTask.Id = null;
             App.Mtn.WoTask.Store.setBaseParam('mtn_work_order_id', App.Mtn.Wo.Id);
             App.Mtn.WoTask.Store.load();
@@ -1295,51 +1178,40 @@ App.Mtn.addTaskWindow = Ext.extend(Ext.Window,
             App.Mtn.WoTaskComponent.Store.load();
         }
     },
-    initComponent: function()
-    {
-        this.items = 
-        [{
+    initComponent: function() {
+        this.items = [{
             xtype: 'panel',
             border: false,
-            items: 
-            [{
+            items: [{
                 xtype: 'panel',
                 border: false,
-                viewConfig: 
-                {
+                viewConfig: {
                     forceFit: true
                 },
-                items: 
-                [{
+                items: [{
                     xtype: 'form',
                     id: 'App.Mtn.Wo.FormWoTask',
                     labelAlign: 'top',
                     border: false,
-                    viewConfig: 
-                    {
+                    viewConfig: {
                         forceFit: true
                     },
                     frame: true,
                     padding: '5 5 5 5',
-                    items: 
-                    [{
+                    items: [{
                         border: false,
-                        viewConfig: 
-                        {
+                        viewConfig: {
                             forceFit: true
                         },
-                        items: 
-                        [{
+                        items: [{
                             layout: 'form',
                             width: '100%',
                             border: false,
-                            viewConfig: 
-                            {
+                            viewConfig: {
                                 forceFit: true
                             },
                             defaultType: 'textfield',
-                            items: 
-                            [{
+                            items: [{
                                 xtype: 'combo',
                                 fieldLabel: App.Language.Maintenance.task,
                                 anchor: '100%',
@@ -1349,8 +1221,8 @@ App.Mtn.addTaskWindow = Ext.extend(Ext.Window,
                                 valueField: 'mtn_task_id',
                                 selecOnFocus: true,
                                 typeAhead: true,
-                                selectOnFocus:true,
-                                forceSelection:true,
+                                selectOnFocus: true,
+                                forceSelection: true,
                                 typeAhead: true,
                                 allowBlank: false,
                                 triggerAction: 'all',
@@ -1361,12 +1233,10 @@ App.Mtn.addTaskWindow = Ext.extend(Ext.Window,
                     }, {
                         layout: 'column',
                         padding: '5 0 15 0',
-                        items: 
-                        [{
+                        items: [{
                             columnWidth: .5,
                             layout: 'form',
-                            items: 
-                            [{
+                            items: [{
                                 xtype: 'numberfield',
                                 fieldLabel: App.Language.General.value,
                                 anchor: '98%',
@@ -1375,8 +1245,7 @@ App.Mtn.addTaskWindow = Ext.extend(Ext.Window,
                         }, {
                             columnWidth: .5,
                             layout: 'form',
-                            items: 
-                            [{
+                            items: [{
                                 xtype: 'numberfield',
                                 fieldLabel: App.Language.General.time,
                                 anchor: '100%',
@@ -1384,18 +1253,15 @@ App.Mtn.addTaskWindow = Ext.extend(Ext.Window,
                             }]
                         }]
                     }, {
-                        items: 
-                        [{
+                        items: [{
                             layout: 'form',
                             width: '100%',
                             border: false,
-                            viewConfig: 
-                            {
+                            viewConfig: {
                                 forceFit: true
                             },
                             defaultType: 'textarea',
-                            items: 
-                            [{
+                            items: [{
                                 fieldLabel: App.Language.General.comment,
                                 name: 'mtn_work_order_task_comment',
                                 width: '100%',
@@ -1409,30 +1275,25 @@ App.Mtn.addTaskWindow = Ext.extend(Ext.Window,
                 id: 'App.Mtn.Wo.PanelInsumosTask',
                 hidden: true,
                 border: false,
-                viewConfig: 
-                {
+                viewConfig: {
                     forceFit: true
                 },
                 title: App.Language.Maintenance.Select_input_using_task,
                 width: '100%',
-                items: 
-                [{
+                items: [{
                     xtype: 'form',
                     layout: 'column',
                     padding: '10',
                     frame: true,
                     border: false,
-                    viewConfig: 
-                    {
+                    viewConfig: {
                         forceFit: true
                     },
                     height: 100,
-                    items: 
-                    [{
+                    items: [{
                         columnWidth: .8,
                         layout: 'form',
-                        items: 
-                        [{
+                        items: [{
                             xtype: 'combo',
                             fieldLabel: App.Language.Maintenance.input,
                             id: 'App.Mtn.WoTaskComponent.Component',
@@ -1446,18 +1307,13 @@ App.Mtn.addTaskWindow = Ext.extend(Ext.Window,
                             mode: 'remote',
                             minChars: 0,
                             allowBlank: false,
-                            listeners: 
-                            {
-                                'select': function(cb, record)
-                                {
-                                    if (record.data.MtnPriceListComponent.length == 0) 
-                                    {
+                            listeners: {
+                                'select': function(cb, record) {
+                                    if (record.data.MtnPriceListComponent.length == 0) {
                                         //Habilitar el textfield para ingresar el valor
                                         Ext.getCmp('App.Mtn.WoTaskComponent.ComponentPrice').setDisabled(false);
                                         Ext.getCmp('App.Mtn.WoTaskComponent.ComponentPrice').setValue('');
-                                    }
-                                    else 
-                                    {
+                                    } else {
                                         //Mantener deshabilitado el textfield para mostrar el valor del insumo
                                         Ext.getCmp('App.Mtn.WoTaskComponent.ComponentPrice').setDisabled(true);
                                         //Mostrar el valor del insumo
@@ -1469,8 +1325,7 @@ App.Mtn.addTaskWindow = Ext.extend(Ext.Window,
                         }, {
                             columnWidth: .1,
                             layout: 'form',
-                            items: 
-                            [{
+                            items: [{
                                 xtype: 'numberfield',
                                 name: 'mtn_work_order_component_price',
                                 id: 'App.Mtn.WoTaskComponent.ComponentPrice',
@@ -1491,34 +1346,26 @@ App.Mtn.addTaskWindow = Ext.extend(Ext.Window,
                     }, {
                         columnWidth: .1,
                         layout: 'form',
-                        items: 
-                        [{
+                        items: [{
                             xtype: 'button',
                             text: App.Language.General.add,
                             hidden: (App.Mtn.Wo.CurrentWoData.mtn_work_order_closed == '1' ? true : false),
                             anchor: '100%',
-                            handler: function(b)
-                            {
+                            handler: function(b) {
                                 form = b.ownerCt.ownerCt.getForm();
-                                if (form.isValid()) 
-                                {
-                                    form.submit
-                                    ({
+                                if (form.isValid()) {
+                                    form.submit({
                                         clientValidation: true,
                                         url: 'index.php/mtn/wotaskcomponent/add',
-                                        params: 
-                                        {
+                                        params: {
                                             mtn_work_order_task_id: App.Mtn.WoTask.Id
                                         },
                                         waitMsg: App.Language.General.message_guarding_information,
-                                        success: function(form, response)
-                                        {
+                                        success: function(form, response) {
                                             App.Mtn.WoTaskComponent.AddComponent();
                                         },
-                                        failure: function(form, action)
-                                        {
-                                            switch (action.failureType) 
-                                            {
+                                        failure: function(form, action) {
+                                            switch (action.failureType) {
                                                 case Ext.form.Action.CLIENT_INVALID:
                                                     Ext.Msg.alert(App.Language.General.error, App.Language.General.message_extjs_client_invalid);
                                                     break;
@@ -1537,30 +1384,23 @@ App.Mtn.addTaskWindow = Ext.extend(Ext.Window,
                 }, {
                     xtype: 'panel',
                     border: false,
-                    viewConfig: 
-                    {
+                    viewConfig: {
                         forceFit: true
                     },
-                    tbar: 
-                    {
+                    tbar: {
                         xtype: 'toolbar',
                         height: 26,
-                        items: 
-                        [{
+                        items: [{
                             xtype: 'button',
                             text: App.Language.General.ddelete,
                             hidden: (App.Mtn.Wo.CurrentWoData.mtn_work_order_closed == '1' ? true : false),
                             iconCls: 'delete_icon',
-                            handler: function(b)
-                            {
+                            handler: function(b) {
                                 grid = Ext.getCmp('App.Mtn.WoTaskComponentGrid');
-                                if (grid.getSelectionModel().getCount()) 
-                                {
-                                    Ext.MessageBox.confirm(App.Language.General.confirmation, App.Language.General.are_you_sure_you_want_to_delete, function(b){
-                                        if (b == 'yes') 
-                                        {
-                                            grid.getSelectionModel().each(function(record)
-                                            {
+                                if (grid.getSelectionModel().getCount()) {
+                                    Ext.MessageBox.confirm(App.Language.General.confirmation, App.Language.General.are_you_sure_you_want_to_delete, function(b) {
+                                        if (b == 'yes') {
+                                            grid.getSelectionModel().each(function(record) {
                                                 App.Mtn.WoTaskComponent.Store.remove(record);
                                             });
                                         }
@@ -1571,65 +1411,59 @@ App.Mtn.addTaskWindow = Ext.extend(Ext.Window,
                             }
                         }]
                     },
-                    items: 
-                    [{
+                    items: [{
                         xtype: 'editorgrid',
                         id: 'App.Mtn.WoTaskComponentGrid',
                         height: 101,
                         width: '100%',
                         store: App.Mtn.WoTaskComponent.Store,
-                        viewConfig: 
-                        {
+                        viewConfig: {
                             forceFit: true
                         },
                         clicksToEdit: 1,
-                        columns: [new Ext.grid.CheckboxSelectionModel(), 
-                        {
-                            header: App.Language.Maintenance.input_name,
-                            dataIndex: 'mtn_component_name',
-                            sortable: true,
-                            width: 420
-                        }, {
-                            header: App.Language.General.quantity,
-                            dataIndex: 'mtn_work_order_component_amount',
-                            sortable: true,
-                            width: 130,
-                            editor: new Ext.form.NumberField
-                            ({
-                                allowDecimals: false,
-                                allowNegative: false,
-                                blankText: App.Language.Maintenance.amount_greater_zero
-                            })
-                        }, {
-                            header: App.Language.Maintenance.unit_price,
-                            dataIndex: 'mtn_work_order_task_component_price',
-                            sortable: true,
-                            width: 170,
-                            renderer: function(value)
+                        columns: [new Ext.grid.CheckboxSelectionModel(),
                             {
-                                return Ext.util.Format.number(value, App.General.DefaultSystemCurrencyFormatMoney);
+                                header: App.Language.Maintenance.input_name,
+                                dataIndex: 'mtn_component_name',
+                                sortable: true,
+                                width: 420
+                            }, {
+                                header: App.Language.General.quantity,
+                                dataIndex: 'mtn_work_order_component_amount',
+                                sortable: true,
+                                width: 130,
+                                editor: new Ext.form.NumberField({
+                                    allowDecimals: false,
+                                    allowNegative: false,
+                                    blankText: App.Language.Maintenance.amount_greater_zero
+                                })
+                            }, {
+                                header: App.Language.Maintenance.unit_price,
+                                dataIndex: 'mtn_work_order_task_component_price',
+                                sortable: true,
+                                width: 170,
+                                renderer: function(value) {
+                                    return Ext.util.Format.number(value, App.General.DefaultSystemCurrencyFormatMoney);
+                                }
+                            }, {
+                                header: App.Language.Maintenance.total_price,
+                                dataIndex: 'mtn_work_order_task_component_price',
+                                sortable: true,
+                                width: 180,
+                                renderer: function(value, metadata, record) {
+                                    var total = value * record.data.mtn_work_order_component_amount;
+                                    return Ext.util.Format.number(total, App.General.DefaultSystemCurrencyFormatMoney);
+                                }
                             }
-                        }, {
-                            header: App.Language.Maintenance.total_price,
-                            dataIndex: 'mtn_work_order_task_component_price',
-                            sortable: true,
-                            width: 180,
-                            renderer: function(value, metadata, record)
-                            {
-                                var total = value * record.data.mtn_work_order_component_amount;
-                                return Ext.util.Format.number(total, App.General.DefaultSystemCurrencyFormatMoney);
-                            }
-                        }],
+                        ],
                         sm: new Ext.grid.CheckboxSelectionModel()
                     }]
                 }]
             }],
-            buttons: 
-            [{
+            buttons: [{
                 xtype: 'button',
                 text: App.Language.General.close,
-                handler: function(b)
-                {
+                handler: function(b) {
                     b.ownerCt.ownerCt.ownerCt.close();
                 }
             }, {
@@ -1637,28 +1471,22 @@ App.Mtn.addTaskWindow = Ext.extend(Ext.Window,
                 text: App.Language.General.save,
                 hidden: (App.Mtn.Wo.CurrentWoData.mtn_work_order_closed == '1' ? true : false),
                 id: 'App.Mtn.Wo.FormWoTask.BtnSaveWoTask',
-                handler: function(b)
-                {
+                handler: function(b) {
                     form = Ext.getCmp('App.Mtn.Wo.FormWoTask').getForm();
-                    if (form.isValid()) 
-                    {
-                        form.submit
-                        ({
+                    if (form.isValid()) {
+                        form.submit({
                             clientValidation: true,
                             url: (App.Mtn.WoTask.Id != null ? 'index.php/mtn/wotask/update' : 'index.php/mtn/wotask/add'),
-                            params: 
-                            {
+                            params: {
                                 mtn_work_order_id: App.Mtn.Wo.Id,
                                 mtn_work_order_task_id: App.Mtn.WoTask.Id
                             },
                             waitMsg: App.Language.General.message_guarding_information,
-                            success: function(form, response)
-                            {
-                                if (response.result.success == 'true') 
-                                {
+                            success: function(form, response) {
+                                if (response.result.success == 'true') {
                                     App.Mtn.WoTask.ActiveGuiEditMode(response.result.mtn_work_order_task_id);
                                     App.Mtn.WoTask.Store.load({
-                                        callback: function(){
+                                        callback: function() {
                                             mtn_work_order_task_id = response.result.mtn_work_order_task_id;
                                         }
                                     });
@@ -1668,10 +1496,8 @@ App.Mtn.addTaskWindow = Ext.extend(Ext.Window,
                                     alert(App.Language.Maintenance.error_when_entering_the_job);
                                 }
                             },
-                            failure: function(form, action)
-                            {
-                                switch (action.failureType) 
-                                {
+                            failure: function(form, action) {
+                                switch (action.failureType) {
                                     case Ext.form.Action.CLIENT_INVALID:
                                         Ext.Msg.alert(App.Language.General.error, App.Language.General.message_extjs_client_invalid);
                                         break;
@@ -1691,57 +1517,47 @@ App.Mtn.addTaskWindow = Ext.extend(Ext.Window,
     }
 });
 
-App.Mtn.addOtherCostsWindow = Ext.extend(Ext.Window, 
-{
+App.Mtn.addOtherCostsWindow = Ext.extend(Ext.Window, {
     title: App.Language.Maintenance.add_other_costs,
     width: 600,
     padding: 1,
     frame: true,
-    viewConfig: 
-    {
+    viewConfig: {
         forceFit: true
     },
     modal: true,
     id: 'App.Mtn.Wo.WinOtherCosts',
-    listeners: 
-    {
-        'close': function()
-        {
+    listeners: {
+        'close': function() {
             App.Mtn.OtherCostsWo.Store.setBaseParam('mtn_work_order_id', App.Mtn.Wo.Id);
             App.Mtn.OtherCostsWo.Store.load();
         }
     },
-    initComponent: function()
-    {
-        this.items = 
-        [{
+    initComponent: function() {
+        this.items = [{
             xtype: 'panel',
             border: false,
-            items: 
-            [{
+            items: [{
                 xtype: 'form',
                 id: 'App.Mtn.Wo.FormWoOtherCosts',
                 labelAlign: 'top',
                 border: false,
                 frame: true,
                 padding: '5 0 5 0',
-                items: 
-                [{
+                items: [{
                     layout: 'column',
                     padding: '5 0 15 0',
-                    items: 
-                    [{
+                    items: [{
                         columnWidth: .6,
                         layout: 'form',
-                        items: 
-                        [{
+                        items: [{
                             xtype: 'combo',
                             fieldLabel: App.Language.Maintenance.name_costs,
                             anchor: '98%',
                             selecOnFocus: true,
                             typeAhead: true,
-                            selectOnFocus:true,
-                            triggerAction:'all',
+                            selectOnFocus: true,
+                            triggerAction: 'all',
                             hiddenName: 'mtn_other_costs_id',
                             store: App.Mtn.OtherCosts.Store,
                             displayField: 'mtn_other_costs_name',
@@ -1749,16 +1565,12 @@ App.Mtn.addOtherCostsWindow = Ext.extend(Ext.Window,
                             mode: 'remote',
                             minChars: 0,
                             allowBlank: false,
-                            listeners: 
-                            {
-                                'afterrender': function(cb)
-                                {
+                            listeners: {
+                                'afterrender': function(cb) {
                                     cb.__value = cb.value;
                                     cb.setValue('');
-                                    cb.getStore().load
-                                    ({
-                                        callback: function()
-                                        {
+                                    cb.getStore().load({
+                                        callback: function() {
                                             cb.setValue(cb.__value);
                                         }
                                     });
@@ -1768,8 +1580,7 @@ App.Mtn.addOtherCostsWindow = Ext.extend(Ext.Window,
                     }, {
                         columnWidth: .4,
                         layout: 'form',
-                        items: 
-                        [{
+                        items: [{
                             xtype: 'numberfield',
                             fieldLabel: App.Language.General.value,
                             anchor: '98%',
@@ -1777,13 +1588,11 @@ App.Mtn.addOtherCostsWindow = Ext.extend(Ext.Window,
                         }]
                     }]
                 }, {
-                    items: 
-                    [{
+                    items: [{
                         layout: 'form',
                         width: '100%',
                         defaultType: 'textarea',
-                        items: 
-                        [{
+                        items: [{
                             fieldLabel: App.Language.General.comment,
                             name: 'mtn_work_order_other_costs_comment',
                             width: '100%',
@@ -1792,12 +1601,10 @@ App.Mtn.addOtherCostsWindow = Ext.extend(Ext.Window,
                     }]
                 }]
             }],
-            buttons: 
-            [{
+            buttons: [{
                 xtype: 'button',
                 text: App.Language.General.close,
-                handler: function(b)
-                {
+                handler: function(b) {
                     b.ownerCt.ownerCt.ownerCt.close();
                 }
             }, {
@@ -1805,30 +1612,23 @@ App.Mtn.addOtherCostsWindow = Ext.extend(Ext.Window,
                 text: App.Language.General.save,
                 id: 'App.Mtn.Wo.FormWoOtherCosts.BtnSaveOtherCosts',
                 hidden: (App.Mtn.Wo.CurrentWoData.mtn_work_order_closed == '1' ? true : false),
-                handler: function(b)
-                {
+                handler: function(b) {
                     form = Ext.getCmp('App.Mtn.Wo.FormWoOtherCosts').getForm();
-                    if (form.isValid()) 
-                    {
-                        form.submit
-                        ({
+                    if (form.isValid()) {
+                        form.submit({
                             clientValidation: true,
                             url: 'index.php/mtn/woothercosts/add',
-                            params: 
-                            {
+                            params: {
                                 mtn_work_order_id: App.Mtn.Wo.Id
                             },
                             waitMsg: App.Language.General.message_guarding_information,
-                            success: function(form, response)
-                            {
+                            success: function(form, response) {
                                 App.Mtn.OtherCostsWo.Store.load();
                                 Ext.getCmp('App.Mtn.Wo.WinWo').fireEvent('beforerender', Ext.getCmp('App.Mtn.Wo.WinWo'));
                                 Ext.getCmp('App.Mtn.Wo.WinOtherCosts').close();
                             },
-                            failure: function(form, action)
-                            {
-                                switch (action.failureType) 
-                                {
+                            failure: function(form, action) {
+                                switch (action.failureType) {
                                     case Ext.form.Action.CLIENT_INVALID:
                                         Ext.Msg.alert(App.Language.General.error, App.Language.General.message_extjs_client_invalid);
                                         break;
@@ -1848,8 +1648,7 @@ App.Mtn.addOtherCostsWindow = Ext.extend(Ext.Window,
     }
 });
 
-App.Mtn.WoTaskComponent.AddComponent = function()
-{
+App.Mtn.WoTaskComponent.AddComponent = function() {
     Ext.getCmp('App.Mtn.WoTaskComponent.Component').setValue('');
     Ext.getCmp('App.Mtn.WoTaskComponent.ComponentAmount').setValue('');
     Ext.getCmp('App.Mtn.WoTaskComponent.ComponentPrice').setValue(0);
@@ -1858,60 +1657,50 @@ App.Mtn.WoTaskComponent.AddComponent = function()
     App.Mtn.WoTaskComponent.Store.load();
 }
 
-App.Mtn.Wo.resetWo = function()
-{
+App.Mtn.Wo.resetWo = function() {
     App.Mtn.Wo.Id = null;
     App.Mtn.WoTotal = 0;
     App.Mtn.OtherCosts.Total = 0;
     App.Mtn.WoTask.Total = 0;
-    
+
     App.Mtn.WoTask.Store.baseParams = [];
     App.Mtn.OtherCostsWo.Store.baseParams = [];
     App.Mtn.FlowWo.Store.baseParams = [];
-    
+
     //Caso especial para los components
     App.Mtn.WoTaskComponent.Store.baseParams = [];
     App.Mtn.WoTaskComponent.Store.load();
-    
+
     //Actualizamos el store del buscador de ot
-    if (App.Mtn.Wo.EditModeFromGrid === true) 
-    {
+    if (App.Mtn.Wo.EditModeFromGrid === true) {
         App.Mtn.Wo.Store.load();
     }
-    
+
     App.Mtn.WoTypes.Store.setBaseParam('show_predictive_ot', 1);
     App.Mtn.WoTypes.Store.load();
 }
 
 
-App.Mtn.Wo.OpenEditMode = function(mtn_work_order_id)
-{
-    w = new App.Mtn.generateWorkOrderWindow
-    ({
+App.Mtn.Wo.OpenEditMode = function(mtn_work_order_id) {
+    w = new App.Mtn.generateWorkOrderWindow({
         mtn_work_order_id: mtn_work_order_id
     });
-    
+
     formWo = Ext.getCmp('App.Mtn.Wo.FormWo');
     btnWO = Ext.getCmp('App.Mtn.Wo.FormWo.BtnSaveWo');
-    btnWO.handler = function(b)
-    {
+    btnWO.handler = function(b) {
         form = formWo.getForm();
-        if (form.isValid()) 
-        {
-            form.submit
-            ({
+        if (form.isValid()) {
+            form.submit({
                 url: 'index.php/mtn/wo/update',
-                params: 
-                {
+                params: {
                     mtn_work_order_id: mtn_work_order_id
                 },
-                success: function(fp, o)
-                {
+                success: function(fp, o) {
                     App.Mtn.Wo.Store.load();
                     Ext.getCmp('App.Mtn.Wo.WinWo').close();
                 },
-                failure: function(fp, o)
-                {
+                failure: function(fp, o) {
                     alert('Error:\n' + o.result.msg);
                 }
             });
@@ -1920,18 +1709,15 @@ App.Mtn.Wo.OpenEditMode = function(mtn_work_order_id)
     w.show();
 }
 
-App.Mtn.WoTask.ActiveGuiEditMode = function(mtn_work_order_task_id)
-{
+App.Mtn.WoTask.ActiveGuiEditMode = function(mtn_work_order_task_id) {
     Ext.getCmp('App.Mtn.Wo.PanelInsumosTask').setVisible(true);
     App.Mtn.WoTask.Id = mtn_work_order_task_id;
     App.Mtn.WoTaskComponent.Store.setBaseParam('mtn_work_order_task_id', App.Mtn.WoTask.Id);
     App.Mtn.WoTaskComponent.Store.load();
 }
 
-App.Mtn.WoTask.OpenEditMode = function(record)
-{
-    w = new App.Mtn.addTaskWindow
-    ({
+App.Mtn.WoTask.OpenEditMode = function(record) {
+    w = new App.Mtn.addTaskWindow({
         title: App.Language.Maintenance.edit_task
     });
     formWoTask = Ext.getCmp('App.Mtn.Wo.FormWoTask');
@@ -1941,20 +1727,16 @@ App.Mtn.WoTask.OpenEditMode = function(record)
     w.show();
 }
 
-App.Mtn.OtherCosts.OpenEditMode = function(record)
-{
-    w = new App.Mtn.addOtherCostsWindow
-    ({
+App.Mtn.OtherCosts.OpenEditMode = function(record) {
+    w = new App.Mtn.addOtherCostsWindow({
         title: App.Language.Maintenance.edit_other_costs
     });
     formWoOtherCosts = Ext.getCmp('App.Mtn.Wo.FormWoOtherCosts');
     formWoOtherCosts.record = record;
     btnSaveOtherCosts = Ext.getCmp('App.Mtn.Wo.FormWoOtherCosts.BtnSaveOtherCosts');
-    btnSaveOtherCosts.handler = function()
-    {
+    btnSaveOtherCosts.handler = function() {
         form = formWoOtherCosts.getForm();
-        if (form.isValid()) 
-        {
+        if (form.isValid()) {
             form.updateRecord(formWoOtherCosts.record);
             w.close();
         }
@@ -1963,8 +1745,7 @@ App.Mtn.OtherCosts.OpenEditMode = function(record)
     w.show();
 }
 
-App.Mtn.Wo.AddAssetWindow = Ext.extend(Ext.Window, 
-{
+App.Mtn.Wo.AddAssetWindow = Ext.extend(Ext.Window, {
     title: App.Language.General.asset_search,
     resizable: false,
     modal: true,
@@ -1973,19 +1754,15 @@ App.Mtn.Wo.AddAssetWindow = Ext.extend(Ext.Window,
     height: 450,
     layout: 'fit',
     padding: 1,
-    initComponent: function()
-    {
-        this.items = 
-        [{
+    initComponent: function() {
+        this.items = [{
             xtype: 'panel',
             padding: 1,
             border: false,
-            viewConfig: 
-            {
+            viewConfig: {
                 forceFit: true
             },
-            items: 
-            [{
+            items: [{
                 xtype: 'form',
                 plugins: [new Ext.ux.OOSubmit()],
                 frame: true,
@@ -1993,15 +1770,12 @@ App.Mtn.Wo.AddAssetWindow = Ext.extend(Ext.Window,
                 id: 'AddAssetContract',
                 padding: '25 25 25 25',
                 border: false,
-                items: 
-                [{
+                items: [{
                     layout: 'column',
-                    items: 
-                    [{
+                    items: [{
                         columnWidth: .55,
                         layout: 'form',
-                        items: 
-                        [{
+                        items: [{
                             xtype: 'textfield',
                             fieldLabel: App.Language.General.name,
                             anchor: '80%',
@@ -2025,16 +1799,12 @@ App.Mtn.Wo.AddAssetWindow = Ext.extend(Ext.Window,
                             editable: false,
                             mode: 'remote',
                             minChars: 0,
-                            listeners: 
-                            {
-                                'afterrender': function(cb)
-                                {
+                            listeners: {
+                                'afterrender': function(cb) {
                                     cb.__value = cb.value;
                                     cb.setValue('');
-                                    cb.getStore().load
-                                    ({
-                                        callback: function()
-                                        {
+                                    cb.getStore().load({
+                                        callback: function() {
                                             cb.setValue(cb.__value);
                                         }
                                     });
@@ -2044,8 +1814,7 @@ App.Mtn.Wo.AddAssetWindow = Ext.extend(Ext.Window,
                     }, {
                         columnWidth: .45,
                         layout: 'form',
-                        items: 
-                        [{
+                        items: [{
                             xtype: 'combo',
                             fieldLabel: App.Language.Asset.asset_type,
                             anchor: '100%',
@@ -2057,16 +1826,12 @@ App.Mtn.Wo.AddAssetWindow = Ext.extend(Ext.Window,
                             editable: false,
                             mode: 'remote',
                             minChars: 0,
-                            listeners: 
-                            {
-                                'afterrender': function(cb)
-                                {
+                            listeners: {
+                                'afterrender': function(cb) {
                                     cb.__value = cb.value;
                                     cb.setValue('');
-                                    cb.getStore().load
-                                    ({
-                                        callback: function()
-                                        {
+                                    cb.getStore().load({
+                                        callback: function() {
                                             cb.setValue(cb.__value);
                                         }
                                     });
@@ -2084,16 +1849,12 @@ App.Mtn.Wo.AddAssetWindow = Ext.extend(Ext.Window,
                             editable: false,
                             mode: 'remote',
                             minChars: 0,
-                            listeners: 
-                            {
-                                'afterrender': function(cb)
-                                {
+                            listeners: {
+                                'afterrender': function(cb) {
                                     cb.__value = cb.value;
                                     cb.setValue('');
-                                    cb.getStore().load
-                                    ({
-                                        callback: function()
-                                        {
+                                    cb.getStore().load({
+                                        callback: function() {
                                             cb.setValue(cb.__value);
                                         }
                                     });
@@ -2102,105 +1863,93 @@ App.Mtn.Wo.AddAssetWindow = Ext.extend(Ext.Window,
                         }]
                     }]
                 }],
-                buttons: 
-                [{
+                buttons: [{
                     text: App.Language.General.search,
-                    handler: function(b)
-                    {
+                    handler: function(b) {
                         form = b.ownerCt.ownerCt.getForm();
                         node_id = App.Asset.Store.baseParams.node_id;
                         App.Asset.Store.baseParams = form.getSubmitValues();
                         App.Asset.Store.setBaseParam('node_id', node_id);
                         App.Asset.Store.setBaseParam('search_branch', 1);
-                        App.Asset.Store.load({params: {node_id: App.Interface.selectedNodeId,start: 0, limit: App.GridLimitAsset}});
+                        App.Asset.Store.load({ params: { node_id: App.Interface.selectedNodeId, start: 0, limit: App.GridLimitAsset } });
                     }
                 }, {
                     text: App.Language.General.clean,
-                    handler: function(b)
-                    {
+                    handler: function(b) {
                         form = b.ownerCt.ownerCt.getForm();
                         node_id = App.Asset.Store.baseParams.node_id;
                         form.reset();
                         App.Asset.Store.baseParams = {};
                         App.Asset.Store.setBaseParam('node_id', node_id);
-                        App.Asset.Store.load({params: {node_id: App.Interface.selectedNodeId,start: 0, limit: App.GridLimitAsset}});
+                        App.Asset.Store.load({ params: { node_id: App.Interface.selectedNodeId, start: 0, limit: App.GridLimitAsset } });
                     }
                 }]
             }, {
                 xtype: 'panel',
                 border: false,
                 padding: 1,
-                items: 
-                [{
+                items: [{
                     xtype: 'grid',
                     height: 215,
                     id: 'App.Mtn.Wo.AddAsset',
                     width: '100%',
                     store: App.Asset.Store,
-                    listeners: 
-                    {
-                        'beforerender': function()
-                        {
-                            App.Asset.Store.load({params: {node_id: App.Interface.selectedNodeId,start: 0, limit: App.GridLimitAsset}});
+                    listeners: {
+                        'beforerender': function() {
+                            App.Asset.Store.load({ params: { node_id: App.Interface.selectedNodeId, start: 0, limit: App.GridLimitAsset } });
                         }
                     },
-                    viewConfig: 
-                    {
+                    viewConfig: {
                         forceFit: true
                     },
-                    columns: [new Ext.grid.CheckboxSelectionModel(), 
-                    {
-                        header: App.Language.General.name,
-                        sortable: true,
-                        dataIndex: 'asset_name'
-                    }, {
-                        header: App.Language.General.brand,
-                        sortable: true,
-                        dataIndex: 'brand_name'
-                    }, {
-                        header: App.Language.General.type,
-                        sortable: true,
-                        dataIndex: 'asset_type_name'
-                    }, {
-                        header: App.Language.Asset.internal_number,
-                        sortable: true,
-                        dataIndex: 'asset_num_serie_intern'
-                    }, {
-                        header: App.Language.Core.location,
-                        sortable: true,
-                        dataIndex: 'asset_path',
-                        align: 'center'
-                    }],
-                    sm: new Ext.grid.CheckboxSelectionModel
-                    ({
+                    columns: [new Ext.grid.CheckboxSelectionModel(),
+                        {
+                            header: App.Language.General.name,
+                            sortable: true,
+                            dataIndex: 'asset_name'
+                        }, {
+                            header: App.Language.General.brand,
+                            sortable: true,
+                            dataIndex: 'brand_name'
+                        }, {
+                            header: App.Language.General.type,
+                            sortable: true,
+                            dataIndex: 'asset_type_name'
+                        }, {
+                            header: App.Language.Asset.internal_number,
+                            sortable: true,
+                            dataIndex: 'asset_num_serie_intern'
+                        }, {
+                            header: App.Language.Core.location,
+                            sortable: true,
+                            dataIndex: 'asset_path',
+                            align: 'center'
+                        }
+                    ],
+                    sm: new Ext.grid.CheckboxSelectionModel({
                         singleSelect: true
                     })
                 }]
             }],
-            buttons: 
-            [{
+            buttons: [{
                 xtype: 'button',
                 text: App.Language.General.close,
-                handler: function(b)
-                {
+                handler: function(b) {
                     b.ownerCt.ownerCt.ownerCt.close();
                 }
             }, {
                 xtype: 'button',
                 text: App.Language.General.select,
-                handler: function(b)
-                {
+                handler: function(b) {
                     grid = Ext.getCmp('App.Mtn.Wo.AddAsset');
-                    if (grid.getSelectionModel().getCount()) 
-                    {
+                    if (grid.getSelectionModel().getCount()) {
                         asset_id = grid.getSelectionModel().getSelected().id;
                         asset_name = grid.getSelectionModel().getSelected().json.asset_name;
                         asset_path = grid.getSelectionModel().getSelected().json.asset_path;
                         App.Mtn.Wo.Store.setBaseParam('asset_id', asset_id);
                         App.Mtn.Wo.Store.setBaseParam('asset_name', App.Mtn.Wo.assetNameName);
                         b.ownerCt.ownerCt.ownerCt.close();
-                        w = new App.Mtn.generateWorkOrderWindow
-                        ({
+                        w = new App.Mtn.generateWorkOrderWindow({
                             height: 250
                         });
                         w.panel.form_wo.url_action.colum_general.form_general.colum_asset.form_asset.displayfield_asset.setValue(asset_name);
@@ -2218,8 +1967,7 @@ App.Mtn.Wo.AddAssetWindow = Ext.extend(Ext.Window,
     }
 });
 
-App.Mtn.Wo.DateWO = Ext.extend(Ext.Window, 
-{
+App.Mtn.Wo.DateWO = Ext.extend(Ext.Window, {
     title: App.Language.Maintenance.change_dates,
     resizable: false,
     modal: true,
@@ -2227,53 +1975,42 @@ App.Mtn.Wo.DateWO = Ext.extend(Ext.Window,
     height: 140,
     layout: 'fit',
     padding: 1,
-    initComponent: function()
-    {
-        this.items = 
-        [{
+    initComponent: function() {
+        this.items = [{
             xtype: 'form',
             ref: 'form',
             plugins: [new Ext.ux.OOSubmit()],
             labelWidth: 150,
             padding: 5,
-            items: 
-            [{
+            items: [{
                 xtype: 'datefield',
                 fieldLabel: App.Language.Maintenance.new_date,
                 format: App.General.DefaultSystemDate,
                 name: 'mtn_work_order_date',
                 anchor: '100%'
             }],
-            buttons: 
-            [{
+            buttons: [{
                 text: App.Language.General.close,
-                handler: function(b)
-                {
+                handler: function(b) {
                     b.ownerCt.ownerCt.ownerCt.close();
                 }
             }, {
                 text: App.Language.General.save,
                 ref: '../saveButton',
-                handler: function(b)
-                {
+                handler: function(b) {
                     form = b.ownerCt.ownerCt.getForm();
-                    if (form.isValid()) 
-                    {
-                        form.submit
-                        ({
+                    if (form.isValid()) {
+                        form.submit({
                             url: 'index.php/mtn/wo/updateDate',
-                            params: 
-                            {
+                            params: {
                                 mtn_work_order_id: aux_mtn_work_order_id
                             },
-                            success: function(fp, o)
-                            {
+                            success: function(fp, o) {
                                 App.Mtn.Wo.Store.load();
                                 b.ownerCt.ownerCt.ownerCt.close();
                                 Ext.FlashMessage.alert(o.result.msg);
                             },
-                            failure: function(fp, o)
-                            {
+                            failure: function(fp, o) {
                                 alert('Error:\n' + o.result.msg);
                             }
                         });
@@ -2286,8 +2023,7 @@ App.Mtn.Wo.DateWO = Ext.extend(Ext.Window,
 });
 
 /*--Detalles de Asset solo vista---*/
-App.Mtn.AssetdetailsAssetWindow = Ext.extend(Ext.Window, 
-{
+App.Mtn.AssetdetailsAssetWindow = Ext.extend(Ext.Window, {
     title: App.Language.Asset.asset_details,
     width: 650,
     height: 500,
@@ -2296,19 +2032,14 @@ App.Mtn.AssetdetailsAssetWindow = Ext.extend(Ext.Window,
     padding: 5,
     modal: true,
     resizable: false,
-    listeners: 
-    {
-        'beforerender': function(w)
-        {
-            Ext.getCmp('detalle').getForm().load
-            ({
+    listeners: {
+        'beforerender': function(w) {
+            Ext.getCmp('detalle').getForm().load({
                 url: 'index.php/asset/asset/getOne',
-                params: 
-                {
+                params: {
                     asset_id: asset_id
                 },
-                success: function(fp, o)
-                {
+                success: function(fp, o) {
                     record = o.result;
                     Ext.getCmp('Brand').setValue(record.data.Brand.brand_name);
                     Ext.getCmp('AssetType').setValue(record.data.AssetType.asset_type_name);
@@ -2318,35 +2049,29 @@ App.Mtn.AssetdetailsAssetWindow = Ext.extend(Ext.Window,
             })
         }
     },
-    initComponent: function()
-    {
-        this.items = 
-        [{
+    initComponent: function() {
+        this.items = [{
             xtype: 'form',
             id: 'detalle',
             ref: 'uno',
             plugins: [new Ext.ux.OOSubmit()],
-            items: 
-            [{
+            items: [{
                 xtype: 'tabpanel',
                 activeTab: 0,
                 height: 420,
                 border: false,
                 ref: 'tabpanel',
-                defaults: 
-                {
+                defaults: {
                     layout: 'form',
                     defaultType: 'textfield',
                     hideMode: 'offsets'
                 },
-                items: 
-                [{
+                items: [{
                     ref: 'detail',
                     title: App.Language.General.details,
                     padding: 5,
                     labelWidth: 150,
-                    items: 
-                    [{
+                    items: [{
                         xtype: 'displayfield',
                         fieldLabel: App.Language.General.name,
                         name: 'asset_name',
@@ -2432,22 +2157,17 @@ App.Mtn.AssetdetailsAssetWindow = Ext.extend(Ext.Window,
                     store: App.Asset.Insurance.Store,
                     loadMask: true,
                     anchor: '100%',
-                    viewConfig: 
-                    {
+                    viewConfig: {
                         forceFit: true
                     },
-                    listeners:
-                    {
-                        'render': function()
-                        {
+                    listeners: {
+                        'render': function() {
                             this.store.setBaseParam('asset_id', asset_id);
                             this.store.load();
                         }
                     },
-                    initComponent: function()
-                    {
-                        this.columns = 
-                        [{
+                    initComponent: function() {
+                        this.columns = [{
                             header: App.Language.General.provider,
                             sortable: true,
                             dataIndex: 'provider_name'
@@ -2480,27 +2200,21 @@ App.Mtn.AssetdetailsAssetWindow = Ext.extend(Ext.Window,
                     store: App.Asset.Measurement.Store,
                     loadMask: true,
                     anchor: '100%',
-                    viewConfig: 
-                    {
+                    viewConfig: {
                         forceFit: true
                     },
-                    listeners: 
-                    {
-                        'render': function()
-                        {
+                    listeners: {
+                        'render': function() {
                             this.store.setBaseParam('asset_id', asset_id);
                             this.store.load();
                         }
                     },
-                    initComponent: function()
-                    {
-                        this.columns = 
-                        [{
+                    initComponent: function() {
+                        this.columns = [{
                             header: App.Language.Asset.measurement,
                             sortable: true,
                             dataIndex: 'asset_measurement_cantity',
-                            renderer: function(value, metaData, record)
-                            {
+                            renderer: function(value, metaData, record) {
                                 return value + ' ' + record.data.measure_unit_name;
                             }
                         }, {
@@ -2523,22 +2237,17 @@ App.Mtn.AssetdetailsAssetWindow = Ext.extend(Ext.Window,
                     region: 'center',
                     loadMask: true,
                     anchor: '100%',
-                    viewConfig: 
-                    {
+                    viewConfig: {
                         forceFit: true
                     },
-                    listeners: 
-                    {
-                        'beforerender': function()
-                        {
+                    listeners: {
+                        'beforerender': function() {
                             this.store.setBaseParam('asset_id', asset_id);
                             this.store.load();
                         }
                     },
-                    initComponent: function()
-                    {
-                        this.columns = 
-                        [{
+                    initComponent: function() {
+                        this.columns = [{
                             header: App.Language.General.action,
                             sortable: true,
                             dataIndex: 'asset_log_type_name'
@@ -2552,8 +2261,7 @@ App.Mtn.AssetdetailsAssetWindow = Ext.extend(Ext.Window,
                             header: App.Language.General.details,
                             sortable: true,
                             dataIndex: 'asset_log_detail',
-                            renderer: function(value, metadata, record, rowIndex, colIndex, store)
-                            {
+                            renderer: function(value, metadata, record, rowIndex, colIndex, store) {
                                 metadata.attr = 'ext:qtip="' + value + '"';
                                 return value;
                             }
@@ -2561,8 +2269,7 @@ App.Mtn.AssetdetailsAssetWindow = Ext.extend(Ext.Window,
                             header: App.Language.General.user,
                             sortable: true,
                             dataIndex: 'User',
-                            renderer: function(User)
-                            {
+                            renderer: function(User) {
                                 return User.user_name;
                             }
                         }];
@@ -2574,27 +2281,21 @@ App.Mtn.AssetdetailsAssetWindow = Ext.extend(Ext.Window,
                     store: App.Asset.Document.Store,
                     loadMask: true,
                     anchor: '100%',
-                    viewConfig: 
-                    {
+                    viewConfig: {
                         forceFit: true
                     },
-                    listeners: 
-                    {
-                        'render': function()
-                        {
+                    listeners: {
+                        'render': function() {
                             this.store.setBaseParam('asset_id', asset_id);
                             this.store.load();
                         }
                     },
-                    initComponent: function()
-                    {
-                        this.columns = 
-                        [{
+                    initComponent: function() {
+                        this.columns = [{
                             header: App.Language.General.file_name,
                             dataIndex: 'asset_document_filename',
                             sortable: true,
-                            renderer: function(val, metadata, record)
-                            {
+                            renderer: function(val, metadata, record) {
                                 return "<a href='index.php/asset/assetdocument/download/" + record.data.asset_document_id + "'>" + val + "</a>";
                             }
                         }, {
@@ -2610,12 +2311,10 @@ App.Mtn.AssetdetailsAssetWindow = Ext.extend(Ext.Window,
                     }
                 }]
             }],
-            buttons: 
-            [{
+            buttons: [{
                 xtype: 'button',
                 text: App.Language.General.close,
-                handler: function(b)
-                {
+                handler: function(b) {
                     b.ownerCt.ownerCt.ownerCt.hide();
                 }
             }]
@@ -2624,8 +2323,7 @@ App.Mtn.AssetdetailsAssetWindow = Ext.extend(Ext.Window,
     }
 });
 
-App.Mtn.ChangeStateWindow = Ext.extend(Ext.Window, 
-{
+App.Mtn.ChangeStateWindow = Ext.extend(Ext.Window, {
     title: App.Language.Maintenance.change_of_status,
     resizable: false,
     modal: true,
@@ -2633,17 +2331,14 @@ App.Mtn.ChangeStateWindow = Ext.extend(Ext.Window,
     height: 230,
     layout: 'fit',
     padding: 1,
-    initComponent: function()
-    {
-        this.items = 
-        [{
+    initComponent: function() {
+        this.items = [{
             xtype: 'form',
             ref: 'form',
             frame: false,
             labelWidth: 150,
             padding: 5,
-            items: 
-            [{
+            items: [{
                 xtype: 'displayfield',
                 fieldLabel: App.Language.Maintenance.type_ot,
                 ref: '../wo_type'
@@ -2672,35 +2367,28 @@ App.Mtn.ChangeStateWindow = Ext.extend(Ext.Window,
                 anchor: '100%',
                 name: 'mtn_status_log_comments'
             }],
-            buttons: 
-            [{
+            buttons: [{
                 text: App.Language.General.close,
-                handler: function(b)
-                {
+                handler: function(b) {
                     b.ownerCt.ownerCt.ownerCt.close();
                 }
             }, {
                 text: App.Language.General.save,
-                handler: function(b)
-                {
+                handler: function(b) {
                     form = b.ownerCt.ownerCt.getForm();
-                    if (form.isValid()) 
-                    {
-                        form.submit
-                        ({
+                    if (form.isValid()) {
+                        form.submit({
                             url: 'index.php/mtn/wo/updateState',
-                            params: 
-                            {
+                            params: {
                                 mtn_work_order_id: App.Mtn.Wo.CurrentWoData.mtn_work_order_id
                             },
-                            success: function(fp, o)
-                            {
+                            success: function(fp, o) {
                                 b.ownerCt.ownerCt.ownerCt.close();
                                 Ext.getCmp('App.Mtn.Wo.WinWo').close();
                                 App.Mtn.Wo.OpenEditMode(App.Mtn.Wo.CurrentWoData.mtn_work_order_id);
-                                
+
                             },
-                            failure: function(fp, o){
+                            failure: function(fp, o) {
                                 alert('Error:\n' + o.result.msg);
                             }
                         });

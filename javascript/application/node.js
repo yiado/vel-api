@@ -1,12 +1,9 @@
 Ext.namespace('App.Node');
 
-App.Node.CopyProxy = function(node_id, successCallBack)
-{
-    Ext.Ajax.request
-	({
-        url: 	'index.php/core/nodecontroller/edit',
-        params: 
-		{
+App.Node.CopyProxy = function(node_id, successCallBack) {
+    Ext.Ajax.request({
+        url: 'index.php/core/nodecontroller/edit',
+        params: {
             node_id: node_id,
             action: 'copy'
         },
@@ -14,13 +11,10 @@ App.Node.CopyProxy = function(node_id, successCallBack)
     });
 };
 
-App.Node.CutProxy = function(node_id, successCallBack)
-{
-    Ext.Ajax.request
-	({
+App.Node.CutProxy = function(node_id, successCallBack) {
+    Ext.Ajax.request({
         url: 'index.php/core/nodecontroller/edit',
-        params: 
-	{
+        params: {
             node_id: node_id,
             action: 'cut'
         },
@@ -28,13 +22,10 @@ App.Node.CutProxy = function(node_id, successCallBack)
     });
 };
 
-App.Node.PasteProxy = function(node_parent_id, successCallBack)
-{
-    Ext.Ajax.request
-	({
+App.Node.PasteProxy = function(node_parent_id, successCallBack) {
+    Ext.Ajax.request({
         url: 'index.php/core/nodecontroller/edit',
-        params: 
-	{
+        params: {
             node_parent_id: node_parent_id,
             action: 'paste'
         },
@@ -42,13 +33,10 @@ App.Node.PasteProxy = function(node_parent_id, successCallBack)
     })
 };
 
-App.Node.DeleteProxy = function(node_id, successCallBack)
-{
-    Ext.Ajax.request
-	({
+App.Node.DeleteProxy = function(node_id, successCallBack) {
+    Ext.Ajax.request({
         url: 'index.php/core/nodecontroller/edit',
-        params: 
-	{
+        params: {
             node_id: node_id,
             action: 'delete'
         },
@@ -56,13 +44,10 @@ App.Node.DeleteProxy = function(node_id, successCallBack)
     });
 };
 
-App.Node.MoveProxy = function(node_id, node_parent_id, successCallBack)
-{
-    Ext.Ajax.request
-	({
+App.Node.MoveProxy = function(node_id, node_parent_id, successCallBack) {
+    Ext.Ajax.request({
         url: 'index.php/core/nodecontroller/edit',
-        params: 
-	{
+        params: {
             node_id: node_id,
             node_parent_id: node_parent_id,
             action: 'move'

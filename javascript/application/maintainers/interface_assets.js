@@ -1,5 +1,4 @@
-App.Maintainers.addToModuleMenu('asset', 
-{
+App.Maintainers.addToModuleMenu('asset', {
     xtype: 'button',
     text: App.Language.Asset.assets,
     iconCls: 'equip_icon_32',
@@ -8,54 +7,44 @@ App.Maintainers.addToModuleMenu('asset',
     iconAlign: 'top'
 });
 
-App.Maintainers.Assets.Principal = Ext.extend(Ext.TabPanel, 
-{
+App.Maintainers.Assets.Principal = Ext.extend(Ext.TabPanel, {
     activeTab: 0,
     border: false,
-    initComponent: function()
-    {
-        this.items = 
-        [{
+    initComponent: function() {
+        this.items = [{
             xtype: 'grid',
             title: App.Language.Asset.asset_type,
             id: 'App.Maintainers.AssetTypeGrid',
             store: App.Asset.Type.Store,
             height: 900,
-            viewConfig: 
-            {
+            viewConfig: {
                 forceFit: true
             },
-            listeners: 
-            {
-                'rowdblclick': function(grid, rowIndex)
-                {
+            listeners: {
+                'rowdblclick': function(grid, rowIndex) {
                     record = grid.getStore().getAt(rowIndex);
                     App.Maintainers.AssetTypeOpenEditMode(record);
                 },
-                'beforerender': function()
-                {
+                'beforerender': function() {
                     App.Asset.Type.Store.load();
                 }
             },
-            columns: 
-            [new Ext.grid.CheckboxSelectionModel(), 
-            {
-                xtype: 'gridcolumn',
-                header: App.Language.General.name,
-                dataIndex: 'asset_type_name',
-                sortable: true,
-                width: 100
-            }],
+            columns: [new Ext.grid.CheckboxSelectionModel(),
+                {
+                    xtype: 'gridcolumn',
+                    header: App.Language.General.name,
+                    dataIndex: 'asset_type_name',
+                    sortable: true,
+                    width: 100
+                }
+            ],
             sm: new Ext.grid.CheckboxSelectionModel(),
-            tbar: 
-            {
+            tbar: {
                 xtype: 'toolbar',
-                items: 
-                [{
+                items: [{
                     text: App.Language.General.add,
                     iconCls: 'add_icon',
-                    handler: function()
-                    {
+                    handler: function() {
                         w = new App.Maintainers.addAssetTypeWindow();
                         w.show();
                     }
@@ -66,16 +55,12 @@ App.Maintainers.Assets.Principal = Ext.extend(Ext.TabPanel,
                     xtype: 'button',
                     text: App.Language.General.ddelete,
                     iconCls: 'delete_icon',
-                    handler: function(b){
+                    handler: function(b) {
                         grid = Ext.getCmp('App.Maintainers.AssetTypeGrid');
-                        if (grid.getSelectionModel().getCount()) 
-                        {
-                            Ext.MessageBox.confirm(App.Language.General.confirmation, App.Language.General.message_really_want_delete_option, function(b)
-                            {
-                                if (b == 'yes') 
-                                {
-                                    grid.getSelectionModel().each(function(record)
-                                    {
+                        if (grid.getSelectionModel().getCount()) {
+                            Ext.MessageBox.confirm(App.Language.General.confirmation, App.Language.General.message_really_want_delete_option, function(b) {
+                                if (b == 'yes') {
+                                    grid.getSelectionModel().each(function(record) {
                                         App.Asset.Type.Store.remove(record);
                                     });
                                 }
@@ -92,47 +77,40 @@ App.Maintainers.Assets.Principal = Ext.extend(Ext.TabPanel,
             id: 'App.Maintainers.AssetStatusGrid',
             store: App.Asset.Status.Store,
             height: 900,
-            viewConfig: 
-            {
+            viewConfig: {
                 forceFit: true
             },
-            listeners: 
-            {
-                'rowdblclick': function(grid, rowIndex)
-                {
+            listeners: {
+                'rowdblclick': function(grid, rowIndex) {
                     record = grid.getStore().getAt(rowIndex);
                     App.Maintainers.AssetStatusOpenEditMode(record);
                 },
-                'beforerender': function()
-                {
+                'beforerender': function() {
                     App.Asset.Status.Store.load();
                 }
             },
-            columns: 
-            [new Ext.grid.CheckboxSelectionModel(), 
-            {
-                xtype: 'gridcolumn',
-                dataIndex: 'asset_status_name',
-                header: App.Language.General.name,
-                sortable: true,
-                width: 100
-            }, {
-                xtype: 'gridcolumn',
-                dataIndex: 'asset_status_description',
-                header: App.Language.General.description,
-                sortable: true,
-                width: 100
-            }],
+            columns: [new Ext.grid.CheckboxSelectionModel(),
+                {
+                    xtype: 'gridcolumn',
+                    dataIndex: 'asset_status_name',
+                    header: App.Language.General.name,
+                    sortable: true,
+                    width: 100
+                }, {
+                    xtype: 'gridcolumn',
+                    dataIndex: 'asset_status_description',
+                    header: App.Language.General.description,
+                    sortable: true,
+                    width: 100
+                }
+            ],
             sm: new Ext.grid.CheckboxSelectionModel(),
-            tbar: 
-            {
+            tbar: {
                 xtype: 'toolbar',
-                items:
-                [{
+                items: [{
                     text: App.Language.General.add,
                     iconCls: 'add_icon',
-                    handler: function()
-                    {
+                    handler: function() {
                         w = new App.Maintainers.addAssetStatusWindow();
                         w.show();
                     }
@@ -143,16 +121,12 @@ App.Maintainers.Assets.Principal = Ext.extend(Ext.TabPanel,
                     xtype: 'button',
                     text: App.Language.General.ddelete,
                     iconCls: 'delete_icon',
-                    handler: function(b)
-                    {
+                    handler: function(b) {
                         grid = Ext.getCmp('App.Maintainers.AssetStatusGrid');
                         if (grid.getSelectionModel().getCount()) {
-                            Ext.MessageBox.confirm(App.Language.General.confirmation, App.Language.General.message_really_want_delete_option, function(b)
-                            {
-                                if (b == 'yes') 
-                                {
-                                    grid.getSelectionModel().each(function(record)
-                                    {
+                            Ext.MessageBox.confirm(App.Language.General.confirmation, App.Language.General.message_really_want_delete_option, function(b) {
+                                if (b == 'yes') {
+                                    grid.getSelectionModel().each(function(record) {
                                         App.Asset.Status.Store.remove(record);
                                     });
                                 }
@@ -169,44 +143,40 @@ App.Maintainers.Assets.Principal = Ext.extend(Ext.TabPanel,
             id: 'App.Maintainers.AssetConditionGrid',
             store: App.Asset.Condition.Store,
             height: 900,
-            viewConfig: 
-            {
+            viewConfig: {
                 forceFit: true
             },
-            listeners: 
-            {
-                'rowdblclick': function(grid, rowIndex){
+            listeners: {
+                'rowdblclick': function(grid, rowIndex) {
                     record = grid.getStore().getAt(rowIndex);
                     App.Maintainers.AssetConditionOpenEditMode(record);
                 },
-                'beforerender': function(){
+                'beforerender': function() {
                     App.Asset.Condition.Store.load();
                 }
             },
-            columns: [new Ext.grid.CheckboxSelectionModel(), 
-            {
-                xtype: 'gridcolumn',
-                dataIndex: 'asset_condition_name',
-                header: App.Language.General.name,
-                sortable: true,
-                width: 100
-            }, {
-                xtype: 'gridcolumn',
-                dataIndex: 'asset_condition_description',
-                header: App.Language.General.description,
-                sortable: true,
-                width: 100
-            }],
+            columns: [new Ext.grid.CheckboxSelectionModel(),
+                {
+                    xtype: 'gridcolumn',
+                    dataIndex: 'asset_condition_name',
+                    header: App.Language.General.name,
+                    sortable: true,
+                    width: 100
+                }, {
+                    xtype: 'gridcolumn',
+                    dataIndex: 'asset_condition_description',
+                    header: App.Language.General.description,
+                    sortable: true,
+                    width: 100
+                }
+            ],
             sm: new Ext.grid.CheckboxSelectionModel(),
-            tbar: 
-            {
+            tbar: {
                 xtype: 'toolbar',
-                items: 
-                [{
+                items: [{
                     text: App.Language.General.add,
                     iconCls: 'add_icon',
-                    handler: function()
-                    {
+                    handler: function() {
                         w = new App.Maintainers.addAssetConditionWindow();
                         w.show();
                     }
@@ -217,17 +187,12 @@ App.Maintainers.Assets.Principal = Ext.extend(Ext.TabPanel,
                     xtype: 'button',
                     text: App.Language.General.ddelete,
                     iconCls: 'delete_icon',
-                    handler: function(b)
-                    {
+                    handler: function(b) {
                         grid = Ext.getCmp('App.Maintainers.AssetConditionGrid');
-                        if (grid.getSelectionModel().getCount()) 
-                        {
-                            Ext.MessageBox.confirm(App.Language.General.confirmation, App.Language.General.message_really_want_delete_option, function(b)
-                            {
-                                if (b == 'yes') 
-                                {
-                                    grid.getSelectionModel().each(function(record)
-                                    {
+                        if (grid.getSelectionModel().getCount()) {
+                            Ext.MessageBox.confirm(App.Language.General.confirmation, App.Language.General.message_really_want_delete_option, function(b) {
+                                if (b == 'yes') {
+                                    grid.getSelectionModel().each(function(record) {
                                         App.Asset.Condition.Store.remove(record);
                                     });
                                 }
@@ -244,32 +209,25 @@ App.Maintainers.Assets.Principal = Ext.extend(Ext.TabPanel,
             store: App.Asset.DatosDinamicos.Store,
             stripeRows: true,
             height: 900,
-            viewConfig: 
-            {
+            viewConfig: {
                 forceFit: true
             },
             loadMask: true,
-            listeners: 
-            {
-                'rowdblclick': function(grid, rowIndex)
-                {
+            listeners: {
+                'rowdblclick': function(grid, rowIndex) {
                     record = grid.getStore().getAt(rowIndex);
                     App.Maintainers.AssetDynamiDataOpenEditMode(record);
                 },
-                'beforerender': function()
-                {
+                'beforerender': function() {
                     App.Asset.DatosDinamicos.Store.load();
                 }
             },
-            tbar: 
-            {
+            tbar: {
                 xtype: 'toolbar',
-                items: 
-                [{
+                items: [{
                     text: App.Language.General.add,
                     iconCls: 'add_icon',
-                    handler: function()
-                    {
+                    handler: function() {
                         w = new App.Maintainers.addAssetDynamiDataWindow();
                         w.show();
                     }
@@ -280,17 +238,12 @@ App.Maintainers.Assets.Principal = Ext.extend(Ext.TabPanel,
                     xtype: 'button',
                     text: App.Language.General.ddelete,
                     iconCls: 'delete_icon',
-                    handler: function(b)
-                    {
+                    handler: function(b) {
                         grid = b.ownerCt.ownerCt;
-                        if (grid.getSelectionModel().getCount()) 
-                        {
-                            Ext.MessageBox.confirm(App.Language.General.confirmation, App.Language.General.message_really_want_delete_option, function(b)
-                            {
-                                if (b == 'yes') 
-                                {
-                                    grid.getSelectionModel().each(function(record)
-                                    {
+                        if (grid.getSelectionModel().getCount()) {
+                            Ext.MessageBox.confirm(App.Language.General.confirmation, App.Language.General.message_really_want_delete_option, function(b) {
+                                if (b == 'yes') {
+                                    grid.getSelectionModel().each(function(record) {
                                         App.Asset.DatosDinamicos.Store.remove(record);
                                     });
                                 }
@@ -301,23 +254,22 @@ App.Maintainers.Assets.Principal = Ext.extend(Ext.TabPanel,
                     }
                 }]
             },
-            columns: 
-            [new Ext.grid.CheckboxSelectionModel(), 
-            {
-                xtype: 'gridcolumn',
-                dataIndex: 'asset_other_data_attribute_name',
-                header: App.Language.Infrastructure.tag_name,
-                sortable: true,
-                width: 100
-            }],
+            columns: [new Ext.grid.CheckboxSelectionModel(),
+                {
+                    xtype: 'gridcolumn',
+                    dataIndex: 'asset_other_data_attribute_name',
+                    header: App.Language.Infrastructure.tag_name,
+                    sortable: true,
+                    width: 100
+                }
+            ],
             sm: new Ext.grid.CheckboxSelectionModel()
         }, {
             xtype: 'form',
             title: App.Language.Asset.dynamic_data_associate_assets,
             width: 900,
             bodyStyle: 'padding:10px;',
-            items: 
-            [{
+            items: [{
                 xtype: 'combo',
                 width: 200,
                 fieldLabel: App.Language.Asset.asset_type,
@@ -330,12 +282,10 @@ App.Maintainers.Assets.Principal = Ext.extend(Ext.TabPanel,
                 editable: true,
                 selecOnFocus: true,
                 typeAhead: true,
-                selectOnFocus:true,
+                selectOnFocus: true,
                 minChars: 0,
-                listeners: 
-                {
-                    'select': function(cb, record)
-                    {
+                listeners: {
+                    'select': function(cb, record) {
                         App.Asset.DatosDinamicosDisponibles.Store.setBaseParam('asset_type_id', record.data.asset_type_id);
                         App.Asset.DatosDinamicosDisponibles.Store.load();
                         App.Asset.DatosDinamicosAsociados.Store.setBaseParam('asset_other_data_attribute_asset_type_id', record.data.asset_type_id);
@@ -347,8 +297,7 @@ App.Maintainers.Assets.Principal = Ext.extend(Ext.TabPanel,
                 name: 'itemselector',
                 fieldLabel: App.Language.Infrastructure.attributes,
                 imagePath: 'javascript/extjs/ux/images/',
-                multiselects: 
-                [{
+                multiselects: [{
                     width: 350,
                     height: 300,
                     store: App.Asset.DatosDinamicosDisponibles.Store,
@@ -366,20 +315,16 @@ App.Maintainers.Assets.Principal = Ext.extend(Ext.TabPanel,
                 text: App.Language.General.save,
                 bodyStyle: 'padding:5px 5px 0',
                 width: 80,
-                handler: function(b)
-                {
+                handler: function(b) {
                     form = b.ownerCt.getForm();
-                    form.submit
-                    ({
+                    form.submit({
                         waitTitle: App.Language.General.message_please_wait,
                         waitMsg: App.Language.General.message_guarding_information,
                         url: 'index.php/asset/assetotherdataattributeassettype/add',
-                        success: function(fp, o)
-                        {
+                        success: function(fp, o) {
                             Ext.FlashMessage.alert(o.result.msg);
                         },
-                        failure: function(fp, o)
-                        {
+                        failure: function(fp, o) {
                             alert('Error:\n' + o.result.msg);
                         }
                     });
@@ -390,8 +335,7 @@ App.Maintainers.Assets.Principal = Ext.extend(Ext.TabPanel,
     }
 });
 
-App.Maintainers.addAssetTypeWindow = Ext.extend(Ext.Window, 
-{
+App.Maintainers.addAssetTypeWindow = Ext.extend(Ext.Window, {
     title: App.Language.General.add_type,
     resizable: false,
     modal: true,
@@ -399,48 +343,38 @@ App.Maintainers.addAssetTypeWindow = Ext.extend(Ext.Window,
     height: 140,
     layout: 'fit',
     padding: 1,
-    initComponent: function()
-    {
-        this.items = 
-        [{
+    initComponent: function() {
+        this.items = [{
             xtype: 'form',
             ref: 'form',
             labelWidth: 150,
             padding: 5,
-            items: 
-            [{
+            items: [{
                 xtype: 'textfield',
                 fieldLabel: App.Language.General.name_type,
                 name: 'asset_type_name',
                 anchor: '100%',
                 allowBlank: false
             }],
-            buttons: 
-            [{
+            buttons: [{
                 text: App.Language.General.close,
-                handler: function(b)
-                {
+                handler: function(b) {
                     b.ownerCt.ownerCt.ownerCt.hide();
                 }
             }, {
                 text: App.Language.General.add,
                 ref: '../saveButton',
-                handler: function(b)
-                {
+                handler: function(b) {
                     form = b.ownerCt.ownerCt.getForm();
-                    if (form.isValid()) 
-                    {
-                        form.submit
-                        ({
+                    if (form.isValid()) {
+                        form.submit({
                             url: 'index.php/asset/assettype/add',
-                            success: function(fp, o)
-                            {
+                            success: function(fp, o) {
                                 App.Asset.Type.Store.load();
                                 b.ownerCt.ownerCt.ownerCt.hide();
                                 Ext.FlashMessage.alert(o.result.msg);
                             },
-                            failure: function(fp, o)
-                            {
+                            failure: function(fp, o) {
                                 alert('Error:\n' + o.result.msg);
                             }
                         });
@@ -452,19 +386,15 @@ App.Maintainers.addAssetTypeWindow = Ext.extend(Ext.Window,
     }
 });
 
-App.Maintainers.AssetTypeOpenEditMode = function(record)
-{
-    w = new App.Maintainers.addAssetTypeWindow
-    ({
+App.Maintainers.AssetTypeOpenEditMode = function(record) {
+    w = new App.Maintainers.addAssetTypeWindow({
         title: App.Language.Asset.edit_type_asset
     });
     w.form.saveButton.setText(App.Language.General.edit);
     w.form.record = record;
-    w.form.saveButton.handler = function()
-    {
+    w.form.saveButton.handler = function() {
         form = w.form.getForm();
-        if (form.isValid()) 
-        {
+        if (form.isValid()) {
             form.updateRecord(w.form.record);
             w.close();
             App.NodeTypeCategory.Store.load();
@@ -474,8 +404,7 @@ App.Maintainers.AssetTypeOpenEditMode = function(record)
     w.show();
 }
 
-App.Maintainers.addAssetStatusWindow = Ext.extend(Ext.Window, 
-{
+App.Maintainers.addAssetStatusWindow = Ext.extend(Ext.Window, {
     title: App.Language.Asset.add_asset_state,
     resizable: false,
     modal: true,
@@ -483,16 +412,13 @@ App.Maintainers.addAssetStatusWindow = Ext.extend(Ext.Window,
     height: 180,
     layout: 'fit',
     padding: 1,
-    initComponent: function()
-    {
-        this.items = 
-        [{
+    initComponent: function() {
+        this.items = [{
             xtype: 'form',
             ref: 'form',
             labelWidth: 150,
             padding: 5,
-            items: 
-            [{
+            items: [{
                 xtype: 'textfield',
                 fieldLabel: App.Language.Asset.name_state,
                 name: 'asset_status_name',
@@ -504,31 +430,25 @@ App.Maintainers.addAssetStatusWindow = Ext.extend(Ext.Window,
                 name: 'asset_status_description',
                 anchor: '100%'
             }],
-            buttons: 
-            [{
+            buttons: [{
                 text: App.Language.General.close,
-                handler: function(b)
-                {
+                handler: function(b) {
                     b.ownerCt.ownerCt.ownerCt.hide();
                 }
             }, {
                 text: App.Language.General.add,
                 ref: '../saveButton',
-                handler: function(b)
-                {
+                handler: function(b) {
                     form = b.ownerCt.ownerCt.getForm();
-                    if (form.isValid()) 
-                    {
+                    if (form.isValid()) {
                         form.submit({
                             url: 'index.php/asset/assetstatus/add',
-                            success: function(fp, o)
-                            {
+                            success: function(fp, o) {
                                 App.Asset.Status.Store.load();
                                 b.ownerCt.ownerCt.ownerCt.hide();
                                 Ext.FlashMessage.alert(o.result.msg);
                             },
-                            failure: function(fp, o)
-                            {
+                            failure: function(fp, o) {
                                 alert('Error:\n' + o.result.msg);
                             }
                         });
@@ -540,19 +460,15 @@ App.Maintainers.addAssetStatusWindow = Ext.extend(Ext.Window,
     }
 });
 
-App.Maintainers.AssetStatusOpenEditMode = function(record)
-{
-    w = new App.Maintainers.addAssetStatusWindow
-    ({
+App.Maintainers.AssetStatusOpenEditMode = function(record) {
+    w = new App.Maintainers.addAssetStatusWindow({
         title: App.Language.Asset.edit_asset_state
     });
     w.form.saveButton.setText(App.Language.General.edit);
     w.form.record = record;
-    w.form.saveButton.handler = function()
-    {
+    w.form.saveButton.handler = function() {
         form = w.form.getForm();
-        if (form.isValid()) 
-        {
+        if (form.isValid()) {
             form.updateRecord(w.form.record);
             w.close();
             App.NodeTypeCategory.Store.load();
@@ -562,8 +478,7 @@ App.Maintainers.AssetStatusOpenEditMode = function(record)
     w.show();
 }
 
-App.Maintainers.addAssetConditionWindow = Ext.extend(Ext.Window, 
-{
+App.Maintainers.addAssetConditionWindow = Ext.extend(Ext.Window, {
     title: App.Language.Asset.add_asset_condition,
     resizable: false,
     modal: true,
@@ -571,16 +486,13 @@ App.Maintainers.addAssetConditionWindow = Ext.extend(Ext.Window,
     height: 180,
     layout: 'fit',
     padding: 1,
-    initComponent: function()
-    {
-        this.items = 
-        [{
+    initComponent: function() {
+        this.items = [{
             xtype: 'form',
             ref: 'form',
             labelWidth: 150,
             padding: 5,
-            items: 
-            [{
+            items: [{
                 xtype: 'textfield',
                 fieldLabel: App.Language.Asset.condition_name,
                 name: 'asset_condition_name',
@@ -592,32 +504,25 @@ App.Maintainers.addAssetConditionWindow = Ext.extend(Ext.Window,
                 name: 'asset_condition_description',
                 anchor: '100%'
             }],
-            buttons: 
-            [{
+            buttons: [{
                 text: App.Language.General.close,
-                handler: function(b)
-                {
+                handler: function(b) {
                     b.ownerCt.ownerCt.ownerCt.hide();
                 }
             }, {
                 text: App.Language.General.add,
                 ref: '../saveButton',
-                handler: function(b)
-                {
+                handler: function(b) {
                     form = b.ownerCt.ownerCt.getForm();
-                    if (form.isValid()) 
-                    {
-                        form.submit
-                        ({
+                    if (form.isValid()) {
+                        form.submit({
                             url: 'index.php/asset/assetcondition/add',
-                            success: function(fp, o)
-                            {
+                            success: function(fp, o) {
                                 App.Asset.Condition.Store.load();
                                 b.ownerCt.ownerCt.ownerCt.hide();
                                 Ext.FlashMessage.alert(o.result.msg);
                             },
-                            failure: function(fp, o)
-                            {
+                            failure: function(fp, o) {
                                 alert('Error:\n' + o.result.msg);
                             }
                         });
@@ -629,19 +534,15 @@ App.Maintainers.addAssetConditionWindow = Ext.extend(Ext.Window,
     }
 });
 
-App.Maintainers.AssetConditionOpenEditMode = function(record)
-{
-    w = new App.Maintainers.addAssetConditionWindow
-    ({
+App.Maintainers.AssetConditionOpenEditMode = function(record) {
+    w = new App.Maintainers.addAssetConditionWindow({
         title: App.Language.Asset.edit_condition_asset
     });
     w.form.saveButton.setText(App.Language.General.edit);
     w.form.record = record;
-    w.form.saveButton.handler = function()
-    {
+    w.form.saveButton.handler = function() {
         form = w.form.getForm();
-        if (form.isValid()) 
-        {
+        if (form.isValid()) {
             form.updateRecord(w.form.record);
             w.close();
             App.NodeTypeCategory.Store.load();
@@ -651,8 +552,7 @@ App.Maintainers.AssetConditionOpenEditMode = function(record)
     w.show();
 }
 
-App.Maintainers.addAssetDynamiDataWindow = Ext.extend(Ext.Window, 
-{
+App.Maintainers.addAssetDynamiDataWindow = Ext.extend(Ext.Window, {
     title: App.Language.Infrastructure.add_dynamic_data,
     resizable: false,
     frame: true,
@@ -661,48 +561,38 @@ App.Maintainers.addAssetDynamiDataWindow = Ext.extend(Ext.Window,
     height: 140,
     layout: 'fit',
     padding: 1,
-    initComponent: function()
-    {
-        this.items = 
-        [{
+    initComponent: function() {
+        this.items = [{
             xtype: 'form',
             ref: 'form',
             labelWidth: 150,
             padding: 5,
-            items: 
-            [{
+            items: [{
                 xtype: 'textfield',
                 fieldLabel: App.Language.Infrastructure.tag_name,
                 name: 'asset_other_data_attribute_name',
                 anchor: '100%',
                 allowBlank: false
             }],
-            buttons: 
-            [{
+            buttons: [{
                 text: App.Language.General.close,
-                handler: function(b)
-                {
+                handler: function(b) {
                     b.ownerCt.ownerCt.ownerCt.close();
                 }
             }, {
                 text: App.Language.General.add,
                 ref: '../saveButton',
-                handler: function(b)
-                {
+                handler: function(b) {
                     form = b.ownerCt.ownerCt.getForm();
-                    if (form.isValid()) 
-                    {
-                        form.submit
-                        ({
+                    if (form.isValid()) {
+                        form.submit({
                             url: 'index.php/asset/assetotherdataattribute/add',
-                            success: function(fp, o)
-                            {
+                            success: function(fp, o) {
                                 App.Asset.DatosDinamicos.Store.load();
                                 b.ownerCt.ownerCt.ownerCt.hide();
                                 Ext.FlashMessage.alert(o.result.msg);
                             },
-                            failure: function(fp, o)
-                            {
+                            failure: function(fp, o) {
                                 alert('Error:\n' + o.result.msg);
                             }
                         });
@@ -714,19 +604,15 @@ App.Maintainers.addAssetDynamiDataWindow = Ext.extend(Ext.Window,
     }
 });
 
-App.Maintainers.AssetDynamiDataOpenEditMode = function(record)
-{
-    w = new App.Maintainers.addAssetDynamiDataWindow
-    ({
+App.Maintainers.AssetDynamiDataOpenEditMode = function(record) {
+    w = new App.Maintainers.addAssetDynamiDataWindow({
         title: App.Language.Infrastructure.edit_dynamic_data
     });
     w.form.saveButton.setText(App.Language.General.edit);
     w.form.record = record;
-    w.form.saveButton.handler = function()
-    {
+    w.form.saveButton.handler = function() {
         form = w.form.getForm();
-        if (form.isValid()) 
-        {
+        if (form.isValid()) {
             form.updateRecord(w.form.record);
             w.close();
             App.Asset.DatosDinamicos.Store.load();

@@ -1,43 +1,42 @@
 App.Iot.allowRootGui = true;
 //se agrega el modulo al menu
 App.Interface.addToModuleMenu('iot', {
-//    xtype: 'button',
- iconCls: 'general_icon_32',
+    //    xtype: 'button',
+    iconCls: 'general_icon_32',
     text: App.Language.Iot.iot,
-   
-//    scale: 'large',
+
+    //    scale: 'large',
     module: 'Iot',
-//    iconAlign: 'top'
+    //    iconAlign: 'top'
 });
 //se Crea el tab principal
 App.Iot.Principal = Ext.extend(Ext.TabPanel, {
     activeTab: 0,
     border: false,
-    initComponent: function () {
+    initComponent: function() {
         this.items = [new App.Iot.PrincipalClase()];
         App.Iot.Principal.superclass.initComponent.call(this);
     }
 });
-App.Iot.Principal.listener = function (node) {
+App.Iot.Principal.listener = function(node) {
     if (node && node.id) {
         Ext.getCmp('App.Iot.Principal').deviceIot.removeAll();
         Ext.getCmp('App.Iot.Principal').deviceIot.doLayout();
-//        App.Iot.Device.Store.setBaseParam('node_id', node.id);
-//        App.Iot.Device.Store.load();
+        //        App.Iot.Device.Store.setBaseParam('node_id', node.id);
+        //        App.Iot.Device.Store.load();
 
-        if (typeof Ext.getCmp('App.Iot.Principal') != "undefined")
-        {
+        if (typeof Ext.getCmp('App.Iot.Principal') != "undefined") {
 
             Ext.Ajax.request({
                 url: 'index.php/iot/iot/getDeviceInfo',
                 params: {
-                    node_id: node.id},
-                success: function (response) {
+                    node_id: node.id
+                },
+                success: function(response) {
 
                     response = Ext.decode(response.responseText);
-//                    console.log('>> response: ', response);
-                    if (response.total > 0)
-                    {
+                    //                    console.log('>> response: ', response);
+                    if (response.total > 0) {
 
                         var date_value = response.results[0]['node']['updated_at'].split("T");
 
@@ -57,8 +56,10 @@ App.Iot.Principal.listener = function (node) {
 
                         aux = new Ext.form.FieldSet({
                             title: 'Dispositivo',
-                            layout: 'form', collapsible: true,
-                            anchor: '100%', labelWidth: 70,
+                            layout: 'form',
+                            collapsible: true,
+                            anchor: '100%',
+                            labelWidth: 70,
                             items: [{
                                     xtype: 'displayfield',
                                     fieldLabel: App.Language.General.name,
@@ -126,8 +127,8 @@ App.Iot.Principal.listener = function (node) {
                                     hideLabel: response.results[0]['node']['node_type'] === 2 ? false : true,
                                     hidden: response.results[0]['node']['node_type'] === 2 ? false : true,
                                 },
-                            ]}
-                        );
+                            ]
+                        });
                         if (node.id != 'root') {
                             Ext.getCmp('App.Iot.Principal').deviceIot.add(aux);
                             Ext.getCmp('App.Iot.Principal').deviceIot.doLayout();
@@ -150,109 +151,107 @@ App.Iot.Principal.listener = function (node) {
                                 height: 900,
                                 border: true,
                                 id: 'App.Iot.Tabs',
-                                listeners:
-                                        {
-                                            'tabchange': function (cb)
-                                            {
-//                                                console.log('>>cb: ', cb);
-                                                params = cb.activeTab.id.split("_");
+                                listeners: {
+                                    'tabchange': function(cb) {
+                                        //                                                console.log('>>cb: ', cb);
+                                        params = cb.activeTab.id.split("_");
 
-                                                App.Iot.Sensors.Store.setBaseParam('element_id', params[1]);
-                                                App.Iot.Sensors.Store.setBaseParam('device_id', params[2]);
-                                                App.Iot.Sensors.Store.load({
-                                                    callback: function (records, operation, success, ) {
-                                                        if (success == true) {
-                                                            // create a checkbox for each task
-                                                            var categories = [];
-                                                            var data_sensors = [];
-                                                            var units =records[0].data.unit;
-                                                            var title = records[0].data.sensor_name;
-                                                            
-                                                            App.Iot.Sensors.Store.each(function (record) {
-                                                                
-                                                                data_sensors.push(record.data.data);
-//                                                            var date_sensors = record.data.created_at.split(" ");
-//                                                    date_sensors[1] = date_sensors[1].split(".");
-                                                                categories.push(record.data.created_at);
-                                                               
-                                                            });
+                                        App.Iot.Sensors.Store.setBaseParam('element_id', params[1]);
+                                        App.Iot.Sensors.Store.setBaseParam('device_id', params[2]);
+                                        App.Iot.Sensors.Store.load({
+                                            callback: function(records, operation, success, ) {
+                                                    if (success == true) {
+                                                        // create a checkbox for each task
+                                                        var categories = [];
+                                                        var data_sensors = [];
+                                                        var units = records[0].data.unit;
+                                                        var title = records[0].data.sensor_name;
+
+                                                        App.Iot.Sensors.Store.each(function(record) {
+
+                                                            data_sensors.push(record.data.data);
+                                                            //                                                            var date_sensors = record.data.created_at.split(" ");
+                                                            //                                                    date_sensors[1] = date_sensors[1].split(".");
+                                                            categories.push(record.data.created_at);
+
+                                                        });
 
 
-                                                            Highcharts.chart('container' + params[1], {
+                                                        Highcharts.chart('container' + params[1], {
 
+                                                            title: {
+                                                                text: title.toUpperCase()
+                                                            },
+                                                            subtitle: {
+                                                                text: ''
+                                                            },
+                                                            yAxis: {
                                                                 title: {
-                                                                    text: title.toUpperCase()
-                                                                },
-                                                                subtitle: {
-                                                                    text: ''
-                                                                },
-                                                                yAxis: {
-                                                                    title: {
-                                                                        text: units
-                                                                    }
-                                                                },
-                                                                xAxis: {
-                                                                    categories: categories,
-
-                                                                },
-                                                                legend: {
-                                                                    layout: 'vertical',
-                                                                    align: 'right',
-                                                                    verticalAlign: 'middle'
-                                                                },
-                                                                plotOptions: {
-//                                                            series: {
-//                                                                label: {
-//                                                                    connectorAllowed: false
-//                                                                },
-////                                                pointStart: 2010
-//                                                            }
-                                                                },
-                                                                series: [{
-                                                                        name: 'Data',
-                                                                        label: false,
-                                                                        data: data_sensors
-                                                                    }],
-                                                                responsive: {
-                                                                    rules: [{
-                                                                            condition: {
-                                                                                maxWidth: 500
-                                                                            },
-                                                                            chartOptions: {
-//                                                        legend: {
-//                                                            layout: 'horizontal',
-//                                                            align: 'center',
-//                                                            verticalAlign: 'bottom'
-//                                                        }
-                                                                            }
-                                                                        }]
+                                                                    text: units
                                                                 }
+                                                            },
+                                                            xAxis: {
+                                                                categories: categories,
 
-                                                            });
+                                                            },
+                                                            legend: {
+                                                                layout: 'vertical',
+                                                                align: 'right',
+                                                                verticalAlign: 'middle'
+                                                            },
+                                                            plotOptions: {
+                                                                //                                                            series: {
+                                                                //                                                                label: {
+                                                                //                                                                    connectorAllowed: false
+                                                                //                                                                },
+                                                                ////                                                pointStart: 2010
+                                                                //                                                            }
+                                                            },
+                                                            series: [{
+                                                                name: 'Data',
+                                                                label: false,
+                                                                data: data_sensors
+                                                            }],
+                                                            responsive: {
+                                                                rules: [{
+                                                                    condition: {
+                                                                        maxWidth: 500
+                                                                    },
+                                                                    chartOptions: {
+                                                                        //                                                        legend: {
+                                                                        //                                                            layout: 'horizontal',
+                                                                        //                                                            align: 'center',
+                                                                        //                                                            verticalAlign: 'bottom'
+                                                                        //                                                        }
+                                                                    }
+                                                                }]
+                                                            }
+
+                                                        });
 
 
 
-                                                        } else {
-                                                            // the store didn't load, deal with it
-                                                        }
+                                                    } else {
+                                                        // the store didn't load, deal with it
                                                     }
-                                                    // scope: this,
-                                                });
+                                                }
+                                                // scope: this,
+                                        });
 
 
-                                            }
-                                        }
+                                    }
+                                }
                             });
 
                             if (node.id != 'root') {
 
                                 var categories = [];
                                 var data_sensors = [];
-                                sensors.forEach(function (element) {
+                                sensors.forEach(function(element) {
 
                                     App.Iot.Sensors.Store.setBaseParam('element_id', element.id);
                                     App.Iot.Sensors.Store.setBaseParam('device_id', response.results[0]['node']['id']);
-                                    App.Iot.Sensors.Store.load( );
+                                    App.Iot.Sensors.Store.load();
 
 
 
@@ -260,77 +259,72 @@ App.Iot.Principal.listener = function (node) {
                                     tabs.add({
                                         title: element.name,
                                         id: 'tab_' + element.id + '_' + response.results[0]['node']['id'],
-//                                        iconCls: 'tabs',
+                                        //                                        iconCls: 'tabs',
                                         closable: true,
 
-                                        items: [
-                                            {
+                                        items: [{
                                                 xtype: 'spacer',
                                                 height: 5
                                             },
                                             {
                                                 xtype: 'panel',
-//                                                autoScroll: true,
+                                                //                                                autoScroll: true,
                                                 id: 'PanelSensors_' + element.id + '_' + response.results[0]['node']['id'],
                                                 autoHeight: true,
                                                 style: 'padding:5 10 5 10',
                                                 border: true,
                                                 title: 'Data',
-                                                items: [
-                                                    {
-                                                        xtype: 'grid',
-                                                        id: 'gridSensors_' + element.id + '_' + response.results[0]['node']['id'],
-                                                        height: 230,
-                                                        anchor: '100%',
-                                                         cls: 'clsGrid',
-//                                                        region: 'center',
-//                                                        layauot: 'fit',
-//                                                        width: '100%',
-//                                                        style: 'padding:5 10 5 10',
-                                                        loadMask: true,
-//                                                        maskDisabled: false,
-                                                        border: false,
-                                                        viewConfig:
-                                                                {
-                                                                    forceFit: true,
-//                                                                    folderSort: true,
-
-                                                                },
-                                                        store: App.Iot.Sensors.Store,
-
-                                                        columns: [
-                                                            {
-                                                                header: 'Unidad',
-                                                                sortable: true,
-//                                                                width: '20%',
-                                                                dataIndex: 'unit',
-//                                                                renderer: function (val, metadata, record) {
-//                                                                    return "<a href='index.php/doc/document/download/" + record.data.doc_current_version_id + "'>" + val + "</a>";
-//                                                                }
-                                                            }, {
-                                                                dataIndex: 'data',
-                                                                header: 'Medición',
-                                                                sortable: true,
-//                                                                width: 150,
-//                                                                renderer: function (doc_path, metadata, record, rowIndex, colIndex, store) {
-//                                                                    metadata.attr = 'ext:qtip="' + doc_path + '"';
-//                                                                    return doc_path;
-//                                                                }
-                                                            },
-                                                            {
-                                                                dataIndex: 'created_at',
-                                                                header: 'Fecha de registro',
-//                                                                sortable: true,
-
-//                                                                renderer: function (doc_path, metadata, record, rowIndex, colIndex, store) {
-//                                                                    metadata.attr = 'ext:qtip="' + doc_path + '"';
-//                                                                    return doc_path;
-//                                                                }
-                                                            }
-                                                        ]
+                                                items: [{
+                                                    xtype: 'grid',
+                                                    id: 'gridSensors_' + element.id + '_' + response.results[0]['node']['id'],
+                                                    height: 230,
+                                                    anchor: '100%',
+                                                    cls: 'clsGrid',
+                                                    //                                                        region: 'center',
+                                                    //                                                        layauot: 'fit',
+                                                    //                                                        width: '100%',
+                                                    //                                                        style: 'padding:5 10 5 10',
+                                                    loadMask: true,
+                                                    //                                                        maskDisabled: false,
+                                                    border: false,
+                                                    viewConfig: {
+                                                        forceFit: true,
+                                                        //                                                                    folderSort: true,
 
                                                     },
-                                                ]
+                                                    store: App.Iot.Sensors.Store,
+
+                                                    columns: [{
+                                                            header: 'Unidad',
+                                                            sortable: true,
+                                                            //                                                                width: '20%',
+                                                            dataIndex: 'unit',
+                                                            //                                                                renderer: function (val, metadata, record) {
+                                                            //                                                                    return "<a href='index.php/doc/document/download/" + record.data.doc_current_version_id + "'>" + val + "</a>";
+                                                            //                                                                }
+                                                        }, {
+                                                            dataIndex: 'data',
+                                                            header: 'Medición',
+                                                            sortable: true,
+                                                            //                                                                width: 150,
+                                                            //                                                                renderer: function (doc_path, metadata, record, rowIndex, colIndex, store) {
+                                                            //                                                                    metadata.attr = 'ext:qtip="' + doc_path + '"';
+                                                            //                                                                    return doc_path;
+                                                            //                                                                }
+                                                        },
+                                                        {
+                                                            dataIndex: 'created_at',
+                                                            header: 'Fecha de registro',
+                                                            //                                                                sortable: true,
+
+                                                            //                                                                renderer: function (doc_path, metadata, record, rowIndex, colIndex, store) {
+                                                            //                                                                    metadata.attr = 'ext:qtip="' + doc_path + '"';
+                                                            //                                                                    return doc_path;
+                                                            //                                                                }
+                                                        }
+                                                    ]
+
+                                                }, ]
                                             },
                                             {
                                                 xtype: 'spacer',
@@ -342,7 +336,7 @@ App.Iot.Principal.listener = function (node) {
                                                 border: true,
                                                 autoHeight: true,
                                                 style: 'padding:5 10 5 10',
-//                                                height: 'auto',
+                                                //                                                height: 'auto',
                                                 title: 'Grafico',
                                                 html: '<div id="container' + element.id + '" height="400" width="100%"></div>'
 
@@ -351,10 +345,10 @@ App.Iot.Principal.listener = function (node) {
                                     }).show();
 
                                 });
-//
-//                                    Ext.getCmp('form_sensors').form_sensors.add(tabs);
-//
-//                                });
+                                //
+                                //                                    Ext.getCmp('form_sensors').form_sensors.add(tabs);
+                                //
+                                //                                });
                                 auxDos.add(tabs);
 
                                 Ext.getCmp('App.Iot.Principal').deviceIot.add(auxDos);
@@ -382,52 +376,43 @@ App.Iot.PrincipalClase = Ext.extend(Ext.Panel, {
     border: false,
     loadMask: true,
     layout: 'border',
-//    tbar: App.Iot.TBar,
-    initComponent: function () {
-        this.items = [
-            {
-                xtype: 'form',
-                ref: 'deviceIot',
-                anchor: '100%',
-                width: '100%',
-                region: 'center',
-                plugins: [new Ext.ux.OOSubmit()],
-//                title: 'Datos',
-                padding: 5,
-                border: false,
-                bodyStyle: 'overflowY: auto',
-                listeners:
-                        {
-                            'render': function ()
-                            {
+    //    tbar: App.Iot.TBar,
+    initComponent: function() {
+        this.items = [{
+            xtype: 'form',
+            ref: 'deviceIot',
+            anchor: '100%',
+            width: '100%',
+            region: 'center',
+            plugins: [new Ext.ux.OOSubmit()],
+            //                title: 'Datos',
+            padding: 5,
+            border: false,
+            bodyStyle: 'overflowY: auto',
+            listeners: {
+                'render': function() {
 
-                                Ext.getCmp('App.Iot.Principal').deviceIot.getEl();
-//                                App.InfraStructure.OtrosDatos.Store.on('beforeload', function () {
-//                                    Ext.getCmp('App.InfraStructure.Principal').otherdata.getTopToolbar().hide();
-//                                    App.InfraStructure.OtrosDatosLoadMask = new Ext.LoadMask(Ext.getCmp('App.InfraStructure.Principal').otherdata.getEl(),
-//                                            {
-//                                                msg: App.Language.General.message_loading_information,
-//                                                store: App.InfraStructure.OtrosDatos.Store
-//                                            });
-//                                    App.InfraStructure.OtrosDatosLoadMask.show();
-//                                });
-                            },
-                            'destroy': function ()
-                            {
-//                                App.InfraStructure.OtrosDatos.Store.purgeListeners();
-                            }
-                        },
-                tbar:
-                        {
-                            xtype: 'toolbar',
-                            hidden: false,
-//                            items: [App.ModuleActions[5004]]
-                        }
+                    Ext.getCmp('App.Iot.Principal').deviceIot.getEl();
+                    //                                App.InfraStructure.OtrosDatos.Store.on('beforeload', function () {
+                    //                                    Ext.getCmp('App.InfraStructure.Principal').otherdata.getTopToolbar().hide();
+                    //                                    App.InfraStructure.OtrosDatosLoadMask = new Ext.LoadMask(Ext.getCmp('App.InfraStructure.Principal').otherdata.getEl(),
+                    //                                            {
+                    //                                                msg: App.Language.General.message_loading_information,
+                    //                                                store: App.InfraStructure.OtrosDatos.Store
+                    //                                            });
+                    //                                    App.InfraStructure.OtrosDatosLoadMask.show();
+                    //                                });
+                },
+                'destroy': function() {
+                    //                                App.InfraStructure.OtrosDatos.Store.purgeListeners();
+                }
             },
-        ]
+            tbar: {
+                xtype: 'toolbar',
+                hidden: false,
+                //                            items: [App.ModuleActions[5004]]
+            }
+        }, ]
         App.Document.PrincipalClase.superclass.initComponent.call(this);
     }
 });
-
-
-

@@ -1,10 +1,7 @@
-App.Document.CutProxy = function(doc_document_id, successCallBack)
-{
-    Ext.Ajax.request
-	({
+App.Document.CutProxy = function(doc_document_id, successCallBack) {
+    Ext.Ajax.request({
         url: 'index.php/doc/document/edit',
-        params: 
-	{
+        params: {
             node_id: App.Interface.selectedNodeId,
             doc_document_id: doc_document_id,
             action: 'cut'
@@ -13,13 +10,10 @@ App.Document.CutProxy = function(doc_document_id, successCallBack)
     });
 };
 
-App.Document.PasteProxy = function(node_parent_id, successCallBack)
-{
-    Ext.Ajax.request
-	({
+App.Document.PasteProxy = function(node_parent_id, successCallBack) {
+    Ext.Ajax.request({
         url: 'index.php/doc/document/edit',
-        params: 
-	{
+        params: {
             node_parent_id: node_parent_id,
             action: 'paste'
         },
@@ -27,30 +21,23 @@ App.Document.PasteProxy = function(node_parent_id, successCallBack)
     })
 };
 
-App.Document.Store = new Ext.data.JsonStore
-({
-    proxy: new Ext.data.HttpProxy
-    ({ 
-        api: 
-        {
-            read :    'index.php/doc/document/get',
-            create :  'index.php/doc/document/add',
-            update :  'index.php/doc/document/update'
+App.Document.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
+            read: 'index.php/doc/document/get',
+            create: 'index.php/doc/document/add',
+            update: 'index.php/doc/document/update'
         },
-        listeners : 
-        {
-            'exception' : function ( DataProxy, type, action, options, response, arg ) 
-            {
-                if (type == 'remote') 
-                {
+        listeners: {
+            'exception': function(DataProxy, type, action, options, response, arg) {
+                if (type == 'remote') {
                     Ext.FlashMessage.alert(response.raw.msg);
                 }
             }
         }
     }),
     autoSave: true,
-    writer: new Ext.data.JsonWriter
-    ({
+    writer: new Ext.data.JsonWriter({
         encode: true,
         writeAllFields: true,
         encodeDelete: true
@@ -58,10 +45,9 @@ App.Document.Store = new Ext.data.JsonStore
     root: 'results',
     totalProperty: 'total',
     idProperty: 'doc_document_id',
-    fields: 
-    [
-        'node_id', 
-        'doc_document_id', 
+    fields: [
+        'node_id',
+        'doc_document_id',
         'doc_document_filename',
         'doc_document_description',
         'doc_extension_id',
@@ -69,7 +55,7 @@ App.Document.Store = new Ext.data.JsonStore
             name: 'doc_extension_id',
             mapping: 'DocExtension.doc_extension_name'
         },
-        'doc_category_id', 
+        'doc_category_id',
         {
             name: 'doc_category_name',
             mapping: 'DocCategory.doc_category_name'
@@ -127,38 +113,29 @@ App.Document.Store = new Ext.data.JsonStore
         },
         'doc_path'
     ],
-    listeners: 
-    {
-        'save': function()
-        {
+    listeners: {
+        'save': function() {
             this.load();
         }
     }
 });
 
-App.Document.Papelera.Store = new Ext.data.JsonStore
-({
-    proxy: new Ext.data.HttpProxy
-    ({ 
-        api: 
-        {
-            read :    'index.php/doc/document/getBin',
-            destroy : 'index.php/doc/document/delete'
+App.Document.Papelera.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
+            read: 'index.php/doc/document/getBin',
+            destroy: 'index.php/doc/document/delete'
         },
-        listeners : 
-        {
-            'exception' : function ( DataProxy, type, action, options, response, arg ) 
-            {
-                if (type == 'remote') 
-                {
+        listeners: {
+            'exception': function(DataProxy, type, action, options, response, arg) {
+                if (type == 'remote') {
                     Ext.FlashMessage.alert(response.raw.msg);
                 }
             }
         }
     }),
     autoSave: true,
-    writer: new Ext.data.JsonWriter
-    ({
+    writer: new Ext.data.JsonWriter({
         encode: true,
         writeAllFields: true,
         encodeDelete: true
@@ -166,17 +143,16 @@ App.Document.Papelera.Store = new Ext.data.JsonStore
     root: 'results',
     totalProperty: 'total',
     idProperty: 'doc_document_id',
-    fields: 
-    [
-        'node_id', 
-        'doc_document_id', 
+    fields: [
+        'node_id',
+        'doc_document_id',
         'doc_document_filename',
         'doc_extension_id',
         {
             name: 'doc_extension_id',
             mapping: 'DocExtension.doc_extension_name'
         },
-        'doc_category_id', 
+        'doc_category_id',
         {
             name: 'doc_category_name',
             mapping: 'DocCategory.doc_category_name'
@@ -216,28 +192,21 @@ App.Document.Papelera.Store = new Ext.data.JsonStore
     ]
 });
 
-App.Document.Vencido.Store = new Ext.data.JsonStore
-({
-    proxy: new Ext.data.HttpProxy
-    ({ 
-        api: 
-        {
-            read :    'index.php/doc/document/getDocumentoVencido'
+App.Document.Vencido.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
+            read: 'index.php/doc/document/getDocumentoVencido'
         },
-        listeners : 
-        {
-            'exception' : function ( DataProxy, type, action, options, response, arg ) 
-            {
-                if (type == 'remote') 
-                {
+        listeners: {
+            'exception': function(DataProxy, type, action, options, response, arg) {
+                if (type == 'remote') {
                     Ext.FlashMessage.alert(response.raw.msg);
                 }
             }
         }
     }),
     autoSave: true,
-    writer: new Ext.data.JsonWriter
-    ({
+    writer: new Ext.data.JsonWriter({
         encode: true,
         writeAllFields: true,
         encodeDelete: true
@@ -245,10 +214,9 @@ App.Document.Vencido.Store = new Ext.data.JsonStore
     root: 'results',
     totalProperty: 'total',
     idProperty: 'doc_version_id',
-    fields: 
-    [
-        'doc_version_id', 
-        'user_id', 
+    fields: [
+        'doc_version_id',
+        'user_id',
         'doc_document_id',
         'doc_version_code',
         'doc_version_code_client',
@@ -281,30 +249,23 @@ App.Document.Vencido.Store = new Ext.data.JsonStore
     ]
 });
 
-App.Document.Version.Store = new Ext.data.JsonStore
-({
-    proxy: new Ext.data.HttpProxy
-    ({ 
-        api: 
-        {
-            read :      'index.php/doc/docversion/get',
-            create :    'index.php/doc/docversion/add',
-            update :    'index.php/doc/docversion/update',
-            destroy :   'index.php/doc/docversion/delete'
+App.Document.Version.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
+            read: 'index.php/doc/docversion/get',
+            create: 'index.php/doc/docversion/add',
+            update: 'index.php/doc/docversion/update',
+            destroy: 'index.php/doc/docversion/delete'
         },
-        listeners : 
-        {
-            'exception' : function ( DataProxy, type, action, options, response, arg ) 
-            {
-                if (type == 'remote') 
-                {
-                     Ext.FlashMessage.alert(response.raw.msg);
+        listeners: {
+            'exception': function(DataProxy, type, action, options, response, arg) {
+                if (type == 'remote') {
+                    Ext.FlashMessage.alert(response.raw.msg);
                 }
             }
         }
     }),
-    writer: new Ext.data.JsonWriter
-    ({
+    writer: new Ext.data.JsonWriter({
         //encode: true,
         writeAllFields: true,
         encodeDelete: true
@@ -312,8 +273,7 @@ App.Document.Version.Store = new Ext.data.JsonStore
     root: 'results',
     totalProperty: 'total',
     idProperty: 'doc_version_id',
-    fields: 
-    [
+    fields: [
         'doc_version_id',
         'DocDocument',
         'doc_version_code',
@@ -347,49 +307,40 @@ App.Document.Version.Store = new Ext.data.JsonStore
     ]
 });
 
-App.Document.Extension.Store = new Ext.data.JsonStore
-({
-    proxy: new Ext.data.HttpProxy
-    ({ 
-        api: 
-        {
-            read :    'index.php/doc/docextension/get',
-            create :  'index.php/doc/docextension/add',
-            update :  'index.php/doc/docextension/update',
-            destroy : 'index.php/doc/docextension/delete'
+App.Document.Extension.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
+            read: 'index.php/doc/docextension/get',
+            create: 'index.php/doc/docextension/add',
+            update: 'index.php/doc/docextension/update',
+            destroy: 'index.php/doc/docextension/delete'
         }
     }),
     root: 'results',
-    writer: new Ext.data.JsonWriter
-    ({
+    writer: new Ext.data.JsonWriter({
         encode: true,
         writeAllFields: true,
         encodeDelete: true
     }),
     totalProperty: 'total',
     idProperty: 'doc_extension_id',
-    fields: 
-    [
+    fields: [
         'doc_extension_id',
         'doc_extension_name',
         'doc_extension_extension'
     ]
 });
 
-App.Document.Categoria.Store = new Ext.data.JsonStore
-({
-    proxy: new Ext.data.HttpProxy
-    ({ 
-        api: 
-        {
-            read :    'index.php/doc/doccategory/get',
-            create :  'index.php/doc/doccategory/add',
-            update :  'index.php/doc/doccategory/update',
-            destroy : 'index.php/doc/doccategory/delete'
+App.Document.Categoria.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
+            read: 'index.php/doc/doccategory/get',
+            create: 'index.php/doc/doccategory/add',
+            update: 'index.php/doc/doccategory/update',
+            destroy: 'index.php/doc/doccategory/delete'
         }
     }),
-    writer: new Ext.data.JsonWriter
-    ({
+    writer: new Ext.data.JsonWriter({
         encode: true,
         writeAllFields: true,
         encodeDelete: true
@@ -397,9 +348,8 @@ App.Document.Categoria.Store = new Ext.data.JsonStore
     root: 'results',
     totalProperty: 'total',
     idProperty: 'doc_category_id',
-    fields: 
-    [
-        'doc_category_id', 
+    fields: [
+        'doc_category_id',
         'doc_category_name',
         'doc_category_description'
     ]

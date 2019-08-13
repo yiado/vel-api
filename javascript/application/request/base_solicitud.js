@@ -1,46 +1,39 @@
 Ext.namespace('App.Request');
 Ext.namespace('App.RequestByNode');
 
-App.General.declareNameSpaces('App.Request', 
-[
+App.General.declareNameSpaces('App.Request', [
     'Solicitudes',
     'SolicitudEstados',
     'SolicitudTipos',
     'SolicitudLog'
 ]);
 
-App.Request.moduleActivate = function()
-{
-    if (App.Interface.selectedNodeId > 0) 
-    {
+App.Request.moduleActivate = function() {
+    if (App.Interface.selectedNodeId > 0) {
         App.Interface.ViewPort.displayModuleGui();
     } else {
-        return new Ext.Panel
-        ({
+        return new Ext.Panel({
             border: false
         });
     }
 }
 
-App.ModuleActions[8000] =
-{
-//    xtype: 'button',
+App.ModuleActions[8000] = {
+    //    xtype: 'button',
     iconCls: 'request_icon_32',
     text: App.Language.Request.requests,
-    
-//    scale: 'large',
-//    iconAlign: 'top',
+
+    //    scale: 'large',
+    //    iconAlign: 'top',
     module: 'Request'
 }
 
-App.ModuleActions[8001] =
-{
+App.ModuleActions[8001] = {
     text: App.Language.General.add,
     iconCls: 'add_icon',
     id: 'ModuleAction_8001',
     hidden: true,
-    handler: function()
-    {
+    handler: function() {
         w = new App.Request.addRequestByNodeWindow({
             title: App.Language.Request.add_request
         });
@@ -48,18 +41,15 @@ App.ModuleActions[8001] =
     }
 }
 
-App.ModuleActions[8002] =
-{
+App.ModuleActions[8002] = {
     text: App.Language.Request.approve,
     iconCls: 'approve_icon',
     id: 'ModuleAction_8002',
     hidden: true,
-    handler: function(b)
-    {
+    handler: function(b) {
         grid = Ext.getCmp('App.Request.Grid');
-        if (grid.getSelectionModel().getCount())
-        {
-            w = new App.Request.addAprobarWindow({ title: 'Aprobar Solicitud'});
+        if (grid.getSelectionModel().getCount()) {
+            w = new App.Request.addAprobarWindow({ title: 'Aprobar Solicitud' });
             w.show();
             records = grid.getSelectionModel().getSelections();
             aux = new Array();
@@ -69,7 +59,7 @@ App.ModuleActions[8002] =
                 Ext.getCmp('App.Request.TipoSolicitud').setValue(records[i].data.SolicitudType.solicitud_type_nombre);
                 Ext.getCmp('App.Request.Usuario').setValue(App.Security.Session.user_username);
                 Ext.getCmp('App.Request.Email').setValue(App.Security.Session.user_email);
-                
+
                 var iso_date = Date.parseDate(records[i].data.solicitud_fecha, "Y-m-d H:i:s");
                 Ext.getCmp('App.Request.Fecha').setValue(iso_date.format("d/m/Y H:i"));
 
@@ -85,18 +75,15 @@ App.ModuleActions[8002] =
     }
 }
 
-App.ModuleActions[8003] =
-{
+App.ModuleActions[8003] = {
     text: App.Language.Request.reject,
     iconCls: 'delete_icon',
     id: 'ModuleAction_8003',
     hidden: true,
-    handler: function(b)
-    {
+    handler: function(b) {
         grid = Ext.getCmp('App.Request.Grid');
-        if (grid.getSelectionModel().getCount())
-        {
-            w = new App.Request.addRechazarWindow({ title: 'Rechazar Solicitud'});
+        if (grid.getSelectionModel().getCount()) {
+            w = new App.Request.addRechazarWindow({ title: 'Rechazar Solicitud' });
             w.show();
             records = grid.getSelectionModel().getSelections();
             aux = new Array();
@@ -106,7 +93,7 @@ App.ModuleActions[8003] =
                 Ext.getCmp('App.RequestRechazar.TipoSolicitud').setValue(records[i].data.SolicitudType.solicitud_type_nombre);
                 Ext.getCmp('App.RequestRechazar.Usuario').setValue(App.Security.Session.user_username);
                 Ext.getCmp('App.RequestRechazar.Email').setValue(App.Security.Session.user_email);
-                
+
                 var iso_date = Date.parseDate(records[i].data.solicitud_fecha, "Y-m-d H:i:s");
                 Ext.getCmp('App.RequestRechazar.Fecha').setValue(iso_date.format("d/m/Y H:i"));
 
@@ -122,29 +109,25 @@ App.ModuleActions[8003] =
     }
 }
 
-App.ModuleActions[8004] =
-{
+App.ModuleActions[8004] = {
     text: App.Language.General.eexport,
     iconCls: 'export_icon',
     id: 'ModuleAction_8004',
     hidden: true,
-    handler: function()
-    {
+    handler: function() {
         w = new App.Request.exportListByNodeWindow();
         w.show();
     }
 }
 
-App.ModuleActions[8005] =
-{
+App.ModuleActions[8005] = {
     text: App.Language.Request.history,
     id: 'ModuleAction_8005',
     hidden: true,
     iconCls: 'config_icon',
     handler: function(b) {
         grid = Ext.getCmp('App.Request.Grid');
-        if (grid.getSelectionModel().getCount())
-        {
+        if (grid.getSelectionModel().getCount()) {
             records = grid.getSelectionModel().getSelections();
             aux = new Array();
             for (var i = 0; i < records.length; i++) {
@@ -154,7 +137,7 @@ App.ModuleActions[8005] =
                 App.Request.SolicitudLog.Store.load();
             }
 
-            w = new App.Request.historialWindow({ title: 'Historial Solicitud Folio =>' +  folio});
+            w = new App.Request.historialWindow({ title: 'Historial Solicitud Folio =>' + folio });
             w.show();
 
 
@@ -165,16 +148,14 @@ App.ModuleActions[8005] =
     }
 }
 
-App.ModuleActions[8006] =
-{
+App.ModuleActions[8006] = {
     id: 'ModuleAction_8006',
     hidden: true,
     text: App.Language.General.search,
     iconCls: 'search_icon_16',
     enableToggle: true,
     handler: function(b) {
-        if (b.ownerCt.ownerCt.form.isVisible())
-        {
+        if (b.ownerCt.ownerCt.form.isVisible()) {
             b.ownerCt.ownerCt.form.hide();
         } else {
             b.ownerCt.ownerCt.form.show();
