@@ -155,6 +155,11 @@ $route['request/estado/(:any)']                     					= "request/solicitudest
 $route['request/tipo/(:any)']                     					= "request/solicitudtipocontroller/$1";
 $route['request/log/(:any)']                     					= "request/solicitudlogcontroller/$1";
 
+$route['request/service/(:any)']                     					= "request/servicecontroller/$1";
+$route['request/servicestatus/(:any)']                     				= "request/servicestatuscontroller/$1";
+$route['request/servicetype/(:any)']                     				= "request/servicetypecontroller/$1";
+$route['request/servicelog/(:any)']                     				= "request/servicelogcontroller/$1";
+
 $route['network/fo/(:any)']                     					= "network/focontroller/$1";
 
 /** administrator **/

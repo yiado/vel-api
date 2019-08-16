@@ -1,7 +1,12 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+App.Request.Information_id = null;
 
+App.Request.allowRootGui = true;
 
+App.Request.Information = Ext.extend(Ext.Panel, {
+    title: 'RDI',
+    id: 'App.Request.Principal',
+    border: false,
+    loadMask: true,
+    layout: 'border'
+    
+});

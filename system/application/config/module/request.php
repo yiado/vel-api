@@ -10,7 +10,6 @@ $config['request_gui_files'] = array(
     '/application/request/base_informacion.js',
     '/application/request/store_informacion.js',
     '/application/request/interface_informacion.js'
-    
 );
 
 $config['request_prov_gui_files'] = array(

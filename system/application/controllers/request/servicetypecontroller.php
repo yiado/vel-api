@@ -2,9 +2,9 @@
 
 /**
  * @package    Controller
- * @subpackage ServiceTipoController
+ * @subpackage ServiceTypeController
  */
-class ServiceTipoController extends APP_Controller {
+class ServiceTypeController extends APP_Controller {
 
     function ServiceTypeController() {
         parent::APP_Controller();

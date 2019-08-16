@@ -6,7 +6,7 @@ App.Request.Solicitudes.Store = new Ext.data.JsonStore({
             update: 'index.php/request/solicitud/update'
         },
         listeners: {
-            'exception': function (DataProxy, type, action, options, response, arg) {
+            'exception': function(DataProxy, type, action, options, response, arg) {
                 if (type == 'remote') {
                     Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
                 } else if (type == 'response') {
@@ -47,8 +47,7 @@ App.Request.Solicitudes.Store = new Ext.data.JsonStore({
         'User'
     ],
     listeners: {
-        'save': function ()
-        {
+        'save': function() {
             this.load();
         }
     }
@@ -60,7 +59,7 @@ App.Request.SolicitudEstados.Store = new Ext.data.JsonStore({
             read: 'index.php/request/estado/get'
         },
         listeners: {
-            'exception': function (DataProxy, type, action, options, response, arg) {
+            'exception': function(DataProxy, type, action, options, response, arg) {
                 if (type == 'remote') {
                     Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
                 }
@@ -82,7 +81,7 @@ App.Request.SolicitudEstados.Store = new Ext.data.JsonStore({
         'solicitud_estado_comentario'
     ],
     listeners: {
-        'save': function () {
+        'save': function() {
             this.load();
         }
     }
@@ -109,8 +108,7 @@ App.Request.SolicitudTipos.Store = new Ext.data.JsonStore({
         'solicitud_type_comentario'
     ],
     listeners: {
-        'save': function ()
-        {
+        'save': function() {
             this.load();
         }
     }
@@ -122,7 +120,7 @@ App.Request.SolicitudLog.Store = new Ext.data.JsonStore({
             read: 'index.php/request/log/get'
         },
         listeners: {
-            'exception': function (DataProxy, type, action, options, response, arg) {
+            'exception': function(DataProxy, type, action, options, response, arg) {
                 if (type == 'remote') {
                     Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
                 } else if (type == 'response') {
@@ -152,7 +150,7 @@ App.Request.SolicitudLog.Store = new Ext.data.JsonStore({
         'Solicitud'
     ],
     listeners: {
-        'save': function () {
+        'save': function() {
             this.load();
         }
     }
