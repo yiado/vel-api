@@ -114,6 +114,10 @@ abstract class BaseNode extends Doctrine_Record {
 
     public function setUp() {
         parent::setUp();
+        $this->hasMany('Solicitud', array(
+            'local' => 'node_id',
+            'foreign' => 'node_id'));
+        
         $this->hasMany('DocDocument', array(
             'local' => 'node_id',
             'foreign' => 'node_id'));
@@ -178,10 +182,10 @@ abstract class BaseNode extends Doctrine_Record {
             'local' => 'node_id',
             'foreign' => 'node_id'));
 
-		$this->hasMany('MtnNodeWorkOrder', array(
+        $this->hasMany('MtnNodeWorkOrder', array(
             'local' => 'node_id',
             'foreign' => 'node_id'));
-        
+
         $this->hasMany('GroupAssetNode', array(
             'local' => 'node_id',
             'foreign' => 'node_id'));
@@ -193,6 +197,6 @@ abstract class BaseNode extends Doctrine_Record {
         $this->actAs($nestedset0);
 
         loadListeners($this, 'Node');
+    }
 
-}
 }

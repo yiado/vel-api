@@ -1,7 +1,7 @@
 <?php
+
 //bech
 //puc
 //uchile
 
-$config['client']   ="uchile";
-	 
+$config['client'] = "uchile";

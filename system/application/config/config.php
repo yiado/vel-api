@@ -12,7 +12,7 @@
 |
 */
  
-$config['base_url']	= "http://igeo.velociti.cl/development/desarrollo/";  
+$config['base_url']	= "http://igeo.velociti.cl/development/rm-igeobackend/";  
 
 
 /*
