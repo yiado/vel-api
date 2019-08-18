@@ -10,7 +10,7 @@ class SolicitudController extends APP_Controller {
         parent::APP_Controller();
     }
 
-    function get() {
+    function get() {        
         $request = Doctrine_Core::getTable('Solicitud')->retrieveAll($this->filtrosSolicitudes());
 
         if ($request->count()) {
@@ -39,7 +39,6 @@ class SolicitudController extends APP_Controller {
         $file_extension_fatura = $this->app->getFileExtension($file_uploaded_factura['name']);
         $file_name_actual_factura = $this->app->getFileName($file_uploaded_factura['name']);
 
-
         //Para la Orden de Compra
         $file_uploaded_oc = $this->input->file('solicitud_oc_nombre');
         $file_extension_oc = $this->app->getFileExtension($file_uploaded_oc['name']);
@@ -47,7 +46,7 @@ class SolicitudController extends APP_Controller {
 
         if (($docExtension->isAllowed($file_extension_fatura)) !== false && ($docExtension->isAllowed($file_extension_oc)) !== false) {
             //Recibimos los parametros
-            $node_id = $this->input->post('$node_id');
+            $node_id = (int) $this->input->post('node_id');
             $solicitud_type_id = $this->input->post('solicitud_type_id');
             $solicitud_factura_numero = $this->input->post('solicitud_factura_numero');
             $solicitud_oc_numero = $this->input->post('solicitud_oc_numero');
@@ -91,7 +90,6 @@ class SolicitudController extends APP_Controller {
                 $this->sendNotification($solicitud->solicitud_id);
 
                 $solicitudLog = new SolicitudLog();
-                $user_id = $this->auth->get_user_data('user_id');
                 $solicitudLog->user_id = $user_id;
                 $solicitudLog->solicitud_id = $solicitud->solicitud_id;
                 $solicitudLog->solicitud_log_detalle = 'Creación de  Solicitud';
@@ -152,7 +150,7 @@ class SolicitudController extends APP_Controller {
             }
         } else {
             $success = false;
-            $msg = $this->translateTag('Documen', 'type_extension_not_allowed');
+            $msg = $this->translateTag('Document', 'type_extension_not_allowed');
         }
 
         $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg));
@@ -464,6 +462,8 @@ class SolicitudController extends APP_Controller {
         $user_id = $this->session->userdata('user_id');
         $user_type = $this->session->userdata('user_type');
 
+        $node_id = (int) $this->input->post('node_id');
+        
         $solicitud_type_id = $this->input->post('solicitud_type_id');
         $solicitud_estado_id = $this->input->post('solicitud_estado_id');
         $solicitud_folio = $this->input->post('solicitud_folio');
@@ -482,6 +482,7 @@ class SolicitudController extends APP_Controller {
         $filters = array(
             'st.solicitud_type_id = ?' => $solicitud_type_id,
             'se.solicitud_estado_id = ?' => $solicitud_estado_id,
+            'node_id = ?' => $node_id,
             'solicitud_folio LIKE ?' => (!empty($solicitud_folio) ? '%' . $solicitud_folio . '%' : NULL),
             'u.user_username LIKE ?' => (!empty($user_username) ? '%' . $user_username . '%' : NULL),
             'u.user_email = ?' => $user_email,

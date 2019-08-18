@@ -30,100 +30,40 @@ class ServiceController extends APP_Controller {
     }
 
     function add() {
-
-        //Recibimos los parametros
-        $node_id = $this->input->post('$node_id');
-        $service_type_id = $this->input->post('service_type_id');
-        $service_factura_numero = $this->input->post('service_factura_numero');
-        $service_oc_numero = $this->input->post('service_oc_numero');
-        $service_comen_user = $this->input->post('service_comen_user');
-
-        //Obtenemos la conexiï¿½n actual
+        //Obtenemos la conexión actual
         $conn = Doctrine_Manager::getInstance()->getCurrentConnection();
 
-        //Iniciamos la transacciï¿½n
+        //Iniciamos la transacción
         $conn->beginTransaction();
 
         try {
             //Insertamos el nuevo documento en la tabla
             $service = new Service();
             $user_id = $this->auth->get_user_data('user_id');
+            $service->node_id = $this->input->post('node_id');
             $service->user_id = $user_id;
-            $service->service_type_id = $service_type_id;
-            $service->service_estado_id = 1; //Queda como Solicitado
-
-            $CI = & get_instance();
-            $nuevo_folio = Doctrine_Core :: getTable('Service')->lastFolioWo() + 1;
-            $service->node_id = $CI->app->generateFolio($node_id);
-            $service->service_folio = $CI->app->generateFolio($nuevo_folio);
-            $service->service_factura_archivo = $doc_name_factura;
-            $service->service_factura_nombre = $file_name_actual_factura . '.' . $file_extension_fatura;
-            $service->service_factura_numero = $service_factura_numero;
-            $service->service_oc_archivo = $doc_name_oc;
-            $service->service_oc_nombre = $file_name_actual_oc . '.' . $file_extension_oc;
-            $service->service_oc_numero = $service_oc_numero;
-            $service->service_comen_user = $service_comen_user;
-
-
-            //ESTO AUMENTA LA CUENTA DE LOS ARCHIVOS DEL ACTIVO
+            $service->service_type_id = $this->input->post('service_type_id');
+            $service->service_status_id = 1;
+            $service->service_organism = $this->input->post('service_organism');
+            $service->service_phone = $this->input->post('service_phone');
+            $service->service_commentary = $this->input->post('service_commentary');
             $service->save();
 
             //Enviar correo de Alerta de creación de Service
             $this->sendNotification($service->service_id);
 
             $serviceLog = new ServiceLog();
-            $user_id = $this->auth->get_user_data('user_id');
             $serviceLog->user_id = $user_id;
             $serviceLog->service_id = $service->service_id;
-            $serviceLog->service_log_detalle = 'Creación de  Service';
+            $serviceLog->service_log_detail = 'Creación de Solicitud de Servicio';
             $serviceLog->save();
 
             //Cagamos la Libreria para Subir Archivos
             $this->load->library('upload');
 
-            // Procedimiento para Subir archivo Factura       
-            if (!empty($_FILES['service_factura_nombre']['name'])) {
-                // Configuración para la Factura
-                $config['upload_path'] = $this->config->item('asset_doc_dir');
-                $config['allowed_types'] = $file_extension_fatura;
-                $config['file_name'] = $doc_name_factura;
-
-                $this->upload->initialize($config);
-
-                // Subimos archivo de la Factura
-                if ($this->upload->do_upload('service_factura_nombre')) {
-                    $data = $this->upload->data();
-                } else {
-                    $success = 'false';
-                    $msg = $this->upload->display_errors('-', '\n');
-                    throw new Exception($msg);
-                }
-            }
-
-            // Procedimiento para Subir archivo Orden de Compra
-            if (!empty($_FILES['service_oc_nombre']['name'])) {
-                // Configuración para de la Orden de Compra
-                $config['upload_path'] = $this->config->item('asset_doc_dir');
-                $config['allowed_types'] = $file_extension_oc;
-                $config['file_name'] = $doc_name_oc;
-
-                // Cargamos la configuración del Archivo 1
-                $this->upload->initialize($config);
-
-                // Subimos archivo de la Orden de Compra
-                if ($this->upload->do_upload('service_oc_nombre')) {
-                    $data = $this->upload->data();
-                } else {
-                    $success = 'false';
-                    $msg = $this->upload->display_errors('-', '\n');
-                    throw new Exception($msg);
-                }
-            }
-            //SiTodo OK Sube Archivos
             $success = true;
             $msg = $this->translateTag('General', 'operation_successful');
-            // 
-            // Si todo OK, commit a la base de datos
+
             $conn->commit();
         } catch (Exception $e) {
             //Si hay error, rollback de los cambios en la base de datos
@@ -131,7 +71,6 @@ class ServiceController extends APP_Controller {
             $success = false;
             $msg = $e->getMessage();
         }
-
 
         $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg));
         echo $json_data;
@@ -357,33 +296,29 @@ class ServiceController extends APP_Controller {
         $user_id = $this->session->userdata('user_id');
         $user_type = $this->session->userdata('user_type');
 
+        $node_id = (int) $this->input->post('node_id');
+
         $service_type_id = $this->input->post('service_type_id');
-        $service_estado_id = $this->input->post('service_estado_id');
-        $service_folio = $this->input->post('service_folio');
+        $service_status_id = $this->input->post('service_status_id');
         $user_username = $this->input->post('user_username');
         $user_email = $this->input->post('user_email');
 
         $start_date = $this->input->post('start_date');
         $end_date = $this->input->post('end_date');
 
-        $service_factura_nombre = $this->input->post('service_factura_nombre');
-        $service_factura_numero = $this->input->post('service_factura_numero');
-
-        $service_oc_nombre = $this->input->post('service_oc_nombre');
-        $service_oc_numero = $this->input->post('service_oc_numero');
+        $service_phone = $this->input->post('service_phone');
+        $service_organism = $this->input->post('service_organism');
 
         $filters = array(
+            'node_id = ?' => $node_id,
             'st.service_type_id = ?' => $service_type_id,
-            'se.service_estado_id = ?' => $service_estado_id,
-            'service_folio LIKE ?' => (!empty($service_folio) ? '%' . $service_folio . '%' : NULL),
+            'se.service_status_id = ?' => $service_status_id,
             'u.user_username LIKE ?' => (!empty($user_username) ? '%' . $user_username . '%' : NULL),
             'u.user_email = ?' => $user_email,
-            'service_fecha >= ?' => (!empty($start_date) ? $start_date . ' 00:00:00' : NULL ),
-            'service_fecha <= ?' => (!empty($end_date) ? $end_date . ' 23:59:59' : NULL ),
-            'service_factura_nombre LIKE ?' => (!empty($service_factura_nombre) ? '%' . $service_factura_nombre . '%' : NULL),
-            'service_factura_numero LIKE ?' => (!empty($service_factura_numero) ? '%' . $service_factura_numero . '%' : NULL),
-            'service_oc_nombre LIKE ?' => (!empty($service_oc_nombre) ? '%' . $service_oc_nombre . '%' : NULL),
-            'service_oc_numero LIKE ?' => (!empty($service_oc_numero) ? '%' . $service_oc_numero . '%' : NULL)
+            'se.service_phone = ?' => $service_phone,
+            'service_date >= ?' => (!empty($start_date) ? $start_date . ' 00:00:00' : NULL ),
+            'service_date <= ?' => (!empty($end_date) ? $end_date . ' 23:59:59' : NULL ),
+            'service_organism LIKE ?' => (!empty($service_organism) ? '%' . $service_organism . '%' : NULL)
         );
 
         if ($user_type !== 'A') {
@@ -397,34 +332,28 @@ class ServiceController extends APP_Controller {
 
         $requests = Doctrine_Core::getTable('Service')->retrieveAll($this->filtrosServices());
 
-        $titulos[] = 'Tipo de Service';
-        $titulos[] = 'Nº de Folio';
+        $titulos[] = 'Tipo de Servicio';
+        $titulos[] = 'Estado';
         $titulos[] = 'Nombre Usuario';
         $titulos[] = 'Email Usuario';
-        $titulos[] = 'Fecha Service';
-        $titulos[] = 'Nombre Factura';
-        $titulos[] = 'Numero de Factura';
-        $titulos[] = 'Nombre OC';
-        $titulos[] = 'Numero OC';
-        $titulos[] = 'Estado Service';
+        $titulos[] = 'Telefono';
+        $titulos[] = 'Fecha Servicio';
+        $titulos[] = 'Organismo';
         $titulos[] = 'Comentario';
 
         $servicees = array();
         foreach ($requests as $request) {
-            $date = new DateTime($request->service_fecha);
+            $date = new DateTime($request->service_date);
             $fecha = $date->format('d/m/Y H:i');
             $service = array();
-            $service[] = $request->ServiceType->service_type_nombre;
-            $service[] = $request->service_folio;
+            $service[] = $request->ServiceType->service_type_name;
+            $service[] = $request->ServiceStatus->service_status_name;
             $service[] = $request->User->user_username;
             $service[] = $request->User->user_email;
+            $service[] = $request->service_phone;
             $service[] = $fecha;
-            $service[] = $request->service_factura_nombre;
-            $service[] = $request->service_factura_numero;
-            $service[] = $request->service_oc_nombre;
-            $service[] = $request->service_oc_numero;
-            $service[] = $request->ServiceEstado->service_estado_nombre;
-            $service[] = $request->service_comen_user;
+            $service[] = $request->service_organism;
+            $service[] = $request->service_commentary;
             $servicees[] = $service;
         }
 
@@ -441,10 +370,7 @@ class ServiceController extends APP_Controller {
         $sheet->setAutoFilter($dimensionHoja);
 
         /** Formato de tipo de datos en celdas */
-        $sheet->getStyle("B2:B{$ultimaFila}")
-                ->getNumberFormat()
-                ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER);
-        $sheet->getStyle("E2:E{$ultimaFila}")
+        $sheet->getStyle("F2:F{$ultimaFila}")
                 ->getNumberFormat()
                 ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DATETIME);
 
@@ -485,7 +411,7 @@ class ServiceController extends APP_Controller {
 
         $q = Doctrine_Query::create()
                 ->from('Service s')
-                ->innerJoin('s.ServiceEstado se')
+                ->innerJoin('s.ServiceStatus se')
                 ->innerJoin('s.ServiceType st')
                 ->innerJoin('s.User u')
                 ->where('service_id = ?', $service_id);
@@ -499,19 +425,16 @@ class ServiceController extends APP_Controller {
 
         $subject = 'Aviso de Creación de service'; //ASUNTO
         //Formatear Fecha
-        $date = new DateTime($results['service_fecha']);
+        $date = new DateTime($results['service_date']);
         $fecha = $date->format('d/m/Y H:i');
 
-        $body = 'Tipo de Service :' . $results['ServiceType']['service_type_nombre'] . "\n"; //CUERPO DEL MENSAJE
-        $body .= 'Estado de Service :' . $results['ServiceEstado']['service_estado_nombre'] . "\n";
-        $body .= 'Folio de Service :' . $results['service_folio'] . "\n";
+        $body = 'Tipo de Servicio :' . $results['ServiceType']['service_type_name'] . "\n"; //CUERPO DEL MENSAJE
+        $body .= 'Estado del Servicio :' . $results['ServiceStatus']['service_status_name'] . "\n";
         $body .= 'Nombre de Usuario :' . $results['User']['user_username'] . "\n";
-        $body .= 'Fecha de Service :' . $fecha . "\r\n";
-        $body .= 'Nombre de Documento de Factura :' . $results['service_factura_nombre'] . "\r\n";
-        $body .= 'Numero de Factura :' . $results['service_factura_numero'] . "\r\n";
-        $body .= 'Nombre de Documento de Orden de Compra :' . $results['service_oc_nombre'] . "\r\n";
-        $body .= 'Numero de Orden de Compra :' . $results['service_oc_numero'] . "\r\n";
-        $body .= 'Comentario de Usuario :' . $results['service_comen_user'] . "\r\n";
+        $body .= 'Fecha de Servicio :' . $fecha . "\r\n";
+        $body .= 'Teléfono :' . $results['service_phone'] . "\r\n";
+        $body .= 'Organismo :' . $results['service_organism'] . "\r\n";
+        $body .= 'Comentario de Usuario :' . $results['service_commentary'] . "\r\n";
     }
 
 }

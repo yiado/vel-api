@@ -2,8 +2,6 @@ App.Request.Solicitud_id = null;
 
 App.Interface.addToModuleMenu('request', App.ModuleActions[8000]);
 
-App.Request.allowRootGui = true;
-
 App.Request.Principal = Ext.extend(Ext.TabPanel, {
     activeTab: 0,
     border: false,
@@ -17,7 +15,6 @@ App.Request.Principal = Ext.extend(Ext.TabPanel, {
     }
 });
 
-//PROPUESTA PARA UNIVERSIDAD DE CHILE 04/08/2016
 App.Request.Asset = Ext.extend(Ext.Panel, {
     title: App.Language.Asset.assets,
     border: false,
@@ -83,15 +80,19 @@ App.Request.Asset = Ext.extend(Ext.Panel, {
                     text: App.Language.General.search,
                     handler: function(b) {
                         form = b.ownerCt.ownerCt.getForm();
+                        node_id = App.Request.Solicitudes.Store.baseParams.node_id;
                         App.Request.Solicitudes.Store.baseParams = form.getSubmitValues();
+                        App.Request.Solicitudes.Store.setBaseParam('node_id', node_id);
                         App.Request.Solicitudes.Store.load();
                     }
                 }, {
                     text: App.Language.General.clean,
                     handler: function(b) {
                         form = b.ownerCt.ownerCt.getForm();
+                        node_id = App.Request.Solicitudes.Store.baseParams.node_id;
                         form.reset();
                         App.Request.Solicitudes.Store.baseParams = {};
+                        App.Request.Solicitudes.Store.setBaseParam('node_id', node_id);
                         App.Request.Solicitudes.Store.load();
                     }
                 }],
@@ -293,7 +294,6 @@ App.Request.Asset = Ext.extend(Ext.Panel, {
 
                             var iso_date = Date.parseDate(record.data.solicitud_fecha, "Y-m-d H:i:s");
                             Ext.getCmp('App.RequestEdit.Fecha').setValue(iso_date.format("d/m/Y H:i"));
-
                         }
                     }
                 },
@@ -558,7 +558,15 @@ App.Request.editRequestByNodeWindow = Ext.extend(Ext.Window, {
     }
 });
 
-App.Request.Principal.listener = function() {};
+App.Request.Principal.listener = function(node) {
+    if (node && node.id) {
+        App.Request.Services.Store.setBaseParam('node_id', node.id);
+        App.Request.Services.Store.load();
+        
+        App.Request.Solicitudes.Store.setBaseParam('node_id', node.id);
+        App.Request.Solicitudes.Store.load();
+    }
+};
 
 App.Request.addAprobarWindow = Ext.extend(Ext.Window, {
     width: (screen.width < 500) ? screen.width - 50 : 500,
@@ -1000,6 +1008,7 @@ App.Request.exportListByNodeWindow = Ext.extend(Ext.Window, {
                         url: 'index.php/request/solicitud/export',
                         method: 'POST',
                         params: {
+                            node_id: App.Interface.selectedNodeId,
                             file_name: Ext.getCmp('App.Request.SearchNombre').getValue(),
                             solicitud_type_id: Ext.getCmp('App.Request.SearchTipo').getValue(),
                             solicitud_estado_id: Ext.getCmp('App.Request.SearchEstado').getValue(),
