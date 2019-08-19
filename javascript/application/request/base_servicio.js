@@ -33,7 +33,7 @@ App.ModuleActions[8010] = {
 }
 
 App.ModuleActions[8011] = {
-    text: App.Language.Request.history,
+    text: App.Language.Request.history_service,
     id: 'ModuleAction_8011',
     hidden: true,
     iconCls: 'config_icon',
@@ -42,12 +42,13 @@ App.ModuleActions[8011] = {
         if (grid.getSelectionModel().getCount()) {
             records = grid.getSelectionModel().getSelections();
             aux = new Array();
-            for (var i = 0; i < records.length; i++) {
-                App.Request.Solicitud_id = records[i].data.service_id;
-                App.Request.ServicedLog.Store.setBaseParam('service_id', App.Request.Solicitud_id);
-                App.Request.ServicedLog.Store.load();
-            }
-            w = new App.Request.historialWindow({ title: 'Historial Servicio ID ${records[i].data.service_id}' });
+            
+            records.forEach(function (serviceHistory){
+                App.Request.Service_id = serviceHistory.data.service_id;
+                App.Request.ServicesLog.Store.setBaseParam('service_id', App.Request.Service_id);
+                App.Request.ServicesLog.Store.load();
+            });
+            w = new App.Request.historialServiceWindow({ title: 'Historial Servicio' });
             w.show();
         } else {
             Ext.FlashMessage.alert('Debe Seleccionar un Servicio');
