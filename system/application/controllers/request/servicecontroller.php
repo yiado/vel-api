@@ -263,9 +263,9 @@ class ServiceController extends APP_Controller {
         $CI = & get_instance();
         $CI->load->library('NotificationUser');
 
-        $to = trim($results['User']['user_email']); //CORREO DESTINATARIO
+        $to = trim($results['User']['user_email']);
 
-        $subject = 'Aviso de Creación de service'; //ASUNTO
+        $subject = 'Aviso de Creación de service';
         //Formatear Fecha
         $date = new DateTime($results['service_date']);
         $fecha = $date->format('d/m/Y H:i');
