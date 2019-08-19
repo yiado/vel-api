@@ -2,7 +2,6 @@ App.Request.Service_id = null;
 
 App.Request.Service = Ext.extend(Ext.Panel, {
     title: App.Language.General.services,
-    id: 'App.Request.Principal',
     border: false,
     loadMask: true,
     layout: 'border',
@@ -47,6 +46,7 @@ App.Request.Service = Ext.extend(Ext.Panel, {
                 ref: 'form',
                 hidden: true,
                 height: 200,
+                width: '100%',
                 margins: '0 5 0 5',
                 padding: '0 5 5 5',
                 border: true,
@@ -230,26 +230,22 @@ App.Request.Service = Ext.extend(Ext.Panel, {
                         App.Request.Services.Store.load();
                     },
                     'rowdblclick': function (grid, rowIndex) {
-                        if (App.Security.Session.user_type !== 'A') {
-                            /*record = grid.getStore().getAt(rowIndex);
-
-                            w = new App.Request.editRequestByNodeWindow({title: 'Editar Servicio'});
+                        record = grid.getStore().getAt(rowIndex);
+                        console.log(record)
+                        if (App.Security.Session.user_username === record.data.User.user_username) {
+                            w = new App.Request.editRequestServiceByNodeWindow({title: 'Editar Servicio'});
                             w.show();
                             App.Request.Service_id = record.data.service_id;
-                            Ext.getCmp('App.RequestEdit.Alta').setValue(record.data.SolicitudType.solicitud_type_id);
-                            Ext.getCmp('App.RequestEdit.Alta').setDisabled(true);
-                            Ext.getCmp('App.RequestEdit.Usuario').setValue(record.data.User.user_username);
-                            Ext.getCmp('App.RequestEdit.Email').setValue(record.data.User.user_email);
-                            Ext.getCmp('App.RequestEdit.Factura').setValue(record.data.solicitud_factura_nombre);
-                            Ext.getCmp('App.RequestEdit.FacturaNum').setValue(record.data.solicitud_factura_numero);
-                            Ext.getCmp('App.RequestEdit.OC').setValue(record.data.solicitud_oc_nombre);
-                            Ext.getCmp('App.RequestEdit.OCNum').setValue(record.data.solicitud_oc_numero);
-                            Ext.getCmp('App.RequestEdit.Coment').setValue(record.data.solicitud_comen_user);
-                            Ext.getCmp('App.RequestEdit.ComentAdmin').setValue(record.data.solicitud_comen_admin);
-                            Ext.getCmp('App.RequestEdit.Folio').setValue(record.data.solicitud_folio);
+                            Ext.getCmp('App.RequestServiceEdit.Alta').setValue(record.data.ServiceType.service_type_id);
+                            Ext.getCmp('App.RequestServiceEdit.Alta').setDisabled(true);
+                            Ext.getCmp('App.RequestServiceEdit.Usuario').setValue(record.data.User.user_username);
+                            Ext.getCmp('App.RequestServiceEdit.Email').setValue(record.data.User.user_email);
+                            Ext.getCmp('App.RequestServiceEdit.Telefono').setValue(record.data.service_phone);
+                            Ext.getCmp('App.RequestServiceEdit.Organismo').setValue(record.data.service_organism);
+                            Ext.getCmp('App.RequestServiceEdit.Coment').setValue(record.data.service_commentary);
 
-                            var iso_date = Date.parseDate(record.data.solicitud_fecha, "Y-m-d H:i:s");
-                            Ext.getCmp('App.RequestEdit.Fecha').setValue(iso_date.format("d/m/Y H:i"));*/
+                            var iso_date = Date.parseDate(record.data.service_date, "Y-m-d H:i:s");
+                            Ext.getCmp('App.RequestServiceEdit.Fecha').setValue(iso_date.format("d/m/Y H:i"));
                         }
                     }
                 },
@@ -282,6 +278,11 @@ App.Request.Service = Ext.extend(Ext.Panel, {
                             return ServiceStatus.service_status_name;
                         }
                     }, {
+                        dataIndex: 'service_organism',
+                        header: 'Organismo',
+                        width: 100,
+                        sortable: true
+                    }, {
                         dataIndex: 'User',
                         header: 'Nombre',
                         width: 60,
@@ -297,18 +298,13 @@ App.Request.Service = Ext.extend(Ext.Panel, {
                         sortable: true
                     }, {
                         xtype: 'datecolumn',
-                        header: 'Fecha Servicio',
+                        header: 'Fecha',
                         sortable: true,
                         dataIndex: 'service_date',
                         width: 60,
                         format: App.General.DefaultDateTimeFormat,
                         align: 'center'
-                    }, {
-                        dataIndex: 'service_organism',
-                        header: 'Organismo',
-                        width: 100,
-                        sortable: true
-                    }, {
+                    }, {                    
                         dataIndex: 'service_commentary',
                         header: 'Comentario',
                         width: 100,
@@ -421,7 +417,7 @@ App.Request.addRequestServiceByNodeWindow = Ext.extend(Ext.Window, {
                                 if (o.result.success === "false") {
                                     Ext.FlashMessage.alert('Error al Ingreso de Datos');
                                 } else {
-                                    App.Request.Solicitudes.Store.load();
+                                    App.Request.Services.Store.load();
 
                                     b.ownerCt.ownerCt.ownerCt.close();
                                     Ext.FlashMessage.alert(o.result.msg);
@@ -437,6 +433,126 @@ App.Request.addRequestServiceByNodeWindow = Ext.extend(Ext.Window, {
             }]
         }];
         App.Request.addRequestByNodeWindow.superclass.initComponent.call(this);
+    }
+});
+
+App.Request.editRequestServiceByNodeWindow = Ext.extend(Ext.Window, {
+    width: 500,
+    height: 550,
+    modal: true,
+    resizable: false,
+    layout: 'fit',
+    padding: 1,
+    initComponent: function() {
+        this.items = [{
+            xtype: 'form',
+            ref: 'form',
+            labelWidth: 150,
+            fileUpload: true,
+            plugins: [new Ext.ux.OOSubmit()],
+            bodyStyle: 'padding: 10 10px 10',
+            items: [{
+                xtype: 'fieldset',
+                title: 'Datos Solicitante',
+                items: [{
+                    xtype: 'displayfield',
+                    fieldLabel: 'Nombre de Usuario',
+                    name: 'user_name',
+                    id: 'App.RequestServiceEdit.Usuario',
+                    anchor: '100%'
+                }, {
+                    xtype: 'displayfield',
+                    fieldLabel: 'Email',
+                    name: 'user_email',
+                    id: 'App.RequestServiceEdit.Email',
+                    anchor: '100%'
+                }]
+            }, {
+                xtype: 'fieldset',
+                title: 'Datos Solicitud',
+                ref: 'solicitud',
+                items: [{
+                    xtype: 'displayfield',
+                    fieldLabel: 'Fecha',
+                    name: 'solicitud_fecha',
+                    id: 'App.RequestServiceEdit.Fecha',
+                    anchor: '100%'
+                }, {
+                    xtype: 'combo',
+                    fieldLabel: 'Tipo de Servicio',
+                    anchor: '100%',
+                    id: 'App.RequestServiceEdit.Alta',
+                    store: App.Request.ServicesType.Store,
+                    hiddenName: 'service_type_id',
+                    triggerAction: 'all',
+                    displayField: 'service_type_name',
+                    valueField: 'service_type_id',
+                    editable: true,
+                    typeAhead: true,
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    mode: 'remote',
+                    minChars: 0,
+                    allowBlank: false
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: 'Organismo',
+                    id: 'App.RequestServiceEdit.Organismo',
+                    name: 'service_organism',
+                    anchor: '100%',
+                    allowBlank: false
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: 'Teléfono',
+                    id: 'App.RequestServiceEdit.Telefono',
+                    name: 'service_phone',
+                    anchor: '100%',
+                    allowBlank: false
+                }, {
+                    xtype: 'textarea',
+                    fieldLabel: 'Comentarios',
+                    id: 'App.RequestServiceEdit.Coment',
+                    name: 'service_commentary',
+                    anchor: '100%',
+                    allowBlank: false
+                }]
+            }],
+            buttons: [{
+                text: App.Language.General.close,
+                handler: function(b) {
+                    b.ownerCt.ownerCt.ownerCt.close();
+                }
+            }, {
+                text: 'Editar',
+                ref: '../saveButton',
+                handler: function(b) {
+                    form = b.ownerCt.ownerCt.getForm();
+                    if (form.isValid()) {
+                        form.submit({
+                            url: 'index.php/request/service/update',
+                            params: {
+                                service_id: App.Request.Service_id
+                            },
+                            success: function(fp, o) {
+                                if (o.result.success === "false") {
+                                    Ext.FlashMessage.alert('Error al Ingreso de Datos');
+                                } else {
+                                    App.Request.Solicitudes.Store.load();
+
+                                    b.ownerCt.ownerCt.ownerCt.close();
+                                    Ext.FlashMessage.alert(o.result.msg);
+
+                                }
+                            },
+                            failure: function(fp, o) {
+                                alert('Error:\n' + o.result.msg);
+                            }
+                        });
+                    }
+                }
+            }]
+        }];
+        App.Request.editRequestServiceByNodeWindow.superclass.initComponent.call(this);
     }
 });
 
@@ -479,6 +595,7 @@ App.Request.exportServiceListByNodeWindow = Ext.extend(Ext.Window, {
                                 url: 'index.php/request/service/export',
                                 method: 'POST',
                                 params: {
+                                    node_id: App.Interface.selectedNodeId,
                                     file_name: Ext.getCmp('App.Request.SearchRequestNombre').getValue(),
                                     service_type_id: Ext.getCmp('App.Request.SearchServiceType').getValue(),
                                     service_status_id: Ext.getCmp('App.Request.SearchServiceStatus').getValue(),

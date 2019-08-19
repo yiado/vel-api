@@ -8,16 +8,6 @@ App.General.declareNameSpaces('App.Request', [
     'ServicesLog'
 ]);
 
-App.Request.moduleActivate = function () {
-    if (App.Interface.selectedNodeId > 0) {
-        App.Interface.ViewPort.displayModuleGui();
-    } else {
-        return new Ext.Panel({
-            border: false
-        });
-    }
-}
-
 App.ModuleActions[8009] = {
     text: App.Language.General.add,
     iconCls: 'add_icon',

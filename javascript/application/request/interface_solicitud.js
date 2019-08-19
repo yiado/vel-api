@@ -1,4 +1,5 @@
 App.Request.Solicitud_id = null;
+App.Request.allowRootGui = true;
 
 App.Interface.addToModuleMenu('request', App.ModuleActions[8000]);
 
@@ -9,7 +10,7 @@ App.Request.Principal = Ext.extend(Ext.TabPanel, {
         this.items = [
             new App.Request.Asset(),
             new App.Request.Service(),
-            new App.Request.Information()
+            //new App.Request.Information()
         ];
         App.Request.Principal.superclass.initComponent.call(this);
     }
@@ -18,6 +19,7 @@ App.Request.Principal = Ext.extend(Ext.TabPanel, {
 App.Request.Asset = Ext.extend(Ext.Panel, {
     title: App.Language.Asset.assets,
     border: false,
+    id: 'App.Request.Principal',
     loadMask: true,
     layout: 'border',
     tbar: {
@@ -274,9 +276,8 @@ App.Request.Asset = Ext.extend(Ext.Panel, {
                         App.Request.Solicitudes.Store.load();
                     },
                     'rowdblclick': function(grid, rowIndex) {
-                        if (App.Security.Session.user_type != 'A') {
-                            record = grid.getStore().getAt(rowIndex);
-
+                        record = grid.getStore().getAt(rowIndex);
+                        if (App.Security.Session.user_username === record.data.User.user_username) {
                             w = new App.Request.editRequestByNodeWindow({ title: 'Editar Solicitud' });
                             w.show();
                             App.Request.Solicitud_id = record.data.solicitud_id;

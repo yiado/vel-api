@@ -78,218 +78,57 @@ class ServiceController extends APP_Controller {
 
     function update() {
         $service = Doctrine_Core::getTable('Service')->find($this->input->post('service_id'));
+        $conn = Doctrine_Manager::getInstance()->getCurrentConnection();
+        $conn->beginTransaction();
+        try {
 
-        $docExtension = new DocExtension();
-        //Para la Fatura
-        $file_uploaded_factura = $this->input->file('service_factura_nombre');
-        $file_extension_fatura = $this->app->getFileExtension($file_uploaded_factura['name']);
-        $file_name_actual_factura = $this->app->getFileName($file_uploaded_factura['name']);
+            $service_organism = $this->input->post('service_organism');
+            if ($service->service_organism != $service_organism) {
+                $serviceLog = new ServiceLog();
+                $user_id = $this->auth->get_user_data('user_id');
+                $serviceLog->user_id = $user_id;
+                $serviceLog->service_id = $service->service_id;
+                $serviceLog->service_log_detail = 'Cambio de organismo:' . $service->service_organism . ' Por  :' . $service_organism;
+                $serviceLog->save();
 
-
-        //Para la Orden de Compra
-        $file_uploaded_oc = $this->input->file('service_oc_nombre');
-        $file_extension_oc = $this->app->getFileExtension($file_uploaded_oc['name']);
-        $file_name_actual_oc = $this->app->getFileName($file_uploaded_oc['name']);
-
-
-        if ($file_extension_fatura) {
-            if ($docExtension->isAllowed($file_extension_fatura) == false) {
-                $success = false;
-                $msg = $this->translateTag('Documen', 'type_extension_not_allowed');
-                $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg));
-                echo $json_data;
-                return;
-            } else {
-                $nombre_factura = $file_name_actual_factura . '.' . $file_extension_fatura;
-                $nombre_factura_archivo_antes = $service->service_factura_archivo;
+                $service->service_organism = $service_organism;
             }
-        } else {
-            $nombre_factura = $service->service_factura_nombre;
-        }
-
-        if ($file_extension_oc) {
-            if ($docExtension->isAllowed($file_extension_oc) == false) {
-                $success = false;
-                $msg = $this->translateTag('Documen', 'type_extension_not_allowed');
-                $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg));
-                echo $json_data;
-                return;
-            } else {
-                $nombre_oc = $file_name_actual_oc . '.' . $file_extension_oc;
-                $nombre_oc_archivo_antes = $service->service_oc_archivo;
+            
+            $service_phone = $this->input->post('service_phone');
+            if ($service->service_phone != $service_phone) {
+                $serviceLog = new ServiceLog();
+                $user_id = $this->auth->get_user_data('user_id');
+                $serviceLog->user_id = $user_id;
+                $serviceLog->service_id = $service->service_id;
+                $serviceLog->service_log_detail = 'Cambio de teléfono:' . $service->service_phone . ' Por  :' . $service_phone;
+                $serviceLog->save();
+                $service->service_phone = $service_phone;
             }
-        } else {
-            $nombre_oc = $service->service_oc_nombre;
-        }
+            
+            $service_commentary = $this->input->post('service_commentary');
+            if ($service->service_commentary != $service_commentary) {
+                $serviceLog = new ServiceLog();
+                $user_id = $this->auth->get_user_data('user_id');
+                $serviceLog->user_id = $user_id;
+                $serviceLog->service_id = $service->service_id;
+                $serviceLog->service_log_detail = 'Cambio de comentario:' . $service->service_commentary . ' Por  :' . $service_commentary;
+                $serviceLog->save();
+                $service->service_commentary = $service_commentary;
+            }
+            
+            $service->save();
 
-        if ($nombre_factura == $nombre_oc) {
+            $success = true;
+            $msg = $this->translateTag('General', 'operation_successful');
+            $conn->commit();
+        } catch (Exception $e) {
+            $conn->rollback();
             $success = false;
-            $msg = 'El archivo de la Factura es Igual al archivo de Orden de Compra';
-            $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg));
-            echo $json_data;
-            return;
-        } else {
-
-            //Ahora se pueden actualizar los archivos y los datos
-            //Obtenemos la conexiï¿½n actual
-            $conn = Doctrine_Manager::getInstance()->getCurrentConnection();
-
-            //Iniciamos la transacciï¿½n
-            $conn->beginTransaction();
-
-            try {
-                //Cagamos la Libreria para Subir Archivos
-                $this->load->library('upload');
-
-                //Actualizar en caso de Cambiar el Archivode Factura 
-                if ($file_extension_fatura) {
-                    $doc_name_factura = md5($file_name_actual_factura . ' ' . time()) . '.' . $file_extension_fatura;
-
-                    // Procedimiento para Subir archivo Factura       
-                    if (!empty($_FILES['service_factura_nombre']['name'])) {
-                        $serviceLog = new ServiceLog();
-                        $user_id = $this->auth->get_user_data('user_id');
-                        $serviceLog->user_id = $user_id;
-                        $serviceLog->service_id = $service->service_id;
-                        $serviceLog->service_log_detalle = 'Cambio Archivo Factura :' . $service->service_factura_nombre . ' Por  :' . $nombre_factura;
-                        $serviceLog->save();
-
-                        $service->service_factura_archivo = $doc_name_factura;
-                        $service->service_factura_nombre = $nombre_factura;
-
-                        // Configuración para la Factura
-                        $config['upload_path'] = $this->config->item('asset_doc_dir');
-                        $config['allowed_types'] = $file_extension_fatura;
-                        $config['file_name'] = $doc_name_factura;
-
-                        $this->upload->initialize($config);
-
-                        // Subimos archivo de la Factura
-                        if ($this->upload->do_upload('service_factura_nombre')) {
-                            $data = $this->upload->data();
-                        } else {
-                            $success = 'false';
-                            $msg = $this->upload->display_errors('-', '\n');
-                            throw new Exception($msg);
-                        }
-
-                        //Elimina Archivo Antiguo
-                        $path = './asset_doc/';
-                        $file_full_path = $path . $nombre_factura_archivo_antes;
-                        unlink($file_full_path);
-                    }
-                }
-
-                if ($file_extension_oc) {
-                    $doc_name_oc = md5($file_name_actual_oc . ' ' . time()) . '.' . $file_extension_oc;
-
-                    // Procedimiento para Subir archivo Orden de Compra
-                    if (!empty($_FILES['service_oc_nombre']['name'])) {
-                        $serviceLog = new ServiceLog();
-                        $user_id = $this->auth->get_user_data('user_id');
-                        $serviceLog->user_id = $user_id;
-                        $serviceLog->service_id = $service->service_id;
-                        $serviceLog->service_log_detalle = 'Cambio Archivo OC :' . $service->service_oc_nombre . ' Por  :' . $nombre_oc;
-                        $serviceLog->save();
-
-                        $service->service_oc_archivo = $doc_name_oc;
-                        $service->service_oc_nombre = $nombre_oc;
-
-
-                        // Configuración para de la Orden de Compra
-                        $config['upload_path'] = $this->config->item('asset_doc_dir');
-                        $config['allowed_types'] = $file_extension_oc;
-                        $config['file_name'] = $doc_name_oc;
-
-                        // Cargamos la configuración del Archivo 1
-                        $this->upload->initialize($config);
-
-                        // Subimos archivo de la Orden de Compra
-                        if ($this->upload->do_upload('service_oc_nombre')) {
-                            $data = $this->upload->data();
-                        } else {
-                            $success = 'false';
-                            $msg = $this->upload->display_errors('-', '\n');
-                            throw new Exception($msg);
-                        }
-
-                        //Elimina Archivo Antiguo
-                        $path = './asset_doc/';
-                        $file_full_path = $path . $nombre_oc_archivo_antes;
-                        unlink($file_full_path);
-                    }
-                }
-
-
-
-
-                //Actualizamos datos de la base de datos
-                //Recibimos los parametros
-                $service_factura_numero = $this->input->post('service_factura_numero');
-                $service_oc_numero = $this->input->post('service_oc_numero');
-                $service_comen_user = $this->input->post('service_comen_user');
-
-
-                //Actualizamos Numero de Factura
-                if ($service->service_factura_numero != $service_factura_numero) {
-                    $serviceLog = new ServiceLog();
-                    $user_id = $this->auth->get_user_data('user_id');
-                    $serviceLog->user_id = $user_id;
-                    $serviceLog->service_id = $service->service_id;
-                    $serviceLog->service_log_detalle = 'Cambio Nº de Factura :' . $service->service_factura_numero . ' Por  :' . $service_factura_numero;
-                    $serviceLog->save();
-
-                    $service->service_factura_numero = $service_factura_numero;
-                }
-
-                //Actualizamos Numero de OC
-                if ($service->service_oc_numero != $service_oc_numero) {
-                    $serviceLog = new ServiceLog();
-                    $user_id = $this->auth->get_user_data('user_id');
-                    $serviceLog->user_id = $user_id;
-                    $serviceLog->service_id = $service->service_id;
-                    $serviceLog->service_log_detalle = 'Cambio Nº de OC :' . $service->service_oc_numero . ' Por  :' . $service_oc_numero;
-                    $serviceLog->save();
-
-                    $service->service_oc_numero = $service_oc_numero;
-                }
-
-                //Actualizamos Comentario Usuario
-                if ($service->service_comen_user != $service_comen_user) {
-                    $serviceLog = new ServiceLog();
-                    $user_id = $this->auth->get_user_data('user_id');
-                    $serviceLog->user_id = $user_id;
-                    $serviceLog->service_id = $service->service_id;
-                    $serviceLog->service_log_detalle = 'Cambio Comentario :' . $service->service_comen_user . ' Por  :' . $service_comen_user;
-                    $serviceLog->save();
-
-                    $service->service_comen_user = $service_comen_user;
-                }
-
-
-
-                //ESTO AUMENTA LA CUENTA DE LOS ARCHIVOS DEL ACTIVO
-                $service->save();
-
-
-
-                //SiTodo OK Sube Archivos
-                $success = true;
-                $msg = $this->translateTag('General', 'operation_successful');
-                // 
-                // Si todo OK, commit a la base de datos
-                $conn->commit();
-            } catch (Exception $e) {
-                //Si hay error, rollback de los cambios en la base de datos
-                $conn->rollback();
-                $success = false;
-                $msg = $e->getMessage();
-            }
-
-
-            $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg));
-            echo $json_data;
+            $msg = $e->getMessage();
         }
+
+        $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg));
+        echo $json_data;
     }
 
     function filtrosServices() {
@@ -336,7 +175,7 @@ class ServiceController extends APP_Controller {
         $titulos[] = 'Estado';
         $titulos[] = 'Nombre Usuario';
         $titulos[] = 'Email Usuario';
-        $titulos[] = 'Telefono';
+        $titulos[] = 'Teléfono';
         $titulos[] = 'Fecha Servicio';
         $titulos[] = 'Organismo';
         $titulos[] = 'Comentario';
@@ -370,6 +209,9 @@ class ServiceController extends APP_Controller {
         $sheet->setAutoFilter($dimensionHoja);
 
         /** Formato de tipo de datos en celdas */
+        $sheet->getStyle("E2:E{$ultimaFila}")
+                ->getNumberFormat()
+                ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER);
         $sheet->getStyle("F2:F{$ultimaFila}")
                 ->getNumberFormat()
                 ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DATETIME);
