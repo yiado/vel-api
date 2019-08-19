@@ -53,7 +53,7 @@ App.Request.Service.formSearching = {
     frame: true,
     ref: 'form',
     hidden: true,
-    height: 200,
+    height: 210,
     width: '100%',
     margins: '0 5 0 5',
     padding: '0 5 5 5',
@@ -241,9 +241,8 @@ App.Request.Service.Grilla = {
         },
         'rowdblclick': function (grid, rowIndex) {
             record = grid.getStore().getAt(rowIndex);
-            console.log(record)
             if (App.Security.Session.user_username === record.data.User.user_username) {
-                w = new App.Request.editRequestServiceByNodeWindow({title: 'Editar Servicio'});
+                w = new App.Request.editRequestServiceByNodeWindow({title: 'Editar Solicitud de Servicio'});
                 w.show();
                 App.Request.Service_id = record.data.service_id;
                 Ext.getCmp('App.RequestServiceEdit.Alta').setValue(record.data.ServiceType.service_type_id);
@@ -256,6 +255,8 @@ App.Request.Service.Grilla = {
 
                 var iso_date = Date.parseDate(record.data.service_date, "Y-m-d H:i:s");
                 Ext.getCmp('App.RequestServiceEdit.Fecha').setValue(iso_date.format("d/m/Y H:i"));
+            } else {
+                Ext.FlashMessage.alert(`No es posible editar registros de otros usuarios.`);
             }
         }
     },
@@ -328,7 +329,7 @@ App.Request.Service.Grilla = {
 
 App.Request.addRequestServiceByNodeWindow = Ext.extend(Ext.Window, {
     width: (screen.width < 500) ? screen.width - 50 : 500,
-    height: 430,
+    height: 370,
     modal: true,
     resizable: false,
     layout: 'fit',
@@ -445,7 +446,7 @@ App.Request.addRequestServiceByNodeWindow = Ext.extend(Ext.Window, {
 
 App.Request.editRequestServiceByNodeWindow = Ext.extend(Ext.Window, {
     width: 500,
-    height: 550,
+    height: 390,
     modal: true,
     resizable: false,
     layout: 'fit',
@@ -481,7 +482,7 @@ App.Request.editRequestServiceByNodeWindow = Ext.extend(Ext.Window, {
                 items: [{
                     xtype: 'displayfield',
                     fieldLabel: 'Fecha',
-                    name: 'solicitud_fecha',
+                    name: 'service_date',
                     id: 'App.RequestServiceEdit.Fecha',
                     anchor: '100%'
                 }, {
@@ -544,7 +545,7 @@ App.Request.editRequestServiceByNodeWindow = Ext.extend(Ext.Window, {
                                 if (o.result.success === "false") {
                                     Ext.FlashMessage.alert('Error al Ingreso de Datos');
                                 } else {
-                                    App.Request.Solicitudes.Store.load();
+                                    App.Request.Services.Store.load();
 
                                     b.ownerCt.ownerCt.ownerCt.close();
                                     Ext.FlashMessage.alert(o.result.msg);

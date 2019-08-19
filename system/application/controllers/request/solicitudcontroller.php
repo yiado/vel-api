@@ -555,6 +555,12 @@ class SolicitudController extends APP_Controller {
         $sheet->getStyle("E2:E{$ultimaFila}")
                 ->getNumberFormat()
                 ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DATETIME);
+        $sheet->getStyle("G2:G{$ultimaFila}")
+                ->getNumberFormat()
+                ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER);
+        $sheet->getStyle("I2:I{$ultimaFila}")
+                ->getNumberFormat()
+                ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER);
 
         /** Estilos visuales de celdas */
         $filaTitulos = $sheet->getStyle("A1:{$ultimaColumna}1");

@@ -280,6 +280,7 @@ App.Request.Asset = Ext.extend(Ext.Panel, {
                         if (App.Security.Session.user_username === record.data.User.user_username) {
                             w = new App.Request.editRequestByNodeWindow({ title: 'Editar Solicitud' });
                             w.show();
+                            
                             App.Request.Solicitud_id = record.data.solicitud_id;
                             Ext.getCmp('App.RequestEdit.Alta').setValue(record.data.SolicitudType.solicitud_type_id);
                             Ext.getCmp('App.RequestEdit.Alta').setDisabled(true);
@@ -295,6 +296,8 @@ App.Request.Asset = Ext.extend(Ext.Panel, {
 
                             var iso_date = Date.parseDate(record.data.solicitud_fecha, "Y-m-d H:i:s");
                             Ext.getCmp('App.RequestEdit.Fecha').setValue(iso_date.format("d/m/Y H:i"));
+                        } else {
+                            Ext.FlashMessage.alert(`No es posible editar registros de otros usuarios.`);
                         }
                     }
                 },
@@ -507,6 +510,7 @@ App.Request.editRequestByNodeWindow = Ext.extend(Ext.Window, {
             }, {
                 xtype: 'fieldset',
                 title: 'Rechazo',
+                hidden: record.data.SolicitudEstado.solicitud_estado_id == 3 ?false:true,
                 items: [{
                     xtype: 'displayfield',
                     anchor: '100%',
