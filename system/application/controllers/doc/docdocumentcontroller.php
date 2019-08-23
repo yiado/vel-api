@@ -727,7 +727,7 @@ class DocDocumentController extends APP_Controller {
             }
         } else {
             $success = 'false';
-            $msg = $this->translateTag('Documen', 'type_extension_not_allowed');
+            $msg = $this->translateTag('Document', 'type_extension_not_allowed');
         }
         echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
     }

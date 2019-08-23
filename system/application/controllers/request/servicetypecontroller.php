@@ -11,7 +11,7 @@ class ServiceTypeController extends APP_Controller {
     }
 
     function get() {
-        $request = Doctrine_Core::getTable('ServiceType')->retrieveAll();
+        $request = Doctrine_Core::getTable('ServiceType')->retrieveAll($this->input->post('query'));
         if ($request->count()) {
             echo '({"total":"' . $request->count() . '", "results":' . $this->json->encode($request->toArray()) . '})';
         } else {

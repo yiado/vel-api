@@ -10,7 +10,7 @@ App.Request.Principal = Ext.extend(Ext.TabPanel, {
         this.items = [
             new App.Request.Asset(),
             new App.Request.Service(),
-            //new App.Request.Information()
+            new App.Request.Information()
         ];
         App.Request.Principal.superclass.initComponent.call(this);
     }

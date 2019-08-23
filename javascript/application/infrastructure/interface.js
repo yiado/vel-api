@@ -350,96 +350,18 @@ App.InfraStructure.Principal = Ext.extend(Ext.TabPanel, {
             defaults: {
                 margins: '0 0 5 0'
             },
-            tbar: [
-                //                    {
-                //                        text: App.Language.General.printer,
-                //                        iconCls: 'print_icon',
-                //                        handler: function ()
-                //                        {
-                //                    var targetElement = Ext.getCmp('App.InfraStructure.fichaResumen');
-                //                    
-                //                    var myWindow =  window.open('', 'to_print', 'width='+targetElement.getWidth()+',height='+targetElement.getHeight()+',scrollbars='+1);
-                ////                    var myWindow = window.open('', '','width=500,height=1000 target=_blank');
-                //                    myWindow.document.write('<html><head>');
-                //                    myWindow.document.write('<title>' + 'Title' + '</title>');
-                //                    myWindow.document.write('<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />');
-                //
-                //                    myWindow.document.write('<link rel="stylesheet" type="text/css" href="javascript/extjs/resources/css/ext-all.css"/>');
-                //                    myWindow.document.write('<link rel="stylesheet" type="text/css" href="javascript/extjs/ux/treegrid/treegrid.css"/>');
-                //                    
-                ////    myWindow.document.write('<link rel="stylesheet" type="text/css" href="javascript/extjs/ux/calendar/resources/css/extensible-all.css"/>');
-                ////    myWindow.document.write('<link rel="stylesheet" type="text/css" href="style/default/base.css"/>');
-                ////    myWindow.document.write('<link rel="stylesheet" type="text/css" href="style/default/document.css"/>');
-                ////    myWindow.document.write('<link rel="stylesheet" type="text/css" href="style/default/fileuploadfield.css"/>');
-                ////    myWindow.document.write('<link rel="stylesheet" type="text/css" href="javascript/extjs/ux/MultiSelect.css"/>');
-                ////    myWindow.document.write('<link rel="stylesheet" type="text/css" href="javascript/extjs/ux/Spinner.css"/>');
-                ////    myWindow.document.write('<link rel="stylesheet" type="text/css" href="javascript/extjs/ux/RowEditor.css"/>');
-                ////    myWindow.document.write('<link rel="stylesheet" type="text/css" href="javascript/extjs/ux/FlashMessage.css"/>');
-                ////    myWindow.document.write('<link rel="stylesheet" type="text/css" href="javascript/extjs/ux/GroupSummary.css" />');
-                ////                    
-                ////                    
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/extjs/adapter/ext/ext-base-debug.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/extjs/ext-all-debug.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/extjs/locale/ext-lang-es.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/extjs/ux/FileUploadField.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/extjs/ux/ItemSelector.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/extjs/ux/MultiSelect.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/extjs/ux/XmlTreeLoader.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/extjs/ux/treegrid/TreeGridSorter.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/extjs/ux/treegrid/TreeGridColumnResizer.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/extjs/ux/treegrid/TreeGridNodeUI.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/extjs/ux/treegrid/TreeGridLoader.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/extjs/ux/treegrid/TreeGridColumns.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/extjs/ux/treegrid/TreeGrid.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/extjs/ux/Spinner.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/extjs/ux/SpinnerField.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/extjs/ux/Window.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/extjs/ux/CheckColumn.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/extjs/ux/ColorPaletteField.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/extjs/ux/FlashMessage.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/extjs/ux/GroupSummary.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/extjs/ux/RowEditor.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/extjs/ux/DataView-more.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/extjs/ux/extensible-all-debug.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/extjs/ux/calendar/ext-lang-es.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/application/svgcontrol.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/application/base.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/application/store.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/application/language.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/application/preference.js"></script>');
-                ////    myWindow.document.write('<script type="text/javascript" src="javascript/application/security.js"></script>');
-                //    
-                //    
-                ////                    myWindow.document.write('<script type="text/javascript" src="javascript/extjs/adapter/ext/ext-base-debug.js"></script>');
-                ////                    myWindow.document.write('<script type="text/javascript" src="http://dev.sencha.com/deploy/ext-4.0.1/bootstrap.js"></script>');
-                //                    myWindow.document.write('</head><body>');
-                ////                    myWindow.document.write('<a href="javascript:window.print(); void 0;">Imprimir</a>');
-                //                    myWindow.document.write(targetElement.body.dom.innerHTML);
-                //                    myWindow.document.write('</body></html>');
-                ////                    myWindow.print();   
-                //                            
-                //                    myWindow.document.close(); // necessary for IE >= 10
-                //                    myWindow.focus(); // necessary for IE >= 10
-                //
-                //                    myWindow.print();
-                ////                    myWindow.close();
-                //
-                //                    return true;
-                //                        }
-                //                    },
-                {
-                    text: App.Language.General.printer,
-                    iconCls: 'print_icon',
-                    handler: function() {
-
-                        //                            alert(App.InfraStructure.pathFotoResumen);
-                        document.location = 'index.php/plan/plan/imprimirResumen/' + App.Interface.selectedNodeId + "/" + App.Plan.CurrentPlanId + "/" + App.InfraStructure.pathFotoResumen + "/" + App.InfraStructure.latResumen + "/" + App.InfraStructure.lonResumen;
-                    }
+            tbar: [{
+                text: App.Language.General.printer,
+                iconCls: 'print_icon',
+                handler: function() {
+                    document.location = 'index.php/plan/plan/imprimirResumen/' + App.Interface.selectedNodeId + "/" + App.Plan.CurrentPlanId + "/" + App.InfraStructure.pathFotoResumen + "/" + App.InfraStructure.latResumen + "/" + App.InfraStructure.lonResumen;
                 }
-            ],
+            }],
             listeners: {
                 'afterrender': function(panel) {
-                    //                                      panel.remove(0);
+                    panel.add(
+                        new App.InfraStructure.QRCode()
+                    );
                     panel.add(
                         new App.InfraStructure.Foto()
                     );
@@ -448,66 +370,43 @@ App.InfraStructure.Principal = Ext.extend(Ext.TabPanel, {
                             height: 5
                         })
                     );
-                    panel.add(
-                        //                                                new App.InfraStructure.mapaResumen()
-                        //                                new Ext.ux.GMapPanel(
-                        {
-                            //                                    xtype: 'gmappanel',
-                            xtype: 'panel',
-                            height: 250,
-                            width: 'auto',
-                            id: 'App.InfraStructure.mapResumen',
-                            cls: 'google_map',
-                            ref: 'map2',
-                            border: true,
-                            title: App.Language.Infrastructure.map,
-                            html: '<div id="mapResumen" class="map_resumen"></div>',
-                            //                                    zoomLevel: parseFloat(infra_default_zoomLevel),
-                            //                                    gmapType: 'map',
-                            //                                    mapTypeId: eval(infra_default_map),
-                            //                                    mapConfOpts: ['enableScrollWheelZoom', 'enableDoubleClickZoom', 'enableDragging'],
-                            //                                    mapControls: ['GSmallMapControl', 'GMapTypeControl', 'NonExistantControl'],
-                            //                                    setCenter: {
-                            //                                        geoCodeAddr: infra_default_start
-                            //                                    },
-                            listeners: {
-                                'render': function() {
-                                    App.InfraStructure.Coordinate.Store.on('afterload', function() {
-                                        //                                                        new Ext.LoadMask(Ext.getCmp('App.InfraStructure.Principal').ficha.map2.getEl(),
-                                        new Ext.LoadMask(panel.map2.getEl(), {
-                                            msg: App.Language.General.message_loading_information,
-                                            store: App.InfraStructure.Coordinate.Store
-                                        }).show();
-                                    });
-                                },
-                                'destroy': function() {
-                                    App.InfraStructure.Info.Store.purgeListeners();
-                                }
+                    panel.add({
+                        xtype: 'panel',
+                        height: 250,
+                        width: 'auto',
+                        id: 'App.InfraStructure.mapResumen',
+                        cls: 'google_map',
+                        ref: 'map2',
+                        border: true,
+                        title: App.Language.Infrastructure.map,
+                        html: '<div id="mapResumen" class="map_resumen"></div>',
+                        listeners: {
+                            'render': function() {
+                                App.InfraStructure.Coordinate.Store.on('afterload', function() {
+                                    new Ext.LoadMask(panel.map2.getEl(), {
+                                        msg: App.Language.General.message_loading_information,
+                                        store: App.InfraStructure.Coordinate.Store
+                                    }).show();
+                                });
+                            },
+                            'destroy': function() {
+                                App.InfraStructure.Info.Store.purgeListeners();
                             }
                         }
-                        //)
-                    );
+                    });
                     panel.add(
                         new Ext.Spacer({
                             height: 5
                         })
 
                     );
-                    //                        var plan_filename = "base_1613.svg";
 
                     panel.add({
                         xtype: 'panel',
                         title: 'Plano',
                         height: 'auto',
                         id: 'App.InfraStructure.planoResumen',
-                        //                                    height: 600,
-                        //                                    tpl: '<div id="plan_div_{plan_id}"><embed  src="plans/{plan_filename}" id="plan_embed_{plan_id}" width="100%" height="100%" type="image/svg+xml"></div>'
-                        //                                    tpl: '<div id="plan_div_{plan_id}"><embed  src="plans/{plan_filename}" id="plan_embed_{plan_id}" width="100%" height="100%" "></div>'
-                        //                                    tpl: '<div id="plan_div2_{plan_id}"><embed wmode="window" src="plans/{plan_filename}" id="plan_embed2_{plan_id}" width="100%" height="100%" type="image/svg+xml"></div>'
-                        //                                    html: '<div id="plan_div_{plan_id}"><embed wmode="window" src="plans/{plan_filename}" id="plan_embed_{plan_id}" width="100%" height="100%" type="image/svg+xml"></div>'
                         html: '<div></div>'
-                            //                                    html: '<div id="plan_div_1613"><embed wmode="window" src="plans/base_1613.svg" id="plan_embed_1613" width="100%" height="100%" type="image/svg+xml"></div>'
-                            //                                    html: '<object id="svg1" width="100%" height="100%" data="plans/base_1613.svg" type="image/svg+xml"></object>'
                     });
                     panel.add(
                         new Ext.Spacer({
@@ -717,10 +616,6 @@ App.InfraStructure.Principal = Ext.extend(Ext.TabPanel, {
             id: 'App.InfraStructure.mapTab',
             cls: 'google_mapTab',
             html: '<div id="mapTab" class="map_tab"></div>',
-            //                gmapType: 'map',
-            //                mapTypeId: eval(infra_default_map),
-            //                mapConfOpts: ['enableScrollWheelZoom', 'enableDoubleClickZoom', 'enableDragging'],
-            //                mapControls: ['GSmallMapControl', 'GMapTypeControl', 'NonExistantControl'],
             setCenter: {
                 geoCodeAddr: infra_default_start
             },
@@ -742,53 +637,6 @@ App.InfraStructure.Principal = Ext.extend(Ext.TabPanel, {
         App.InfraStructure.Principal.superclass.initComponent.call(this);
     }
 });
-//App.InfraStructure.mapaResumen = Ext.extend(Ext.grid.Panel,{
-//    
-//      
-//            
-//             xtype: 'gmappanel',
-//            id:'App.InfraStructure.mapaResumen',
-//            ref: 'map',
-//            title: App.Language.Infrastructure.map,
-//            zoomLevel: parseFloat(infra_default_zoomLevel),
-//            gmapType: 'map',
-//            mapTypeId: eval(infra_default_map),
-//            mapConfOpts: ['enableScrollWheelZoom', 'enableDoubleClickZoom', 'enableDragging'],
-//            mapControls: ['GSmallMapControl', 'GMapTypeControl', 'NonExistantControl'],
-//            setCenter: 
-//            {
-//                geoCodeAddr: infra_default_start
-//            },
-//            listeners: 
-//            {
-//                'render': function()
-//                {
-//                    App.InfraStructure.Coordinate.Store.on('afterload', function()
-//                    {
-//                        new Ext.LoadMask(Ext.getCmp('App.InfraStructure.Principal').map.getEl(), 
-//                        {
-//                            msg: App.Language.General.message_loading_information,
-//                            store: App.InfraStructure.Coordinate.Store
-//                        }).show();
-//                    });
-//                },
-//                'destroy': function()
-//                {
-//                    App.InfraStructure.Info.Store.purgeListeners();
-//                }
-//            },
-// 
-//            initComponent: function ()
-//            {
-//
-//               App.InfraStructure.mapaResumen.superclass.initComponent.call(this);
-//            }
-//            
-//            
-//       
-//
-//});
-
 
 
 App.InfraStructure.OtrosDatosResumen = Ext.extend(Ext.grid.GridPanel, {
@@ -800,9 +648,6 @@ App.InfraStructure.OtrosDatosResumen = Ext.extend(Ext.grid.GridPanel, {
     hideLabel: true,
     height: 600,
     cls: 'myCls',
-
-    //            resizable:true,
-    //        layout: 'fit',
     updateCarga: function() {
 
         if (App.Interface.selectedNodeId == App.Interface.nodeRoot) {
@@ -828,18 +673,15 @@ App.InfraStructure.OtrosDatosResumen = Ext.extend(Ext.grid.GridPanel, {
         this.selModel = new Ext.grid.CheckboxSelectionModel({
             checkOnly: false
         });
-        this.columns = [
-            //            this.selModel,
-            {
-                header: 'ESTRUCTURA ASOCIADA',
-                dataIndex: 'label',
-                cls: 'myClsp',
+        this.columns = [{
+            header: 'ESTRUCTURA ASOCIADA',
+            dataIndex: 'label',
+            cls: 'myClsp',
 
-            }, {
-                header: 'SUPERFICIE CONSTRIDA TOTAL',
-                dataIndex: 'value'
-            }
-        ];
+        }, {
+            header: 'SUPERFICIE CONSTRIDA TOTAL',
+            dataIndex: 'value'
+        }];
         App.InfraStructure.OtrosDatosResumen.superclass.initComponent.call(this);
     }
 });
@@ -1138,6 +980,46 @@ App.InfraStructure.Foto = Ext.extend(Ext.Panel, {
         }], App.InfraStructure.Foto.superclass.initComponent.call(this);
     }
 });
+
+App.InfraStructure.QRCode = Ext.extend(Ext.Panel, {
+    title: 'Código QR',
+    id: 'App.InfraStructure.QRCode',
+    border: false,
+    loadMask: true,
+    height: '50',
+    updateImage: function() {
+        this.imagepanel1.removeAll();
+        this.imagepanel1.add(new Ext.Panel({
+            layout: 'fit',
+            overflowY: 'scroll',
+            autoHeight: true,
+            html: '<img style="display: block;margin-left: auto;margin-right: auto;" height="200" src="docs/dbf54bef542feea7b493fd3f8ac18d91.png" />'
+        }));
+        this.imagepanel1.doLayout();
+    },
+    listeners: {
+        'afterrender': function(w) {
+            w.updateImage();
+        }
+    },
+    initComponent: function() {
+        this.items = [{
+            xtype: 'panel',
+            style: 'padding: 5 0 5 5',
+            region: 'center',
+            ref: 'imagepanel1',
+
+            autoScroll: true,
+            border: false,
+            layoutConfig: {
+                align: 'middle'
+            },
+            overflowY: 'scroll',
+            layout: 'fit'
+        }], App.InfraStructure.QRCode.superclass.initComponent.call(this);
+    }
+});
+
 App.InfraStructure.FotoConfi.GridView = Ext.extend(Ext.grid.GridPanel, {
     xtype: 'grid',
     id: 'App.InfraStructure.FotoConfi.GridView',
@@ -1314,23 +1196,15 @@ App.InfraStructure.Principal.listener = function(node) { //--> ACA ENTRA AL HACE
         waitMsg: App.Language.General.message_generating_file,
         url: 'index.php/plan/plan/getResumen',
         params: {
-            //            plan_category_id: 'NULL',
-            //            plan_current_version: '0',
             node_id: App.Interface.selectedNodeId
         },
         method: 'POST',
         success: function(response) {
 
             response = Ext.decode(response.responseText);
-            //            console.log(response.file_exist);
-            //            alert(response.results.plan_filename);
 
             if (response.results.plan_filename) {
                 Ext.getCmp('App.InfraStructure.planoResumen').show();
-                //                Ext.getCmp('App.InfraStructure.planoResumen').tpl.overwrite(Ext.getCmp('App.InfraStructure.planoResumen').body, {
-                //                    plan_filename: response.results.plan_filename,
-                //                    plan_id: response.results.plan_id
-                //                });
                 if (response.file_exist) {
                     Ext.getCmp('App.InfraStructure.planoResumen').update('<div id="plan_div2_' + response.results.plan_id + '"><embed  src="plans/' + response.results.plan_filename + '" id="plan_embed2_' + response.results.plan_id + '" width="100%" height="100%" type="image/svg+xml"></div>');
                     App.Plan.CurrentPlanId = response.results.plan_id;
@@ -1353,7 +1227,6 @@ App.InfraStructure.Principal.listener = function(node) { //--> ACA ENTRA AL HACE
         failure: function(response) {
             //AQUI OCULTA EL PLANO
             Ext.getCmp('App.InfraStructure.planoResumen').hide();
-            //            Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
         }
     });
     //LLAMA A LA FUNCION updateImage PARA ACTUALIZAR LA FOTO RESUMEN
@@ -1454,7 +1327,6 @@ App.InfraStructure.Principal.listener = function(node) { //--> ACA ENTRA AL HACE
                             if (typeof record === 'object') {
 
                                 field = App.InfraStructure.Info.fields[record.field];
-                                //El fieldLabel se setea en la variable field(infraestructure/base.js).
                                 if (field.xtype == 'combo' && parseInt(record.value, 10) > 0) {
                                     field.disabled = false;
                                 }
@@ -1533,239 +1405,7 @@ App.InfraStructure.Principal.listener = function(node) { //--> ACA ENTRA AL HACE
         getMap();
     }
 
-
-
-    //    App.InfraStructure.Coordinate.Store.setBaseParam('search_branch', busquedaInterna);
-    //
-    //    App.InfraStructure.Coordinate.Store.load
-    //            ({
-    //                callback: function (records)
-    //                {
-    //                    if (typeof Ext.getCmp('App.InfraStructure.Principal') !== "undefined")
-    //                    { //Fix
-    //                        if (Ext.getCmp('App.InfraStructure.Principal').map)
-    //                        { //Fix
-    ////                    mapRef = Ext.getCmp('App.InfraStructure.Principal').map;
-    //                            mapRef = mapaParaEditar;
-    //                            if (App.InfraStructure.Coordinate.Store.getTotalCount())
-    //                            {
-    //                                if (mapRef.loaded)
-    //                                {
-    //                                    mapRef.clearOverlays();
-    ////var bounds = new google.maps.LatLngBounds();
-    //
-    //
-    //                                    var nodo_click = records.length - 1;
-    //                                    console.log('nodo_click: ', nodo_click);
-    //                                    App.InfraStructure.latResumen = records[nodo_click].data.node_latitude;
-    //                                    App.InfraStructure.lonResumen = records[nodo_click].data.node_longitude;
-    ////                                    if (records.length > 1) {
-    //                                    for (var x = 0; x < records.length; x++)
-    //                                    {
-    //                                        App.InfraStructure.gmaps = records[x].data.node_id;
-    //
-    //
-    //
-    ////                                        mapRef.addMarker(new GLatLng(records[i].data.node_longitude, records[i].data.node_latitude),
-    ////                                                {
-    ////                                                    icon: G_DEFAULT_ICON,
-    ////                                                    draggable: true,
-    ////                                                    bouncy: true,
-    ////                                                    title: records[i].json.node_name,
-    ////
-    ////                                                },
-    ////                                                false,
-    ////                                                true,
-    ////                                                );
-    //
-    ////                                    } else {
-    //
-    ////                                        App.InfraStructure.latResumen = records[0].data.node_latitude;
-    ////                                        App.InfraStructure.lonResumen = records[0].data.node_longitude;
-    //                                        mapRef.addMarker(new GLatLng(records[x].data.node_longitude, records[x].data.node_latitude),
-    //                                                {
-    //                                                    icon: G_DEFAULT_ICON,
-    //                                                    draggable: true,
-    //                                                    bouncy: true,
-    //                                                    title: records[x].json.node_name
-    //                                                },
-    //                                                false,
-    //                                                true,
-    //                                                {
-    //                                                    'dragend': function (LatLng)
-    //                                                    {
-    //                                                        App.InfraStructure.Coordinate.updateCoordinate(LatLng.lat(), LatLng.lng());
-    //                                                    },
-    //                                                    'click': function (event)
-    //                                                    {
-    //                                                        var lat = event.lat();
-    //                                                        var lng = event.lng();
-    ////                                                        console.log('>>event2: ', event.lng());
-    //
-    //                                                        Ext.Ajax.request({
-    //                                                            url: 'index.php/infra/infrainfo/get',
-    //                                                            params: {
-    //                                                                node_id: node.id,
-    //                                                                lat: lat,
-    //                                                                lng: lng
-    //                                                            },
-    //                                                            success: function (response) {
-    //
-    //                                                                response = Ext.decode(response.responseText);
-    ////                                                                console.log(response.resultsInfraOtherData[0].InfraOtherDataAttribute);
-    //
-    //                                                                html = '<div><table style=" padding: 4px; text-align: left;  font: 12 normal;  font: normal 11px tahoma, arial, helvetica, sans-serif;">';
-    ////                                                                 html = html + ' <tr><td style="padding-bottom: 5px;padding-right: 3px;">';
-    ////                                                                html = html + "TIPO: ";
-    ////                                                                html = html + '</td><td style="padding-bottom: 5px;">';
-    ////                                                                html = html + response.resultsInfraNodeParent;
-    ////                                                                html = html + ' </td></tr>';
-    //                                                                for (i in response.resultsInfraOtherData) {
-    //                                                                    if (typeof response.resultsInfraOtherData[i] === 'object') {
-    //                                                                        for (x in response.resultsInfraOtherData[i].InfraOtherDataAttribute) {
-    //                                                                            if (x == 0 || x == 2 || x == 3 || x == 5 || x == 16 || x == 17 || x == 18 || x == 19) {
-    //                                                                                record = response.resultsInfraOtherData[i].InfraOtherDataAttribute[x];
-    //                                                                                if (typeof record === 'object') {
-    //                                                                                    field = App.InfraStructure.OtrosDatos.fields[Ext.util.Format.trim(record.infra_other_data_attribute_type)];
-    //                                                                                    if (record.InfraOtherDataValue[0]) {
-    //                                                                                        if (record.infra_other_data_attribute_type == 5) { //Tipo Combo
-    //                                                                                            field.value = record.InfraOtherDataValue[0].infra_other_data_option_id;
-    //                                                                                        } else {
-    //                                                                                            field.value = (record.InfraOtherDataValue[0] ? record.InfraOtherDataValue[0].infra_other_data_value_value : '');
-    //                                                                                        }
-    //                                                                                    } else {
-    //                                                                                        field.value = (record.InfraOtherDataValue[0] ? record.InfraOtherDataValue[0].infra_other_data_value_value : '');
-    //                                                                                    }
-    //
-    //                                                                                    if (field.value == null)
-    //                                                                                        field.value = '';
-    ////                                                                                    field.fieldLabel = record.infra_other_data_attribute_name;
-    ////                                                                                    html = html + '<tr><td style="padding-bottom: 5px;padding-right: 3px;"><label>';
-    ////                                                                                    html = html + field.fieldLabel + " : ";
-    ////                                                                                    html = html + '</label></td><td style="padding-bottom: 5px;">';
-    ////                                                                                    html = html + field.value;
-    ////                                                                                    html = html + ' </td></tr>';
-    ////
-    ////                                                                                    console.log(field.fieldLabel);
-    ////                                                                                    console.log(field.value);
-    //
-    //                                                                                }
-    //
-    //                                                                            }
-    //
-    //                                                                        }
-    //                                                                    }
-    //                                                                }
-    //
-    //                                                                for (i in response.resultsInfraInfo) {
-    //                                                                    record = response.resultsInfraInfo[i];
-    //                                                                    if (typeof record === 'object') {
-    //                                                                        if (i == 1 || i == 2 || i == 0) {
-    //                                                                            html = html + ' <tr><td style="padding-bottom: 5px;padding-right: 3px;">';
-    //                                                                            html = html + record.label + ": ";
-    //                                                                            html = html + '</td><td style="padding-bottom: 5px;">';
-    //                                                                            html = html + record.value;
-    //                                                                            html = html + ' </td></tr>';
-    ////
-    ////                                                                            console.log(record.field);
-    ////                                                                            console.log(record.value);
-    //                                                                        }
-    //                                                                    }
-    //                                                                }
-    //
-    //                                                                html = html + "</div></table>";
-    //                                                                var orderFormWindow = Ext.extend(Ext.Window, {
-    //                                                                    initComponent: function () {
-    //                                                                        Ext.apply(this, {
-    //                                                                            title: 'Informaci&oacute;n Resumen',
-    //                                                                            closable: true,
-    //                                                                            width: 400,
-    //                                                                            height: 270,
-    //                                                                            plain: false,
-    //                                                                            layout: 'fit',
-    //                                                                            modal: true,
-    //                                                                            maximizable: true,
-    //                                                                            padding: 1,
-    //                                                                            items: [
-    //                                                                                new Ext.Panel({
-    //                                                                                    html: html,
-    //                                                                                    autoScroll: true,
-    //                                                                                })
-    //                                                                            ],
-    //                                                                            buttons: [{
-    //                                                                                    xtype: 'button',
-    //                                                                                    text: App.Language.General.close,
-    //                                                                                    handler: function () {
-    //                                                                                        orderForm.hide(this);
-    //                                                                                    }
-    //                                                                                }]
-    //                                                                        });
-    //                                                                        orderFormWindow.superclass.initComponent.call(this);
-    //                                                                    }
-    //                                                                });
-    //                                                                var orderForm = new orderFormWindow();
-    //                                                                orderForm.show(this);
-    ////                                                                Ext.MessageBox.alert(
-    ////                                                                             'Informaci&oacute;n Resumen',
-    ////                                                                             "<br>"+html
-    ////                                                                                );
-    //                                                            }
-    //                                                        });
-    //                                                        //ABRE EL MAPA CON EL CLICK EN EL PUNTO MARCADO 
-    ////                 alert(node_id);
-    ////                                                         App.InfraStructure.expandDeepNode(node_id); 
-    ////                                            
-    //
-    //                                                    }
-    //                                                });
-    ////                                    }
-    //
-    //                                    }
-    //
-    //                                    mapRef.zoomLevel = parseFloat(18);
-    //                                } else {
-    //                                    mapRef.onMapReady = function () {
-    //                                        mapRef.clearOverlays();
-    //                                        for (var i = 0; i < records.length; i++)
-    //                                        {
-    //
-    //                                            mapRef.addMarker(new GLatLng(records[i].data.node_longitude, records[i].data.node_latitude), {
-    //                                                icon: G_DEFAULT_ICON,
-    //                                                draggable: true,
-    //                                                bouncy: true,
-    //                                                title: records[i].json.node_name
-    //
-    //                                            },
-    //                                                    true,
-    //                                                    true,
-    //                                                    {
-    //                                                        'dragend': function (LatLng)
-    //                                                        {
-    //                                                            App.InfraStructure.Coordinate.updateCoordinate(LatLng.lat(), LatLng.lng());
-    //                                                        }
-    //                                                    });
-    //                                        }
-    //
-    //                                        mapRef.zoomLevel = parseFloat(infra_default_zoomLevel);
-    //                                    }
-    //                                }
-    //                            } else {
-    //
-    //
-    //                                if (mapRef.loaded)
-    //                                {
-    //
-    //                                    mapRef.clearOverlays();
-    //                                    mapRef.geoCodeLookup(infra_default_start);
-    //                                }
-    //                            }
-    //                        }
-    //                    }
-    //                }
-    //            });
-
-    if (node && node.id) // && node.found_search == false) 
-    {
+    if (node && node.id) {
         node.expand();
         Ext.getCmp('App.StructureTree.Tree').getSelectionModel().select(node);
         App.StructureTree.Tree.refreshPathBar(node);

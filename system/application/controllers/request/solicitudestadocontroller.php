@@ -13,7 +13,7 @@ class SolicitudEstadoController extends APP_Controller
 
     function get ()
     {
-        $request = Doctrine_Core::getTable('SolicitudEstado')->findAll();
+        $request = Doctrine_Core::getTable('SolicitudEstado')->retrieveAll($this->input->post('query'));
         if ($request->count()) {
             echo '({"total":"' . $request->count() . '", "results":' . $this->json->encode($request->toArray()) . '})';
         } else {

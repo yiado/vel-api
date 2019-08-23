@@ -71,3 +71,31 @@ App.ModuleActions[8012] = {
         b.ownerCt.ownerCt.doLayout();
     }
 }
+
+App.ModuleActions[8013] = {
+    xtype: 'splitbutton',
+    text: 'Estados',
+    hidden: true,
+    iconCls: 'add_icon',
+    menu: [{
+        text: 'Recepcionada',
+        iconCls: 'add_icon',
+        handler: function() {}
+    }, {
+        text: 'En proceso',
+        iconCls: 'add_icon',
+        handler: function() {}
+    }, {
+        text: 'Terminadas',
+        iconCls: 'add_icon',
+        handler: function() {}
+    }, {
+        text: 'En presupuesto',
+        iconCls: 'add_icon',
+        handler: function() {}
+    }, {
+        text: 'Rechazada',
+        iconCls: 'add_icon',
+        handler: function() {}
+    }],
+}

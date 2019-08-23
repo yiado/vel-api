@@ -10,6 +10,7 @@ App.Request.Service = Ext.extend(Ext.Panel, {
         autoScroll: 'auto',
         items: [
             App.ModuleActions[8009],
+            App.ModuleActions[8013],
             {
                 xtype: 'spacer',
                 width: 10
@@ -317,7 +318,7 @@ App.Request.Service.Grilla = {
             align: 'center'
         }, {                    
             dataIndex: 'service_commentary',
-            header: 'Comentario',
+            header: 'Requerimiento',
             width: 100,
             sortable: true
         }
@@ -401,7 +402,7 @@ App.Request.addRequestServiceByNodeWindow = Ext.extend(Ext.Window, {
                     xtype: 'textarea',
                     anchor: '100%',
                     name: 'service_commentary',
-                    fieldLabel: 'Comentarios',
+                    fieldLabel: 'Requerimiento',
                     allowBlank: false
                 }]
             }],
@@ -518,7 +519,7 @@ App.Request.editRequestServiceByNodeWindow = Ext.extend(Ext.Window, {
                     allowBlank: false
                 }, {
                     xtype: 'textarea',
-                    fieldLabel: 'Comentarios',
+                    fieldLabel: 'Requerimiento',
                     id: 'App.RequestServiceEdit.Coment',
                     name: 'service_commentary',
                     anchor: '100%',
