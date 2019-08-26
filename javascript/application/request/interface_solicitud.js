@@ -199,7 +199,7 @@ App.Request.Asset = Ext.extend(Ext.Panel, {
                             id: 'column_start_date',
                             frame: true,
                             items: [{
-                                columnWidth: .5,
+                                bodyStyle: 'margin-right: 50px;',
                                 layout: 'form',
                                 id: 'column_start_date1',
                                 items: [{
@@ -216,7 +216,6 @@ App.Request.Asset = Ext.extend(Ext.Panel, {
                                     }
                                 }]
                             }, {
-                                columnWidth: .5,
                                 layout: 'form',
                                 items: [{
                                     xtype: 'datefield',

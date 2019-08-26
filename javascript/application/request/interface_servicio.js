@@ -180,7 +180,7 @@ App.Request.Service.formSearching = {
                             id: 'column_start_service_date',
                             frame: true,
                             items: [{
-                                    columnWidth: .5,
+                                    bodyStyle: 'margin-right: 50px;',
                                     layout: 'form',
                                     id: 'column_start_service_date1',
                                     items: [{
@@ -197,7 +197,6 @@ App.Request.Service.formSearching = {
                                             }
                                         }]
                                 }, {
-                                    columnWidth: .5,
                                     layout: 'form',
                                     items: [{
                                             xtype: 'datefield',

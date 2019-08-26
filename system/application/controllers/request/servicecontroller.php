@@ -49,9 +49,6 @@ class ServiceController extends APP_Controller {
             $service->service_commentary = $this->input->post('service_commentary');
             $service->save();
 
-            //Enviar correo de Alerta de creación de Service
-            $this->sendNotification($service->service_id);
-
             $serviceLog = new ServiceLog();
             $serviceLog->user_id = $user_id;
             $serviceLog->service_id = $service->service_id;
@@ -65,6 +62,9 @@ class ServiceController extends APP_Controller {
             $msg = $this->translateTag('General', 'operation_successful');
 
             $conn->commit();
+            
+            //Enviar correo de Alerta de creación de Service
+            $this->sendNotification($service);
         } catch (Exception $e) {
             //Si hay error, rollback de los cambios en la base de datos
             $conn->rollback();
@@ -247,36 +247,23 @@ class ServiceController extends APP_Controller {
 
         echo '{"success": true, "file": "temp/' . $this->input->post('file_name') . '.xlsx"}';
     }
+    
+    function sendNotification($service) {
+        $to = trim($service->User->user_email);
 
-    function sendNotification($service_id) {
+        $subject = 'Aviso de Creación de servicio';
 
-
-        $q = Doctrine_Query::create()
-                ->from('Service s')
-                ->innerJoin('s.ServiceStatus se')
-                ->innerJoin('s.ServiceType st')
-                ->innerJoin('s.User u')
-                ->where('service_id = ?', $service_id);
-
-        $results = $q->fetchOne();
-
-        $CI = & get_instance();
-        $CI->load->library('NotificationUser');
-
-        $to = trim($results['User']['user_email']);
-
-        $subject = 'Aviso de Creación de service';
-        //Formatear Fecha
-        $date = new DateTime($results['service_date']);
+        $date = new DateTime($service->solicitud_fecha);
         $fecha = $date->format('d/m/Y H:i');
-
-        $body = 'Tipo de Servicio :' . $results['ServiceType']['service_type_name'] . "\n"; //CUERPO DEL MENSAJE
-        $body .= 'Estado del Servicio :' . $results['ServiceStatus']['service_status_name'] . "\n";
-        $body .= 'Nombre de Usuario :' . $results['User']['user_username'] . "\n";
-        $body .= 'Fecha de Servicio :' . $fecha . "\r\n";
-        $body .= 'Teléfono :' . $results['service_phone'] . "\r\n";
-        $body .= 'Organismo :' . $results['service_organism'] . "\r\n";
-        $body .= 'Comentario de Usuario :' . $results['service_commentary'] . "\r\n";
+        
+        $body = "Tipo de Servicio : {$service->ServiceType->service_type_name}\n";
+        $body .= "Estado del Servicio : {$service->ServiceStatus->service_status_name}\n";
+        $body .= "Nombre de Usuario : {$service->User->user_username}\n";
+        $body .= "Fecha de Servicio : {$fecha}\r\n";
+        $body .= "Teléfono : {$service->service_phone}\r\n";
+        $body .= "Organismo : {$service->service_organism}\r\n";
+        $body .= "Comentario de Usuario : {$service->service_commentary}\r\n";
+        
     }
 
 }

@@ -86,10 +86,6 @@ App.ModuleActions[8013] = {
         iconCls: 'add_icon',
         handler: function() {}
     }, {
-        text: 'Terminadas',
-        iconCls: 'add_icon',
-        handler: function() {}
-    }, {
         text: 'En presupuesto',
         iconCls: 'add_icon',
         handler: function() {}
@@ -97,5 +93,9 @@ App.ModuleActions[8013] = {
         text: 'Rechazada',
         iconCls: 'add_icon',
         handler: function() {}
-    }],
+    }, {
+        text: 'Terminadas',
+        iconCls: 'add_icon',
+        handler: function() {}
+    }]
 }

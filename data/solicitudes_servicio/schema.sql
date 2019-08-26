@@ -1,3 +1,22 @@
+
+
+DROP TABLE IF EXISTS `service_status`;
+CREATE TABLE `service_status`  (
+  `service_status_id` int(11) NOT NULL AUTO_INCREMENT,
+  `service_status_name` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `service_status_commentary` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`service_status_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+
+
+DROP TABLE IF EXISTS `service_type`;
+CREATE TABLE `service_type`  (
+  `service_type_id` int(11) NOT NULL AUTO_INCREMENT,
+  `service_type_name` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `service_type_commentary` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`service_type_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+
 DROP TABLE IF EXISTS `service`;
 CREATE TABLE `service`  (
   `service_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -32,20 +51,4 @@ CREATE TABLE `service_log`  (
   INDEX `service_log_ibfk_2`(`user_id`) USING BTREE,
   CONSTRAINT `service_log_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `service` (`service_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `service_log_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
-
-DROP TABLE IF EXISTS `service_status`;
-CREATE TABLE `service_status`  (
-  `service_status_id` int(11) NOT NULL AUTO_INCREMENT,
-  `service_status_name` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `service_status_commentary` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`service_status_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
-
-DROP TABLE IF EXISTS `service_type`;
-CREATE TABLE `service_type`  (
-  `service_type_id` int(11) NOT NULL AUTO_INCREMENT,
-  `service_type_name` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `service_type_commentary` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`service_type_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;

@@ -82,13 +82,9 @@ class SolicitudController extends APP_Controller {
                 $solicitud->solicitud_oc_numero = $solicitud_oc_numero;
                 $solicitud->solicitud_comen_user = $solicitud_comen_user;
 
-
                 //ESTO AUMENTA LA CUENTA DE LOS ARCHIVOS DEL ACTIVO
                 $solicitud->save();
-
-                //Enviar correo de Alerta de creación de Solicitud
-                $this->sendNotification($solicitud->solicitud_id);
-
+                
                 $solicitudLog = new SolicitudLog();
                 $solicitudLog->user_id = $user_id;
                 $solicitudLog->solicitud_id = $solicitud->solicitud_id;
@@ -142,6 +138,9 @@ class SolicitudController extends APP_Controller {
                 // 
                 // Si todo OK, commit a la base de datos
                 $conn->commit();
+                
+                //Enviar correo de Alerta de creación de Solicitud
+                $this->sendNotification($solicitud);
             } catch (Exception $e) {
                 //Si hay error, rollback de los cambios en la base de datos
                 $conn->rollback();
@@ -627,38 +626,25 @@ class SolicitudController extends APP_Controller {
         echo $json_data;
     }
 
-    function sendNotification($solicitud_id) {
+    function sendNotification($solicitud) {
+        $to = trim($solicitud->User->user_email);
 
+        $subject = 'Aviso de Creación de solicitud';
 
-        $q = Doctrine_Query::create()
-                ->from('Solicitud s')
-                ->innerJoin('s.SolicitudEstado se')
-                ->innerJoin('s.SolicitudType st')
-                ->innerJoin('s.User u')
-                ->where('solicitud_id = ?', $solicitud_id);
-
-        $results = $q->fetchOne();
-
-        $CI = & get_instance();
-        $CI->load->library('NotificationUser');
-
-        $to = trim($results['User']['user_email']); //CORREO DESTINATARIO
-
-        $subject = 'Aviso de Creación de solicitud'; //ASUNTO
-        //Formatear Fecha
-        $date = new DateTime($results['solicitud_fecha']);
+        $date = new DateTime($solicitud->solicitud_fecha);
         $fecha = $date->format('d/m/Y H:i');
 
-        $body = 'Tipo de Solicitud :' . $results['SolicitudType']['solicitud_type_nombre'] . "\n"; //CUERPO DEL MENSAJE
-        $body .= 'Estado de Solicitud :' . $results['SolicitudEstado']['solicitud_estado_nombre'] . "\n";
-        $body .= 'Folio de Solicitud :' . $results['solicitud_folio'] . "\n";
-        $body .= 'Nombre de Usuario :' . $results['User']['user_username'] . "\n";
-        $body .= 'Fecha de Solicitud :' . $fecha . "\r\n";
-        $body .= 'Nombre de Documento de Factura :' . $results['solicitud_factura_nombre'] . "\r\n";
-        $body .= 'Numero de Factura :' . $results['solicitud_factura_numero'] . "\r\n";
-        $body .= 'Nombre de Documento de Orden de Compra :' . $results['solicitud_oc_nombre'] . "\r\n";
-        $body .= 'Numero de Orden de Compra :' . $results['solicitud_oc_numero'] . "\r\n";
-        $body .= 'Comentario de Usuario :' . $results['solicitud_comen_user'] . "\r\n";
+        $body = "Tipo de Solicitud: {$solicitud->SolicitudType->solicitud_type_nombre} :\n";
+        $body .= "Estado de Solicitud: {$solicitud->SolicitudEstado->solicitud_estado_nombre}\n";
+        $body .= "Folio de Solicitud: {$solicitud->solicitud_folio}\n";
+        $body .= "Nombre de Usuario: {$solicitud->User->user_name}\n";
+        $body .= "Fecha de Solicitud: {$fecha}\r\n";
+        $body .= "Nombre de Documento de Factura: {$solicitud->solicitud_factura_nombre}\r\n";
+        $body .= "Numero de Factura: {$solicitud->solicitud_factura_numero}\r\n";
+        $body .= "Nombre de Documento de Orden de Compra: {$solicitud->solicitud_oc_nombre}\r\n";
+        $body .= "Numero de Orden de Compra: {$solicitud->solicitud_oc_numero}\r\n";
+        $body .= "Comentario de Usuario: {$solicitud->solicitud_comen_user}\r\n";
+        
     }
 
 }
