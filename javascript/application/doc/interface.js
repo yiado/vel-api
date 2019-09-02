@@ -404,7 +404,7 @@ App.Document.PrincipalClase = Ext.extend(Ext.Panel, {
             hidden: true,
             cls: 'formCls',
             autoScroll: true,
-            height: 260,
+            height: 280,
             margins: '5 5 0 5',
             padding: '5 5 5 5',
             border: true,
@@ -495,7 +495,7 @@ App.Document.PrincipalClase = Ext.extend(Ext.Panel, {
                         id: 'column_start_date_interna',
                         frame: true,
                         items: [{
-                            columnWidth: .5,
+                            bodyStyle: 'margin-right: 50px;',
                             layout: 'form',
                             id: 'column_start_date_interna_1',
                             items: [{
@@ -512,7 +512,6 @@ App.Document.PrincipalClase = Ext.extend(Ext.Panel, {
                                 }
                             }]
                         }, {
-                            columnWidth: .5,
                             layout: 'form',
                             items: [{
                                 xtype: 'datefield',
@@ -544,7 +543,7 @@ App.Document.PrincipalClase = Ext.extend(Ext.Panel, {
                         id: 'column_start_date',
                         frame: true,
                         items: [{
-                            columnWidth: .5,
+                            bodyStyle: 'margin-right: 50px;',
                             layout: 'form',
                             id: 'column_start_date1',
                             items: [{
@@ -561,7 +560,6 @@ App.Document.PrincipalClase = Ext.extend(Ext.Panel, {
                                 }
                             }]
                         }, {
-                            columnWidth: .5,
                             layout: 'form',
                             items: [{
                                 xtype: 'datefield',
@@ -592,7 +590,7 @@ App.Document.PrincipalClase = Ext.extend(Ext.Panel, {
                         layout: 'column',
                         frame: true,
                         items: [{
-                            columnWidth: .5,
+                            bodyStyle: 'margin-right: 50px;',
                             layout: 'form',
                             items: [{
                                 xtype: 'datefield',
@@ -607,7 +605,6 @@ App.Document.PrincipalClase = Ext.extend(Ext.Panel, {
                                 }
                             }]
                         }, {
-                            columnWidth: .5,
                             layout: 'form',
                             items: [{
                                 xtype: 'datefield',

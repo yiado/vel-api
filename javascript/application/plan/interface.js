@@ -159,7 +159,7 @@ App.Plan.AllVersionsGrid = Ext.extend(Ext.Panel, {
             frame: true,
             hidden: true,
             cls: 'formCls',
-            height: 'auto',
+            height: '200',
             margins: '5 5 0 5',
             autoScroll: true,
             padding: '5 5 5 5',
@@ -248,7 +248,7 @@ App.Plan.AllVersionsGrid = Ext.extend(Ext.Panel, {
                         layout: 'column',
                         frame: true,
                         items: [{
-                            columnWidth: .5,
+                            bodyStyle: 'margin-right: 50px;',
                             layout: 'form',
                             items: [{
                                 xtype: 'datefield',
@@ -264,7 +264,7 @@ App.Plan.AllVersionsGrid = Ext.extend(Ext.Panel, {
                                 }
                             }]
                         }, {
-                            columnWidth: .5,
+                            margin: '5 5 5 5',
                             layout: 'form',
                             items: [{
                                 xtype: 'datefield',

@@ -1,3 +1,5 @@
+/* global Ext, App */
+
 Ext.namespace('App.Report');
 App.Report.NameSpaces = [];
 
@@ -9,16 +11,12 @@ App.Report.moduleActivate = function() {
         return new Ext.Panel({
             border: false,
             title: App.Language.Report.reports
-        })
+        });
     }
-}
+};
 
 App.ModuleActions[9000] = {
-    //    xtype: 'button',
     iconCls: 'reports_icon_32',
     text: App.Language.Report.reports,
-
-    //    scale: 'large',
-    //    iconAlign: 'top',
     module: 'Report'
-}
+};

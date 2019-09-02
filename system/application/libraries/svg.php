@@ -23,9 +23,6 @@ class SVG {
         }
 
         foreach ($obj as $k => $el) {
-//			print_r($k);
-//                        echo '-------------------el--------------------';
-//                        print_r($el);
             if ($k == "CADConverterDwgEntity") {
                 
                 $ahandle = $el->Handle;
@@ -51,6 +48,8 @@ class SVG {
                     $buf[$alayer][] = "<path  d='" . $el['d'] . "' stroke='" . $el['stroke'] . "' stroke-width='" . $el['stroke-width'] . "' " .
                             "fill='" . $el['fill'] . "'/>\n";
                 }
+            } elseif ($k == 'polyline') {
+                $buf[$alayer][] = "<polyline points='{$el['points']}' style='{$el['style']}'/>\n";
             }
         }
         

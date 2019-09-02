@@ -1,5 +1,6 @@
+/* global Ext, App */
+
 App.Request.Solicitud_id = null;
-App.Request.allowRootGui = true;
 
 App.Interface.addToModuleMenu('request', App.ModuleActions[8000]);
 
@@ -16,10 +17,21 @@ App.Request.Principal = Ext.extend(Ext.TabPanel, {
     }
 });
 
+
+App.Request.Principal.listener = function(node) {
+    if (node && node.id) {
+        App.Request.Services.Store.setBaseParam('node_id', node.id);
+        App.Request.Services.Store.load();
+
+        App.Request.Solicitudes.Store.setBaseParam('node_id', node.id);
+        App.Request.Solicitudes.Store.load();
+    }
+};
+
 App.Request.Asset = Ext.extend(Ext.Panel, {
     title: App.Language.Asset.assets,
     border: false,
-    id: 'App.Request.Principal',
+    id: 'App.Request.Activos',
     loadMask: true,
     layout: 'border',
     tbar: {
@@ -33,7 +45,8 @@ App.Request.Asset = Ext.extend(Ext.Panel, {
                 hidden: (App.Security.Actions[8001] === undefined ? true : false)
             }, {
                 xtype: 'tbseparator',
-                width: 10
+                width: 10,
+                hidden: (App.Security.Actions[8001] === undefined ? true : false)
             },
             App.ModuleActions[8002],
             {
@@ -106,7 +119,7 @@ App.Request.Asset = Ext.extend(Ext.Panel, {
                         labelWidth: 150,
                         items: [{
                             xtype: 'combo',
-                            fieldLabel: 'Tipo de Solicitud',
+                            fieldLabel: App.Language.Request.type_of_request,
                             anchor: '95%',
                             id: 'App.Request.SearchTipo',
                             store: App.Request.SolicitudTipos.Store,
@@ -133,7 +146,7 @@ App.Request.Asset = Ext.extend(Ext.Panel, {
                             }
                         }, {
                             xtype: 'combo',
-                            fieldLabel: 'Estado de Solicitud',
+                            fieldLabel: App.Language.Request.request_status,
                             triggerAction: 'all',
                             anchor: '95%',
                             id: 'App.Request.SearchEstado',
@@ -161,13 +174,13 @@ App.Request.Asset = Ext.extend(Ext.Panel, {
                         }, {
                             xtype: 'textfield',
                             id: 'App.Request.SearchFolio',
-                            fieldLabel: 'Nº Folio',
+                            fieldLabel: App.Language.Request.folio_number,
                             name: 'solicitud_folio',
                             anchor: '95%'
                         }, {
                             xtype: 'textfield',
                             id: 'App.Request.SearchUser',
-                            fieldLabel: 'Nombre',
+                            fieldLabel: App.Language.General.name,
                             name: 'user_username',
                             anchor: '95%',
                             disabled: App.Security.Session.user_type === 'A' ? false : true,
@@ -237,25 +250,25 @@ App.Request.Asset = Ext.extend(Ext.Panel, {
                         }, {
                             xtype: 'textfield',
                             id: 'App.Request.SearchFactura',
-                            fieldLabel: 'Nombre Factura',
+                            fieldLabel: App.Language.Request.invoice_name,
                             name: 'solicitud_factura_nombre',
                             anchor: '100%'
                         }, {
                             xtype: 'textfield',
                             id: 'App.Request.SearchNumFactura',
-                            fieldLabel: 'Nº Factura',
+                            fieldLabel: App.Language.Request.invoice_number,
                             name: 'solicitud_factura_numero',
                             anchor: '100%'
                         }, {
                             xtype: 'textfield',
                             id: 'App.Request.SearchOC',
-                            fieldLabel: 'Nombre Orden de Compra',
+                            fieldLabel: App.Language.Request.purchase_order_name,
                             name: 'solicitud_oc_nombre',
                             anchor: '100%'
                         }, {
                             xtype: 'textfield',
                             id: 'App.Request.SearchNumOC',
-                            fieldLabel: 'Nº Orden de Compra',
+                            fieldLabel: App.Language.Request.purchase_order_number,
                             name: 'solicitud_oc_numero',
                             anchor: '100%'
                         }]
@@ -277,9 +290,9 @@ App.Request.Asset = Ext.extend(Ext.Panel, {
                     'rowdblclick': function(grid, rowIndex) {
                         record = grid.getStore().getAt(rowIndex);
                         if (App.Security.Session.user_username === record.data.User.user_username) {
-                            w = new App.Request.editRequestByNodeWindow({ title: 'Editar Solicitud' });
+                            w = new App.Request.editRequestByNodeWindow({ title: App.Language.Request.edit_request });
                             w.show();
-                            
+
                             App.Request.Solicitud_id = record.data.solicitud_id;
                             Ext.getCmp('App.RequestEdit.Alta').setValue(record.data.SolicitudType.solicitud_type_id);
                             Ext.getCmp('App.RequestEdit.Alta').setDisabled(true);
@@ -304,7 +317,7 @@ App.Request.Asset = Ext.extend(Ext.Panel, {
                     forceFit: true,
                     getRowClass: function(record, index) {
                         var c = record.get('solicitud_estado_id');
-                        if (c == 3) {
+                        if (c === 3) {
                             return 'heavenly-row';
                         }
                     }
@@ -408,10 +421,10 @@ App.Request.editRequestByNodeWindow = Ext.extend(Ext.Window, {
             bodyStyle: 'padding: 10 10px 10',
             items: [{
                 xtype: 'fieldset',
-                title: 'Datos Solicitante',
+                title: App.Language.Request.applicant_details,
                 items: [{
                     xtype: 'displayfield',
-                    fieldLabel: 'Nombre de Usuario',
+                    fieldLabel: App.Language.General.user_name,
                     name: 'user_name',
                     id: 'App.RequestEdit.Usuario',
                     anchor: '100%'
@@ -424,23 +437,23 @@ App.Request.editRequestByNodeWindow = Ext.extend(Ext.Window, {
                 }]
             }, {
                 xtype: 'fieldset',
-                title: 'Datos Solicitud',
+                title: App.Language.Request.data_request,
                 ref: 'solicitud',
                 items: [{
                     xtype: 'displayfield',
-                    fieldLabel: 'Folio',
+                    fieldLabel: App.Language.Request.folio,
                     name: 'solicitud_folio',
                     id: 'App.RequestEdit.Folio',
                     anchor: '100%'
                 }, {
                     xtype: 'displayfield',
-                    fieldLabel: 'Fecha',
+                    fieldLabel: App.Language.General.date,
                     name: 'solicitud_fecha',
                     id: 'App.RequestEdit.Fecha',
                     anchor: '100%'
                 }, {
                     xtype: 'combo',
-                    fieldLabel: 'Tipo de Solicitud',
+                    fieldLabel: App.Language.Request.type_of_request,
                     anchor: '100%',
                     id: 'App.RequestEdit.Alta',
                     store: App.Request.SolicitudTipos.Store,
@@ -458,7 +471,7 @@ App.Request.editRequestByNodeWindow = Ext.extend(Ext.Window, {
                 }, {
                     xtype: 'fileuploadfield',
                     emptyText: 'Seleccione Factura',
-                    fieldLabel: 'Factura',
+                    fieldLabel: App.Language.Request.bill,
                     ref: 'solicitud_factura',
                     id: 'App.RequestEdit.Factura',
                     anchor: '100%',
@@ -471,7 +484,7 @@ App.Request.editRequestByNodeWindow = Ext.extend(Ext.Window, {
                     }
                 }, {
                     xtype: 'textfield',
-                    fieldLabel: 'Nº Factura',
+                    fieldLabel: App.Language.Request.invoice_number,
                     id: 'App.RequestEdit.FacturaNum',
                     name: 'solicitud_factura_numero',
                     anchor: '100%',
@@ -479,7 +492,7 @@ App.Request.editRequestByNodeWindow = Ext.extend(Ext.Window, {
                 }, {
                     xtype: 'fileuploadfield',
                     emptyText: 'Seleccione Orden de Compra',
-                    fieldLabel: 'Orden de Compra',
+                    fieldLabel: App.Language.Request.purchase_order,
                     ref: 'solicitud_oc',
                     id: 'App.RequestEdit.OC',
                     anchor: '100%',
@@ -492,7 +505,7 @@ App.Request.editRequestByNodeWindow = Ext.extend(Ext.Window, {
                     }
                 }, {
                     xtype: 'textfield',
-                    fieldLabel: 'Nº Orden de Compra',
+                    fieldLabel: App.Language.Request.purchase_order_number,
                     id: 'App.RequestEdit.OCNum',
                     name: 'solicitud_oc_numero',
                     anchor: '100%',
@@ -502,19 +515,19 @@ App.Request.editRequestByNodeWindow = Ext.extend(Ext.Window, {
                     anchor: '100%',
                     id: 'App.RequestEdit.Coment',
                     name: 'solicitud_comen_user',
-                    fieldLabel: 'Comentarios',
+                    fieldLabel: App.Language.General.comment,
                     allowBlank: false
 
                 }]
             }, {
                 xtype: 'fieldset',
-                title: 'Rechazo',
-                hidden: record.data.SolicitudEstado.solicitud_estado_id == 3 ?false:true,
+                title: App.Language.Request.rejection,
+                hidden: record.data.SolicitudEstado.solicitud_estado_id === 3 ? false : true,
                 items: [{
                     xtype: 'displayfield',
                     anchor: '100%',
                     name: 'solicitud_comen_admin',
-                    fieldLabel: 'Rechazada Por',
+                    fieldLabel: App.Language.Request.rejected_by,
                     id: 'App.RequestEdit.ComentAdmin',
                     allowBlank: false
                 }]
@@ -528,7 +541,7 @@ App.Request.editRequestByNodeWindow = Ext.extend(Ext.Window, {
                 text: 'Editar',
                 ref: '../saveButton',
                 handler: function(b) {
-                    if (Ext.getCmp('App.RequestEdit.Factura').getValue() == Ext.getCmp('App.RequestEdit.OC').getValue()) {
+                    if (Ext.getCmp('App.RequestEdit.Factura').getValue() === Ext.getCmp('App.RequestEdit.OC').getValue()) {
                         Ext.FlashMessage.alert('Los Documentos Factura y Orden de Compra no pueden ser Iguales');
                     } else {
                         form = b.ownerCt.ownerCt.getForm();
@@ -562,16 +575,6 @@ App.Request.editRequestByNodeWindow = Ext.extend(Ext.Window, {
     }
 });
 
-App.Request.Principal.listener = function(node) {
-    if (node && node.id) {
-        App.Request.Services.Store.setBaseParam('node_id', node.id);
-        App.Request.Services.Store.load();
-        
-        App.Request.Solicitudes.Store.setBaseParam('node_id', node.id);
-        App.Request.Solicitudes.Store.load();
-    }
-};
-
 App.Request.addAprobarWindow = Ext.extend(Ext.Window, {
     width: (screen.width < 500) ? screen.width - 50 : 500,
     height: 420,
@@ -587,28 +590,28 @@ App.Request.addAprobarWindow = Ext.extend(Ext.Window, {
             bodyStyle: 'padding: 10 10px 10',
             items: [{
                 xtype: 'fieldset',
-                title: 'Datos Solicitante',
+                title: App.Language.Request.applicant_details,
                 items: [{
                     xtype: 'displayfield',
-                    fieldLabel: 'Folio',
+                    fieldLabel: App.Language.Request.folio,
                     name: 'solicitud_folio',
                     id: 'App.Request.Folio',
                     anchor: '100%'
                 }, {
                     xtype: 'displayfield',
-                    fieldLabel: 'Fecha de Creación',
+                    fieldLabel: App.Language.General.creation_date,
                     name: 'node_name',
                     id: 'App.Request.Fecha',
                     anchor: '100%'
                 }, {
                     xtype: 'displayfield',
-                    fieldLabel: 'Tipo de Solicitud',
+                    fieldLabel: App.Language.Request.type_of_request,
                     name: 'solicitud_type',
                     id: 'App.Request.TipoSolicitud',
                     anchor: '100%'
                 }, {
                     xtype: 'displayfield',
-                    fieldLabel: 'Nombre de Usuario',
+                    fieldLabel: App.Language.General.user_name,
                     name: 'node_name',
                     id: 'App.Request.Usuario',
                     anchor: '100%'
@@ -621,34 +624,34 @@ App.Request.addAprobarWindow = Ext.extend(Ext.Window, {
                 }]
             }, {
                 xtype: 'fieldset',
-                title: 'Datos Solicitud',
+                title: App.Language.Request.data_request,
                 items: [{
                     xtype: 'displayfield',
-                    fieldLabel: 'Factura',
+                    fieldLabel: App.Language.Request.bill,
                     name: 'solicitud_factura',
                     id: 'App.Request.FacturaNombre',
                     anchor: '100%'
                 }, {
                     xtype: 'displayfield',
-                    fieldLabel: 'Nº Factura',
+                    fieldLabel: App.Language.Request.invoice_number,
                     name: 'solicitud_factura_numero',
                     id: 'App.Request.FacturaNumero',
                     anchor: '100%'
                 }, {
                     xtype: 'displayfield',
-                    fieldLabel: 'Orden de Compra',
+                    fieldLabel: App.Language.Request.purchase_order,
                     name: 'solicitud_oc_nombre',
                     id: 'App.Request.OCNombre',
                     anchor: '100%'
                 }, {
                     xtype: 'displayfield',
-                    fieldLabel: 'Nº Orden de Compra',
+                    fieldLabel: App.Language.Request.purchase_order_number,
                     name: 'solicitud_oc_numero',
                     id: 'App.Request.OCNumero',
                     anchor: '100%'
                 }, {
                     xtype: 'displayfield',
-                    fieldLabel: 'Comentarios',
+                    fieldLabel: App.Language.General.comment,
                     name: 'solicitud_comentarios',
                     id: 'App.Request.Comentario',
                     anchor: '100%'
@@ -704,29 +707,29 @@ App.Request.addRechazarWindow = Ext.extend(Ext.Window, {
             bodyStyle: 'padding: 10 10px 10',
             items: [{
                 xtype: 'fieldset',
-                title: 'Datos Solicitante',
+                title: App.Language.Request.applicant_details,
                 items: [{
                     xtype: 'displayfield',
-                    fieldLabel: 'Folio',
+                    fieldLabel: App.Language.Request.folio,
                     name: 'solicitud_folio',
                     id: 'App.RequestRechazar.Folio',
                     anchor: '100%'
                 }, {
 
                     xtype: 'displayfield',
-                    fieldLabel: 'Fecha de Creación',
+                    fieldLabel: App.Language.General.creation_date,
                     name: 'node_name',
                     id: 'App.RequestRechazar.Fecha',
                     anchor: '100%'
                 }, {
                     xtype: 'displayfield',
-                    fieldLabel: 'Tipo de Solicitud',
+                    fieldLabel: App.Language.Request.type_of_request,
                     name: 'solicitud_type',
                     id: 'App.RequestRechazar.TipoSolicitud',
                     anchor: '100%'
                 }, {
                     xtype: 'displayfield',
-                    fieldLabel: 'Nombre de Usuario',
+                    fieldLabel: App.Language.General.user_name,
                     name: 'node_name',
                     id: 'App.RequestRechazar.Usuario',
                     anchor: '100%'
@@ -739,46 +742,46 @@ App.Request.addRechazarWindow = Ext.extend(Ext.Window, {
                 }]
             }, {
                 xtype: 'fieldset',
-                title: 'Datos Solicitud',
+                title: App.Language.Request.data_request,
                 items: [{
                     xtype: 'displayfield',
-                    fieldLabel: 'Factura',
+                    fieldLabel: App.Language.Request.bill,
                     name: 'solicitud_factura',
                     id: 'App.RequestRechazar.FacturaNombre',
                     anchor: '100%'
                 }, {
                     xtype: 'displayfield',
-                    fieldLabel: 'Nº Factura',
+                    fieldLabel: App.Language.Request.invoice_number,
                     name: 'solicitud_factura_numero',
                     id: 'App.RequestRechazar.FacturaNumero',
                     anchor: '100%'
                 }, {
                     xtype: 'displayfield',
-                    fieldLabel: 'Orden de Compra',
+                    fieldLabel: App.Language.Request.purchase_order,
                     name: 'solicitud_oc_nombre',
                     id: 'App.RequestRechazar.OCNombre',
                     anchor: '100%'
                 }, {
                     xtype: 'displayfield',
-                    fieldLabel: 'Nº Orden de Compra',
+                    fieldLabel: App.Language.Request.purchase_order_number,
                     name: 'solicitud_oc_numero',
                     id: 'App.RequestRechazar.OCNumero',
                     anchor: '100%'
                 }, {
                     xtype: 'displayfield',
-                    fieldLabel: 'Comentarios',
+                    fieldLabel: App.Language.General.comment,
                     name: 'solicitud_comentarios',
                     id: 'App.RequestRechazar.Comentario',
                     anchor: '100%'
                 }]
             }, {
                 xtype: 'fieldset',
-                title: 'Rechazo',
+                title: App.Language.Request.rejection,
                 items: [{
                     xtype: 'textarea',
                     anchor: '100%',
                     name: 'request_comentario',
-                    fieldLabel: 'Rechazada Por',
+                    fieldLabel: App.Language.Request.rejected_by,
                     id: 'App.RequestRechazar.ComentarioAdmin',
                     allowBlank: false
                 }]
@@ -847,10 +850,10 @@ App.Request.addRequestByNodeWindow = Ext.extend(Ext.Window, {
             bodyStyle: 'padding: 10 10px 10',
             items: [{
                 xtype: 'fieldset',
-                title: 'Datos Solicitante',
+                title: App.Language.Request.applicant_details,
                 items: [{
                     xtype: 'displayfield',
-                    fieldLabel: 'Nombre de Usuario',
+                    fieldLabel: App.Language.General.user_name,
                     name: 'user_name',
                     id: 'App.Request.Usuario',
                     anchor: '100%'
@@ -863,11 +866,11 @@ App.Request.addRequestByNodeWindow = Ext.extend(Ext.Window, {
                 }]
             }, {
                 xtype: 'fieldset',
-                title: 'Datos Solicitud',
+                title: App.Language.Request.data_request,
                 ref: 'solicitud',
                 items: [{
                     xtype: 'combo',
-                    fieldLabel: 'Tipo de Solicitud',
+                    fieldLabel: App.Language.Request.type_of_request,
                     anchor: '100%',
                     id: 'App.Request.Alta',
                     store: App.Request.SolicitudTipos.Store,
@@ -885,7 +888,7 @@ App.Request.addRequestByNodeWindow = Ext.extend(Ext.Window, {
                 }, {
                     xtype: 'fileuploadfield',
                     emptyText: 'Seleccione Factura',
-                    fieldLabel: 'Factura',
+                    fieldLabel: App.Language.Request.bill,
                     ref: 'solicitud_factura',
                     id: 'App.Request.Factura',
                     anchor: '100%',
@@ -898,14 +901,14 @@ App.Request.addRequestByNodeWindow = Ext.extend(Ext.Window, {
                     }
                 }, {
                     xtype: 'textfield',
-                    fieldLabel: 'Nº Factura',
+                    fieldLabel: App.Language.Request.invoice_number,
                     name: 'solicitud_factura_numero',
                     anchor: '100%',
                     allowBlank: false
                 }, {
                     xtype: 'fileuploadfield',
                     emptyText: 'Seleccione Orden de Compra',
-                    fieldLabel: 'Orden de Compra',
+                    fieldLabel: App.Language.Request.purchase_order,
                     ref: 'solicitud_oc',
                     id: 'App.Request.OC',
                     anchor: '100%',
@@ -918,7 +921,7 @@ App.Request.addRequestByNodeWindow = Ext.extend(Ext.Window, {
                     }
                 }, {
                     xtype: 'textfield',
-                    fieldLabel: 'Nº Orden de Compra',
+                    fieldLabel: App.Language.Request.purchase_order_number,
                     name: 'solicitud_oc_numero',
                     anchor: '100%',
                     allowBlank: false
@@ -926,7 +929,7 @@ App.Request.addRequestByNodeWindow = Ext.extend(Ext.Window, {
                     xtype: 'textarea',
                     anchor: '100%',
                     name: 'solicitud_comen_user',
-                    fieldLabel: 'Comentarios',
+                    fieldLabel: App.Language.Request.comment,
                     allowBlank: false
                 }]
             }],
@@ -939,7 +942,7 @@ App.Request.addRequestByNodeWindow = Ext.extend(Ext.Window, {
                 text: App.Language.General.save,
                 ref: '../saveButton',
                 handler: function(b) {
-                    if (Ext.getCmp('App.Request.Factura').getValue() == Ext.getCmp('App.Request.OC').getValue()) {
+                    if (Ext.getCmp('App.Request.Factura').getValue() === Ext.getCmp('App.Request.OC').getValue()) {
                         Ext.FlashMessage.alert('Los Documentos Factura y Orden de Compra no pueden ser Iguales');
                     } else {
                         form = b.ownerCt.ownerCt.getForm();
@@ -1094,7 +1097,7 @@ App.Request.historialWindow = Ext.extend(Ext.Window, {
                         sortable: true
                     }
                 ],
-                sm: new Ext.grid.CheckboxSelectionModel(),
+                sm: new Ext.grid.CheckboxSelectionModel()
             }],
             buttons: [{
                 text: App.Language.General.close,

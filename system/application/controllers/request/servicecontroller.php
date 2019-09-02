@@ -168,6 +168,7 @@ class ServiceController extends APP_Controller {
     }
 
     function export() {
+        $this->load->library('PHPExcel');
 
         $requests = Doctrine_Core::getTable('Service')->retrieveAll($this->filtrosServices());
 
@@ -190,13 +191,12 @@ class ServiceController extends APP_Controller {
             $service[] = $request->User->user_username;
             $service[] = $request->User->user_email;
             $service[] = $request->service_phone;
-            $service[] = $fecha;
+            $service[] = PHPExcel_Shared_Date::stringToExcel($fecha);
             $service[] = $request->service_organism;
             $service[] = $request->service_commentary;
             $servicees[] = $service;
         }
 
-        $this->load->library('PHPExcel');
         $sheet = $this->phpexcel->setActiveSheetIndex(0);
         $sheet->setTitle($this->translateTag('Request', 'requests'));
         $sheet->fromArray($titulos, null, "A1");
@@ -214,7 +214,7 @@ class ServiceController extends APP_Controller {
                 ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER);
         $sheet->getStyle("F2:F{$ultimaFila}")
                 ->getNumberFormat()
-                ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DATETIME);
+                ->setFormatCode('dd/mm/yyyy hh:mm');
 
         /** Estilos visuales de celdas */
         $filaTitulos = $sheet->getStyle("A1:{$ultimaColumna}1");

@@ -1,3 +1,5 @@
+/* global Ext, App */
+
 Ext.namespace('App.Report.Store');
 Ext.namespace('App.Report.UserGroup.Store');
 Ext.namespace('App.Report.UserGroupPermitted.Store');

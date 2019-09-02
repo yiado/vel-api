@@ -1,7 +1,9 @@
+/* global App, Ext */
+
 App.Request.Service_id = null;
 
 App.Request.Service = Ext.extend(Ext.Panel, {
-    title: App.Language.General.services,
+    title: App.Language.Request.services,
     border: false,
     loadMask: true,
     layout: 'border',
@@ -13,23 +15,29 @@ App.Request.Service = Ext.extend(Ext.Panel, {
             App.ModuleActions[8013],
             {
                 xtype: 'spacer',
-                width: 10
+                width: 10,
+                hidden: (App.Security.Actions[8009] === undefined && App.Security.Actions[8013] === undefined ? true : false)
+
             }, {
                 xtype: 'tbseparator',
-                width: 10
+                width: 10,
+                hidden: (App.Security.Actions[8009] === undefined && App.Security.Actions[8013] === undefined ? true : false)
             },
             App.ModuleActions[8010],
             {
                 xtype: 'spacer',
-                width: 10
+                width: 10,
+                hidden: (App.Security.Actions[8010] === undefined? true : false)
             }, {
                 xtype: 'tbseparator',
-                width: 10
+                width: 10,
+                hidden: (App.Security.Actions[8010] === undefined? true : false)
             },
             App.ModuleActions[8012],
             {
                 xtype: 'tbseparator',
-                width: 10
+                width: 10,
+                hidden: (App.Security.Actions[8012] === undefined? true : false)
             },
             App.ModuleActions[8011]
         ]
@@ -242,7 +250,7 @@ App.Request.Service.Grilla = {
         'rowdblclick': function (grid, rowIndex) {
             record = grid.getStore().getAt(rowIndex);
             if (App.Security.Session.user_username === record.data.User.user_username) {
-                w = new App.Request.editRequestServiceByNodeWindow({title: 'Editar Solicitud de Servicio'});
+                w = new App.Request.editRequestServiceByNodeWindow({title: App.Language.Request.edit_request_service});
                 w.show();
                 App.Request.Service_id = record.data.service_id;
                 Ext.getCmp('App.RequestServiceEdit.Alta').setValue(record.data.ServiceType.service_type_id);
@@ -264,7 +272,7 @@ App.Request.Service.Grilla = {
         forceFit: true,
         getRowClass: function (record, index) {
             var c = record.get('service_status_id');
-            if (c == 3) {
+            if (c === 3) {
                 return 'heavenly-row';
             }
         }

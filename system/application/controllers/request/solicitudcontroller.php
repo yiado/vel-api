@@ -501,6 +501,7 @@ class SolicitudController extends APP_Controller {
     }
 
     function export() {
+        $this->load->library('PHPExcel');
 
         $requests = Doctrine_Core::getTable('Solicitud')->retrieveAll($this->filtrosSolicitudes());
 
@@ -525,7 +526,7 @@ class SolicitudController extends APP_Controller {
             $solicitud[] = $request->solicitud_folio;
             $solicitud[] = $request->User->user_username;
             $solicitud[] = $request->User->user_email;
-            $solicitud[] = $fecha;
+            $solicitud[] = PHPExcel_Shared_Date::stringToExcel($fecha);
             $solicitud[] = $request->solicitud_factura_nombre;
             $solicitud[] = $request->solicitud_factura_numero;
             $solicitud[] = $request->solicitud_oc_nombre;
@@ -535,7 +536,6 @@ class SolicitudController extends APP_Controller {
             $solicitudes[] = $solicitud;
         }
 
-        $this->load->library('PHPExcel');
         $sheet = $this->phpexcel->setActiveSheetIndex(0);
         $sheet->setTitle($this->translateTag('Request', 'requests'));
         $sheet->fromArray($titulos, null, "A1");
@@ -553,7 +553,7 @@ class SolicitudController extends APP_Controller {
                 ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER);
         $sheet->getStyle("E2:E{$ultimaFila}")
                 ->getNumberFormat()
-                ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DATETIME);
+                ->setFormatCode('dd/mm/yyyy hh:mm');
         $sheet->getStyle("G2:G{$ultimaFila}")
                 ->getNumberFormat()
                 ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER);
