@@ -24,6 +24,7 @@ class ServiceTypeController extends APP_Controller {
             $serviceType = new ServiceType();
             $serviceType->service_type_name = $this->input->post('service_type_name');
             $serviceType->service_type_commentary = $this->input->post('service_type_commentary');
+            $serviceType->user_id = $this->input->post('user_id');
             $serviceType->save();
 
             $success = true;
@@ -42,6 +43,7 @@ class ServiceTypeController extends APP_Controller {
             $serviceType = Doctrine_Core::getTable('ServiceType')->find($this->input->post('service_type_id'));
             $serviceType->service_type_name = $this->input->post('service_type_name');
             $serviceType->service_type_commentary = $this->input->post('service_type_commentary');
+            $serviceType->user_id = $this->input->post('user_id');
             $serviceType->save();
 
             $success = true;

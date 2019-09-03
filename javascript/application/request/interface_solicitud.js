@@ -13,6 +13,7 @@ App.Request.Principal = Ext.extend(Ext.TabPanel, {
             new App.Request.Service(),
             new App.Request.Information()
         ];
+        App.Request.ServicesStatus.Store.load();
         App.Request.Principal.superclass.initComponent.call(this);
     }
 });

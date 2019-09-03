@@ -1,3 +1,5 @@
+/* global App, Ext */
+
 App.Core.MtnMaintainerType.Store = new Ext.data.JsonStore({
     proxy: new Ext.data.HttpProxy({
         api: {
@@ -456,7 +458,6 @@ App.Core.UserNotification.Store = new Ext.data.JsonStore({
         }
     ]
 });
-
 
 App.Core.User.ModuleStore = new Ext.data.JsonStore({
     proxy: new Ext.data.HttpProxy({

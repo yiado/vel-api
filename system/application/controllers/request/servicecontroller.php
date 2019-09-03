@@ -55,16 +55,13 @@ class ServiceController extends APP_Controller {
             $serviceLog->service_log_detail = 'Creación de Solicitud de Servicio';
             $serviceLog->save();
 
-            //Cagamos la Libreria para Subir Archivos
-            $this->load->library('upload');
-
             $success = true;
             $msg = $this->translateTag('General', 'operation_successful');
 
             $conn->commit();
             
             //Enviar correo de Alerta de creación de Service
-            $this->sendNotification($service);
+            //$this->sendNotification($service);
         } catch (Exception $e) {
             //Si hay error, rollback de los cambios en la base de datos
             $conn->rollback();
@@ -114,6 +111,18 @@ class ServiceController extends APP_Controller {
                 $serviceLog->service_log_detail = 'Cambio de comentario:' . $service->service_commentary . ' Por  :' . $service_commentary;
                 $serviceLog->save();
                 $service->service_commentary = $service_commentary;
+            }
+            
+            $service_status_id = $this->input->post('service_status_id');
+            if ($service->service_status_id != $service_status_id && isset($service_status_id)) {
+                $serviceStatusNew = Doctrine_Core::getTable('ServiceStatus')->find((int) $service_status_id);
+                $serviceLog = new ServiceLog();
+                $user_id = $this->auth->get_user_data('user_id');
+                $serviceLog->user_id = $user_id;
+                $serviceLog->service_id = $service->service_id;
+                $serviceLog->service_log_detail = "Cambio de estado: {$service->ServiceStatus->service_status_name} Por  : {$serviceStatusNew->service_status_name}";
+                $serviceLog->save();
+                $service->service_status_id = $service_status_id;
             }
             
             $service->save();

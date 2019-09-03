@@ -168,7 +168,6 @@ App.Request.SolicitudLog.Store = new Ext.data.JsonStore({
 
 
 /**
- * 
  * Servicios
  */
 App.Request.Services.Store = new Ext.data.JsonStore({
@@ -278,7 +277,9 @@ App.Request.ServicesType.Store = new Ext.data.JsonStore({
     fields: [
         'service_type_id',
         'service_type_name',
-        'service_type_commentary'
+        'service_type_commentary',
+        'user_id',
+        'User'
     ],
     listeners: {
         'save': function() {

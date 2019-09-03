@@ -1,3 +1,5 @@
+/* global App, Ext */
+
 App.Asset.copiedAsset = new Array();
 App.Asset.selectedAssetId = null;
 valoraux = null;

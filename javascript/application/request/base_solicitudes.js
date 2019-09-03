@@ -240,25 +240,42 @@ App.ModuleActions[8013] = {
     text: 'Estados',
     hidden: true,
     iconCls: 'add_icon',
-    menu: [{
-        text: 'Recepcionada',
-        iconCls: 'add_icon',
-        handler: function() {}
-    }, {
-        text: 'En proceso',
-        iconCls: 'add_icon',
-        handler: function() {}
-    }, {
-        text: 'En presupuesto',
-        iconCls: 'add_icon',
-        handler: function() {}
-    }, {
-        text: 'Rechazada',
-        iconCls: 'add_icon',
-        handler: function() {}
-    }, {
-        text: 'Terminadas',
-        iconCls: 'add_icon',
-        handler: function() {}
-    }]
+    id: 'btn-service-status',
+    menu: [],
+    listeners: {
+        beforerender: function(){
+            let btn = Ext.getCmp('btn-service-status');            
+            App.Request.ServicesStatus.Store.data.items.forEach(function(serviceStatus){
+                btn.menu.add({
+                    text:  serviceStatus.data.service_status_name,
+                    iconCls: 'add_icon',
+                    handler: function() {
+                        grid = Ext.getCmp('App.Request.Service.Grid');
+                        if (grid.getSelectionModel().getCount()) {
+                            data = grid.getSelectionModel().getSelections()[0].data;
+                            
+                            if (data.ServiceStatus.service_status_id === '4') {
+                                Ext.FlashMessage.alert(`El servicio esta en estado ${data.ServiceStatus.service_status_name}`);
+                                return;
+                            }
+                            w = new App.Request.changeServiceStatusWindow({ title: 'Cambio estado de Servicio' });
+                            w.show();
+                            App.Request.Service_id = data.service_id;
+                            Ext.getCmp('App.Service.Request.btnChangeServiceStatusWindow').setText(serviceStatus.data.service_status_name);
+                            Ext.getCmp('App.Request.Service.Usuario').setValue(data.User.user_username);
+                            Ext.getCmp('App.Request.Service.Email').setValue(data.User.user_email);
+                            Ext.getCmp('App.Request.Service.Phone').setValue(data.service_phone);
+                            Ext.getCmp('App.Request.Service.Organism').setValue(data.service_organism);
+                            Ext.getCmp('App.Request.Service.ServiceType').setValue(data.ServiceType.service_type_id).setDisabled(true);
+                            Ext.getCmp('App.Request.Service.ServiceStatus').setValue(data.ServiceStatus.service_status_id).setDisabled(true);
+                            Ext.getCmp('App.Request.Service.ServiceStatusNew').setValue(serviceStatus.data.service_status_id).setDisabled(true);
+                            Ext.getCmp('App.Request.Service.Commentary').setValue(data.service_commentary);
+                        } else {
+                            Ext.FlashMessage.alert('Debe Seleccionar un Servicio');
+                        }
+                    }
+                });
+            });
+        }
+    }
 };

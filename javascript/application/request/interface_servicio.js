@@ -46,7 +46,7 @@ App.Request.Service = Ext.extend(Ext.Panel, {
         this.items = [
             App.Request.Service.formSearching,
             App.Request.Service.Grilla
-        ],
+        ],       
         App.Request.Service.superclass.initComponent.call(this);
     }
 });
@@ -250,6 +250,10 @@ App.Request.Service.Grilla = {
         'rowdblclick': function (grid, rowIndex) {
             record = grid.getStore().getAt(rowIndex);
             if (App.Security.Session.user_username === record.data.User.user_username) {
+                if (record.data.ServiceStatus.service_status_id === '4') {
+                    Ext.FlashMessage.alert(`No es posible editar solicitudes finalizadas.`);
+                    return;
+                }
                 w = new App.Request.editRequestServiceByNodeWindow({title: App.Language.Request.edit_request_service});
                 w.show();
                 App.Request.Service_id = record.data.service_id;
@@ -353,7 +357,6 @@ App.Request.addRequestServiceByNodeWindow = Ext.extend(Ext.Window, {
             xtype: 'form',
             ref: 'form',
             labelWidth: 150,
-            fileUpload: true,
             plugins: [new Ext.ux.OOSubmit()],
             bodyStyle: 'padding: 10 10px 10',
             items: [{
@@ -701,5 +704,151 @@ App.Request.historialServiceWindow = Ext.extend(Ext.Window, {
             }]
         }];
         App.Request.historialServiceWindow.superclass.initComponent.call(this);
+    }
+});
+
+App.Request.changeServiceStatusWindow = Ext.extend(Ext.Window, {
+    resizable: false,
+    modal: true,
+    border: true,
+    width: (screen.width < 750) ? screen.width - 50 : 750,
+    height: 500,
+    layout: 'fit',
+    padding: 2,
+    initComponent: function() {
+        this.items = [{
+            xtype: 'form',
+            ref: 'form',
+            labelWidth: 150,
+            plugins: [new Ext.ux.OOSubmit()],
+            bodyStyle: 'padding: 10 10px 10',
+            items: [{
+                xtype: 'fieldset',
+                title: 'Datos Solicitante',
+                items: [{
+                    xtype: 'displayfield',
+                    fieldLabel: 'Nombre de Usuario',
+                    name: 'user_name',
+                    id: 'App.Request.Service.Usuario',
+                    anchor: '100%'
+                }, {
+                    xtype: 'displayfield',
+                    fieldLabel: 'Email',
+                    name: 'user_email',
+                    id: 'App.Request.Service.Email',
+                    anchor: '100%'
+                }]
+            }, {
+                xtype: 'fieldset',
+                title: 'Datos Solicitud',
+                ref: 'solicitud',
+                items: [{
+                    xtype: 'displayfield',
+                    fieldLabel: 'Teléfono',
+                    name: 'service_phone',
+                    id: 'App.Request.Service.Phone',
+                    anchor: '100%'
+                }, {
+                    xtype: 'displayfield',
+                    fieldLabel: 'Organismo',
+                    name: 'service_organism',
+                    id: 'App.Request.Service.Organism',
+                    anchor: '100%',
+                    allowBlank: false
+                }, {
+                    xtype: 'combo',
+                    fieldLabel: 'Tipo de Servicio',
+                    anchor: '100%',
+                    id: 'App.Request.Service.ServiceType',
+                    store: App.Request.ServicesType.Store,
+                    hiddenName: 'service_type_id',
+                    triggerAction: 'all',
+                    displayField: 'service_type_name',
+                    valueField: 'service_type_id',
+                    editable: true,
+                    typeAhead: true,
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    mode: 'remote',
+                    minChars: 0,
+                    allowBlank: false
+                }, {
+                    xtype: 'combo',
+                    fieldLabel: 'Estado actual',
+                    anchor: '100%',
+                    id: 'App.Request.Service.ServiceStatus',
+                    store: App.Request.ServicesStatus.Store,
+                    hiddenName: 'service_status_id',
+                    triggerAction: 'all',
+                    displayField: 'service_status_name',
+                    valueField: 'service_status_id',
+                    editable: true,
+                    typeAhead: true,
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    mode: 'remote',
+                    minChars: 0,
+                    allowBlank: false
+                }, {
+                    xtype: 'combo',
+                    fieldLabel: 'Estado nuevo',
+                    anchor: '100%',
+                    id: 'App.Request.Service.ServiceStatusNew',
+                    store: App.Request.ServicesStatus.Store,
+                    hiddenName: 'service_status_id',
+                    triggerAction: 'all',
+                    displayField: 'service_status_name',
+                    valueField: 'service_status_id',
+                    editable: true,
+                    typeAhead: true,
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    mode: 'remote',
+                    minChars: 0,
+                    allowBlank: false
+                }, {
+                    xtype: 'displayfield',
+                    anchor: '100%',
+                    name: 'service_commentary',
+                    fieldLabel: 'Requerimiento',
+                    id: 'App.Request.Service.Commentary'
+                }]
+            }],
+            buttons: [{
+                text: App.Language.General.close,
+                handler: function(b) {
+                    b.ownerCt.ownerCt.ownerCt.close();
+                }
+            }, {
+                id: 'App.Service.Request.btnChangeServiceStatusWindow',
+                text: App.Language.General.save,
+                ref: '../saveButton',
+                handler: function(b) {
+                    form = b.ownerCt.ownerCt.getForm();
+                    if (form.isValid()) {
+                        form.submit({
+                            url: 'index.php/request/service/update',
+                            params: {
+                                service_id: App.Request.Service_id,
+                                service_status_id: Ext.getCmp('App.Request.Service.ServiceStatusNew').getValue()
+                            },
+                            success: function(fp, o) {
+                                if (o.result.success === "false") {
+                                    Ext.FlashMessage.alert('Error al Ingreso de Datos');
+                                } else {
+                                    App.Request.Services.Store.load();
+                                    b.ownerCt.ownerCt.ownerCt.close();
+                                    Ext.FlashMessage.alert(o.result.msg);
+                                }
+                            },
+                            failure: function(fp, o) {
+                                alert('Error:\n' + o.result.msg);
+                            }
+                        });
+                    }
+                }
+            }]
+        }];
+        App.Request.changeServiceStatusWindow.superclass.initComponent.call(this);
     }
 });

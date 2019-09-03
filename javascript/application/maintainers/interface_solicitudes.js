@@ -42,7 +42,7 @@ App.Maintainers.Request.Principal = Ext.extend(Ext.TabPanel, {
                     width: 40
                 }, {
                     xtype: 'gridcolumn',
-                    header: App.Language.General.name,
+                    header: App.Language.General.commentary,
                     dataIndex: 'solicitud_type_comentario',
                     sortable: true,
                     width: 60
@@ -112,7 +112,7 @@ App.Maintainers.Request.Principal = Ext.extend(Ext.TabPanel, {
                     width: 40
                 }, {
                     xtype: 'gridcolumn',
-                    header: App.Language.General.name,
+                    header: App.Language.General.commentary,
                     dataIndex: 'solicitud_estado_comentario',
                     sortable: true,
                     width: 60
@@ -179,13 +179,31 @@ App.Maintainers.Request.Principal = Ext.extend(Ext.TabPanel, {
                     header: App.Language.General.name,
                     dataIndex: 'service_type_name',
                     sortable: true,
-                    width: 40
+                    width: 20                
                 }, {
                     xtype: 'gridcolumn',
-                    header: App.Language.General.name,
+                    dataIndex: 'User',
+                    header: 'Usuario Responsable',
+                    width: 20,
+                    sortable: true,
+                    renderer: function(User) {
+                        return User.user_username;
+                    }
+                }, {
+                    xtype: 'gridcolumn',
+                    dataIndex: 'User',
+                    header: 'Correo',
+                    width: 20,
+                    sortable: true,
+                    renderer: function(User) {
+                        return User.user_email;
+                    }
+                }, {
+                    xtype: 'gridcolumn',
+                    header: App.Language.General.commentary,
                     dataIndex: 'service_type_commentary',
                     sortable: true,
-                    width: 60
+                    width: 30
                 }
             ],
             sm: new Ext.grid.CheckboxSelectionModel({
@@ -252,7 +270,7 @@ App.Maintainers.Request.Principal = Ext.extend(Ext.TabPanel, {
                     width: 40
                 }, {
                     xtype: 'gridcolumn',
-                    header: App.Language.General.name,
+                    header: App.Language.General.commentary,
                     dataIndex: 'service_status_commentary',
                     sortable: true,
                     width: 60
@@ -323,7 +341,7 @@ App.Maintainers.Request.addActivosSolicitudTiposWindow = Ext.extend(Ext.Window, 
                 allowBlank: false
             }, {
                 xtype: 'textarea',
-                fieldLabel: App.Language.General.description,
+                fieldLabel: App.Language.General.commentary,
                 name: 'solicitud_type_comentario',
                 anchor: '100%'
             }],
@@ -400,7 +418,7 @@ App.Maintainers.Request.addActivosSolicitudEstadosWindow = Ext.extend(Ext.Window
                 allowBlank: false
             }, {
                 xtype: 'textarea',
-                fieldLabel: App.Language.General.description,
+                fieldLabel: App.Language.General.commentary,
                 name: 'solicitud_estado_comentario',
                 anchor: '100%'
             }],
@@ -460,7 +478,7 @@ App.Maintainers.Request.addServiceTypeWindow = Ext.extend(Ext.Window, {
     resizable: false,
     modal: true,
     width: 380,
-    height: 180,
+    height: 220,
     layout: 'fit',
     padding: 1,
     initComponent: function() {
@@ -469,18 +487,36 @@ App.Maintainers.Request.addServiceTypeWindow = Ext.extend(Ext.Window, {
             ref: 'form',
             labelWidth: 150,
             padding: 5,
-            items: [{
+            items: [
+                {
                 xtype: 'textfield',
-                fieldLabel: App.Language.Asset.name_state,
+                fieldLabel: 'Servicio',
                 name: 'service_type_name',
                 anchor: '100%',
                 allowBlank: false
-            }, {
-                xtype: 'textarea',
-                fieldLabel: App.Language.General.description,
-                name: 'service_type_commentary',
-                anchor: '100%'
-            }],
+            },{
+                    xtype: 'combo',
+                    anchor: '100%',
+                    triggerAction: 'all',
+                    fieldLabel: 'Usuario Responsable',
+                    hiddenName: 'user_id',
+                    store: App.Core.UserNotification.Store,
+                    displayField: 'user_name',
+                    valueField: 'user_id',
+                    mode: 'remote',
+                    editable: true,
+                    selecOnFocus: true,
+                    typeAhead: true,
+                    selectOnFocus: true,
+                    minChars: 0,
+                    allowBlank: false
+                }, {
+                    xtype: 'textarea',
+                    fieldLabel: App.Language.General.description,
+                    name: 'service_type_commentary',
+                    anchor: '100%'
+                }
+            ],
             buttons: [{
                 text: App.Language.General.close,
                 handler: function(b) {
@@ -554,7 +590,7 @@ App.Maintainers.Request.addServiceStatusWindow = Ext.extend(Ext.Window, {
                 allowBlank: false
             }, {
                 xtype: 'textarea',
-                fieldLabel: App.Language.General.description,
+                fieldLabel: App.Language.General.commentary,
                 name: 'service_status_commentary',
                 anchor: '100%'
             }],
