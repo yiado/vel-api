@@ -185,6 +185,8 @@ $route['inframtn/nodeplan/(:any)']                                              
 $route['inframtn/nodeplantask/(:any)']                                              = "inframtn/nodeplantaskcontroller/$1";
 $route['inframtn/wodocument/(:any)']                                              = "inframtn/wodocumentcontroller/$1";
 
+$route['qr/(:any)']                                                                     = "qr/qrcontroller/$1";
+
 
 $route['scaffolding_trigger']								= "";
 

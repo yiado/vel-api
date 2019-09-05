@@ -1,5 +1,8 @@
 <?php
 
+//Path QR Code
+$config['qr_dir'] = 'temp/qrcode/';
+
 //Directorio temporal para los files generados por el sistema
 $config['temp_dir'] = FCPATH . 'temp/';
 

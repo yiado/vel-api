@@ -169,6 +169,8 @@ App.Maintainers.Request.Principal = Ext.extend(Ext.TabPanel, {
                     App.Maintainers.Request.editServiceTypeWindow(record);
                 },
                 'beforerender': function() {
+                    App.Core.UserNotification.Store.setBaseParam('show_admin_user', true);
+                    App.Core.UserNotification.Store.load();
                     App.Request.ServicesType.Store.load();
                 }
             },
@@ -311,7 +313,7 @@ App.Maintainers.Request.Principal = Ext.extend(Ext.TabPanel, {
                     }
                 }]
             }
-        }];
+        }];        
         App.Maintainers.Request.Principal.superclass.initComponent.call(this);
     }
 });
@@ -386,7 +388,6 @@ App.Maintainers.Request.editActivosSolicitudTiposWindow = function(record) {
         if (form.isValid()) {
             form.updateRecord(w.form.record);
             w.close();
-            App.NodeTypeCategory.Store.load();
         }
     };
     w.form.getForm().loadRecord(record);
@@ -463,7 +464,6 @@ App.Maintainers.Request.editActivosSolicitudEstadosWindow = function(record) {
         if (form.isValid()) {
             form.updateRecord(w.form.record);
             w.close();
-            App.NodeTypeCategory.Store.load();
         }
     };
     w.form.getForm().loadRecord(record);
@@ -542,7 +542,7 @@ App.Maintainers.Request.addServiceTypeWindow = Ext.extend(Ext.Window, {
                     }
                 }
             }]
-        }];
+        }];        
         App.Maintainers.Request.addServiceTypeWindow.superclass.initComponent.call(this);
     }
 });
@@ -558,7 +558,6 @@ App.Maintainers.Request.editServiceTypeWindow = function(record) {
         if (form.isValid()) {
             form.updateRecord(w.form.record);
             w.close();
-            App.NodeTypeCategory.Store.load();
         }
     };
     w.form.getForm().loadRecord(record);
@@ -635,7 +634,6 @@ App.Maintainers.Request.editServiceStatusWindow = function(record) {
         if (form.isValid()) {
             form.updateRecord(w.form.record);
             w.close();
-            App.NodeTypeCategory.Store.load();
         }
     };
     w.form.getForm().loadRecord(record);

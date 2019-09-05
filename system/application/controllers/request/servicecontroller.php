@@ -190,7 +190,7 @@ class ServiceController extends APP_Controller {
         $titulos[] = 'Organismo';
         $titulos[] = 'Comentario';
 
-        $servicees = array();
+        $services = array();
         foreach ($requests as $request) {
             $date = new DateTime($request->service_date);
             $fecha = $date->format('d/m/Y H:i');
@@ -203,13 +203,13 @@ class ServiceController extends APP_Controller {
             $service[] = PHPExcel_Shared_Date::stringToExcel($fecha);
             $service[] = $request->service_organism;
             $service[] = $request->service_commentary;
-            $servicees[] = $service;
+            $services[] = $service;
         }
 
         $sheet = $this->phpexcel->setActiveSheetIndex(0);
         $sheet->setTitle($this->translateTag('Request', 'requests'));
         $sheet->fromArray($titulos, null, "A1");
-        $sheet->fromArray($servicees, null, "A2");
+        $sheet->fromArray($services, null, "A2");
 
         $dimensionHoja = $sheet->calculateWorksheetDimension();
         $ultimaFila = $sheet->getHighestRow();

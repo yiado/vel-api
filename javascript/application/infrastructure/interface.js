@@ -1,3 +1,5 @@
+/* global Ext, App, google */
+
 App.InfraStructure.copiedNodes = new Array();
 App.InfraStructure.allowRootGui = true;
 App.InfraStructure.OtrosDatosComboTotal = 0;
@@ -9,7 +11,18 @@ App.InfraStructure.lonResumen = null;
 App.InfraStructure.activeTab = null;
 
 busquedaInterna = null;
-var markers = []
+var markers = [];
+
+function printImage(src)
+{
+    var printWindow = window.open('', 'Print Window','height=640,width=620');
+    printWindow.document.write('<html><head><title>Print Window</title>');
+    printWindow.document.write('</head><body ><img src=\'');
+    printWindow.document.write(src);
+    printWindow.document.write('\' /></body></html>');
+    printWindow.document.close();
+    printWindow.print();
+}
 
 function getMap() {
     markers = [];
@@ -158,7 +171,7 @@ function getMap() {
                                                     infowindow.open(map, marker);
                                                 }
                                             });
-                                        }
+                                        };
                                     })(marker, i));
                                 }
                             }
@@ -199,7 +212,7 @@ function getMap() {
 
                                 //                                        mapRef.zoomLevel = parseFloat(infra_default_zoomLevel);
 
-                            }
+                            };
                         }
                     } else {
 
@@ -633,7 +646,7 @@ App.InfraStructure.Principal = Ext.extend(Ext.TabPanel, {
                 }
             },
             tbar: App.ModuleActions[5006]
-        }, new App.InfraStructure.FotoStandar()]
+        }, new App.InfraStructure.FotoStandar()];
         App.InfraStructure.Principal.superclass.initComponent.call(this);
     }
 });
@@ -676,8 +689,7 @@ App.InfraStructure.OtrosDatosResumen = Ext.extend(Ext.grid.GridPanel, {
         this.columns = [{
             header: 'ESTRUCTURA ASOCIADA',
             dataIndex: 'label',
-            cls: 'myClsp',
-
+            cls: 'myClsp'
         }, {
             header: 'SUPERFICIE CONSTRIDA TOTAL',
             dataIndex: 'value'
@@ -986,29 +998,44 @@ App.InfraStructure.QRCode = Ext.extend(Ext.Panel, {
     id: 'App.InfraStructure.QRCode',
     border: false,
     loadMask: true,
-    height: '50',
-    updateImage: function() {
+    updateImage: function(qr_file_name) {
         this.imagepanel1.removeAll();
         this.imagepanel1.add(new Ext.Panel({
             layout: 'fit',
             overflowY: 'scroll',
             autoHeight: true,
-            html: '<img style="display: block;margin-left: auto;margin-right: auto;" height="200" src="docs/dbf54bef542feea7b493fd3f8ac18d91.png" />'
+            autoWidth: true,
+            html: `<img style="display: block;margin-left: auto;margin-right: auto;" height="200" src="${qr_file_name}" onclick="printImage('${qr_file_name}')" />`
         }));
         this.imagepanel1.doLayout();
     },
     listeners: {
         'afterrender': function(w) {
-            w.updateImage();
+            Ext.Ajax.request({
+                waitTitle: App.Language.General.message_please_wait,
+                waitMsg: App.Language.General.message_generating_file,
+                url: 'index.php/qr/get',
+                params: {
+                    node_id: App.Interface.selectedNodeId
+                },
+                method: 'POST',
+                success: function(response) {
+                    response = Ext.decode(response.responseText);
+                    w.updateImage(response);
+                },
+                failure: function(response) {
+                    Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
+                }
+            });
         }
     },
     initComponent: function() {
         this.items = [{
             xtype: 'panel',
-            style: 'padding: 5 0 5 5',
+            style: 'padding: 0 0 5 0',
             region: 'center',
+            
             ref: 'imagepanel1',
-
             autoScroll: true,
             border: false,
             layoutConfig: {
@@ -1180,8 +1207,7 @@ App.InfraStructure.FotoStandar = Ext.extend(Ext.Panel, {
 });
 
 App.InfraStructure.Principal.listener = function(node) { //--> ACA ENTRA AL HACER CLICK AL ARBOL <--
-
-
+    
     //DESABILITA EL BOTON DE RUTA INICAL
     if (App.Security.Session.user_path == App.Interface.selectedNodeId) {
         Ext.getCmp('App.InfraStructure.buttonPath').setDisabled(true);
@@ -1391,6 +1417,24 @@ App.InfraStructure.Principal.listener = function(node) { //--> ACA ENTRA AL HACE
             }
         }
     });
+    
+    Ext.Ajax.request({
+        waitTitle: App.Language.General.message_please_wait,
+        waitMsg: App.Language.General.message_generating_file,
+        url: 'index.php/qr/get',
+        params: {
+            node_id: App.Interface.selectedNodeId
+        },
+        method: 'POST',
+        success: function(response) {
+            response = Ext.decode(response.responseText);
+            w = Ext.getCmp('App.InfraStructure.QRCode');
+            w.updateImage(response);
+        },
+        failure: function(response) {
+            Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
+        }
+    });
     //SI ESTA ACTIVA EL TAB FICHA DE RESUMEN ELIGE EL MAPA SELECCIONADO
 
     if (Ext.getCmp('App.InfraStructure.fichaResumen').isVisible()) {
@@ -1419,7 +1463,7 @@ App.InfraStructure.Principal.expand = function(node_id) {
     App.Interface.selectedNodeId = node_id;
     node = Ext.getCmp('App.StructureTree.Tree').getNodeById(node_id);
     App.Security.checkNodeAccess(node);
-}
+};
 
 App.InfraStructure.addNodeWindow = Ext.extend(Ext.Window, {
     title: App.Language.Infrastructure.add_items,
@@ -1609,8 +1653,7 @@ App.InfraStructure.addNodeWindow = Ext.extend(Ext.Window, {
                             App.InfraStructure.Iot.Store.load();;
                         }
                     }],
-                    ddReorder: true,
-                    //                                         
+                    ddReorder: true
                 },
                 {
                     xtype: 'combo',
@@ -1827,8 +1870,7 @@ App.InfraStructure.addNodeWindow = Ext.extend(Ext.Window, {
                             App.InfraStructure.Iot.Store.load();;
                         }
                     }],
-                    ddReorder: true,
-                    //                                         
+                    ddReorder: true
                 },
                 {
                     xtype: 'combo',
@@ -1920,7 +1962,7 @@ App.InfraStructure.editNode = function(node) {
         node: node
     });
     w.show();
-}
+};
 
 App.InfraStructure.exportListWindow = Ext.extend(Ext.Window, {
     title: App.Language.General.eexport_list,
@@ -2123,7 +2165,7 @@ App.InfraStructure.searchWindow = Ext.extend(Ext.Window, {
                             displayField: 'value',
                             valueField: 'value',
                             mode: 'local'
-                        }
+                        };
                         if (xtype_object.xtype == 'combo') {
                             combo_operador.value = '=';
                             combo_operador.disabled = true;
@@ -2136,7 +2178,7 @@ App.InfraStructure.searchWindow = Ext.extend(Ext.Window, {
                         var tbseparator = {
                             xtype: 'tbseparator',
                             height: 30
-                        }
+                        };
                         App.InfraStructure.searchWindowObject.form.dinamicDataFilterParent.add(label);
                         App.InfraStructure.searchWindowObject.form.dinamicDataFilterParent.add(combo_operador);
                         App.InfraStructure.searchWindowObject.form.dinamicDataFilterParent.add(spacer);
@@ -2707,7 +2749,7 @@ App.InfraStructure.expandDeepNode = function(node_id) {
             App.InfraStructure.expandDeepNodeCallback(node_id, response);
         }
     });
-}
+};
 
 App.InfraStructure.expandDeepNodeCallback = function(node_id, children) {
     for (var i = 0; i < children.length; i++) {
@@ -3009,7 +3051,7 @@ App.InfraStructure.Info.fields = {
             }
         }
     }
-}
+};
 
 App.InfraStructure.emportListMasiva = Ext.extend(Ext.Window, {
     title: "Carga masiva",

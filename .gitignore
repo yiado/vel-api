@@ -1,5 +1,4 @@
 /nbproject/private/
-plans/*.svg.filepart
 plans/*.svg
 plans/*.ifc
 plans/*.png
@@ -13,6 +12,7 @@ temp/*.png
 temp/*.jpg
 temp/*.csv
 temp/treexml/*.xml
+temp/qrcode/*.png
 asset_doc/
 system/logs/*.php
 system/application/config/config.php
