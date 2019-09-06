@@ -13,17 +13,6 @@ App.InfraStructure.activeTab = null;
 busquedaInterna = null;
 var markers = [];
 
-function printImage(src)
-{
-    var printWindow = window.open('', 'Print Window','height=640,width=620');
-    printWindow.document.write('<html><head><title>Print Window</title>');
-    printWindow.document.write('</head><body ><img src=\'');
-    printWindow.document.write(src);
-    printWindow.document.write('\' /></body></html>');
-    printWindow.document.close();
-    printWindow.print();
-}
-
 function getMap() {
     markers = [];
 
@@ -1005,10 +994,28 @@ App.InfraStructure.QRCode = Ext.extend(Ext.Panel, {
             overflowY: 'scroll',
             autoHeight: true,
             autoWidth: true,
-            html: `<img style="display: block;margin-left: auto;margin-right: auto;" height="200" src="${qr_file_name}" onclick="printImage('${qr_file_name}')" />`
+            id: 'App.InfraStructure.QRCode.Img',
+            html: `<img style="display: block;margin-left: auto;margin-right: auto;" height="200" src="${qr_file_name}" />`,
+            data: {
+                src: qr_file_name
+            }
         }));
         this.imagepanel1.doLayout();
     },
+    tbar: [{
+        text: 'Imprimir QR',
+        iconCls: 'print_icon',
+        handler: function () {
+            qr = Ext.getCmp('App.InfraStructure.QRCode.Img');
+            var printWindow = window.open('', 'Print Window','height=640,width=620');
+            printWindow.document.write('<html><head><title>Print Window</title>');
+            printWindow.document.write('</head><body ><img src=\'');
+            printWindow.document.write(qr.data.src);
+            printWindow.document.write('\' /></body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        }
+    }],
     listeners: {
         'afterrender': function(w) {
             Ext.Ajax.request({
