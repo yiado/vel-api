@@ -36,7 +36,6 @@ class PlanController extends APP_Controller {
 
                 $plans[0]['plan_filename'] = "not_image_icon.png";
             }
-//               print_r($this->json->encode($plans));exit();
 
             echo '({"total":"' . $size . '", "plan_dir": "' . $dir . '", "results":' . $this->json->encode($plans) . '})';
         } else {
@@ -47,11 +46,7 @@ class PlanController extends APP_Controller {
             if ($line->count()) {
                 $line = $line->toArray();
                 $nodeLine = intval($line[0]['nodeLine']);
-//                  print_r($line);
-//                exit();
                 $associatedLine = Doctrine_Core::getTable('Plan')->retrieveCurrents($nodeLine);
-//                print_r($associatedLine->toArray());
-//                exit();
                 if ($associatedLine->count()) {
                     $associatedLine = $associatedLine->toArray();
                     $associatedLine[0]['handler'] = $line[0]['handler'];
@@ -142,15 +137,14 @@ class PlanController extends APP_Controller {
     function getResumen() {
 
         $Node = Doctrine_Core::getTable('Node')->find($this->input->post('node_id'));
-        if ($this->input->post('node_id') == 'root') {//SIEMPRE SE CARGA LA PRIMERA VEZ CON ROOT LUEGO EL PUNTO CORRECTO
+        if ($this->input->post('node_id') == 'root') {
+            //SIEMPRE SE CARGA LA PRIMERA VEZ CON ROOT LUEGO EL PUNTO CORRECTO
             echo '({"total":"' . 0 . '", "results":[]})';
-// echo '({"total":"10", "results":{"plan_id":"1434","node_id":"1","plan_category_id":"1","user_id":"9","plan_current_version":"1","plan_filename":"base_1434.svg","plan_version":"6","plan_comments":null,"plan_description":"PLANO BASE","plan_datetime":"2011-12-15 10:18:13","PlanCategory":{"plan_category_id":"1","plan_category_name":"PLANO BASE","plan_category_description":"PLANTA ARQUITECTURA","plan_category_default":"1","NodeType":[{"node_type_id":"1","plan_category_id":"1","node_type_category_id":"1","node_type_name":"CAMPUS","node_type_location":"0","PlanCategory":false},{"node_type_id":"2","plan_category_id":"1","node_type_category_id":"1","node_type_name":"EDIFICIO","node_type_location":"0","PlanCategory":false},{"node_type_id":"3","plan_category_id":"1","node_type_category_id":"1","node_type_name":"NIVEL","node_type_location":"0","PlanCategory":false},{"node_type_id":"4","plan_category_id":"1","node_type_category_id":"2","node_type_name":"OFICINA","node_type_location":"0","PlanCategory":false},{"node_type_id":"5","plan_category_id":"1","node_type_category_id":"2","node_type_name":"SALA","node_type_location":"0","PlanCategory":false},{"node_type_id":"6","plan_category_id":"1","node_type_category_id":"2","node_type_name":"LABORATORIO","node_type_location":"0","PlanCategory":false},{"node_type_id":"7","plan_category_id":"1","node_type_category_id":"2","node_type_name":"TALLER","node_type_location":"0","PlanCategory":false},{"node_type_id":"8","plan_category_id":"1","node_type_category_id":"2","node_type_name":"COMEDOR","node_type_location":"0","PlanCategory":false},{"node_type_id":"9","plan_category_id":"1","node_type_category_id":"2","node_type_name":"SERVICIOS","node_type_location":"0","PlanCategory":false},{"node_type_id":"10","plan_category_id":"1","node_type_category_id":"2","node_type_name":"DORMITORIO","node_type_location":"0","PlanCategory":false},{"node_type_id":"11","plan_category_id":"1","node_type_category_id":"2","node_type_name":"INSTALACIONES","node_type_location":"0","PlanCategory":false},{"node_type_id":"12","plan_category_id":"1","node_type_category_id":"2","node_type_name":"BODEGA","node_type_location":"0","PlanCategory":false},{"node_type_id":"13","plan_category_id":"1","node_type_category_id":"2","node_type_name":"OTRO","node_type_location":"0","PlanCategory":false},{"node_type_id":"14","plan_category_id":"1","node_type_category_id":"2","node_type_name":"SIN_INFORMACION","node_type_location":"0","PlanCategory":false},{"node_type_id":"15","plan_category_id":"1","node_type_category_id":"2","node_type_name":"CIRCULACION","node_type_location":"0","PlanCategory":false},{"node_type_id":"16","plan_category_id":"1","node_type_category_id":"2","node_type_name":"CERRADO_SIN_DEPENDENCIA","node_type_location":"0","PlanCategory":false},{"node_type_id":"17","plan_category_id":"1","node_type_category_id":"2","node_type_name":"OTRAS_INSTITUCIONES_EN_RECINTOS_UNIVERSITARIOS","node_type_location":"0","PlanCategory":false},{"node_type_id":"18","plan_category_id":"1","node_type_category_id":"2","node_type_name":"PISCINA","node_type_location":"0","PlanCategory":false},{"node_type_id":"19","plan_category_id":"1","node_type_category_id":"2","node_type_name":"TERRAZA","node_type_location":"0","PlanCategory":false},{"node_type_id":"20","plan_category_id":"1","node_type_category_id":"2","node_type_name":"VIVERO_DE_INVESTIGACION","node_type_location":"0","PlanCategory":false},{"node_type_id":"21","plan_category_id":"1","node_type_category_id":"2","node_type_name":"ESTACIONAMIENTO","node_type_location":"0","PlanCategory":false},{"node_type_id":"22","plan_category_id":"1","node_type_category_id":"2","node_type_name":"PATIO","node_type_location":"0","PlanCategory":false},{"node_type_id":"23","plan_category_id":"1","node_type_category_id":"1","node_type_name":"DIRECCION","node_type_location":"0","PlanCategory":false},{"node_type_id":"24","plan_category_id":"1","node_type_category_id":"1","node_type_name":"PLANTA","node_type_location":"0","PlanCategory":false},{"node_type_id":"25","plan_category_id":"1","node_type_category_id":"1","node_type_name":"Pruebaicono","node_type_location":"0","PlanCategory":false},{"node_type_id":"26","plan_category_id":"1","node_type_category_id":"1","node_type_name":"IGLESIA","node_type_location":"0","PlanCategory":false},{"node_type_id":"27","plan_category_id":"1","node_type_category_id":"1","node_type_name":"CAPILLA","node_type_location":"0","PlanCategory":false},{"node_type_id":"28","plan_category_id":"1","node_type_category_id":"1","node_type_name":"UNIVERSIDAD","node_type_location":"0","PlanCategory":false},{"node_type_id":"29","plan_category_id":"1","node_type_category_id":"1","node_type_name":"DIRECCION PATRIMONIAL","node_type_location":"0","PlanCategory":false}]}}})';
         } else {
 
             $NodeType = Doctrine_Core::getTable('NodeType')->find($Node->node_type_id);
             $filters = array(
                 'p.node_id = ?' => $this->input->post('node_id')
-//                'nt.plan_category_id = ?' => $NodeType->plan_category_id
             );
 
             if ((!is_null($NodeType->plan_category_id)) && (!empty($NodeType->plan_category_id))) {
@@ -158,8 +152,6 @@ class PlanController extends APP_Controller {
             }
 
             $plans = Doctrine_Core::getTable('Plan')->retrieveByNodeResumen($filters);
-//            print_r($plans);
-//            exit();
             if ($plans) {
                 $ruta = 'plans/' . $plans->plan_filename;
 
@@ -168,9 +160,6 @@ class PlanController extends APP_Controller {
                 } else {
                     echo '({"total":"' . $plans->count() . '", "results":' . $this->json->encode($plans->toArray()) . ', "file_exist":false})';
                 }
-
-
-//                echo '({"total":"' . $plans->count() . '", "results":' . $this->json->encode($plans->toArray()) . ', "file_exist":true})';
             } else {
 
                 echo '({"total":"' . 0 . '", "results":[]})';
@@ -183,8 +172,6 @@ class PlanController extends APP_Controller {
 
         //CONFIGURACION DEL PDF  
         $this->load->library('pdf');
-//        $this->pdf->setPageOrientation('l'); // PDF_PAGE_ORIENTATION---> 'l' or 'p
-//        $this->pdf->setPageOrientation('p'); // PDF_PAGE_ORIENTATION---> 'l' or 'p
         $this->pdf->SetFont('helvetica', '', 8);
         if ($node_id != 'root') {
             $node = Doctrine_Core::getTable('Node')->find($node_id);
@@ -198,17 +185,10 @@ class PlanController extends APP_Controller {
         //MUETRA LA FOTO RESUMEN
         if ($foto_resumen != 'null') {
             $this->pdf->AddPage();
-//            $image = $this->config->item('doc_dir'). 'thumb/' . $foto_resumen;
             $image = $this->config->item('doc_dir') . 'thumb/' . $foto_resumen;
-//            $this->pdf->Image($image,0, 0, 20, 20);
             $this->pdf->Image($image, '', '', 100, 100, '', '', 'C', false, 300, 'C', false, false, 1, false, false, false);
         }
-//MAPA GOOGLE
-//        $this->pdf->AddPage();
-//        $lat = '-33.44265064842625';
-//        $lon = '-70.63761055469513';
-//        $lat_vista = $lat;
-//        $lon_vista = $lon;
+        //MAPA GOOGLE
         if ($lat != 'null') {
             $this->pdf->AddPage();
             $url = 'http://maps.google.com/maps/api/staticmap?center=' . $lat . ',' . $lon . '&zoom=16&markers=' . $lat . ',' . $lon . '&size=500x300&sensor=TRUE&key=AIzaSyBN6C_ynpkC6Tq4QquMgOo7c-mJ7SOF0ZY';
@@ -217,7 +197,6 @@ class PlanController extends APP_Controller {
 
         //MUESTRA EL PLAN
         if ($plan_id != 'null') {
-//            $this->pdf->AddPage();
             $plan = Doctrine_Core::getTable('Plan')->find($plan_id);
             $this->pdf->ImageSVG($this->config->item('plan_dir') . $plan->plan_filename, $x = 0, $y = 20, $w = '200', $h = '300', $link = '', $align = 'C', $palign = 'C', $border = 0, $fitonpage = true);
         }
@@ -263,7 +242,6 @@ class PlanController extends APP_Controller {
 
                     foreach ($infraConfig as $config) {
                         $result[$cont] = array();
-//                    $result[$cont]['field'] = $config->infra_attribute;
                         $result[$cont]['value'] = ($info) ? $info->{$config->infra_attribute} : NULL;
                         $result[$cont]['label'] = $this->translateTag('Infrastructure', $config->infra_attribute);
                         $cont++;
@@ -412,32 +390,28 @@ class PlanController extends APP_Controller {
                     $msg = $this->translateTag('General', 'operation_successful');
                     $url = '';
                 } else {
-
-
-                    $service_url = 'https://bimapi.velociti.cl/bim_igeo/';
-
-
+                    $service_url = $this->config->config['bimapi']['base_url'];
+                    $token = $this->getTokenBimApi();
                     $ch = curl_init($service_url);
+
                     $bim = $this->makeCurlFile($this->config->config['plan_dir'] . 'base_' . $plan_last_id . '.ifc');
                     $data = array('bim' => $bim, 'node_id' => $node_id, 'version' => $plan_version);
                     curl_setopt($ch, CURLOPT_POST, 1);
                     curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-//                    curl_setopt($ch, CURLOPT_PORT, 443);
                     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                        "Authorization: {$token}"
+                    ));
 
                     $result = curl_exec($ch);
-                    
                     if (curl_error($ch)) {
                         $result = curl_error($ch);
                     }
                     curl_close($ch);
-                    
-                   
 
                     $decoded = json_decode($result, true);
-
 
                     if ($decoded['status'] != 200) {
                         $success = false;
@@ -445,7 +419,7 @@ class PlanController extends APP_Controller {
                         $url = '';
                         $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg, 'plan_id' => $plan->plan_id, 'plan_category_id' => $plan->plan_category_id, 'plan_filename' => $plan_name, 'url' => $url));
                         echo $json_data;
-                        exit();
+                        exit;
                     } elseif ($decoded['status'] == 200) {
                         $conn->commit();
                         $success = true;
@@ -457,7 +431,7 @@ class PlanController extends APP_Controller {
                         $url = '';
                         $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg, 'plan_id' => $plan->plan_id, 'plan_category_id' => $plan->plan_category_id, 'plan_filename' => $plan_name, 'url' => $url));
                         echo $json_data;
-                        exit();
+                        exit;
                     }
                 }
             }
@@ -489,8 +463,7 @@ class PlanController extends APP_Controller {
         write_file($this->config->config['plan_dir'] . 'base_' . $plan_id . '.svg', $svg);
     }
 
-    private
-            function addPlanSetion($plan_id) {
+    private function addPlanSetion($plan_id) {
         $this->load->helper('file');
         $svg_xml = simplexml_load_file($this->config->config['plan_dir'] . 'base_' . $plan_id . '.svg');
 
@@ -559,79 +532,19 @@ class PlanController extends APP_Controller {
 
     function getgraph() {
 
-//VALIDACIONES
+        //VALIDACIONES
         $dir = str_replace("\\", "/", $this->config->item('temp_dir'));
 
         $plan = str_replace("\\", "/", $this->config->item('plan_dir'));
-
-
-
 
         //RESCATA LAS SECCIONES
         $this->load->helper('file');
         $svg_xml = simplexml_load_file($plan . 'base_493.svg');
 
 
-//        echo '<pre>';
-//        print_r($svg_xml);
-//        echo '</pre>';
-//        exit;
-//        
-//        
-//        
-//    foreach($svg_xml->children() as $child) {
-//        echo $child->getName().":";
-//
-//        foreach($child->children() as $subchild) {
-//          echo "->".$subchild->getName().": ".$subchild."";
-//        }
-//       }
-//       exit;
-//  foreach ($this->getLayers($svg_xml) as $layer)
-//        {
-//        print_r($this->getLayers($svg_xml));
-//             
-////        }
-//      exit;  
-//        
-//        foreach ($this->svg->getLayers($svg_xml) as $layer)
-//        {
-//         echo $this->config->config['plan_default_layer_color'];
-//        }
-//        
-//        
-//        
-//        exit;
-//        
-//        
-//        
-//        
-//        
-//        
-////        echo file_get_contents($plan . 'base_493.svg');
-////        foreach ($this->svg->getLayers($svg_xml) as $layer)
-////        {
-////         print_r($layer);
-////            }
-////        $svg_xml = json_decode(json_encode((array)simplexml_load_string($plan . 'base_493.svg')),1);
-//        
-//        
-////       $dd= $svg_xml->toArray();
-//       
-//        
-////            echo '<pre>';
-////       print_r($svg_xml);
-////       echo '</pre>';
-////       exit;
-//        
-
-
         foreach ($svg_xml->children() as $child) {
 
             $role = $child->attributes();
-//        echo '<pre>';
-//        print_r($role->id );
-//        echo '</pre>';
             if ($role->id[0] == "GENERAL") {
 
                 foreach ($child->children() as $child_hijos) {
@@ -640,49 +553,9 @@ class PlanController extends APP_Controller {
                     echo '</pre>';
                 }
             }
-//        foreach($child as $key => $value) {
-//            
-//            if($role == "GENERAL")
-//            echo("[".$key ."] ".$value . "<br />");
-//            
-//        }
         }
-//        foreach($svg_xml->g as $item){
-//            echo '<pre>';
-//            print_r($item);
-//            echo '</pre>';
-////            print_r($item->id) ;
-//        }
-//        exit;
-//        
-//       echo '<pre>';
-//       print_r($svg_xml->g[1]->path[]);
-//       echo '</pre>';
-//       
-//       exit;
-//        foreach ($this->svg->getLayers($svg_xml) as $layer)
-//        {
-//        echo '<pre>';
-//        print_r($svg_xml);
-//        echo '</pre>';
-//            print_r($svg_xml) ;
-//           echo '<br>';
-//            $planSection = new PlanSection();
-//            $planSection->plan_id = $plan_id;
-//            $planSection->plan_section_name = $layer;
-//            $planSection->plan_section_color = $this->config->config['plan_default_layer_color'];
-//            $planSection->save();
-//        }
-//        foreach ($this->getLayers($svg_xml) as $layer)
-//        {
-//           echo $svg_xml;
-//           echo '-';
-//            $planSection->plan_section_color = $this->config->config['plan_default_layer_color'];
-//            $planSection->save();
-//        }
 
-        exit
-        ;
+        exit;
     }
 
     /**
@@ -804,13 +677,6 @@ class PlanController extends APP_Controller {
         $node = Doctrine_Core::getTable('Node')->find($plan->node_id);
         $node_name = str_replace(' ', '', $node->node_name);
 
-//        $this->load->library('pdf');
-//        $this->pdf->setPageOrientation('l'); // PDF_PAGE_ORIENTATION---> 'l' or 'p
-//        $this->pdf->SetFont('helvetica', '', 8);
-//
-//        $this->pdf->ImageSVG($this->config->item('plan_dir') . $plan->plan_filename, $x = 5, $y = 20, $w = '', $h = '', $link = '', $align = '', $palign = '', $border = 0, $fitonpage = false);
-//        $this->pdf->Output($node_name . '.pdf', 'D');
-
         $data[0] = htmlentities(utf8_encode($node_name), 0, 'UTF-8');
         $data['success'] = true;
         echo json_encode($data);
@@ -829,129 +695,7 @@ class PlanController extends APP_Controller {
 
             $success = true;
             $msg = $this->translateTag('General', 'operation_successful');
-
-
-
-
             $params = json_decode($this->input->post('json_params'));
-//            $this->load->helper('file');
-//            $svg_xml = simplexml_load_file($this->config->config['plan_dir'] . $params->archivo);
-//
-//
-//
-//
-//            if (isset($params->enterText) && !is_null($params->enterText) && (!$params->eliminar)) {
-//
-//
-//                $length = ($params->textSize + $params->textLength);
-//                $id = 'text_' . $params->positionX . '_' . $params->positionY;
-//                $positionPoly = (floatval($params->positionX) . "," . floatval($params->positionY) . " " . (floatval($params->positionX) + floatval(40)) . "," . (floatval($params->positionY) + floatval(40)) . " " . (floatval($params->positionX) + $length + (40)) . "," . (floatval($params->positionY) + floatval(40)));
-//
-//                //echo $positionPoly;exit();
-//                $nodeCircle = $svg_xml->g->addChild('circle');
-//                $nodeCircle->addAttribute('id', "circle_" . $params->positionX . '_' . $params->positionY);
-//                $nodeCircle->addAttribute('cx', $params->positionX);
-//                $nodeCircle->addAttribute('cy', $params->positionY);
-//                $nodeCircle->addAttribute("r", "5");
-//                $nodeCircle->addAttribute("fill", "#f00a0a");
-//
-//                $nodePolyline = $svg_xml->g->addChild('polyline');
-//                $nodePolyline->addAttribute('id', "polyline_" . $params->positionX . '_' . $params->positionY);
-//                $nodePolyline->addAttribute("points", $positionPoly);
-//                $nodePolyline->addAttribute("fill", "none");
-//                $nodePolyline->addAttribute("stroke", "#f00a0a");
-//                $nodePolyline->addAttribute("stroke-width", "2");
-//
-//                //$nodeText = $svg_xml->g->addChild('text', $params->enterText);
-//                $nodeText = $svg_xml->g->addChild('text');
-//                $nodeText->addAttribute('font-family', $params->textFont);
-//                $nodeText->addAttribute('font-size', $params->textSize);
-//                $nodeText->addAttribute('fill', $params->textColor);
-//                $nodeText->addAttribute('y', $params->textY);
-//                $nodeText->addAttribute('x', $params->textX);
-//                $nodeText->addAttribute('id', $id);
-//                $nodeText->addAttribute('onclick', "deleteText('" . $id . "','" . $params->plan_id . "')");
-//
-//                $array_text = explode("\n", $params->enterText);
-//                $inicio = 0;
-//
-//
-//
-//                foreach ($array_text as $key => $value) {
-//
-//                    if ($inicio === 0) {
-//
-//                        if (count($array_text) === 1) {
-//                            $tamano_text = 0;
-//                        } else {
-//                            $tamano_text = $params->textSize * -(count($array_text) - 1);
-//                        }
-//
-//                        $inicio = 1;
-//                    } else {
-//                        $tamano_text = $params->textSize;
-//                    }
-//
-//                    $nodeTspan = $nodeText->addChild('tspan', $value);
-//                    $nodeTspan->addAttribute('x', $params->textX);
-//                    $nodeTspan->addAttribute('dy', $tamano_text);
-//                }
-//            }
-//
-//            if ($params->eliminar) {
-//
-//                $id_s = explode("_", $params->idText);
-//                foreach ($svg_xml->g->text as $key => $value) {
-//                    foreach ($value->attributes() as $key2 => $value2) {
-//                        $_id_temp = (array) $value2;
-//
-//                        if ($key2 === 'id' && $_id_temp[0] === $params->idText) {
-//                            $dom = dom_import_simplexml($value);
-//                            $dom->parentNode->removeChild($dom);
-//                        }
-//                    }
-//                }
-//
-//                foreach ($svg_xml->g->text as $key => $value) {
-//                    foreach ($value->attributes() as $key2 => $value2) {
-//                        $_id_temp = (array) $value2;
-//
-//
-//                        if ($key2 === 'id' && $_id_temp[0] === "polyline_" . $id_s[1] . "_" . $id_s[2]) {
-//                            $dom = dom_import_simplexml($value);
-//                            $dom->parentNode->removeChild($dom);
-//                        }
-//                    }
-//                }
-//
-//                foreach ($svg_xml->g->circle as $key => $value) {
-//                    foreach ($value->attributes() as $key2 => $value2) {
-//                        $_id_temp = (array) $value2;
-//
-//                        if ($key2 === 'id' && $_id_temp[0] === "circle_" . $id_s[1] . "_" . $id_s[2]) {
-//                            $dom = dom_import_simplexml($value);
-//                            $dom->parentNode->removeChild($dom);
-//                        }
-//                    }
-//                }
-//
-//                foreach ($svg_xml->g->polyline as $key => $value) {
-//                    foreach ($value->attributes() as $key2 => $value2) {
-//                        $_id_temp = (array) $value2;
-//
-//                        if ($key2 === 'id' && $_id_temp[0] === "polyline_" . $id_s[1] . "_" . $id_s[2]) {
-//                            $dom = dom_import_simplexml($value);
-//                            $dom->parentNode->removeChild($dom);
-//                        }
-//                    }
-//                }
-//            }
-//
-//
-//
-//            write_file($this->config->config['plan_dir'] . $params->archivo, $svg_xml->asXML());
-//            $success = true;
-//            $msg = $this->translateTag('General', 'operation_successful');
         } catch (Exception $e) {
             //Si hay error, rollback de los cambios en la base de datos
             $conn->rollback();
@@ -999,7 +743,7 @@ class PlanController extends APP_Controller {
         $plans = Doctrine_Core::getTable('Plan')->retrieveByNode($filters);
         echo 'plans: ';
         print_r($plans);
-        exit();
+        exit;
         if ($plans->count()) {
             foreach ($plans as $Plan) {
                 $Plan->plan_cover = null;
@@ -1011,54 +755,65 @@ class PlanController extends APP_Controller {
         $PlanSelected->save();
     }
 
-    function getBim() {
+    function getTokenBimApi() {
+        $serviceUrl = "{$this->config->config['bimapi']['base_url']}authenticate";
+        $ch = curl_init($serviceUrl);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $this->config->config['bimapi']['credenciales']);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        if (curl_error($ch)) {
+            $result = curl_error($ch);
+        }
+        curl_close($ch);
+        $decoded = json_decode($result, 1);
+        return $decoded['token'];
+    }
 
+    function getBim() {
         $node_id = $this->input->post('node_id');
         $plan_category_id = $this->input->post('plan_category_id');
 
         $PlanTable = Doctrine_Core::getTable('Plan')->retrieveCurrentBIM($node_id, $plan_category_id);
-        
-      
+
+
         if ($PlanTable) {
 
             $version = $PlanTable->plan_version;
-            $fileName =  $PlanTable->plan_filename;
+            $fileName = $PlanTable->plan_filename;
 
-            $url = 'https://bimapi.velociti.cl/bim_igeo/' . $node_id . '/' . $version . '/' . $fileName;
-          
-            
+            $url = "{$this->config->config['bimapi']['base_url']}" . $node_id . '/' . $version . '/' . $fileName;
+            $token = $this->getTokenBimApi();
             $curl = curl_init($url);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+                "Authorization: {$token}"
+            ));
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             $curl_response = curl_exec($curl);
             if ($curl_response === false) {
                 $info = curl_getinfo($curl);
 
                 echo '({"total":"0", "results":[]})';
-                exit();
+                exit;
             }
             curl_close($curl);
             $decoded = json_decode($curl_response);
-//        
-          
-           if(isset($decoded[0]->status) != 200 ) {
 
+            if (isset($decoded[0]->status) != 200) {
                 echo '({"total":"0", "results":[]})';
             } else {
-//         
-
                 echo '({"total":"' . count($decoded) . '", "results":' . $this->json->encode($decoded) . '})';
             }
-        }else{
-             echo '({"total":"0", "results":[]})';
+        } else {
+            echo '({"total":"0", "results":[]})';
         }
     }
-    
-    
-    function getBimVersion(){
-        
+
+    function getBimVersion() {
+
         $plan_id = $this->input->post('plan_id');
-        
-        
+
+
         $PlanTable = Doctrine_Core::getTable('Plan')->find($plan_id);
 
         if ($PlanTable) {
@@ -1067,33 +822,32 @@ class PlanController extends APP_Controller {
             $fileName = $PlanTable->plan_filename;
             $node_id = $PlanTable->node_id;
 
-            $url = 'https://bimapi.velociti.cl/bim_igeo/' . $node_id . '/' . $version . '/' . $fileName;
-            
-            
+            $url = "{$this->config->config['bimapi']['base_url']}" . $node_id . '/' . $version . '/' . $fileName;
+
+            $token = $this->getTokenBimApi();
             $curl = curl_init($url);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+                "Authorization: {$token}"
+            ));
+
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             $curl_response = curl_exec($curl);
             if ($curl_response === false) {
                 $info = curl_getinfo($curl);
                 echo '({"total":"0", "results":[]})';
-                exit();
+                exit;
             }
             curl_close($curl);
             $decoded = json_decode($curl_response);
-//        
-          
-           if(isset($decoded[0]->status) != 200 ) {
 
+            if (isset($decoded[0]->status) != 200) {
                 echo '({"total":"0", "results":[]})';
             } else {
-//         
-
                 echo '({"total":"' . count($decoded) . '", "results":' . $this->json->encode($decoded) . '})';
             }
-        }else{
-             echo '({"total":"0", "results":[]})';
+        } else {
+            echo '({"total":"0", "results":[]})';
         }
-        
     }
 
 }

@@ -37,12 +37,10 @@
 $active_group = "default";
 $active_record = TRUE;
 
-//$db['default']['hostname'] = "velociti-labs.ckhscbcb1e5x.us-east-1.rds.amazonaws.com";
 $db['default']['hostname'] = "igeo.ckhscbcb1e5x.us-east-1.rds.amazonaws.com";
 $db['default']['port'] = "3306";
 $db['default']['username'] = "root";
 $db['default']['password'] = "S0p0rt3$$";
-//$db['default']['database'] = "igeo_uchile_2016";
 $db['default']['database'] = "igeo_u_2016_v2";
 $db['default']['dbdriver'] = "mysql";
 $db['default']['dbprefix'] = "";
