@@ -1,3 +1,5 @@
+/* global App, Ext */
+
 App.Request.Services.Store = new Ext.data.JsonStore({
     proxy: new Ext.data.HttpProxy({
         api: {

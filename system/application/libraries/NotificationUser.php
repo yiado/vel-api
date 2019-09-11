@@ -2,13 +2,11 @@
 
 class NotificationUser {
 
-	var $CI;
+    var $CI;
 
-    function NotificationUser () {
-
-        $this->CI =& get_instance();
+    function NotificationUser() {
+        $this->CI = & get_instance();
         $this->CI->config->load('email');
-
     }
 
     /**
@@ -18,32 +16,30 @@ class NotificationUser {
      * @param string $subject (asunto del mensaje)
      * @param string $msg (cuerpo del mensaje)
      */
-
-    function mail($to = array(), $subject, $msg, $cc = NULL, $co = NULL, $attaches=null) {
-
-    	//Clase mail
+    function mail($to, $subject, $msg, $attaches = null) {
         $this->CI->load->library('email');
 
-        $this->CI->email->set_newline("\r\n");
-        $from = $this->CI->config->item('smtp_user');
-        $this->CI->email->from($from, 'Sistema de información IGEO');
+        //$this->CI->email->set_newline("\r\n");
+
+        $this->CI->email->from('igeo@correo.velociti.cl', 'Sistema de información IGEO');
         $this->CI->email->to($to);
 
-        $this->CI->email->subject($subject);
+        $this->CI->email->subject("[iGeo] " . $subject);
         $this->CI->email->message($msg);
-        
-        // attaches
-        if (!is_null($attaches)) {
-        	foreach ($attaches as $attach) {
-        		$this->CI->email->attach($attach);
-        	}
-        }
-        
-        //Enviar mail
-        $this->CI->email->send();
-        //Reset del sender
-        $this->CI->email->clear();
 
+        if (!is_null($attaches)) {
+            foreach ($attaches as $attach) {
+                $this->CI->email->attach($attach);
+            }
+        }
+
+        $this->CI->email->send();
+        /*
+         * Descomentar solo para depurar en caso de fallas.
+         */
+        //echo $this->CI->email->print_debugger();
+        
+        $this->CI->email->clear();
     }
 
     /**
@@ -53,7 +49,7 @@ class NotificationUser {
      * @string $to (numero de celular)
      */
     function sms($msg, $to) {
-
+        
     }
 
 }

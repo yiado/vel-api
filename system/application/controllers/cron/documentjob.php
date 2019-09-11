@@ -61,12 +61,12 @@ class documentjob extends APP_Controller {
 					
 					copy($this->config->item('doc_dir') . $alert['doc_version_filename'], $this->config->item('temp_dir') . $alert['DocDocument']['doc_document_filename']);
 
-					$CI->notificationuser->mail($to, $subject, $body, null, null, array (
+					$CI->notificationuser->mail($to, $subject, $body, array (
 						$this->config->item('temp_dir'
 					) . $alert['DocDocument']['doc_document_filename']));
 					$body = '';
 
-					unlink($this->config->item('temp_dir') . $alert['DocDocument']['doc_document_filename']);
+					@unlink($this->config->item('temp_dir') . $alert['DocDocument']['doc_document_filename']);
 					
 				}
 			}

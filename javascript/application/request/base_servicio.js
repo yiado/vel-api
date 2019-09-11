@@ -1,3 +1,5 @@
+/* global App, Ext */
+
 Ext.namespace('App.Request');
 Ext.namespace('App.RequestByNode');
 
@@ -19,7 +21,7 @@ App.ModuleActions[8009] = {
         });
         w.show();
     }
-}
+};
 
 App.ModuleActions[8010] = {
     text: App.Language.General.eexport,
@@ -30,7 +32,7 @@ App.ModuleActions[8010] = {
         w = new App.Request.exportServiceListByNodeWindow();
         w.show();
     }
-}
+};
 
 App.ModuleActions[8011] = {
     text: App.Language.Request.history_service,
@@ -54,7 +56,7 @@ App.ModuleActions[8011] = {
             Ext.FlashMessage.alert('Debe Seleccionar un Servicio');
         }
     }
-}
+};
 
 App.ModuleActions[8012] = {
     id: 'ModuleAction_8012',
@@ -70,32 +72,4 @@ App.ModuleActions[8012] = {
         }
         b.ownerCt.ownerCt.doLayout();
     }
-}
-
-App.ModuleActions[8013] = {
-    xtype: 'splitbutton',
-    text: 'Estados',
-    hidden: true,
-    iconCls: 'add_icon',
-    menu: [{
-        text: 'Recepcionada',
-        iconCls: 'add_icon',
-        handler: function() {}
-    }, {
-        text: 'En proceso',
-        iconCls: 'add_icon',
-        handler: function() {}
-    }, {
-        text: 'En presupuesto',
-        iconCls: 'add_icon',
-        handler: function() {}
-    }, {
-        text: 'Rechazada',
-        iconCls: 'add_icon',
-        handler: function() {}
-    }, {
-        text: 'Terminadas',
-        iconCls: 'add_icon',
-        handler: function() {}
-    }]
-}
+};

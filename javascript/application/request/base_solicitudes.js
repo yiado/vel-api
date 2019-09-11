@@ -239,7 +239,7 @@ App.ModuleActions[8013] = {
     xtype: 'splitbutton',
     text: 'Estados',
     hidden: true,
-    iconCls: 'add_icon',
+    iconCls: 'edit_icon',
     id: 'btn-service-status',
     menu: [],
     listeners: {

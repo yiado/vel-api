@@ -8,6 +8,8 @@ class ServiceController extends APP_Controller {
 
     function ServiceController() {
         parent::APP_Controller();
+        $this->CI = & get_instance();
+        $this->CI->load->library('NotificationUser');
     }
 
     function get() {
@@ -30,6 +32,8 @@ class ServiceController extends APP_Controller {
     }
 
     function add() {
+        $node = Doctrine_Core::getTable('Node')->find((int) $this->input->post('node_id'));
+
         //Obtenemos la conexión actual
         $conn = Doctrine_Manager::getInstance()->getCurrentConnection();
 
@@ -59,9 +63,10 @@ class ServiceController extends APP_Controller {
             $msg = $this->translateTag('General', 'operation_successful');
 
             $conn->commit();
-            
+
             //Enviar correo de Alerta de creación de Service
-            //$this->sendNotification($service);
+            $this->sendNotificationAdministrador($service, $node);
+            $this->sendNotificationRecibido($service);
         } catch (Exception $e) {
             //Si hay error, rollback de los cambios en la base de datos
             $conn->rollback();
@@ -90,7 +95,7 @@ class ServiceController extends APP_Controller {
 
                 $service->service_organism = $service_organism;
             }
-            
+
             $service_phone = $this->input->post('service_phone');
             if ($service->service_phone != $service_phone) {
                 $serviceLog = new ServiceLog();
@@ -101,7 +106,7 @@ class ServiceController extends APP_Controller {
                 $serviceLog->save();
                 $service->service_phone = $service_phone;
             }
-            
+
             $service_commentary = $this->input->post('service_commentary');
             if ($service->service_commentary != $service_commentary) {
                 $serviceLog = new ServiceLog();
@@ -112,8 +117,9 @@ class ServiceController extends APP_Controller {
                 $serviceLog->save();
                 $service->service_commentary = $service_commentary;
             }
-            
+
             $service_status_id = $this->input->post('service_status_id');
+            $cambio_estado = false;
             if ($service->service_status_id != $service_status_id && isset($service_status_id)) {
                 $serviceStatusNew = Doctrine_Core::getTable('ServiceStatus')->find((int) $service_status_id);
                 $serviceLog = new ServiceLog();
@@ -123,13 +129,17 @@ class ServiceController extends APP_Controller {
                 $serviceLog->service_log_detail = "Cambio de estado: {$service->ServiceStatus->service_status_name} Por  : {$serviceStatusNew->service_status_name}";
                 $serviceLog->save();
                 $service->service_status_id = $service_status_id;
+                $cambio_estado = true;
             }
-            
-            $service->save();
 
+            $service->save();
             $success = true;
             $msg = $this->translateTag('General', 'operation_successful');
             $conn->commit();
+            
+            if ($cambio_estado) {
+                $this->sendNotificationUpdate($service);
+            }
         } catch (Exception $e) {
             $conn->rollback();
             $success = false;
@@ -256,23 +266,51 @@ class ServiceController extends APP_Controller {
 
         echo '{"success": true, "file": "temp/' . $this->input->post('file_name') . '.xlsx"}';
     }
-    
-    function sendNotification($service) {
-        $to = trim($service->User->user_email);
 
-        $subject = 'Aviso de Creación de servicio';
+    function sendNotificationRecibido($service) {
+        $body = "La solicitud [{$service->service_commentary}] ha sido recibida.";
+        $this->CI->notificationuser->mail($service->User->user_email, 'Solicitud de servicio recibida', $body);
+    }
 
-        $date = new DateTime($service->solicitud_fecha);
+    function sendNotificationAdministrador($service, $node) {
+        $date = new DateTime($service->service_date);
         $fecha = $date->format('d/m/Y H:i');
-        
-        $body = "Tipo de Servicio : {$service->ServiceType->service_type_name}\n";
-        $body .= "Estado del Servicio : {$service->ServiceStatus->service_status_name}\n";
-        $body .= "Nombre de Usuario : {$service->User->user_username}\n";
-        $body .= "Fecha de Servicio : {$fecha}\r\n";
-        $body .= "Teléfono : {$service->service_phone}\r\n";
-        $body .= "Organismo : {$service->service_organism}\r\n";
-        $body .= "Comentario de Usuario : {$service->service_commentary}\r\n";
-        
+        $body = '';
+        $nodos_ancestros = array();
+
+        if ($node->getNode()->getLevel()) {
+            foreach ($node->getNode()->getAncestors()->toArray() as $nodo) {
+                $nodos_ancestros[] = $nodo['node_name'];
+            }
+            $nodos_ancestros[] = $node->toArray()['node_name'];
+        }
+
+        $body .= "Ubicacion: " . implode(' => ', $nodos_ancestros) . "<br>";
+        $body .= "Tipo de Servicio: {$service->ServiceType->service_type_name}<br>";
+        $body .= "Estado del Servicio: {$service->ServiceStatus->service_status_name}<br>";
+        $body .= "Nombre de Usuario: {$service->User->user_username}<br>";
+        $body .= "Fecha de Servicio: {$fecha}<br>";
+        $body .= "Teléfono: {$service->service_phone}<br>";
+        $body .= "Organismo: {$service->service_organism}<br>";
+        $body .= "Requerimiento: {$service->service_commentary}<br>";
+
+        $this->CI->notificationuser->mail($service->ServiceType->User->user_email, 'Nueva Solicitud de Servicio', $body, $service->User->user_email);
+    }
+
+    function sendNotificationUpdate($service) {
+        $date = new DateTime($service->service_date);
+        $fecha = $date->format('d/m/Y H:i');
+        $body = "Tipo de Servicio: {$service->ServiceType->service_type_name}<br>";
+        $body .= "Estado del Servicio: {$service->ServiceStatus->service_status_name}<br>";
+        $body .= "Nombre de Usuario: {$service->User->user_username}<br>";
+        $body .= "Fecha de Servicio: {$fecha}<br>";
+        $body .= "Teléfono: {$service->service_phone}<br>";
+        $body .= "Organismo: {$service->service_organism}<br>";
+        $body .= "Requerimiento: {$service->service_commentary}<br>";
+
+        $CI = & get_instance();
+        $CI->load->library('NotificationUser');
+        $CI->notificationuser->mail($service->ServiceType->User->user_email, 'Cambio estado de servicio', $body, $service->User->user_email);
     }
 
 }
