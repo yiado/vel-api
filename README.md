@@ -30,10 +30,12 @@
 ## CREA USUARIO MYSQL
     https://www.digitalocean.com/community/tutorials/crear-un-nuevo-usuario-y-otorgarle-permisos-en-mysql-es
 
-##COMPOSER
+## COMPOSER
     https://www.ionos.com/community/hosting/php/install-and-use-php-composer-on-ubuntu-1604/
 
-##CLONAR REPOSITORIO
+## CLONAR REPOSITORIO
+    git clone git@bitbucket.org:adminpok/igeo-backend.git
+
 ## CAMBIAR CREDENCIALES BD
     cp application/config/bkp_database.php application/config/database.php
     vi application/config/database.php
@@ -57,9 +59,9 @@
     sudo setsebool httpd_can_network_connect=1
 
 
-##PERMISOS EN AMBIENTE PRODUCTIVO
+## PERMISOS EN AMBIENTE PRODUCTIVO
     sudo find . -type f -exec chmod 755 {} \;
     sudo find . -type d -exec chmod 664 {} \;
  
-##CARPETAS ESPECIALES CON PERMISOS 777
+## CARPETAS ESPECIALES CON PERMISOS 777
     chmod -R 777 plans/ docs/ assets_doc/ style/ temp/ system/application/libraries/tcpdf/cache/
