@@ -1,3 +1,5 @@
+/* global App, Ext */
+
 App.Plan.Config.Store = new Ext.data.JsonStore({
     proxy: new Ext.data.HttpProxy({
         api: {
@@ -270,8 +272,7 @@ App.Plan.Section.StoreBimVersion = new Ext.data.JsonStore({
         'filename',
         'node',
         'url',
-        'version',
-
+        'version'
     ]
 });
 
@@ -301,7 +302,7 @@ App.Plan.PlanNode.Store = new Ext.data.JsonStore({
     ],
     listeners: {
         'update': function(store) {
-            store.sort('plan_section_name', 'ASC')
+            store.sort('plan_section_name', 'ASC');
         }
     }
 });

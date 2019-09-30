@@ -1,3 +1,5 @@
+/* global Ext, App */
+
 Ext.namespace('App.Plan');
 
 App.General.declareNameSpaces('App.Plan', [
@@ -21,7 +23,7 @@ App.Plan.moduleActivate = function() {
             title: App.Language.Plan.planimetry
         });
     }
-}
+};
 
 App.ModuleActions[3000] = {};
 
@@ -55,10 +57,10 @@ App.ModuleActions[3001] = {
                     }
                 });
             }
-        }
+        };
         w.show();
     }
-}
+};
 
 App.ModuleActions[3002] = {
     text: App.Language.General.new_version,
@@ -111,11 +113,6 @@ App.ModuleActions[3002] = {
                                 }, 1000);
                             }, false);
 
-                            if (embElement != null) {
-                                if (App.Plan.idPlan.indexOf(idElement) === -1) {
-                                    //                            msg = Ext.MessageBox.wait("", "Cargando...");
-                                }
-                            }
                             zomm_m(o.result.plan_id, msg);
                         } else {
                             panel.tpl.overwrite(panel.body, {
@@ -151,7 +148,7 @@ App.ModuleActions[3002] = {
             }
         });
     }
-}
+};
 
 App.ModuleActions[3004] = {
     text: App.Language.General.eexport,
@@ -161,7 +158,7 @@ App.ModuleActions[3004] = {
         w = new App.Plan.exportListWindow();
         w.show();
     }
-}
+};
 
 App.ModuleActions[3005] = {
     iconCls: 'config_icon',
@@ -172,7 +169,7 @@ App.ModuleActions[3005] = {
         grid = Ext.getCmp('App.Plan.AllVersionsGridAll');
         if (grid.getSelectionModel().getCount() == 1) {
             records = Ext.getCmp('App.Plan.AllVersionsGridAll').getSelectionModel().getSelections();
-            plan_id = records[0].data.plan_id
+            plan_id = records[0].data.plan_id;
             Ext.Ajax.request({
                 url: 'index.php/plan/plan/setPlanPortada',
                 params: { plan_id: plan_id },
@@ -185,4 +182,4 @@ App.ModuleActions[3005] = {
             Ext.FlashMessage.alert("Seleccionar un plano.");
         }
     }
-}
+};
