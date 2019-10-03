@@ -64,10 +64,13 @@ class PlanVersionController extends APP_Controller {
                 $version = $PlanTable->plan_version;
                 $fileName =  $PlanTable->plan_filename;
                 
-                $url = 'https://bimapi.velociti.cl/bim_igeo/' . $node_id . '/' . $version . '/' . $fileName;
-                
+                $url = "{$this->config->config['bimapi']['base_url']}" . $node_id . '/' . $version . '/' . $fileName;
+                $token = $this->getTokenBimApi();
              
                 $curl = curl_init($url);
+                curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+                    "Authorization: {$token}"
+                ));
                 curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
                 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
                 $curl_response = curl_exec($curl);
@@ -202,6 +205,21 @@ class PlanVersionController extends APP_Controller {
         }
         $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg));
         echo $json_data;
+    }
+
+    function getTokenBimApi() {
+        $serviceUrl = "{$this->config->config['bimapi']['base_url']}authenticate";
+        $ch = curl_init($serviceUrl);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $this->config->config['bimapi']['credenciales']);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        if (curl_error($ch)) {
+            $result = curl_error($ch);
+        }
+        curl_close($ch);
+        $decoded = json_decode($result, 1);
+        return $decoded['token'];
     }
 
 }
