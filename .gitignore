@@ -1,10 +1,9 @@
-/nbproject/private/
 plans/*.svg
 plans/*.ifc
 plans/*.png
 plans/*.gltf
 plans/*.pdf
-docs/
+docs/*.*
 temp/*.pdf
 temp/*.xls
 temp/*.xlsx
