@@ -60,7 +60,7 @@ class AssetController extends APP_Controller {
             'asset_condition_id = ?' => $this->input->post('asset_condition_id')
         );
         $asset = $assetTable->retrieveByNodeId($filters, $node_id, $this->input->post('search_branch'), $this->input->post('written_off'), $this->input->post('start'), $this->input->post('limit'));
-
+        
         if ($asset->count()) {
 //            if ($assetCont->count() < 100) {
 //                echo '({"total":"' . $assetCont->count() . '", "results":' . $this->json->encode($assetCont->toArray()) . '})';

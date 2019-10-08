@@ -114,6 +114,10 @@ abstract class BaseNode extends Doctrine_Record {
 
     public function setUp() {
         parent::setUp();
+        $this->hasMany('Service', array(
+            'local' => 'node_id',
+            'foreign' => 'node_id'));
+        
         $this->hasMany('Solicitud', array(
             'local' => 'node_id',
             'foreign' => 'node_id'));

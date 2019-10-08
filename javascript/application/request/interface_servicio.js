@@ -285,6 +285,14 @@ App.Request.Service.Grilla = {
     columns: [
         new Ext.grid.CheckboxSelectionModel(),
         {
+            header: App.Language.Core.location,
+            sortable: true,
+            dataIndex: 'Node',
+            align: 'center',
+            renderer: function (Node, metaData, record) {
+                return "<div style='background-image: url(" + record.data.icon + "); background-repeat: no-repeat; height: 16; width: 16; float: left; padding-left: 20; padding-top: 2'><a href='javascript: App.Request.Service.expand(" + record.data.node_id + ")'>" + Node.node_name + "</a></div>";
+            }
+        }, {
             header: 'Tipo',
             sortable: true,
             width: 50,
@@ -852,3 +860,9 @@ App.Request.changeServiceStatusWindow = Ext.extend(Ext.Window, {
         App.Request.changeServiceStatusWindow.superclass.initComponent.call(this);
     }
 });
+
+App.Request.Service.expand = function(node_id) {
+    App.Interface.selectedNodeId = node_id;
+    node = Ext.getCmp('App.StructureTree.Tree').getNodeById(node_id);
+    App.Security.checkNodeAccess(node);
+};

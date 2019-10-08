@@ -7,12 +7,10 @@ class ServiceTable extends Doctrine_Table {
     function retrieveAll($filters = array()) {
 
         $q = Doctrine_Query::create()
-                ->select('s.*,se.*, st.*, u.*')
                 ->from('Service s')
                 ->innerJoin('s.ServiceStatus se')
                 ->innerJoin('s.ServiceType st')
-                ->innerJoin('s.User u')
-                ->orderBy('service_id');
+                ->innerJoin('s.User u');
 
         $flag = false;
         foreach ($filters as $field => $value) {

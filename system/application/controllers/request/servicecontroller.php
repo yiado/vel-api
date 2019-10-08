@@ -155,6 +155,8 @@ class ServiceController extends APP_Controller {
         $user_type = $this->session->userdata('user_type');
 
         $node_id = (int) $this->input->post('node_id');
+        
+        $ancestros = Doctrine_Core::getTable('Node')->findOneByNodeId($node_id)->getNode()->getAncestors();
 
         $service_type_id = $this->input->post('service_type_id');
         $service_status_id = $this->input->post('service_status_id');
@@ -168,7 +170,6 @@ class ServiceController extends APP_Controller {
         $service_organism = $this->input->post('service_organism');
 
         $filters = array(
-            'node_id = ?' => $node_id,
             'st.service_type_id = ?' => $service_type_id,
             'se.service_status_id = ?' => $service_status_id,
             'u.user_username LIKE ?' => (!empty($user_username) ? '%' . $user_username . '%' : NULL),
@@ -178,6 +179,10 @@ class ServiceController extends APP_Controller {
             'service_date <= ?' => (!empty($end_date) ? $end_date . ' 23:59:59' : NULL ),
             'service_organism LIKE ?' => (!empty($service_organism) ? '%' . $service_organism . '%' : NULL)
         );
+        
+        if ($ancestros) {
+            $filters['node_id = ?'] = $node_id;
+        }
 
         if ($user_type !== 'A') {
             $filters['user_id = ?'] = (!empty($user_id) ? $user_id : NULL );
@@ -285,7 +290,7 @@ class ServiceController extends APP_Controller {
             $nodos_ancestros[] = $node->toArray()['node_name'];
         }
 
-        $body .= "Ubicacion: " . implode(' => ', $nodos_ancestros) . "<br>";
+        $body .= "Nodo: " . implode(' => ', $nodos_ancestros) . "<br>";
         $body .= "Tipo de Servicio: {$service->ServiceType->service_type_name}<br>";
         $body .= "Estado del Servicio: {$service->ServiceStatus->service_status_name}<br>";
         $body .= "Nombre de Usuario: {$service->User->user_username}<br>";
@@ -294,7 +299,7 @@ class ServiceController extends APP_Controller {
         $body .= "Organismo: {$service->service_organism}<br>";
         $body .= "Requerimiento: {$service->service_commentary}<br>";
 
-        $this->CI->notificationuser->mail($service->ServiceType->User->user_email, 'Nueva Solicitud de Servicio', $body, $service->User->user_email);
+        $this->CI->notificationuser->mail($service->ServiceType->User->user_email, 'Nueva Solicitud de Servicio', $body);
     }
 
     function sendNotificationUpdate($service) {
@@ -310,7 +315,7 @@ class ServiceController extends APP_Controller {
 
         $CI = & get_instance();
         $CI->load->library('NotificationUser');
-        $CI->notificationuser->mail($service->ServiceType->User->user_email, 'Cambio estado de servicio', $body, $service->User->user_email);
+        $CI->notificationuser->mail($service->ServiceType->User->user_email, 'Cambio estado de servicio', $body);
     }
 
 }

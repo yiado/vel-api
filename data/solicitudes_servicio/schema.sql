@@ -12,7 +12,10 @@ CREATE TABLE `service_type`  (
   `service_type_id` int(11) NOT NULL AUTO_INCREMENT,
   `service_type_name` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `service_type_commentary` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`service_type_id`) USING BTREE
+  `user_id` int(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`service_type_id`) USING BTREE,
+  INDEX `user_id`(`user_id`) USING BTREE,
+  CONSTRAINT `service_type_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
 

@@ -1,3 +1,5 @@
+/* global Ext, App */
+
 Ext.namespace('App.StructureTree');
 
 App.StructureTree.NameSpaces = [
@@ -49,7 +51,7 @@ App.StructureTree.Tree.XML.expanddeep = function(node_id, treeNode, children) {
         }
 
     }
-}
+};
 
 App.StructureTree.Tree.JSON = Ext.extend(Ext.tree.TreePanel, {
     xtype: 'treepanel',
@@ -62,15 +64,13 @@ App.StructureTree.Tree.JSON = Ext.extend(Ext.tree.TreePanel, {
         this.root = {
             nodeType: 'async',
             text: App.Language.Core.root_node,
-            id: 'root',
-
+            id: 'root'
         };
         this.loader = {
             dataUrl: 'index.php/core/nodecontroller/expand',
             preloadChildren: true,
-            collapseFirst: false,
-
-        }
+            collapseFirst: false
+        };
         App.StructureTree.Tree.JSON.superclass.initComponent.call(this);
         jQuery('.x-tree-ec-icon.x-tree-elbow-end-plus').trigger('click');
     }
@@ -85,4 +85,4 @@ App.StructureTree.Tree.getUserTree = function() {
     } else {
         return 'apptree.XML';
     }
-}
+};

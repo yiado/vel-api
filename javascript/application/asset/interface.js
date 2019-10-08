@@ -724,7 +724,6 @@ App.Asset.PrincipalClase = Ext.extend(Ext.Panel, {
 
                         renderer: function(val, metadata, record) {
                             if (record.data.asset_document_count >= 1) {
-
                                 return "<div style='background-image: url(style/default/icons/clip_icon.png); background-repeat: no-repeat; height: 16; width: 16; float: left; padding-left: 20; padding-top: 2'></div>";
                             }
                         }

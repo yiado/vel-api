@@ -115,6 +115,7 @@ abstract class BaseService extends Doctrine_Record {
         $this->hasOne('Node', array(
             'local' => 'node_id',
             'foreign' => 'node_id'));
+        
         $this->hasOne('User', array(
             'local' => 'user_id',
             'foreign' => 'user_id'));

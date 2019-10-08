@@ -216,5 +216,17 @@ abstract class BaseUser extends Doctrine_Record {
         $this->hasMany('UserProvider', array(
              'local' => 'user_id',
              'foreign' => 'user_id'));
+        
+        $this->hasMany('Service', array(
+             'local' => 'user_id',
+             'foreign' => 'user_id'));
+        
+        $this->hasMany('ServiceLog', array(
+             'local' => 'user_id',
+             'foreign' => 'user_id'));
+        
+        $this->hasMany('ServiceType', array(
+             'local' => 'user_id',
+             'foreign' => 'user_id'));
     }
 }
