@@ -25,11 +25,7 @@ App.Request.moduleActivate = function() {
 
 App.ModuleActions[8000] = {
     iconCls: 'request_icon_32',
-    //    xtype: 'button',
     text: App.Language.Request.requests,
-
-    //    scale: 'large',
-    //    iconAlign: 'top',
     module: 'Request'
 }
 

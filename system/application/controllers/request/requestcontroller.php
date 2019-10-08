@@ -879,7 +879,7 @@ class RequestController extends APP_Controller {
         $body .= $this->translateTag('Request', 'failure') . $results['RequestProblem']['request_problem_name'] . "\r\n";
         $body .= $this->translateTag('Core', 'location') . $node_asset->getPath() . "\r\n";
 
-        $CI->notificationuser->mail($to, $subject, $body, null, null, null);
+        $CI->notificationuser->mail($to, $subject, $body);
         $body = '';
     }
 
@@ -916,7 +916,7 @@ class RequestController extends APP_Controller {
         $body .= $this->translateTag('Core', 'location') . ' : ' . $Node->getPath() . "\r\n";
 
 
-        $CI->notificationuser->mail($to, $subject, $body, null, null, null);
+        $CI->notificationuser->mail($to, $subject, $body);
         $body = '';
     }
 

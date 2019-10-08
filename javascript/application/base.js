@@ -82,7 +82,7 @@ App.General.declareNameSpaces = function(parent, ns) {
     for (k in ns) {
         Ext.namespace(parent + '.' + ns[k]);
     }
-}
+};
 
 App.General.DatPatterns = {
     SortableDateTime: "Y-m-d G:i:s",
@@ -442,7 +442,7 @@ Ext.tree.TreeNodeUI.prototype.onClick = function(e) {
     } else {
         e.stopEvent();
     }
-}
+};
 
 Ext.tree.TreeNodeUI.prototype.renderElements = function(n, a, targetNode, bulkRender) {
     // add some indent caching, this helps performance when rendering a large tree
@@ -483,4 +483,4 @@ Ext.tree.TreeNodeUI.prototype.renderElements = function(n, a, targetNode, bulkRe
     }
     this.anchor = cs[index];
     this.textNode = cs[index].firstChild;
-}
+};

@@ -1,3 +1,5 @@
+/* global Ext, App */
+
 Ext.namespace('App.Security');
 Ext.namespace('App.Security.Session');
 Ext.namespace('App.Security.Actions');
@@ -77,4 +79,4 @@ App.Security.checkNodeAccess = function(node) {
             node_id: node.id
         }
     });
-}
+};

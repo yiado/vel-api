@@ -1,3 +1,5 @@
+/* global Ext, App */
+
 Ext.namespace('App.Node');
 
 App.Node.CopyProxy = function(node_id, successCallBack) {
@@ -30,7 +32,7 @@ App.Node.PasteProxy = function(node_parent_id, successCallBack) {
             action: 'paste'
         },
         success: successCallBack
-    })
+    });
 };
 
 App.Node.DeleteProxy = function(node_id, successCallBack) {

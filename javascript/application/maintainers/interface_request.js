@@ -1,3 +1,5 @@
+/* global App, Ext */
+
 App.Maintainers.addToModuleMenu('request', {
     //    xtype: 'button',
     //   
@@ -92,7 +94,7 @@ App.Maintainers.Request.OpenEditMode = function(record) {
     };
     w.form.getForm().loadRecord(record);
     w.show();
-}
+};
 
 App.Maintainers.Request.addRequestDocumentWindow = Ext.extend(Ext.Window, {
     title: App.Language.Request.request_problem,

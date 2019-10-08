@@ -12,7 +12,7 @@ temp/*.png
 temp/*.jpg
 temp/*.csv
 temp/treexml/*.xml
-temp/qrcode/
+temp/qrcode/*.png
 asset_doc/
 system/logs/*.php
 system/application/config/config.php

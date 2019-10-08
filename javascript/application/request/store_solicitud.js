@@ -3,17 +3,17 @@ App.Request.Solicitudes.Store = new Ext.data.JsonStore({
         api: {
             read: 'index.php/request/solicitud/get',
             create: 'index.php/request/solicitud/add',
-            update: 'index.php/request/solicitud/update',
+            update: 'index.php/request/solicitud/update'
         },
         listeners: {
             'exception': function(DataProxy, type, action, options, response, arg) {
                 if (type == 'remote') {
                     Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
-                }
-                if (type == 'response') {
+                } else if (type == 'response') {
                     response = Ext.decode(response.responseText);
-                    if (response.success == false)
+                    if (response.success == false) {
                         alert(response.msg);
+                    }
                 }
             }
         }
@@ -29,6 +29,7 @@ App.Request.Solicitudes.Store = new Ext.data.JsonStore({
     idProperty: 'solicitud_id',
     fields: [
         'solicitud_id',
+        'node_id',
         'user_id',
         'solicitud_type_id',
         'solicitud_estado_id',
@@ -40,6 +41,7 @@ App.Request.Solicitudes.Store = new Ext.data.JsonStore({
         'solicitud_oc_numero',
         'solicitud_comen_user',
         'solicitud_comen_admin',
+        'Node',
         'SolicitudEstado',
         'SolicitudType',
         'User'
@@ -121,8 +123,7 @@ App.Request.SolicitudLog.Store = new Ext.data.JsonStore({
             'exception': function(DataProxy, type, action, options, response, arg) {
                 if (type == 'remote') {
                     Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
-                }
-                if (type == 'response') {
+                } else if (type == 'response') {
                     response = Ext.decode(response.responseText);
                     if (response.success == false)
                         alert(response.msg);

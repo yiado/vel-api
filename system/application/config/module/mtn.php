@@ -18,12 +18,12 @@ $config['mtn_gui_files'] = array(
 $config['mtn_prov_gui_files'] = array(
     '/application/asset/base.js',
     '/application/asset/store.js',
-	'/application/asset/interface_otherdata.js',
-	'/application/asset/interface_document.js',
-	'/application/asset/interface_insurance.js',
-	'/application/asset/interface_measurement.js',
-	'/application/asset/interface_log.js',
-	'/application/asset/interface_inventory.js',
+    '/application/asset/interface_otherdata.js',
+    '/application/asset/interface_document.js',
+    '/application/asset/interface_insurance.js',
+    '/application/asset/interface_measurement.js',
+    '/application/asset/interface_log.js',
+    '/application/asset/interface_inventory.js',
     '/application/mtn/base.js',
     '/application/mtn/store.js',
     '/application/mtn/interface_provider.js'

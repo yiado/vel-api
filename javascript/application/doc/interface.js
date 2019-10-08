@@ -3,133 +3,137 @@ App.Document.CategoryName = null;
 App.Document.doc_version_filename = null;
 App.Document.doc_image_web = null;
 App.Interface.addToModuleMenu('doc', App.ModuleActions[2006]);
+
 App.Document.Principal = Ext.extend(Ext.TabPanel, {
     activeTab: 0,
     border: false,
     initComponent: function() {
-        this.items = [new App.Document.PrincipalClase(), {
-            title: App.Language.General.bin,
-            border: false,
-            xtype: 'grid',
-            iconCls: 'bin_icon',
-            id: 'App.Document.GridPapelera',
-            ref: 'docsGridPapelera',
-            margins: '5 5 5 5',
-            plugins: [new Ext.ux.OOSubmit()],
-            region: 'center',
-            loadMask: true,
-            tbar: {
-                xtype: 'toolbar',
-                autoScroll: 'auto',
+        this.items = [
+            new App.Document.PrincipalClase(),
+            {
+                title: App.Language.General.bin,
+                border: false,
+                xtype: 'grid',
+                iconCls: 'bin_icon',
+                id: 'App.Document.GridPapelera',
+                ref: 'docsGridPapelera',
+                margins: '5 5 5 5',
+                plugins: [new Ext.ux.OOSubmit()],
+                region: 'center',
+                loadMask: true,
+                tbar: {
+                    xtype: 'toolbar',
+                    autoScroll: 'auto',
 
-                items: [App.ModuleActions[2002], {
-                    xtype: 'spacer',
-                    width: 10
-                }, {
-                    text: App.Language.General.restore,
-                    iconCls: 'restore_icon',
-                    handler: function(b) {
-                        grid = Ext.getCmp('App.Document.GridPapelera');
-                        if (grid.getSelectionModel().getCount()) {
-                            records = Ext.getCmp('App.Document.GridPapelera').getSelectionModel().getSelections();
-                            aux = new Array();
-                            for (var i = 0; i < records.length; i++) {
-                                aux.push(records[i].data.doc_document_id);
-                            }
-                            doc_document_id = (aux.join(','));
-                            Ext.MessageBox.confirm(App.Language.General.confirmation, App.Language.Document.this_sure_restore_or_document, function(b) {
-                                if (b == 'yes') {
-                                    Ext.Ajax.request({
-                                        waitMsg: App.Language.General.message_generating_file,
-                                        url: 'index.php/doc/document/sacarPapelera',
-                                        timeout: 10000000000,
-                                        params: {
-                                            doc_document_id: doc_document_id
-                                        },
-                                        success: function(response) {
-                                            response = Ext.decode(response.responseText);
-                                            //ACTUALIZA LOS THUMB (GALLERY)
-                                            App.Document.Store.setBaseParam('node_id', App.Interface.selectedNodeId);
-                                            App.Document.Store.load();
-                                            Ext.getCmp('App.Document.GridPapelera').fireEvent('beforerender', Ext.getCmp('App.Document.GridPapelera'));
-                                            Ext.getCmp('App.Document.GridDoc').fireEvent('beforerender', Ext.getCmp('App.Document.GridDoc'));
-                                            Ext.FlashMessage.alert(response.msg);
-                                        },
-                                        failure: function(response) {
-                                            Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
-                                        }
-                                    });
-                                } else {
-                                    Ext.FlashMessage.alert(App.Language.General.you_must_select_at_least_one_record);
+                    items: [App.ModuleActions[2002], {
+                        xtype: 'spacer',
+                        width: 10
+                    }, {
+                        text: App.Language.General.restore,
+                        iconCls: 'restore_icon',
+                        handler: function(b) {
+                            grid = Ext.getCmp('App.Document.GridPapelera');
+                            if (grid.getSelectionModel().getCount()) {
+                                records = Ext.getCmp('App.Document.GridPapelera').getSelectionModel().getSelections();
+                                aux = new Array();
+                                for (var i = 0; i < records.length; i++) {
+                                    aux.push(records[i].data.doc_document_id);
                                 }
-                            });
-                        } else {
-                            Ext.FlashMessage.alert(App.Language.General.you_must_select_at_least_one_record);
+                                doc_document_id = (aux.join(','));
+                                Ext.MessageBox.confirm(App.Language.General.confirmation, App.Language.Document.this_sure_restore_or_document, function(b) {
+                                    if (b == 'yes') {
+                                        Ext.Ajax.request({
+                                            waitMsg: App.Language.General.message_generating_file,
+                                            url: 'index.php/doc/document/sacarPapelera',
+                                            timeout: 10000000000,
+                                            params: {
+                                                doc_document_id: doc_document_id
+                                            },
+                                            success: function(response) {
+                                                response = Ext.decode(response.responseText);
+                                                //ACTUALIZA LOS THUMB (GALLERY)
+                                                App.Document.Store.setBaseParam('node_id', App.Interface.selectedNodeId);
+                                                App.Document.Store.load();
+                                                Ext.getCmp('App.Document.GridPapelera').fireEvent('beforerender', Ext.getCmp('App.Document.GridPapelera'));
+                                                Ext.getCmp('App.Document.GridDoc').fireEvent('beforerender', Ext.getCmp('App.Document.GridDoc'));
+                                                Ext.FlashMessage.alert(response.msg);
+                                            },
+                                            failure: function(response) {
+                                                Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
+                                            }
+                                        });
+                                    } else {
+                                        Ext.FlashMessage.alert(App.Language.General.you_must_select_at_least_one_record);
+                                    }
+                                });
+                            } else {
+                                Ext.FlashMessage.alert(App.Language.General.you_must_select_at_least_one_record);
+                            }
                         }
+                    }]
+                },
+                listeners: {
+                    'beforerender': function(w) {
+                        App.Document.Papelera.Store.load();
                     }
-                }]
-            },
-            listeners: {
-                'beforerender': function(w) {
-                    App.Document.Papelera.Store.load();
-                }
-            },
-            viewConfig: {
-                forceFit: true
-            },
-            store: App.Document.Papelera.Store,
-            columns: [new Ext.grid.CheckboxSelectionModel(), {
-                header: App.Language.General.file_name,
-                sortable: true,
-                dataIndex: 'doc_document_filename',
-                renderer: function(val, metadata, record) {
-                    return "<a href='index.php/doc/document/download/" + record.data.doc_current_version_id + "'>" + val + "</a>";
-                }
-            }, {
-                header: App.Language.General.version,
-                sortable: true,
-                width: 50,
-                dataIndex: 'doc_version_code_client'
+                },
+                viewConfig: {
+                    forceFit: true
+                },
+                store: App.Document.Papelera.Store,
+                columns: [new Ext.grid.CheckboxSelectionModel(), {
+                    header: App.Language.General.file_name,
+                    sortable: true,
+                    dataIndex: 'doc_document_filename',
+                    renderer: function(val, metadata, record) {
+                        return "<a href='index.php/doc/document/download/" + record.data.doc_current_version_id + "'>" + val + "</a>";
+                    }
+                }, {
+                    header: App.Language.General.version,
+                    sortable: true,
+                    width: 50,
+                    dataIndex: 'doc_version_code_client'
 
-            }, {
-                header: App.Language.Document.document_type,
-                sortable: true,
-                dataIndex: 'doc_extension_name',
-                width: 70
-            }, {
-                header: App.Language.General.category,
-                sortable: true,
-                dataIndex: 'doc_category_name',
-                width: 50
-            }, {
-                xtype: 'datecolumn',
-                header: App.Language.General.creation_date,
-                sortable: true,
-                dataIndex: 'doc_document_creation',
-                width: 60,
-                format: App.General.DefaultDateTimeFormat,
-                align: 'center'
-            }, {
-                xtype: 'datecolumn',
-                header: App.Language.General.expiration_date,
-                sortable: true,
-                renderer: App.Document.ColorRowStatusUser,
-                dataIndex: 'doc_version_expiration',
-                width: 60,
-                format: App.General.DatPatterns.DefaultDateFormat,
-                aling: 'center'
-            }, {
-                dataIndex: 'doc_path',
-                header: App.Language.Core.location,
-                sortable: true,
-                width: 100,
-                renderer: function(doc_path, metadata, record, rowIndex, colIndex, store) {
-                    metadata.attr = 'ext:qtip="' + doc_path + '"';
-                    return doc_path;
-                }
-            }],
-            sm: new Ext.grid.CheckboxSelectionModel()
-        }];
+                }, {
+                    header: App.Language.Document.document_type,
+                    sortable: true,
+                    dataIndex: 'doc_extension_name',
+                    width: 70
+                }, {
+                    header: App.Language.General.category,
+                    sortable: true,
+                    dataIndex: 'doc_category_name',
+                    width: 50
+                }, {
+                    xtype: 'datecolumn',
+                    header: App.Language.General.creation_date,
+                    sortable: true,
+                    dataIndex: 'doc_document_creation',
+                    width: 60,
+                    format: App.General.DefaultDateTimeFormat,
+                    align: 'center'
+                }, {
+                    xtype: 'datecolumn',
+                    header: App.Language.General.expiration_date,
+                    sortable: true,
+                    renderer: App.Document.ColorRowStatusUser,
+                    dataIndex: 'doc_version_expiration',
+                    width: 60,
+                    format: App.General.DatPatterns.DefaultDateFormat,
+                    aling: 'center'
+                }, {
+                    dataIndex: 'doc_path',
+                    header: App.Language.Core.location,
+                    sortable: true,
+                    width: 100,
+                    renderer: function(doc_path, metadata, record, rowIndex, colIndex, store) {
+                        metadata.attr = 'ext:qtip="' + doc_path + '"';
+                        return doc_path;
+                    }
+                }],
+                sm: new Ext.grid.CheckboxSelectionModel()
+            }
+        ];
         App.Document.Principal.superclass.initComponent.call(this);
     }
 });
@@ -143,44 +147,6 @@ App.Document.TBar = {
             xtype: 'spacer',
             width: 10
         },
-        //    {
-        //        text: 'Editar Categoría',
-        //        iconCls: 'edit_icon',
-        //        handler: function()
-        //        {
-        //            grid = Ext.getCmp('App.Document.GridDoc');
-        //            if (grid === undefined) {
-        //                //ENTRA CUANDO ES XTEMPLATE
-        //    
-        //            } else {//ENTRA CUANDO ES GRILLA
-        //                if (grid.getSelectionModel().getCount()) {
-        //                    records = Ext.getCmp('App.Document.GridDoc').getSelectionModel().getSelections();
-        //                    aux = new Array();
-        ////                    App.InfraStructure.copiedNodes = new Array();
-        //                    for (var i = 0; i < records.length; i++) {
-        //                        aux.push(records[i].data.doc_document_id);
-        ////                        App.InfraStructure.copiedNodes.push(Ext.getCmp('App.StructureTree.Tree').getNodeById(records[i].data.node_id));
-        //                    }
-        //                    doc_document_id = (aux.join(','));
-        //                    
-        //                    if ( aux.length == 1 ){
-        //                        w = new App.Document.updateCategoryWindow();
-        //                        w.show();
-        //                    } else {
-        //                        Ext.FlashMessage.alert('Solo se puede cambiar 1 categoría a la vez');
-        //                    }
-        //
-        ////                    App.Document.CutProxy(doc_document_id, function(){});
-        //                } else {
-        //                    Ext.FlashMessage.alert(App.Language.General.you_must_select_at_least_one_record);
-        //                }
-        //            }
-        //            
-        //        }
-        //    }, {
-        //        xtype: 'spacer',
-        //        width: 10
-        //    }, 
         {
             text: App.Language.General.send_to_trash,
             iconCls: 'bin_icon',
@@ -438,7 +404,7 @@ App.Document.PrincipalClase = Ext.extend(Ext.Panel, {
             hidden: true,
             cls: 'formCls',
             autoScroll: true,
-            height: 260,
+            height: 280,
             margins: '5 5 0 5',
             padding: '5 5 5 5',
             border: true,
@@ -529,7 +495,7 @@ App.Document.PrincipalClase = Ext.extend(Ext.Panel, {
                         id: 'column_start_date_interna',
                         frame: true,
                         items: [{
-                            columnWidth: .5,
+                            bodyStyle: 'margin-right: 50px;',
                             layout: 'form',
                             id: 'column_start_date_interna_1',
                             items: [{
@@ -546,7 +512,6 @@ App.Document.PrincipalClase = Ext.extend(Ext.Panel, {
                                 }
                             }]
                         }, {
-                            columnWidth: .5,
                             layout: 'form',
                             items: [{
                                 xtype: 'datefield',
@@ -578,7 +543,7 @@ App.Document.PrincipalClase = Ext.extend(Ext.Panel, {
                         id: 'column_start_date',
                         frame: true,
                         items: [{
-                            columnWidth: .5,
+                            bodyStyle: 'margin-right: 50px;',
                             layout: 'form',
                             id: 'column_start_date1',
                             items: [{
@@ -595,7 +560,6 @@ App.Document.PrincipalClase = Ext.extend(Ext.Panel, {
                                 }
                             }]
                         }, {
-                            columnWidth: .5,
                             layout: 'form',
                             items: [{
                                 xtype: 'datefield',
@@ -626,7 +590,7 @@ App.Document.PrincipalClase = Ext.extend(Ext.Panel, {
                         layout: 'column',
                         frame: true,
                         items: [{
-                            columnWidth: .5,
+                            bodyStyle: 'margin-right: 50px;',
                             layout: 'form',
                             items: [{
                                 xtype: 'datefield',
@@ -641,7 +605,6 @@ App.Document.PrincipalClase = Ext.extend(Ext.Panel, {
                                 }
                             }]
                         }, {
-                            columnWidth: .5,
                             layout: 'form',
                             items: [{
                                 xtype: 'datefield',

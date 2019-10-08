@@ -1,3 +1,5 @@
+/* global App, Ext */
+
 App.Asset.copiedAsset = new Array();
 App.Asset.selectedAssetId = null;
 valoraux = null;
@@ -392,7 +394,7 @@ App.Asset.PrincipalClase = Ext.extend(Ext.Panel, {
                 cls: 'formCls',
                 autoScroll: true,
                 hidden: true,
-                height: 220,
+                height: 240,
                 margins: '5 5 0 5',
                 padding: '0 0 0 5',
                 border: true,
@@ -510,11 +512,11 @@ App.Asset.PrincipalClase = Ext.extend(Ext.Panel, {
                                 text: App.Language.General.select_date_range_to_search_active_load
                             }]
                         }, {
-                            columnWidth: .3,
+                            columnWidth: .4,
                             layout: 'column',
                             frame: true,
                             items: [{
-                                    columnWidth: .5,
+                                    bodyStyle: 'margin-right: 50px;',
                                     layout: 'form',
                                     items: [{
                                         xtype: 'datefield',
@@ -530,7 +532,6 @@ App.Asset.PrincipalClase = Ext.extend(Ext.Panel, {
                                     }]
                                 },
                                 {
-                                    columnWidth: .5,
                                     layout: 'form',
                                     items: [{
                                         xtype: 'datefield',
@@ -723,7 +724,6 @@ App.Asset.PrincipalClase = Ext.extend(Ext.Panel, {
 
                         renderer: function(val, metadata, record) {
                             if (record.data.asset_document_count >= 1) {
-
                                 return "<div style='background-image: url(style/default/icons/clip_icon.png); background-repeat: no-repeat; height: 16; width: 16; float: left; padding-left: 20; padding-top: 2'></div>";
                             }
                         }

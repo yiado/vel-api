@@ -1,3 +1,5 @@
+/* global App, Ext */
+
 App.Report.selectedReportId = null;
 
 App.Report.allowRootGui = true;
@@ -80,7 +82,7 @@ App.Report.openExportWindow = function(reporte_id) {
     });
     w.form.file_name.setValue(record.data.report_name);
     w.show();
-}
+};
 
 App.Report.exportListWindow = Ext.extend(Ext.Window, {
     title: App.Language.General.eexport_list,

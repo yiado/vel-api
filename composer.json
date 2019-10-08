@@ -6,6 +6,7 @@
         }
     },
     "require": {
-        "phpoffice/phpspreadsheet": "^1.6"
+        "phpoffice/phpspreadsheet": "^1.6",
+        "endroid/qr-code": "^2.5"
     }
 }

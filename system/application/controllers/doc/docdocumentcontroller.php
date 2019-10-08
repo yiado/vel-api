@@ -727,7 +727,7 @@ class DocDocumentController extends APP_Controller {
             }
         } else {
             $success = 'false';
-            $msg = $this->translateTag('Documen', 'type_extension_not_allowed');
+            $msg = $this->translateTag('Document', 'type_extension_not_allowed');
         }
         echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
     }
@@ -847,7 +847,7 @@ class DocDocumentController extends APP_Controller {
 
         copy($this->config->item('doc_dir') . $results['doc_version_filename'], $this->config->item('temp_dir') . $results['DocDocument']['doc_document_filename']);
 
-        $CI->notificationuser->mail($to, $subject, $body, null, null, array($this->config->item('temp_dir') . $results['DocDocument']['doc_document_filename']));
+        $CI->notificationuser->mail($to, $subject, $body, array($this->config->item('temp_dir') . $results['DocDocument']['doc_document_filename']));
         $body = '';
 
         unlink($this->config->item('temp_dir') . $results['DocDocument']['doc_document_filename']);
