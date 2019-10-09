@@ -4,6 +4,7 @@ plans/*.png
 plans/*.gltf
 plans/*.pdf
 docs/*.*
+docs/thumb/
 temp/*.pdf
 temp/*.xls
 temp/*.xlsx
