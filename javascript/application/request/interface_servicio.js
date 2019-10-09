@@ -1,4 +1,4 @@
-/* global App, Ext */
+/* global App, Ext, Highcharts */
 
 App.Request.Service_id = null;
 
@@ -39,7 +39,8 @@ App.Request.Service = Ext.extend(Ext.Panel, {
                 width: 10,
                 hidden: (App.Security.Actions[8012] === undefined? true : false)
             },
-            App.ModuleActions[8011]
+            App.ModuleActions[8011],
+            App.ModuleActions[8014]
         ]
     },
     initComponent: function () {
@@ -866,3 +867,91 @@ App.Request.Service.expand = function(node_id) {
     node = Ext.getCmp('App.StructureTree.Tree').getNodeById(node_id);
     App.Security.checkNodeAccess(node);
 };
+
+App.Request.statistics = Ext.extend(Ext.Window, {
+    title: 'Estadísticas',
+    border: true,
+    autoWidth: true,
+    autoHeight: true,
+    layout: 'fit',
+    modal: true,
+    resizable: false,
+    padding: 1,
+    id:'statistics_window',
+    html: `<div style="width: ${screen.width < 860?400:800};"><div id="service_status_chart" style="display: block; width:400px; height: 400px; float:right;"></div><div id="service_type_chart" style="display: block; height: 400px; width:400px; float:right;"></div></div>`,
+    afterRender: function() {
+        let plotOptions = {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false
+                },
+                showInLegend: true
+            }
+        };
+        let tooltip = {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        };
+        let chart = {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+        };
+        
+        App.Request.ServicesStatusChart.Store.setBaseParam('node_id', App.Interface.selectedNodeId);
+        App.Request.ServicesStatusChart.Store.load({
+            callback: function(records, operation, success) {
+                let data_service_status_chart = [];
+                records.forEach(function(data){
+                    data_service_status_chart.push({
+                        name: data.data.ServiceStatus.service_status_name,
+                        y: parseInt(data.data.count)
+                    });
+                });
+                
+                Highcharts.chart('service_status_chart', {
+                    chart,
+                    title: {
+                        text: 'Solicitud de Servicios por Estados'
+                    },
+                    tooltip,
+                    plotOptions,
+                    series: [{
+                        name: 'Estados',
+                        colorByPoint: true,
+                        data: data_service_status_chart
+                    }]
+                });                
+            }
+        });
+        
+        App.Request.ServicesTypeChart.Store.setBaseParam('node_id', App.Interface.selectedNodeId);
+        App.Request.ServicesTypeChart.Store.load({
+            callback: function(records, operation, success) {
+                let data_service_type_chart = [];
+                records.forEach(function(data){
+                    data_service_type_chart.push({
+                        name: data.data.ServiceType.service_type_name,
+                        y: parseInt(data.data.count)
+                    });
+                });
+        
+                Highcharts.chart('service_type_chart', {
+                    chart,
+                    title: {
+                        text: 'Solicitud de Servicios por Tipos'
+                    },
+                    tooltip,
+                    plotOptions,
+                    series: [{
+                        name: 'Tipos',
+                        colorByPoint: true,
+                        data: data_service_type_chart
+                    }]
+                });
+            }
+        });
+    }
+});

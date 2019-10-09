@@ -317,5 +317,23 @@ class ServiceController extends APP_Controller {
         $CI->load->library('NotificationUser');
         $CI->notificationuser->mail($service->ServiceType->User->user_email, 'Cambio estado de servicio', $body);
     }
+    
+    function getServiceStatus() {
+        $request = Doctrine_Core::getTable('Service')->groupAllByStatus($this->filtrosServices());
+        if ($request->count()) {
+            echo '({"total":"' . $request->count() . '", "results":' . $this->json->encode($request->toArray()) . '})';
+        } else {
+            echo '({"total":"0", "results":[]})';
+        }
+    }
+    
+    function getServiceType() {
+        $request = Doctrine_Core::getTable('Service')->groupAllByType($this->filtrosServices());
+        if ($request->count()) {
+            echo '({"total":"' . $request->count() . '", "results":' . $this->json->encode($request->toArray()) . '})';
+        } else {
+            echo '({"total":"0", "results":[]})';
+        }
+    }
 
 }

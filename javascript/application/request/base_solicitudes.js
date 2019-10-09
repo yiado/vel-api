@@ -10,7 +10,9 @@ App.General.declareNameSpaces('App.Request', [
     'Services',
     'ServicesStatus',
     'ServicesType',
-    'ServicesLog'
+    'ServicesLog',
+    'ServicesStatusChart',
+    'ServicesTypeChart'
 ]);
 
 App.Request.moduleActivate = function() {
@@ -277,5 +279,18 @@ App.ModuleActions[8013] = {
                 });
             });
         }
+    }
+};
+
+App.ModuleActions[8014] = {
+    text: 'Estadísticas',
+    id: 'ModuleAction_8014',
+    hidden: true,
+    iconCls: 'filter_icon',
+    handler: function(b) {
+        w = new App.Request.statistics({
+            title: 'Estadísticas'
+        });
+        w.show();
     }
 };

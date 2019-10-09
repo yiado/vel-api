@@ -329,3 +329,55 @@ App.Request.ServicesLog.Store = new Ext.data.JsonStore({
         }
     }
 });
+
+App.Request.ServicesStatusChart.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
+            read: 'index.php/request/service/getServiceStatus'
+        },
+        listeners: {
+            'exception': function(DataProxy, type, action, options, response, arg) {
+                if (type === 'remote') {
+                    Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
+                }
+            }
+        }
+    }),
+    writer: new Ext.data.JsonWriter({
+        encode: true,
+        writeAllFields: true,
+        encodeDelete: true
+    }),
+    root: 'results',
+    totalProperty: 'total',
+    fields: [
+        'count',
+        'ServiceStatus'
+    ]
+});
+
+App.Request.ServicesTypeChart.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
+            read: 'index.php/request/service/getServiceType'
+        },
+        listeners: {
+            'exception': function(DataProxy, type, action, options, response, arg) {
+                if (type === 'remote') {
+                    Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
+                }
+            }
+        }
+    }),
+    writer: new Ext.data.JsonWriter({
+        encode: true,
+        writeAllFields: true,
+        encodeDelete: true
+    }),
+    root: 'results',
+    totalProperty: 'total',
+    fields: [
+        'count',
+        'ServiceType'
+    ]
+});
