@@ -1,10 +1,13 @@
 ## APACHE
-    sudo apt update
-    sudo apache2ctl configtest
-    sudo apache2ctl configtest
-    service apache2 restart
+    Ubuntu
+    1) sudo apt update
+    2_ sudo apache2ctl configtest
+    3) sudo apache2ctl configtest
+    4) service apache2 restart
+     
 
-## PHP 5.3
+## PHP
+    Ubuntu
     sudo add-apt-repository ppa:ondrej/php5-5.6
     sudo apt-get install python-software-properties
     sudo add-apt-repository ppa:ondrej/php
@@ -15,12 +18,23 @@
     sudo apt-get install php5.6-gd php5.6-mysql php5.6-dom php5.6-cli php5.6-json php5.6-common php5.6-mbstring php5.6-opcache php5.6-readline
     sudo apt install php5.6-xml php5.6-zip
 
-    ## HABILITAR EXTENSION:
-             MYSQL
-    ##HABILITAR 
-            short_open_tag = On
+    ## --> MAS INFO --> https://tecadmin.net/install-php5-on-ubuntu/
 
-    ##--> MAS INFO --> https://tecadmin.net/install-php5-on-ubuntu/
+    Centos 7
+    1) yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    2) yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+    3) yum install yum-utils
+    4) yum-config-manager --enable remi-php56
+    5) yum install php php-mcrypt php-cli php-gd php-curl php-mysql php-ldap php-zip php-fileinfo
+    6) php -v
+
+    CONFIGURACION
+    ## HABILITAR EXTENSION:
+        MYSQL
+    ## HABILITAR 
+        short_open_tag = On
+
+    
 
 ## MYSQL
     sudo apt-get update
