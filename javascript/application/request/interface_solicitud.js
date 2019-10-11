@@ -26,6 +26,10 @@ App.Request.Principal.listener = function(node) {
 
         App.Request.Solicitudes.Store.setBaseParam('node_id', node.id);
         App.Request.Solicitudes.Store.load();
+        
+        node.expand();
+        Ext.getCmp('App.StructureTree.Tree').getSelectionModel().select(node);
+        App.StructureTree.Tree.refreshPathBar(node);
     }
 };
 

@@ -663,8 +663,9 @@ Ext.onReady(function() {
                 node = node.parentNode;
             } while (node != null);
             for (var i = aux.length - 1; i >= 0; i--) {
-                if (aux[i].id == 'root')
+                if (aux[i].id == 'root') {
                     continue;
+                }
                 fbar.add({
                     xtype: 'button',
                     listeners: {

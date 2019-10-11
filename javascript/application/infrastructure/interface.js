@@ -21,13 +21,9 @@ function getMap() {
     App.InfraStructure.Coordinate.Store.load({
         callback: function(records) {
 
-            if (typeof Ext.getCmp('App.InfraStructure.Principal') !== "undefined") { //Fix
-
-                if (Ext.getCmp('App.InfraStructure.Principal').map) { //Fix
-                    //                  
+            if (typeof Ext.getCmp('App.InfraStructure.Principal') !== "undefined") {
+                if (Ext.getCmp('App.InfraStructure.Principal').map) {
                     mapRef = mapaParaEditar;
-
-
                     if (App.InfraStructure.Coordinate.Store.getTotalCount()) {
 
                         if (mapRef) {
@@ -91,11 +87,8 @@ function getMap() {
                                                 success: function(response) {
 
                                                     response = Ext.decode(response.responseText);
-
-                                                    //                                                                console.log(response.resultsInfraOtherData[0].InfraOtherDataAttribute);
                                                     html = '<h1>Informaci&oacute;n Resumen</h1><hr>'
                                                     html = html + '<div><table style=" padding: 4px; text-align: left;  font: 12 normal;  font: normal 11px tahoma, arial, helvetica, sans-serif;">';
-                                                    //                                                             
                                                     for (i in response.resultsInfraOtherData) {
                                                         if (typeof response.resultsInfraOtherData[i] === 'object') {
                                                             for (x in response.resultsInfraOtherData[i].InfraOtherDataAttribute) {
@@ -113,21 +106,9 @@ function getMap() {
                                                                             field.value = (record.InfraOtherDataValue[0] ? record.InfraOtherDataValue[0].infra_other_data_value_value : '');
                                                                         }
 
-                                                                        if (field.value == null)
+                                                                        if (field.value == null) {
                                                                             field.value = '';
-
-                                                                        //                                                                            field.fieldLabel = record.infra_other_data_attribute_name;
-                                                                        //                                                                            html = html + '<tr><td style="padding-bottom: 5px;padding-right: 3px;"><label>';
-                                                                        //                                                                            html = html + field.fieldLabel + " : ";
-                                                                        //                                                                            html = html + '</label></td><td style="padding-bottom: 5px;">';
-                                                                        //                                                                            html = html + field.value;
-                                                                        //                                                                            html = html + ' </td></tr>';
-
-
-                                                                        //
-                                                                        //                                                                                    console.log(field.fieldLabel);
-                                                                        //                                                                                    console.log(field.value);
-
+                                                                        }
                                                                     }
 
                                                                 }
@@ -145,9 +126,6 @@ function getMap() {
                                                                 html = html + '</td><td style="padding-bottom: 5px;">';
                                                                 html = html + record.value;
                                                                 html = html + ' </td></tr>';
-                                                                //
-                                                                //                                                                            console.log(record.field);
-                                                                //                                                                            console.log(record.value);
                                                             }
                                                         }
                                                     }
@@ -246,7 +224,6 @@ App.InfraStructure.treeSearchToolBar = [{
     enableKeyEvents: true,
     listeners: {
         'keyup': function(tf, e) {
-            //                        console.log('>>KeyCode: ', e.keyCode);
             if (e.keyCode == 13) {
 
                 App.InfraStructure.Search.Store.setBaseParam('node_id', App.Interface.selectedNodeId);
@@ -276,8 +253,6 @@ App.InfraStructure.treeSearchToolBar = [{
 }, {
     xtype: 'button',
     id: 'App.InfraStructure.buttonPath',
-    //        ref: '../keep_add_icon',
-    //        text: App.Language.General.filters,
     tooltip: 'Establecer Ruta Inicial',
     iconCls: 'keep_add_icon',
     handler: function() {
@@ -305,12 +280,9 @@ App.InfraStructure.treeSearchToolBar = [{
     }
 }];
 App.Interface.addToModuleMenu('infra', {
-    //    xtype: 'button',
     text: App.Language.Infrastructure.infrastructure,
     iconCls: 'infrastructure_icon_32',
-    //    scale: 'large',
-    module: 'InfraStructure',
-    //    iconAlign: 'top'
+    module: 'InfraStructure'
 });
 App.InfraStructure.Principal = Ext.extend(Ext.TabPanel, {
     activeTab: 0,
@@ -463,7 +435,6 @@ App.InfraStructure.Principal = Ext.extend(Ext.TabPanel, {
                                 },
                                 success: function(response) {
                                     response = Ext.decode(response.responseText);
-                                    console.log('>>response: ', response[0]['id']);
                                     Ext.getCmp('App.StructureTree.Tree').fireEvent('click', Ext.getCmp('App.StructureTree.Tree').getNodeById(response[0]['id']));
 
                                 },

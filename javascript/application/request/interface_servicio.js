@@ -291,7 +291,7 @@ App.Request.Service.Grilla = {
             dataIndex: 'Node',
             align: 'center',
             renderer: function (Node, metaData, record) {
-                return "<div style='background-image: url(" + record.data.icon + "); background-repeat: no-repeat; height: 16; width: 16; float: left; padding-left: 20; padding-top: 2'><a href='javascript: App.Request.Service.expand(" + record.data.node_id + ")'>" + Node.node_name + "</a></div>";
+                return `<a href='javascript: App.Request.Service.expand(${record.data.node_id})'>${Node.node_name}</a>`;
             }
         }, {
             header: 'Tipo',
@@ -865,8 +865,55 @@ App.Request.changeServiceStatusWindow = Ext.extend(Ext.Window, {
 App.Request.Service.expand = function(node_id) {
     App.Interface.selectedNodeId = node_id;
     node = Ext.getCmp('App.StructureTree.Tree').getNodeById(node_id);
-    App.Security.checkNodeAccess(node);
+    if(!node) {
+        Ext.Ajax.request({
+            url: 'index.php/core/nodecontroller/expandDeepOnlyParents',
+            params: {
+                node_id
+            },
+            success: function(response) {
+                nodos_ancestros = Ext.decode(response.responseText);
+                let aux = nodos_ancestros.length - 1;
+                nodos_ancestros.forEach(function(nodo_id_ancestro, indice){                    
+                    let ultimo_nodo = aux === indice;
+                    cargar(nodo_id_ancestro, ultimo_nodo);
+                });
+
+            }
+        });
+    } else {
+        node.expand();
+        Ext.getCmp('App.StructureTree.Tree').fireEvent('click', Ext.getCmp('App.StructureTree.Tree').getNodeById(node_id));
+    }
 };
+
+function cargar(id, ultimo_nodo) {
+     Ext.Ajax.request({
+        waitMsg: App.Language.General.message_generating_file,
+        url: 'index.php/core/nodecontroller/expand',
+        timeout: 10000000000,
+        params: {
+            node: id
+        },
+        success: function(response) {
+            let res = Ext.decode(response.responseText);
+            if(res) {
+                node = Ext.getCmp('App.StructureTree.Tree').getNodeById(id);
+                if (!node) {
+                    cargar(id);
+                } else {
+                    node.expand();
+                    if (App.Interface.selectedNodeId == id) {
+                        Ext.getCmp('App.StructureTree.Tree').fireEvent('click', Ext.getCmp('App.StructureTree.Tree').getNodeById(id));
+                    }
+                }
+            }
+        },
+        failure: function(response) {
+            Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
+        }
+    });
+}
 
 App.Request.statistics = Ext.extend(Ext.Window, {
     title: 'Estadísticas',
