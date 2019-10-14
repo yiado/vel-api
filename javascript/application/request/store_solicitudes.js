@@ -216,7 +216,7 @@ App.Request.Services.Store = new Ext.data.JsonStore({
     ],
     listeners: {
         'save': function() {
-            this.load();
+            this.load({ params: { node_id: App.Interface.selectedNodeId,start: 0, limit: App.GridLimit } });
         }
     }
 });

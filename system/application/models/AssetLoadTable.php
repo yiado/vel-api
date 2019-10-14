@@ -36,24 +36,6 @@ class AssetLoadTable extends Doctrine_Table {
         return $q->fetchOne();
     }
 
-//    function findAll() {
-//        $q = Doctrine_Query::create()
-//                ->from('AssetLoad al')
-//                ->innerJoin('al.User u')
-//                ->orderBy('asset_load_id DESC');
-//        return $q->execute();
-//    }
-//    function findAllId($asset_load_id) {
-//        $q = Doctrine_Query::create()
-//                ->from('Asset a')
-//                ->innerJoin('a.AssetType at')
-//                ->innerJoin('a.Brand ba')
-//                ->leftJoin('a.AssetStatus as')
-//                ->leftJoin('a.AssetCondition ac')
-//                ->where('a.asset_load_id = ?', $asset_load_id);
-//        return $q->execute();
-//    }
-
     function findAllId($asset_load_id, $start = null, $limit = null, $count = false) {
 
         $q = Doctrine_Query::create()

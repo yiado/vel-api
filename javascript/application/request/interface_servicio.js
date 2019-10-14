@@ -75,7 +75,7 @@ App.Request.Service.formSearching = {
                 node_id = App.Request.Services.Store.baseParams.node_id;
                 App.Request.Services.Store.baseParams = form.getSubmitValues();
                 App.Request.Services.Store.setBaseParam('node_id', node_id);
-                App.Request.Services.Store.load();
+                App.Request.Services.Store.load({ params: { start: 0, limit: App.GridLimit } });
             }
         }, {
             text: App.Language.General.clean,
@@ -85,7 +85,7 @@ App.Request.Service.formSearching = {
                 node_id = App.Request.Services.Store.baseParams.node_id;
                 App.Request.Services.Store.baseParams = {};
                 App.Request.Services.Store.setBaseParam('node_id', node_id);
-                App.Request.Services.Store.load();
+                App.Request.Services.Store.load({ params: { start: 0, limit: App.GridLimit } });
             }
         }],
     items: [{
@@ -246,7 +246,7 @@ App.Request.Service.Grilla = {
     loadMask: true,
     listeners: {
         'beforerender': function (w) {
-            App.Request.Services.Store.load();
+            App.Request.Services.Store.load({ params: { node_id: App.Interface.selectedNodeId, start: 0, limit: App.GridLimit } });
         },
         'rowdblclick': function (grid, rowIndex) {
             record = grid.getStore().getAt(rowIndex);
@@ -345,6 +345,18 @@ App.Request.Service.Grilla = {
     ],
     sm: new Ext.grid.CheckboxSelectionModel({
         singleSelect: true
+    }),
+    bbar: new Ext.PagingToolbar({
+        store: App.Request.Services.Store,
+        displayInfo: true,
+        pageSize: App.GridLimit,
+        prependButtons: true,
+        listeners: {
+            'beforerender': function(w) {
+                App.Request.Services.Store.setBaseParam('node_id', App.Interface.selectedNodeId);
+            }
+
+        }
     })
 };
 
@@ -445,7 +457,7 @@ App.Request.addRequestServiceByNodeWindow = Ext.extend(Ext.Window, {
                                 if (o.result.success === "false") {
                                     Ext.FlashMessage.alert('Error al Ingreso de Datos');
                                 } else {
-                                    App.Request.Services.Store.load();
+                                    App.Request.Services.Store.load({ params: { node_id: App.Interface.selectedNodeId, start: 0, limit: App.GridLimit } });
 
                                     b.ownerCt.ownerCt.ownerCt.close();
                                     Ext.FlashMessage.alert(o.result.msg);
@@ -565,7 +577,7 @@ App.Request.editRequestServiceByNodeWindow = Ext.extend(Ext.Window, {
                                 if (o.result.success === "false") {
                                     Ext.FlashMessage.alert('Error al Ingreso de Datos');
                                 } else {
-                                    App.Request.Services.Store.load();
+                                    App.Request.Services.Store.load({ params: { node_id: App.Interface.selectedNodeId, start: 0, limit: App.GridLimit } });
 
                                     b.ownerCt.ownerCt.ownerCt.close();
                                     Ext.FlashMessage.alert(o.result.msg);
@@ -845,7 +857,7 @@ App.Request.changeServiceStatusWindow = Ext.extend(Ext.Window, {
                                 if (o.result.success === "false") {
                                     Ext.FlashMessage.alert('Error al Ingreso de Datos');
                                 } else {
-                                    App.Request.Services.Store.load();
+                                    App.Request.Services.Store.load({ params: { node_id: App.Interface.selectedNodeId, start: 0, limit: App.GridLimit } });
                                     b.ownerCt.ownerCt.ownerCt.close();
                                     Ext.FlashMessage.alert(o.result.msg);
                                 }
@@ -863,6 +875,7 @@ App.Request.changeServiceStatusWindow = Ext.extend(Ext.Window, {
 });
 
 App.Request.Service.expand = function(node_id) {
+    let nodo_actual = parseInt(App.Interface.selectedNodeId);
     App.Interface.selectedNodeId = node_id;
     node = Ext.getCmp('App.StructureTree.Tree').getNodeById(node_id);
     if(!node) {
@@ -881,7 +894,7 @@ App.Request.Service.expand = function(node_id) {
 
             }
         });
-    } else {
+    } else if (nodo_actual !== node_id) {
         node.expand();
         Ext.getCmp('App.StructureTree.Tree').fireEvent('click', Ext.getCmp('App.StructureTree.Tree').getNodeById(node_id));
     }
@@ -946,7 +959,8 @@ App.Request.statistics = Ext.extend(Ext.Window, {
             plotShadow: false,
             type: 'pie'
         };
-        
+        let form = Ext.getCmp('App.Request.Service.FormCentral').getForm();
+        App.Request.ServicesStatusChart.Store.baseParams = form.getSubmitValues();
         App.Request.ServicesStatusChart.Store.setBaseParam('node_id', App.Interface.selectedNodeId);
         App.Request.ServicesStatusChart.Store.load({
             callback: function(records, operation, success) {
@@ -974,6 +988,7 @@ App.Request.statistics = Ext.extend(Ext.Window, {
             }
         });
         
+        App.Request.ServicesTypeChart.Store.baseParams = form.getSubmitValues();
         App.Request.ServicesTypeChart.Store.setBaseParam('node_id', App.Interface.selectedNodeId);
         App.Request.ServicesTypeChart.Store.load({
             callback: function(records, operation, success) {

@@ -1,3 +1,5 @@
+/* global Ext, App */
+
 Ext.namespace('App.Asset.Store');
 Ext.namespace('App.Asset.Asset');
 Ext.namespace('App.Asset.Papelera.Store');

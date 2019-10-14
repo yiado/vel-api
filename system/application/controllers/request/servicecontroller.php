@@ -13,10 +13,10 @@ class ServiceController extends APP_Controller {
     }
 
     function get() {
-        $request = Doctrine_Core::getTable('Service')->retrieveAll($this->filtrosServices());
-
+        $request = Doctrine_Core::getTable('Service')->retrieveAll($this->filtrosServices(),$this->input->post('start'), $this->input->post('limit'));
         if ($request->count()) {
-            echo '({"total":"' . $request->count() . '", "results":' . $this->json->encode($request->toArray()) . '})';
+            $countAllRequest = Doctrine_Core::getTable('Service')->retrieveAll($this->filtrosServices(), false, false, true);
+            echo '({"total":"' . $countAllRequest . '", "results":' . $this->json->encode($request->toArray()) . '})';
         } else {
             echo '({"total":"0", "results":[]})';
         }
@@ -24,11 +24,7 @@ class ServiceController extends APP_Controller {
 
     function getById() {
         $request = Doctrine_Core::getTable('Service')->findById($this->input->post('service_id'));
-        if ($request->count()) {
-            echo '({"total":"' . $request->count() . '", "results":' . $this->json->encode($request->toArray()) . '})';
-        } else {
-            echo '({"total":"0", "results":[]})';
-        }
+        $this->sendRes($request);
     }
 
     function add() {
@@ -320,15 +316,15 @@ class ServiceController extends APP_Controller {
     
     function getServiceStatus() {
         $request = Doctrine_Core::getTable('Service')->groupAllByStatus($this->filtrosServices());
-        if ($request->count()) {
-            echo '({"total":"' . $request->count() . '", "results":' . $this->json->encode($request->toArray()) . '})';
-        } else {
-            echo '({"total":"0", "results":[]})';
-        }
+        $this->sendRes($request);
     }
     
     function getServiceType() {
         $request = Doctrine_Core::getTable('Service')->groupAllByType($this->filtrosServices());
+        $this->sendRes($request);
+    }
+    
+    function sendRes ($request) {
         if ($request->count()) {
             echo '({"total":"' . $request->count() . '", "results":' . $this->json->encode($request->toArray()) . '})';
         } else {

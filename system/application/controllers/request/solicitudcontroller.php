@@ -12,18 +12,16 @@ class SolicitudController extends APP_Controller {
 
     function get() {        
         $request = Doctrine_Core::getTable('Solicitud')->retrieveAll($this->filtrosSolicitudes());
-
-        if ($request->count()) {
-            echo '({"total":"' . $request->count() . '", "results":' . $this->json->encode($request->toArray()) . '})';
-        } else {
-            echo '({"total":"0", "results":[]})';
-        }
+        $this->sendRes($request);
     }
 
     function getById() {
         $solicitud_id = $this->input->post('solicitud_id');
-
         $request = Doctrine_Core::getTable('Solicitud')->findById($solicitud_id);
+        $this->sendRes($request);
+    }
+    
+    function sendRes ($request) {
         if ($request->count()) {
             echo '({"total":"' . $request->count() . '", "results":' . $this->json->encode($request->toArray()) . '})';
         } else {
@@ -155,71 +153,6 @@ class SolicitudController extends APP_Controller {
         $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg));
         echo $json_data;
     }
-
-//    function update ()
-//    {
-//        $solicitud = Doctrine_Core::getTable('Solicitud')->find($this->input->post('solicitud_id'));
-//        
-//        //Obtenemos la conexiï¿½n actual
-//        $conn = Doctrine_Manager::getInstance()->getCurrentConnection();
-//
-//        //Iniciamos la transacciï¿½n
-//        $conn->beginTransaction();
-//
-//        try {
-//            //Cagamos la Libreria para Subir Archivos
-//            $this->load->library('upload');
-//
-//            //Actualizamos datos de la base de datos
-//
-//            //Recibimos los parametros
-//            $solicitud_factura_numero = $this->input->post('solicitud_factura_numero');
-//            $solicitud_oc_numero = $this->input->post('solicitud_oc_numero');
-//            $solicitud_comen_user = $this->input->post('solicitud_comen_user');
-//            $solicitud_comen_admin = $this->input->post('solicitud_comen_admin');
-//
-//
-//            //Actualizamos Numero de Factura
-//            if ($solicitud->solicitud_factura_numero != $solicitud_factura_numero){
-//                $solicitud->solicitud_factura_numero = $solicitud_factura_numero;
-//            }
-//
-//            //Actualizamos Numero de OC
-//            if ($solicitud->solicitud_oc_numero != $solicitud_oc_numero){
-//                $solicitud->solicitud_oc_numero = $solicitud_oc_numero;
-//            }
-//
-//            //Actualizamos Comentario Usuario
-//            if ($solicitud->solicitud_comen_user != $solicitud_comen_user){
-//                $solicitud->solicitud_comen_user = $solicitud_comen_user;
-//            }
-//
-//            //Actualizamos Comentario Administrador
-//            if ($solicitud->solicitud_comen_admin != $solicitud_comen_admin){
-//                $solicitud->solicitud_comen_admin = $solicitud_comen_admin;
-//            }
-//
-//            //ESTO AUMENTA LA CUENTA DE LOS ARCHIVOS DEL ACTIVO
-//            $solicitud->save();
-//
-//            //SiTodo OK Sube Archivos
-//            $success = true;
-//            $msg = $this->translateTag('General', 'operation_successful');
-//            // 
-//            // Si todo OK, commit a la base de datos
-//            $conn->commit();
-//        } catch (Exception $e) {
-//            //Si hay error, rollback de los cambios en la base de datos
-//            $conn->rollback();
-//            $success = false;
-//            $msg = $e->getMessage();
-//        }
-//        
-//
-//        $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg));
-//        echo $json_data;
-//        
-//    }
 
     function update() {
         $solicitud = Doctrine_Core::getTable('Solicitud')->find($this->input->post('solicitud_id'));

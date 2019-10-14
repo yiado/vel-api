@@ -4,15 +4,20 @@
  */
 class ServiceTable extends Doctrine_Table {
 
-    function retrieveAll($filters = array()) {
-
+    function retrieveAll($filters = array(), $start = false, $limit = false, $count = false) {
         $q = Doctrine_Query::create()
                 ->from('Service s')
                 ->innerJoin('s.ServiceStatus se')
                 ->innerJoin('s.ServiceType st')
                 ->innerJoin('s.User u');
         $this->addFilter($q, $filters);
-        return $q->execute();
+        if (!is_null($start)) {
+            $q->offset($start);
+        }
+        if (!is_null($limit)) {
+            $q->limit($limit);
+        }
+        return $count?$q->count():$q->execute();
     }
 
     function findById($service_id) {
@@ -30,6 +35,7 @@ class ServiceTable extends Doctrine_Table {
                 ->select('s.*, se.*, count(*)')
                 ->from('Service s')
                 ->innerJoin('s.ServiceStatus se')
+                ->innerJoin('s.ServiceType st')
                 ->groupBy('se.service_status_name');
         $this->addFilter($q, $filters);
         return $q->execute();
@@ -39,6 +45,7 @@ class ServiceTable extends Doctrine_Table {
         $q = Doctrine_Query::create()
                 ->select('s.*, st.*, count(*)')
                 ->from('Service s')
+                ->innerJoin('s.ServiceStatus se')
                 ->innerJoin('s.ServiceType st')
                 ->groupBy('st.service_type_name');
         $this->addFilter($q, $filters);

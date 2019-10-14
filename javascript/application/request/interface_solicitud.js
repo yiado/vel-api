@@ -21,15 +21,10 @@ App.Request.Principal = Ext.extend(Ext.TabPanel, {
 
 App.Request.Principal.listener = function(node) {
     if (node && node.id) {
-        App.Request.Services.Store.setBaseParam('node_id', node.id);
-        App.Request.Services.Store.load();
+        App.Request.Services.Store.load({ params: { node_id: node.id, start: 0, limit: App.GridLimit } });
 
         App.Request.Solicitudes.Store.setBaseParam('node_id', node.id);
         App.Request.Solicitudes.Store.load();
-        
-        node.expand();
-        Ext.getCmp('App.StructureTree.Tree').getSelectionModel().select(node);
-        App.StructureTree.Tree.refreshPathBar(node);
     }
 };
 
