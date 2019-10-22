@@ -284,21 +284,7 @@ class NodeController extends APP_Controller {
         $treeNodes[$a][] = new TreeNode($ancestor->node_id, $ancestor->node_name, $ancestor->node_type_id, false, true, "", $ancestor->NodeType->node_type_name, $ancestor->NodeType->NodeTypeCategory->node_type_category_name, false, $treeNodes[$a + 1]);
         echo $this->json->encode($treeNodes[$a]);
     }
-    
-    function expandDeepOnlyParents() {
-        $node = Doctrine_Core::getTable('Node')->find($this->input->post('node_id'));
-        $ancestors = $node->getNode()->getAncestors()->toArray();
-        $nodos_ancestros = array();
-        if ($node->getNode()->getLevel()) {
-            foreach ($ancestors as $nodo) {
-                $nodos_ancestros[] = (int) $nodo['node_id'];
-            }
-            $nodos_ancestros[] = (int) $node->toArray()['node_id'];
-        }
-        
-        echo $this->json->encode($nodos_ancestros);
-    }
-
+  
     /**
      * addParent
      * 
