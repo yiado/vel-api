@@ -333,9 +333,11 @@ App.InfraStructure.Principal = Ext.extend(Ext.TabPanel, {
             }],
             listeners: {
                 'afterrender': function(panel) {
-                    panel.add(
-                        new App.InfraStructure.QRCode()
-                    );
+                    if ( App.Security.Actions['8015'] ) {
+                        panel.add(
+                            new App.InfraStructure.QRCode()
+                        );
+                    }
                     panel.add(
                         new App.InfraStructure.Foto()
                     );
@@ -1390,23 +1392,26 @@ App.InfraStructure.Principal.listener = function(node) { //--> ACA ENTRA AL HACE
         }
     });
     
-    Ext.Ajax.request({
-        waitTitle: App.Language.General.message_please_wait,
-        waitMsg: App.Language.General.message_generating_file,
-        url: 'index.php/qr/get',
-        params: {
-            node_id: App.Interface.selectedNodeId
-        },
-        method: 'POST',
-        success: function(response) {
-            response = Ext.decode(response.responseText);
-            w = Ext.getCmp('App-InfraStructure-QRCode');
-            w.updateImage(response);
-        },
-        failure: function(response) {
-            Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
-        }
-    });
+    if ( App.Security.Actions['8015'] ) {
+        Ext.Ajax.request({
+            waitTitle: App.Language.General.message_please_wait,
+            waitMsg: App.Language.General.message_generating_file,
+            url: 'index.php/qr/get',
+            params: {
+                node_id: App.Interface.selectedNodeId
+            },
+            method: 'POST',
+            success: function(response) {
+                response = Ext.decode(response.responseText);
+                w = Ext.getCmp('App-InfraStructure-QRCode');
+                w.updateImage(response);
+            },
+            failure: function(response) {
+                Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
+            }
+        });
+    }
+    
     //SI ESTA ACTIVA EL TAB FICHA DE RESUMEN ELIGE EL MAPA SELECCIONADO
 
     if (Ext.getCmp('App.InfraStructure.fichaResumen').isVisible()) {
