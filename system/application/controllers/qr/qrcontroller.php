@@ -25,7 +25,7 @@ class QrController extends Controller {
             $qrCode = new QrCode($url);
             $qrCode->setSize(500);
             $qrCode->setMargin(20);
-            $qrCode->setLabel($url, 10, null, LabelAlignment::CENTER);
+            //$qrCode->setLabel($url, 10, null, LabelAlignment::CENTER);
             $qrCode->writeFile($this->config->item('qr_dir') . "{$qrcode_file_name}");
         }
 

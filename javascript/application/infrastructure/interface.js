@@ -339,11 +339,6 @@ App.InfraStructure.Principal = Ext.extend(Ext.TabPanel, {
                     panel.add(
                         new App.InfraStructure.Foto()
                     );
-                    panel.add(
-                        new Ext.Spacer({
-                            height: 5
-                        })
-                    );
                     panel.add({
                         xtype: 'panel',
                         height: 250,
@@ -352,6 +347,7 @@ App.InfraStructure.Principal = Ext.extend(Ext.TabPanel, {
                         cls: 'google_map',
                         ref: 'map2',
                         border: true,
+                        style: 'padding: 5 0 5 0',
                         title: App.Language.Infrastructure.map,
                         html: '<div id="mapResumen" class="map_resumen"></div>',
                         listeners: {
@@ -895,7 +891,7 @@ App.InfraStructure.Foto = Ext.extend(Ext.Panel, {
     id: 'App.InfraStructure.FotoResumen',
     border: false,
     loadMask: true,
-    //    layout: 'border',
+    style: 'padding: 5 0 5 0',
     updateImage: function(doc_version_filename, doc_image_web) {
 
         this.imagepanel2.removeAll();
@@ -903,7 +899,7 @@ App.InfraStructure.Foto = Ext.extend(Ext.Panel, {
             layout: 'fit',
             overflowY: 'scroll',
             autoHeight: true,
-            html: (doc_image_web == 1 ? '<img width=80% src="docs/' + doc_version_filename + '" />' : '<div align="center"><br><img  src="docs/thumb/not_image_icon.png" /></div>')
+            html: (doc_image_web == 1 ? '<img width=100% src="docs/' + doc_version_filename + '" />' : '<div align="center"><br><img  src="docs/thumb/not_image_icon.png" /></div>')
         }));
         this.imagepanel2.doLayout();
     },
@@ -938,8 +934,6 @@ App.InfraStructure.Foto = Ext.extend(Ext.Panel, {
         this.items = [{
             //ESTA ES LA IMAGEN AMPLIADA
             xtype: 'panel',
-            //            id: 'App.Document.fotoResumen',
-            style: 'padding: 5 0 5 5',
             region: 'center',
             ref: 'imagepanel2',
             autoScroll: true,
@@ -955,7 +949,7 @@ App.InfraStructure.Foto = Ext.extend(Ext.Panel, {
 
 App.InfraStructure.QRCode = Ext.extend(Ext.Panel, {
     title: 'Código QR',
-    id: 'App.InfraStructure.QRCode',
+    id: 'App-InfraStructure-QRCode',
     border: false,
     loadMask: true,
     updateImage: function(qr_file_name) {
@@ -965,7 +959,7 @@ App.InfraStructure.QRCode = Ext.extend(Ext.Panel, {
             overflowY: 'scroll',
             autoHeight: true,
             autoWidth: true,
-            id: 'App.InfraStructure.QRCode.Img',
+            id: 'App-InfraStructure-QRCode-Img',
             html: `<img style="display: block;margin-left: auto;margin-right: auto;" height="200" src="${qr_file_name}" />`,
             data: {
                 src: qr_file_name
@@ -977,7 +971,7 @@ App.InfraStructure.QRCode = Ext.extend(Ext.Panel, {
         text: 'Imprimir QR',
         iconCls: 'print_icon',
         handler: function () {
-            qr = Ext.getCmp('App.InfraStructure.QRCode.Img');
+            qr = Ext.getCmp('App-InfraStructure-QRCode-Img');
             var printWindow = window.open('', 'Print Window','height=640,width=620');
             printWindow.document.write('<html><head><title>Print Window</title>');
             printWindow.document.write('</head><body ><img src=\'');
@@ -1010,7 +1004,7 @@ App.InfraStructure.QRCode = Ext.extend(Ext.Panel, {
     initComponent: function() {
         this.items = [{
             xtype: 'panel',
-            style: 'padding: 0 0 5 0',
+            style: 'padding: 5 0 5 0',
             region: 'center',
             
             ref: 'imagepanel1',
@@ -1406,7 +1400,7 @@ App.InfraStructure.Principal.listener = function(node) { //--> ACA ENTRA AL HACE
         method: 'POST',
         success: function(response) {
             response = Ext.decode(response.responseText);
-            w = Ext.getCmp('App.InfraStructure.QRCode');
+            w = Ext.getCmp('App-InfraStructure-QRCode');
             w.updateImage(response);
         },
         failure: function(response) {

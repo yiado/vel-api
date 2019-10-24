@@ -39,7 +39,7 @@
 | routes must come before any wildcard or regular expression routes.
 |
 */
-$route['gui/principal/(:any)']                                                                    = "gui/principal";;
+$route['gui/principal/(:any)']                                                          = "gui/principal";;
 $route['app/(:any)'] 									= "appcontroller/$1";
 $route['core/node/(:any)'] 							 	= "core/nodecontroller/$1";
 $route['core/nodetypecategory/(:any)'] 		 					= "core/nodetypecategorycontroller/$1";

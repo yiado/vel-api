@@ -48,6 +48,7 @@
         <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>javascript/extjs/ux/RowEditor.css"/>
         <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>javascript/extjs/ux/FlashMessage.css"/>
         <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>javascript/extjs/ux/GroupSummary.css" />
+        <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>style/modules/request/style.css"/>
         <script type="text/javascript" src="<?= base_url(); ?>javascript/svg-pan-zoom.js"></script>
         <script type="text/javascript" src="<?= base_url(); ?>javascript/application/svgcontrol.js"></script>
         <script type="text/javascript" src="<?= base_url(); ?>javascript/application/base.js"></script>

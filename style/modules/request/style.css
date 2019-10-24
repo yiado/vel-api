@@ -1,0 +1,16 @@
+@media (max-width: 1024px) {
+    #App-InfraStructure-QRCode-Img > div > div > img {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+
+@media (min-width: 801px) {
+    #App-InfraStructure-QRCode {
+        float: right;
+        margin-left: 5px;
+        max-width: 202px;
+        padding: 5px 0 5px 0;
+    }
+}

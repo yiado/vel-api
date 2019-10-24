@@ -138,15 +138,18 @@ App.Maintainers.Request.Principal = Ext.extend(Ext.TabPanel, {
                     text: App.Language.General.ddelete,
                     iconCls: 'delete_icon',
                     handler: function(b) {
-                        grid = Ext.getCmp('App.Maintainers.Request.ActivosSolicitudEstados');
-                        if (grid.getSelectionModel().getCount()) {
-                            Ext.MessageBox.confirm(App.Language.General.confirmation, App.Language.General.message_really_want_delete_option, function(b) {
-                                if (b === 'yes') {
-                                    grid.getSelectionModel().each(function(record) {
+                        let record = Ext.getCmp('App.Maintainers.Request.ActivosSolicitudEstados').getSelectionModel().getSelected();
+                        if ( record ) {
+                            let id = parseInt(record.id);
+                            if ( id === 1 ) {
+                                Ext.FlashMessage.alert(`No es posible eliminar el estado ${record.data.solicitud_estado_nombre}`);
+                            } else {
+                                Ext.MessageBox.confirm(App.Language.General.confirmation, App.Language.General.message_really_want_delete_option, function(b) {
+                                    if (b === 'yes') {
                                         App.Request.SolicitudEstados.Store.remove(record);
-                                    });
-                                }
-                            });
+                                    }
+                                });
+                            }
                         } else {
                             Ext.FlashMessage.alert(App.Language.General.message_delete_items);
                         }
@@ -298,15 +301,18 @@ App.Maintainers.Request.Principal = Ext.extend(Ext.TabPanel, {
                     text: App.Language.General.ddelete,
                     iconCls: 'delete_icon',
                     handler: function(b) {
-                        grid = Ext.getCmp('App.Maintainers.Request.ServiceStatus');
-                        if (grid.getSelectionModel().getCount()) {
-                            Ext.MessageBox.confirm(App.Language.General.confirmation, App.Language.General.message_really_want_delete_option, function(b) {
-                                if (b === 'yes') {
-                                    grid.getSelectionModel().each(function(record) {
+                        let record = Ext.getCmp('App.Maintainers.Request.ServiceStatus').getSelectionModel().getSelected();
+                        if ( record ) {
+                            let id = parseInt(record.id);
+                            if ( id === 1 || id === 4 ) {
+                                Ext.FlashMessage.alert(`No es posible eliminar el estado ${record.data.service_status_name}`);
+                            } else {
+                                Ext.MessageBox.confirm(App.Language.General.confirmation, App.Language.General.message_really_want_delete_option, function(b) {
+                                    if (b === 'yes') {
                                         App.Request.ServicesStatus.Store.remove(record);
-                                    });
-                                }
-                            });
+                                    }
+                                });
+                            }
                         } else {
                             Ext.FlashMessage.alert(App.Language.General.message_delete_items);
                         }
@@ -322,7 +328,7 @@ App.Maintainers.Request.Principal = Ext.extend(Ext.TabPanel, {
  * Tipo de solicitud
  */
 App.Maintainers.Request.addActivosSolicitudTiposWindow = Ext.extend(Ext.Window, {
-    title: App.Language.Request.add_asset_state,
+    title: App.Language.Request.add_asset_type,
     resizable: false,
     modal: true,
     width: 380,
@@ -337,7 +343,7 @@ App.Maintainers.Request.addActivosSolicitudTiposWindow = Ext.extend(Ext.Window, 
             padding: 5,
             items: [{
                 xtype: 'textfield',
-                fieldLabel: App.Language.Asset.name_state,
+                fieldLabel: App.Language.Request.name,
                 name: 'solicitud_type_nombre',
                 anchor: '100%',
                 allowBlank: false
@@ -568,7 +574,7 @@ App.Maintainers.Request.editServiceTypeWindow = function(record) {
  * Estado de servicio
  */
 App.Maintainers.Request.addServiceStatusWindow = Ext.extend(Ext.Window, {
-    title: App.Language.Request.add_asset_state,
+    title: App.Language.Request.add_service_state,
     resizable: false,
     modal: true,
     width: 380,

@@ -1,3 +1,5 @@
+/* global Ext, App */
+
 Ext.namespace('App.Language');
 App.Language.Tags = new Array();
 

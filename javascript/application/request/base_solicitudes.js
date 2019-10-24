@@ -248,15 +248,17 @@ App.ModuleActions[8013] = {
         beforerender: function(){
             let btn = Ext.getCmp('btn-service-status');            
             App.Request.ServicesStatus.Store.data.items.forEach(function(serviceStatus){
+                if (serviceStatus.id === '1') {
+                    return;
+                }
                 btn.menu.add({
                     text:  serviceStatus.data.service_status_name,
                     iconCls: 'add_icon',
                     handler: function() {
-                        grid = Ext.getCmp('App.Request.Service.Grid');
-                        if (grid.getSelectionModel().getCount()) {
-                            data = grid.getSelectionModel().getSelections()[0].data;
-                            
-                            if (data.ServiceStatus.service_status_id === '4') {
+                        let record = Ext.getCmp('App.Request.Service.Grid').getSelectionModel().getSelected();
+                        if ( record ) {
+                            let data = record.data;
+                            if (data.service_status_id === '4') {
                                 Ext.FlashMessage.alert(`El servicio esta en estado ${data.ServiceStatus.service_status_name}`);
                                 return;
                             }
