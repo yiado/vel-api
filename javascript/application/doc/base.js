@@ -1,3 +1,7 @@
+/* global App */
+
+/* global Ext */
+
 Ext.namespace('App.Document');
 App.General.declareNameSpaces('App.Document', [
     'Version',

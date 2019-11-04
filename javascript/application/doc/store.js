@@ -1,3 +1,5 @@
+/* global App, Ext */
+
 App.Document.CutProxy = function(doc_document_id, successCallBack) {
     Ext.Ajax.request({
         url: 'index.php/doc/document/edit',
