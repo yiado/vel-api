@@ -197,7 +197,7 @@ App.Request.Service.formSearching = {
                                             id: 'start_service_date',
                                             ref: '../start_service_date',
                                             fieldLabel: App.Language.General.start_date,
-                                            name: 'start_service_date',
+                                            name: 'start_date',
                                             anchor: '95%',
                                             listeners: {
                                                 'select': function (fd, date) {
@@ -884,7 +884,14 @@ App.Request.statistics = Ext.extend(Ext.Window, {
     resizable: false,
     padding: 1,
     id:'statistics_window',
-    html: `<div style="width: ${screen.width < 860?400:800};"><div id="service_status_chart" style="display: block; width:400px; height: 400px; float:right;"></div><div id="service_type_chart" style="display: block; height: 400px; width:400px; float:right;"></div></div>`,
+    html: `
+        <div id="grupos_chart" style="width: ${screen.width < 1024?screen.width*0.8:1004}; height: ${screen.width < 1024?screen.height * 0.8:'auto'}; ${screen.width < 1024?'overflow:auto':''};">
+            <div id="service_status_chart" style="border: #99bbe8 1px solid;display: block; width: ${screen.width < 1024?screen.width*0.8:500}; height: ${screen.width < 1024?screen.height*0.8:350}; float:right;"></div>
+            <div id="service_type_chart" style="border: #99bbe8 1px solid;display: block; width:${screen.width < 1024?screen.width*0.8:500}; height: ${screen.width < 1024?screen.height*0.8:350}; float:right;"></div>
+            <div id="service_date_chart" style="border: #99bbe8 1px solid;display: block; width: ${screen.width < 1024?screen.width*0.8:500}; height: ${screen.width < 1024?screen.height*0.8:350}; float:right;"></div>
+            <div id="service_organism_chart" style="border: #99bbe8 1px solid;display: block; width: ${screen.width < 1024?screen.width*0.8:500}; height: ${screen.width < 1024?screen.height*0.8:350}; float:right;"></div>
+        </div>
+    `,
     afterRender: function() {
         let plotOptions = {
             pie: {
@@ -958,6 +965,194 @@ App.Request.statistics = Ext.extend(Ext.Window, {
                         colorByPoint: true,
                         data: data_service_type_chart
                     }]
+                });
+            }
+        });
+        
+        Highcharts.setOptions({
+            lang: {
+                drillUpText: '<< Regresar'
+            }
+        });
+                
+        App.Request.ServicesDateChart.Store.baseParams = form.getSubmitValues();
+        App.Request.ServicesDateChart.Store.setBaseParam('node_id', App.Interface.selectedNodeId);
+        App.Request.ServicesDateChart.Store.load({
+            callback: function(records, operation, success) {
+                let data_service_date_chart = [];
+                records.forEach(function(data){
+                    data_service_date_chart.push({
+                        name: data.data.month_year,
+                        y: parseInt(data.data.count),
+                        drilldown: data.data.month_year
+                    });
+                });
+                Highcharts.chart('service_date_chart', {
+                    chart: {
+                        type: 'column',
+                        events: {
+                            drilldown: function (e) {
+                                let chart = this;
+                                if (!e.seriesOptions) {
+                                    App.Request.ServicesTypeChart.Store.baseParams = form.getSubmitValues();
+                                    App.Request.ServicesTypeChart.Store.setBaseParam('node_id', App.Interface.selectedNodeId);
+                                    App.Request.ServicesTypeChart.Store.setBaseParam('date_interval', e.point.name);
+                                    App.Request.ServicesTypeChart.Store.load({
+                                        callback: function(records, operation, success) {
+                                            let data_service_type_chart = [];
+                                            records.forEach(function(data){
+                                                data_service_type_chart.push([data.data.ServiceType.service_type_name, parseInt(data.data.count)]);
+                                            });
+                                            
+                                            let drilldowns = {
+                                                    nombre: {
+                                                        name: 'Servicio',
+                                                        data: data_service_type_chart
+                                                    }
+                                                },
+                                                series = drilldowns['nombre'];
+                                        
+                                            chart.showLoading('Cargando ...');
+
+                                            setTimeout(function () {
+                                                chart.hideLoading();
+                                                chart.addSeriesAsDrilldown(e.point, series);
+                                            }, 500);
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    },
+                    title: {
+                        text: 'Solicitud de Servicios por Fecha'
+                    },
+                    xAxis: {
+                        type: 'category'
+                    },
+                    yAxis: {
+                        title: {
+                            text: ''
+                        }
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    plotOptions: {
+                        series: {
+                            borderWidth: 0,
+                            dataLabels: {
+                                enabled: true,
+                                format: '{point.y}'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b>'
+                    },
+
+                    series: [
+                        {
+                            name: "Fecha",
+                            colorByPoint: true,
+                            data: data_service_date_chart
+                        }
+                    ],
+                    drilldown: {
+                        series: []
+                    }
+                });
+            }
+        });
+        
+        App.Request.ServicesOrganismChart.Store.baseParams = form.getSubmitValues();
+        App.Request.ServicesOrganismChart.Store.setBaseParam('node_id', App.Interface.selectedNodeId);
+        App.Request.ServicesOrganismChart.Store.load({
+            callback: function(records, operation, success) {
+                let data_service_organims_chart = [];
+                records.forEach(function(data){
+                    data_service_organims_chart.push({
+                        name: data.data.service_organism,
+                        y: parseInt(data.data.count),
+                        drilldown: data.data.service_organism
+                    });
+                });
+                Highcharts.chart('service_organism_chart', {
+                    chart: {
+                        type: 'column',
+                        events: {
+                            drilldown: function (e) {
+                                let chart = this;
+                                if (!e.seriesOptions) {
+                                    App.Request.ServicesTypeChart.Store.baseParams = form.getSubmitValues();
+                                    App.Request.ServicesTypeChart.Store.setBaseParam('node_id', App.Interface.selectedNodeId);
+                                    App.Request.ServicesTypeChart.Store.setBaseParam('service_organism', e.point.name);
+                                    App.Request.ServicesTypeChart.Store.load({
+                                        callback: function(records, operation, success) {
+                                            let data_service_type_chart = [];
+                                            records.forEach(function(data){
+                                                data_service_type_chart.push([data.data.ServiceType.service_type_name, parseInt(data.data.count)]);
+                                            });
+                                            
+                                            let drilldowns = {
+                                                    nombre: {
+                                                        name: 'Servicio',
+                                                        data: data_service_type_chart
+                                                    }
+                                                },
+                                                series = drilldowns['nombre'];
+                                        
+                                            chart.showLoading('Cargando ...');
+
+                                            setTimeout(function () {
+                                                chart.hideLoading();
+                                                chart.addSeriesAsDrilldown(e.point, series);
+                                            }, 500);
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    },
+                    title: {
+                        text: 'Solicitud de Servicios por Organismo'
+                    },
+                    xAxis: {
+                        type: 'category'
+                    },
+                    yAxis: {
+                        title: {
+                            text: ''
+                        }
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    plotOptions: {
+                        series: {
+                            borderWidth: 0,
+                            dataLabels: {
+                                enabled: true,
+                                format: '{point.y}'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b>'
+                    },
+
+                    series: [
+                        {
+                            name: "Organismo",
+                            colorByPoint: true,
+                            data: data_service_organims_chart
+                        }
+                    ],
+                    drilldown: {
+                        series: []
+                    }
                 });
             }
         });

@@ -176,6 +176,10 @@ class ServiceController extends APP_Controller {
             'service_organism LIKE ?' => (!empty($service_organism) ? '%' . $service_organism . '%' : NULL)
         );
         
+        if ($this->input->post('date_interval')) {
+            $filters['DATE_FORMAT(service_date,\'%m-%Y\') = ?'] = $this->input->post('date_interval');
+        }
+            
         if ($ancestros) {
             $filters['node_id = ?'] = $node_id;
         }
@@ -321,6 +325,16 @@ class ServiceController extends APP_Controller {
     
     function getServiceType() {
         $request = Doctrine_Core::getTable('Service')->groupAllByType($this->filtrosServices());
+        $this->sendRes($request);
+    }
+    
+    function getServiceDate() {
+        $request = Doctrine_Core::getTable('Service')->groupAllByDate($this->filtrosServices());
+        $this->sendRes($request);
+    }
+    
+    function getServiceOrganism() {
+        $request = Doctrine_Core::getTable('Service')->groupAllByOrganism($this->filtrosServices());
         $this->sendRes($request);
     }
     

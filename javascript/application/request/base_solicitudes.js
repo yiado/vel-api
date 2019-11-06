@@ -12,7 +12,9 @@ App.General.declareNameSpaces('App.Request', [
     'ServicesType',
     'ServicesLog',
     'ServicesStatusChart',
-    'ServicesTypeChart'
+    'ServicesTypeChart',
+    'ServicesDateChart',
+    'ServicesOrganismChart'
 ]);
 
 App.Request.moduleActivate = function() {

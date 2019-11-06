@@ -381,3 +381,56 @@ App.Request.ServicesTypeChart.Store = new Ext.data.JsonStore({
         'ServiceType'
     ]
 });
+
+App.Request.ServicesDateChart.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
+            read: 'index.php/request/service/getServiceDate'
+        },
+        listeners: {
+            'exception': function(DataProxy, type, action, options, response, arg) {
+                if (type === 'remote') {
+                    Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
+                }
+            }
+        }
+    }),
+    writer: new Ext.data.JsonWriter({
+        encode: true,
+        writeAllFields: true,
+        encodeDelete: true
+    }),
+    root: 'results',
+    totalProperty: 'total',
+    fields: [
+        'count',
+        'month_year',
+        'ServiceType'
+    ]
+});
+
+App.Request.ServicesOrganismChart.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
+            read: 'index.php/request/service/getServiceOrganism'
+        },
+        listeners: {
+            'exception': function(DataProxy, type, action, options, response, arg) {
+                if (type === 'remote') {
+                    Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
+                }
+            }
+        }
+    }),
+    writer: new Ext.data.JsonWriter({
+        encode: true,
+        writeAllFields: true,
+        encodeDelete: true
+    }),
+    root: 'results',
+    totalProperty: 'total',
+    fields: [
+        'count',
+        'service_organism'
+    ]
+});
