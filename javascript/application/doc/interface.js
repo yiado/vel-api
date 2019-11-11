@@ -1,3 +1,5 @@
+/* global App, Ext */
+
 App.Document.selectedDocumentId = null;
 App.Document.CategoryName = null;
 App.Document.doc_version_filename = null;
@@ -814,7 +816,7 @@ App.Document.ThumbView = Ext.extend(Ext.DataView, {
     tpl: new Ext.XTemplate('<tpl for=".">',
         '<div class="thumb-wrap" id="{doc_document_id}">',
         '<tpl if="values.DocCurrentVersion.doc_image_web == \'0\'">',
-        '<div class="thumb"   ><img  src="docs/thumb/not_image_icon.png" ondblclick="App.Document.AbrirImagen({doc_document_id}, {#})" class="thumb-img"/></div>',
+        '<div class="thumb"   ><img src="style/extension_icon/{doc_extension_id}.png" ondblclick="App.Document.AbrirImagen({doc_document_id}, {#});" class="thumb-img"/></div>',
         '<span class="thumb-wrap-span">{doc_document_filename}</span></div>',
         '</tpl>',
         '<tpl if="values.DocCurrentVersion.doc_image_web == \'1\'">',
