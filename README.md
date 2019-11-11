@@ -74,7 +74,7 @@
         $config['base_url']	= "http://localhost/igeov4/";
 
 ## CREAR CARPETAS
-    mkdir docs asset_doc temp/qrcode
+    mkdir docs docs/thumb asset_doc temp/qrcode
     chmod -R 777 plans/ docs/ asset_doc/ style/ temp/ system/application/libraries/tcpdf/cache/
 
 ## PERMISOS SELinux (centos)
