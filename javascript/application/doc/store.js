@@ -1,3 +1,5 @@
+/* global App, Ext */
+
 App.Document.CutProxy = function(doc_document_id, successCallBack) {
     Ext.Ajax.request({
         url: 'index.php/doc/document/edit',
@@ -303,6 +305,9 @@ App.Document.Version.Store = new Ext.data.JsonStore({
         }, {
             name: 'doc_document_description',
             mapping: 'DocDocument.doc_document_description'
+        }, {
+            name: 'doc_extension_name',
+            mapping: 'DocDocument.DocExtension.doc_extension_name'
         }
     ]
 });

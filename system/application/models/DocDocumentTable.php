@@ -171,7 +171,7 @@ class DocDocumentTable extends Doctrine_Table {
     }
 
     function compFileName($file_input, $node_id) {
-        $q = Doctrine_Query :: create()->from('DocDocument dd')->where('dd.doc_document_filename = ?', $file_input)->andWhere('dd.node_id = ?', $node_id)->limit(1);
+        $q = Doctrine_Query :: create()->from('DocDocument dd')->where('dd.doc_document_filename = ?', addslashes($file_input))->andWhere('dd.node_id = ?', $node_id)->limit(1);
 
         $results = $q->execute();
         return ($results->count() == 1 ? true : false);

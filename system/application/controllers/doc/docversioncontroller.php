@@ -48,7 +48,7 @@ class DocVersionController extends APP_Controller {
         //Preguntar si el nombre documento no existe en la base de datos retornar mensaje "Debe ingresarlo como Documento"
         if ($compare === true) {
             $success = false;
-            $msg = $this->translateTag('Documen', 'you_must_enter_the_same_document');
+            $msg = $this->translateTag('Document', 'you_must_enter_the_same_document');
             $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg));
             echo $json_data;
             return;

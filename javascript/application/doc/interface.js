@@ -1,3 +1,5 @@
+/* global Ext, App, pdfjsLib */
+
 App.Document.selectedDocumentId = null;
 App.Document.CategoryName = null;
 App.Document.doc_version_filename = null;
@@ -831,6 +833,7 @@ App.Document.ThumbView = Ext.extend(Ext.DataView, {
         }
     }
 });
+
 App.Document.VersionImagenWindow = Ext.extend(Ext.Window, {
     title: App.Language.General.versions_of_stock,
     width: 1000,
@@ -842,198 +845,261 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window, {
     layout: 'border',
     border: false,
     enableKeyEvents: true,
-    tbar: [{
-        xtype: 'button',
-        iconCls: 'previous_icon',
-        handler: function(b) {
-            App.Document.currentPosition = App.Document.currentPosition - 1;
-            record = App.Document.Store.getAt(App.Document.currentPosition);
-            // VALIDA QUE NO SE MENOR A CERO
-            if (App.Document.currentPosition >= 0) {
-
-                b.ownerCt.ownerCt.updateImage(record.data.doc_version_filename, record.data.doc_image_web);
-            } else {
-                App.Document.currentPosition = App.Document.currentPosition + 1;
-            }
-        }
-    }, {
-        xtype: 'tbseparator',
-        width: 5
-    }, {
-        iconCls: 'next_icon',
-        handler: function(b) {
-            App.Document.currentPosition = App.Document.currentPosition + 1;
-            record = App.Document.Store.getAt(App.Document.currentPosition);
-            //VALIDA QUE NO SEA MAYOR AL TOTAL
-            if (App.Document.currentPosition < App.Document.Store.getCount()) {
-                b.ownerCt.ownerCt.updateImage(record.data.doc_version_filename, record.data.doc_image_web);
-            } else {
+    tbar: [
+        {
+            xtype: 'button',
+            iconCls: 'previous_icon',
+            handler: function(b) {
                 App.Document.currentPosition = App.Document.currentPosition - 1;
+                let record = App.Document.Store.getAt(App.Document.currentPosition).data;
+                // VALIDA QUE NO SE MENOR A CERO
+                if (App.Document.currentPosition >= 0) {
+                    b.ownerCt.ownerCt.updateImage(record.doc_version_filename, record.doc_image_web, record.doc_extension_name);
+                    if (record.doc_extension_name === 'pdf') {
+                        pdfViewer('index.php/doc/document/download/' + record.DocCurrentVersion.doc_version_id);
+                    }
+                } else {
+                    App.Document.currentPosition = App.Document.currentPosition + 1;
+                }
             }
-        }
-    }, {
-        xtype: 'tbseparator',
-        width: 5
-    }, {
-        text: App.Language.General.download,
-        iconCls: 'download_icon',
-        handler: function(b) {
-            grid = Ext.getCmp('App.Document.GridDocVersion');
-            if (grid.getSelectionModel().getCount()) {
-                window.location = 'index.php/doc/document/download/' + grid.getSelectionModel().getSelected().data.doc_version_id;
-            } else {
-                Ext.FlashMessage.alert(App.Language.General.you_have_to_select_an_item_to_set);
+        }, {
+            xtype: 'tbseparator',
+            width: 5
+        }, {
+            iconCls: 'next_icon',
+            handler: function(b) {
+                App.Document.currentPosition = App.Document.currentPosition + 1;
+                let record = App.Document.Store.getAt(App.Document.currentPosition).data;
+                //VALIDA QUE NO SEA MAYOR AL TOTAL
+                if (App.Document.currentPosition < App.Document.Store.getCount()) {
+                    b.ownerCt.ownerCt.updateImage(record.doc_version_filename, record.doc_image_web, record.doc_extension_name);
+                    if (record.doc_extension_name === 'pdf') {
+                        pdfViewer('index.php/doc/document/download/' + record.DocCurrentVersion.doc_version_id);
+                    }
+                } else {
+                    App.Document.currentPosition = App.Document.currentPosition - 1;
+                }
             }
-        }
-    }, {
-        xtype: 'tbseparator',
-        width: 20
-    }, {
-        text: App.Language.Document.rotate_left,
-        iconCls: 'arrow-rotate-1',
-        handler: function(b) {
-            grid = Ext.getCmp('App.Document.GridDoc');
-            if (grid === undefined) {
+        }, {
+            xtype: 'tbseparator',
+            width: 5
+        }, {
+            text: App.Language.General.download,
+            iconCls: 'download_icon',
+            handler: function(b) {
+                grid = Ext.getCmp('App.Document.GridDocVersion');
+                if (grid.getSelectionModel().getCount()) {
+                    window.location = 'index.php/doc/document/download/' + grid.getSelectionModel().getSelected().data.doc_version_id;                    
+                } else {
+                    Ext.FlashMessage.alert(App.Language.General.you_have_to_select_an_item_to_set);
+                }
+            }
+        }, {
+            xtype: 'tbseparator',
+            width: 20
+        }, {
+            text: App.Language.Document.rotate_left,
+            iconCls: 'arrow-rotate-1',
+            id: 'img-rotate-left',
+            handler: function(b) {
+                grid = Ext.getCmp('App.Document.GridDoc');
+                if (grid === undefined) {
 
-                Ext.Ajax.request({
-                    waitTitle: App.Language.General.message_please_wait,
-                    waitMsg: App.Language.Document.rotating_picture,
-                    url: 'index.php/doc/document/vuelveFile',
-                    method: 'POST',
-                    params: {
-                        doc_document_id: App.Document.selectedDocumentId
-                    },
-                    success: function(response) {
-                        response = Ext.decode(response.responseText);
-                        doc_version_filename = response.data.DocVersion[0].doc_version_filename;
-                        var msg = Ext.MessageBox.wait(App.Language.General.please_wait, "Rotando Imagen");
-                        Ext.Ajax.request({
-                            url: 'index.php/doc/document/rotacion1',
-                            method: 'POST',
-                            params: {
-                                doc_version_filename: doc_version_filename
-                            },
-                            success: function(response) {
-                                response = Ext.decode(response.responseText);
-                                doc_image_web = response.data.DocCurrentVersion.doc_image_web;
-                                Ext.getCmp('App.Document.VersionImagenWindow').updateImage(doc_version_filename, doc_image_web);
-                                Ext.getCmp('App.Document.VersionImagenWindow').fireEvent('beforerender', Ext.getCmp('App.Document.VersionImagenWindow'));
-                                App.Document.Store.load();
-                            },
-                            failure: function(response) {
-                                Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
-                            },
-                            callback: function() {
-                                msg.hide()
-                            }
-                        });
-                    },
-                    failure: function(response) {
-                        Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
-                    }
-                });
-            } else {
-                var msg = Ext.MessageBox.wait(App.Language.General.please_wait, App.Language.Document.rotating_picture);
-                Ext.Ajax.request({
-                    url: 'index.php/doc/document/rotacion1',
-                    method: 'POST',
-                    params: {
-                        doc_version_filename: App.Document.doc_version_filename
-                    },
-                    success: function(response) {
-                        response = Ext.decode(response.responseText);
-                        Ext.getCmp('App.Document.VersionImagenWindow').updateImage(response.data.DocCurrentVersion.doc_version_filename, response.data.DocCurrentVersion.doc_image_web);
-                        Ext.getCmp('App.Document.VersionImagenWindow').fireEvent('beforerender', Ext.getCmp('App.Document.VersionImagenWindow'));
-                        App.Document.Store.load();
-                    },
-                    failure: function(response) {
-                        Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
-                    },
-                    callback: function() {
-                        msg.hide()
-                    }
-                });
+                    Ext.Ajax.request({
+                        waitTitle: App.Language.General.message_please_wait,
+                        waitMsg: App.Language.Document.rotating_picture,
+                        url: 'index.php/doc/document/vuelveFile',
+                        method: 'POST',
+                        params: {
+                            doc_document_id: App.Document.selectedDocumentId
+                        },
+                        success: function(response) {
+                            response = Ext.decode(response.responseText);
+                            doc_version_filename = response.data.DocVersion[0].doc_version_filename;
+                            var msg = Ext.MessageBox.wait(App.Language.General.please_wait, "Rotando Imagen");
+                            Ext.Ajax.request({
+                                url: 'index.php/doc/document/rotacion1',
+                                method: 'POST',
+                                params: {
+                                    doc_version_filename: doc_version_filename
+                                },
+                                success: function(response) {
+                                    response = Ext.decode(response.responseText);
+                                    doc_image_web = response.data.DocCurrentVersion.doc_image_web;
+                                    Ext.getCmp('App.Document.VersionImagenWindow').updateImage(doc_version_filename, doc_image_web);
+                                    Ext.getCmp('App.Document.VersionImagenWindow').fireEvent('beforerender', Ext.getCmp('App.Document.VersionImagenWindow'));
+                                    App.Document.Store.load();
+                                },
+                                failure: function(response) {
+                                    Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
+                                },
+                                callback: function() {
+                                    msg.hide()
+                                }
+                            });
+                        },
+                        failure: function(response) {
+                            Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
+                        }
+                    });
+                } else {
+                    var msg = Ext.MessageBox.wait(App.Language.General.please_wait, App.Language.Document.rotating_picture);
+                    Ext.Ajax.request({
+                        url: 'index.php/doc/document/rotacion1',
+                        method: 'POST',
+                        params: {
+                            doc_version_filename: App.Document.doc_version_filename
+                        },
+                        success: function(response) {
+                            response = Ext.decode(response.responseText);
+                            Ext.getCmp('App.Document.VersionImagenWindow').updateImage(response.data.DocCurrentVersion.doc_version_filename, response.data.DocCurrentVersion.doc_image_web);
+                            Ext.getCmp('App.Document.VersionImagenWindow').fireEvent('beforerender', Ext.getCmp('App.Document.VersionImagenWindow'));
+                            App.Document.Store.load();
+                        },
+                        failure: function(response) {
+                            Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
+                        },
+                        callback: function() {
+                            msg.hide();
+                        }
+                    });
+                }
+            }
+        }, {
+            text: App.Language.Document.rotate_right,
+            iconCls: 'arrow-rotate-2',
+            id: 'img-rotate-right',
+            handler: function(b) {
+                grid = Ext.getCmp('App.Document.GridDoc');
+                if (grid === undefined) {
+                    Ext.Ajax.request({
+                        waitTitle: App.Language.General.message_please_wait,
+                        waitMsg: App.Language.Document.rotating_picture,
+                        url: 'index.php/doc/document/vuelveFile',
+                        method: 'POST',
+                        params: {
+                            doc_document_id: App.Document.selectedDocumentId
+                        },
+                        success: function(response) {
+                            response = Ext.decode(response.responseText);
+                            doc_version_filename = response.data.DocVersion[0].doc_version_filename;
+                            var msg = Ext.MessageBox.wait(App.Language.General.please_wait, App.Language.Document.rotating_picture);
+                            Ext.Ajax.request({
+                                url: 'index.php/doc/document/rotacion2',
+                                method: 'POST',
+                                params: {
+                                    doc_version_filename: doc_version_filename
+                                },
+                                success: function(response) {
+                                    response = Ext.decode(response.responseText);
+                                    doc_image_web = response.data.DocCurrentVersion.doc_image_web;
+                                    Ext.getCmp('App.Document.VersionImagenWindow').updateImage(doc_version_filename, doc_image_web);
+                                    Ext.getCmp('App.Document.VersionImagenWindow').fireEvent('beforerender', Ext.getCmp('App.Document.VersionImagenWindow'));
+                                    App.Document.Store.load();
+                                },
+                                failure: function(response) {
+                                    Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
+                                },
+                                callback: function() {
+                                    msg.hide()
+                                }
+                            });
+                        },
+                        failure: function(response) {
+                            Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
+                        }
+                    });
+                } else {
+                    var msg = Ext.MessageBox.wait(App.Language.General.please_wait, App.Language.Document.rotating_picture);
+                    Ext.Ajax.request({
+                        url: 'index.php/doc/document/rotacion2',
+                        method: 'POST',
+                        params: {
+                            doc_version_filename: App.Document.doc_version_filename
+                        },
+                        success: function(response) {
+                            response = Ext.decode(response.responseText);
+                            Ext.getCmp('App.Document.VersionImagenWindow').updateImage(response.data.DocCurrentVersion.doc_version_filename, response.data.DocCurrentVersion.doc_image_web);
+                            Ext.getCmp('App.Document.VersionImagenWindow').fireEvent('beforerender', Ext.getCmp('App.Document.VersionImagenWindow'));
+                            App.Document.Store.load();
+                        },
+                        failure: function(response) {
+                            Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
+                        },
+                        callback: function() {
+                            msg.hide()
+                        }
+                    });
+                }
+            }
+        }, {
+            text: 'Pág. Anterior',
+            id: 'pdf-prev',
+            iconCls: 'previous_icon'
+        }, {
+            text: 'Pág. Siguiente',
+            id: 'pdf-next',
+            iconCls: 'next_icon'
+        }, {
+            xtype: 'tbseparator',
+            width: 5
+        }, {
+            xtype: 'combo',
+            id: 'pdf-paginate',
+            width: 40,
+            triggerAction: 'all',
+            editable: false,
+            typeAhead: true,
+            selectOnFocus: true,
+            forceSelection: true,
+            minChars: 0,
+            allowBlank: true,
+            lazyRender: true,
+            mode: 'local',
+            valueField: 'id_pagina',
+            displayField: 'id_pagina',
+            listeners: {
+                select: function(index) {
+                    queueRenderPage(parseInt(index.lastSelectionText));
+                }
             }
         }
-    }, {
-        text: App.Language.Document.rotate_right,
-        iconCls: 'arrow-rotate-2',
-        handler: function(b) {
-            grid = Ext.getCmp('App.Document.GridDoc');
-            if (grid === undefined) {
-                Ext.Ajax.request({
-                    waitTitle: App.Language.General.message_please_wait,
-                    waitMsg: App.Language.Document.rotating_picture,
-                    url: 'index.php/doc/document/vuelveFile',
-                    method: 'POST',
-                    params: {
-                        doc_document_id: App.Document.selectedDocumentId
-                    },
-                    success: function(response) {
-                        response = Ext.decode(response.responseText);
-                        doc_version_filename = response.data.DocVersion[0].doc_version_filename;
-                        var msg = Ext.MessageBox.wait(App.Language.General.please_wait, App.Language.Document.rotating_picture);
-                        Ext.Ajax.request({
-                            url: 'index.php/doc/document/rotacion2',
-                            method: 'POST',
-                            params: {
-                                doc_version_filename: doc_version_filename
-                            },
-                            success: function(response) {
-                                response = Ext.decode(response.responseText);
-                                doc_image_web = response.data.DocCurrentVersion.doc_image_web;
-                                Ext.getCmp('App.Document.VersionImagenWindow').updateImage(doc_version_filename, doc_image_web);
-                                Ext.getCmp('App.Document.VersionImagenWindow').fireEvent('beforerender', Ext.getCmp('App.Document.VersionImagenWindow'));
-                                App.Document.Store.load();
-                            },
-                            failure: function(response) {
-                                Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
-                            },
-                            callback: function() {
-                                msg.hide()
-                            }
-                        });
-                    },
-                    failure: function(response) {
-                        Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
-                    }
-                });
-            } else {
-                var msg = Ext.MessageBox.wait(App.Language.General.please_wait, App.Language.Document.rotating_picture);
-                Ext.Ajax.request({
-                    url: 'index.php/doc/document/rotacion2',
-                    method: 'POST',
-                    params: {
-                        doc_version_filename: App.Document.doc_version_filename
-                    },
-                    success: function(response) {
-                        response = Ext.decode(response.responseText);
-                        Ext.getCmp('App.Document.VersionImagenWindow').updateImage(response.data.DocCurrentVersion.doc_version_filename, response.data.DocCurrentVersion.doc_image_web);
-                        Ext.getCmp('App.Document.VersionImagenWindow').fireEvent('beforerender', Ext.getCmp('App.Document.VersionImagenWindow'));
-                        App.Document.Store.load();
-                    },
-                    failure: function(response) {
-                        Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
-                    },
-                    callback: function() {
-                        msg.hide()
-                    }
-                });
-            }
-        }
-
-    }],
-    updateImage: function(doc_version_filename, doc_image_web) {
+    ],
+    updateImage: function(doc_version_filename, doc_image_web, doc_extension_name) {
         //ACTUALIZA LA IMAGEN       
-
+        let div_img = `<img width=100% src="docs/${doc_version_filename}?id=' + n + '" />`;
+        let div_no_img = `<div align="center"><br><br><br><br><br><br><br><br><br><br><br><br><img  src="docs/thumb/not_image_icon.png" /></div>`;
+        if (doc_extension_name === 'pdf') {
+            div_no_img = `<canvas id="the-canvas"></canvas>`;
+        }
+        
+        if (doc_extension_name.toLowerCase() === 'pdf') {
+            Ext.getCmp('img-rotate-left').hide();
+            Ext.getCmp('img-rotate-right').hide();
+            Ext.getCmp('pdf-prev').show();
+            Ext.getCmp('pdf-next').show();
+            Ext.getCmp('pdf-paginate').show();
+        } else if (doc_image_web === 1) {
+            Ext.getCmp('img-rotate-left').show();
+            Ext.getCmp('img-rotate-right').show();
+            Ext.getCmp('pdf-prev').hide();
+            Ext.getCmp('pdf-next').hide();
+            Ext.getCmp('pdf-paginate').hide();
+        } else {
+            Ext.getCmp('img-rotate-left').hide();
+            Ext.getCmp('img-rotate-right').hide();
+            Ext.getCmp('pdf-prev').hide();
+            Ext.getCmp('pdf-next').hide();
+            Ext.getCmp('pdf-paginate').hide();
+        }
+        
         var d = new Date();
         var n = d.getTime();
         this.imagepanel.removeAll();
         this.imagepanel.add(new Ext.Panel({
             layout: 'fit',
             overflowY: 'scroll',
-            html: (doc_image_web == 1 ? '<img width=100% src="docs/' + doc_version_filename + '?id=' + n + '" />' : '<div align="center"><br><br><br><br><br><br><br><br><br><br><br><br><img  src="docs/thumb/not_image_icon.png" /></div>')
-                //html: (doc_image_web == 1 ? '<img width=100% src="docs/' + doc_version_filename + '" />' : '<div align="center"><br><br><br><br><br><br><br><br><br><br><br><br><img  src="docs/thumb/not_image_icon.png" /></div>')
+            html: (doc_image_web === 1 ? div_img : div_no_img)
         }));
         this.imagepanel.doLayout();
         record = App.Document.Store.getAt(App.Document.currentPosition);
@@ -1042,36 +1108,44 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window, {
         App.Document.Version.Store.setBaseParam('doc_document_id', record.data.doc_document_id);
         App.Document.Version.Store.load();
     },
-    keys: [{
-        key: Ext.EventObject.RIGHT,
-        fn: function() {
-            App.Document.currentPosition = App.Document.currentPosition + 1;
-            record = App.Document.Store.getAt(App.Document.currentPosition);
-            //VALIDA QUE NO SEA MAYOR AL TOTAL
-            if (App.Document.currentPosition < App.Document.Store.getCount()) {
-                Ext.getCmp('App.Document.VersionImagenWindow').updateImage(record.data.doc_version_filename, record.data.doc_image_web);
-            } else {
-                App.Document.currentPosition = App.Document.currentPosition - 1;
-            }
-        }
-    }, {
-        key: Ext.EventObject.LEFT,
-        fn: function() {
-
-            App.Document.currentPosition = App.Document.currentPosition - 1;
-            record = App.Document.Store.getAt(App.Document.currentPosition);
-            // VALIDA QUE NO SE MENOR A CERO
-            if (App.Document.currentPosition >= 0) {
-                Ext.getCmp('App.Document.VersionImagenWindow').updateImage(record.data.doc_version_filename, record.data.doc_image_web);
-            } else {
+    keys: [
+        {
+            key: Ext.EventObject.RIGHT,
+            fn: function() {
                 App.Document.currentPosition = App.Document.currentPosition + 1;
+                record = App.Document.Store.getAt(App.Document.currentPosition);
+                //VALIDA QUE NO SEA MAYOR AL TOTAL
+                if (App.Document.currentPosition < App.Document.Store.getCount()) {
+                    Ext.getCmp('App.Document.VersionImagenWindow').updateImage(record.data.doc_version_filename, record.data.doc_image_web);
+                } else {
+                    App.Document.currentPosition = App.Document.currentPosition - 1;
+                }
+            }
+        }, {
+            key: Ext.EventObject.LEFT,
+            fn: function() {
+
+                App.Document.currentPosition = App.Document.currentPosition - 1;
+                record = App.Document.Store.getAt(App.Document.currentPosition);
+                // VALIDA QUE NO SE MENOR A CERO
+                if (App.Document.currentPosition >= 0) {
+                    Ext.getCmp('App.Document.VersionImagenWindow').updateImage(record.data.doc_version_filename, record.data.doc_image_web);
+                } else {
+                    App.Document.currentPosition = App.Document.currentPosition + 1;
+                }
             }
         }
-    }],
+    ],
     listeners: {
         'beforerender': function(w) {
-            record = App.Document.Store.getAt(App.Document.currentPosition);
-            w.updateImage(record.data.doc_version_filename, record.data.doc_image_web);
+            let record = App.Document.Store.getAt(App.Document.currentPosition).data;
+            w.updateImage(record.doc_version_filename, record.doc_image_web, record.doc_extension_name);
+        },
+        'afterrender': function(w) {
+            let record = App.Document.Store.getAt(App.Document.currentPosition).data;
+            if (record.doc_extension_name.toLowerCase() === 'pdf') {
+                pdfViewer('index.php/doc/document/download/' + record.DocCurrentVersion.doc_version_id);
+            }
         }
     },
     initComponent: function() {
@@ -1107,7 +1181,11 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window, {
             listeners: {
                 'rowdblclick': function(grid, rowIndex) {
                     w = grid.ownerCt;
-                    w.updateImage(grid.getStore().getAt(rowIndex).data.doc_version_filename, grid.getStore().getAt(rowIndex).data.doc_image_web);
+                    let data = grid.getStore().getAt(rowIndex).data;
+                    w.updateImage(data.doc_version_filename, data.doc_image_web, data.doc_extension_name);
+                    if(data.doc_extension_name.toLowerCase() === 'pdf') {
+                        pdfViewer('index.php/doc/document/download/' + data.doc_version_id);                        
+                    }
                 }
             },
             tbar: {
@@ -1328,7 +1406,6 @@ App.Document.updateCategoryWindow = Ext.extend(Ext.Window, {
             }, {
                 text: App.Language.General.add,
                 handler: function(b) {
-                    //                    console.log(Ext.getCmp('App.Document.updateCate').getValue());
                     if (Ext.getCmp('App.Document.updateCate').getValue() != '') {
                         Ext.Ajax.request({
                             waitMsg: App.Language.General.message_generating_file,
@@ -2177,3 +2254,92 @@ App.Document.addUsersWindow = Ext.extend(Ext.Window, {
         App.Document.addUsersWindow.superclass.initComponent.call(this);
     }
 });
+
+var pdfDoc = null,
+    pageNum = 1,
+    pageRendering = false,
+    pageNumPending = null,
+    scale = 1;
+
+function pdfViewer(url) {
+    pdfDoc = null;
+    pageNum = 1;
+    pageRendering = false;
+    pageNumPending = null;
+    scale = 1;
+    
+    document.getElementById('pdf-prev').addEventListener('click', onPrevPage);
+    document.getElementById('pdf-next').addEventListener('click', onNextPage);
+    pdfjsLib.getDocument(url).promise.then(function (pdfDoc_) {
+        pdfDoc = pdfDoc_;
+        renderPage(pageNum);
+        let paginas = [];
+        for (i = 1; i <= pdfDoc.numPages; i++) {
+            paginas.push([i]);
+        }
+
+        let pdfPaginate = Ext.getCmp('pdf-paginate');
+        pdfPaginate.bindStore(new Ext.data.ArrayStore({
+            id: 1,
+            fields: [
+                'id_pagina'
+            ],
+            data: paginas
+        }));
+    });
+};
+
+function renderPage(num) {
+    var canvas = document.getElementById('the-canvas'),
+            ctx = canvas.getContext('2d');
+
+    pageRendering = true;
+    pdfDoc.getPage(num).then(function (page) {
+        var viewport = page.getViewport({scale: scale});
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        var renderContext = {
+            canvasContext: ctx,
+            viewport: viewport
+        };
+        var renderTask = page.render(renderContext);
+
+        renderTask.promise.then(function () {
+            pageRendering = false;
+            if (pageNumPending !== null) {
+                renderPage(pageNumPending);
+                pageNumPending = null;
+            }
+        });
+        let pdf = document.getElementById('the-canvas');
+        pdf.parentElement.setAttribute('style', `width: ${pdf.width + 4}px; height: ${pdf.height + 4}px;`);
+        pdf.parentElement.parentElement.setAttribute('style', `width: ${pdf.width + 4}px;`);
+        Ext.getCmp('pdf-paginate').setValue(num);
+    });
+}
+
+function onNextPage() {
+    if (pageNum >= pdfDoc.numPages) {
+        return;
+    }
+    pageNum++;
+    queueRenderPage(pageNum);
+}
+
+function onPrevPage() {
+    if (pageNum <= 1) {
+        return;
+    }
+    pageNum--;
+    queueRenderPage(pageNum);
+}
+
+function queueRenderPage(num) {
+    pageNum = num;
+    if (pageRendering) {
+        pageNumPending = num;
+    } else {
+        renderPage(num);
+    }
+}

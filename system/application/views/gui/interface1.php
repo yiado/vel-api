@@ -154,6 +154,8 @@
         <script src="https://code.highcharts.com/modules/exporting.js"></script>
         <!-- script src="https://code.highcharts.com/modules/export-data.js"></script>-->
         <!-- Application Library and StyleSheets -->
+        
+        <script src="<?= base_url(); ?>javascript/pdfjs/build/pdf.js"></script>
 
         <style type="text/css">
             .x-grid33-cell-inner {
