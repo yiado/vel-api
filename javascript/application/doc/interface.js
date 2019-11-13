@@ -1066,12 +1066,20 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window, {
         }
     ],
     updateImage: function(doc_version_filename, doc_image_web, doc_extension_name) {
-        //ACTUALIZA LA IMAGEN       
-        let div_img = `<img width=100% src="docs/${doc_version_filename}?id=' + n + '" />`;
-        let div_no_img = `<div align="center"><br><br><br><br><br><br><br><br><br><br><br><br><img  src="docs/thumb/not_image_icon.png" /></div>`;
-        if (doc_extension_name === 'pdf') {
-            div_no_img = `<canvas id="the-canvas"></canvas>`;
+        //ACTUALIZA LA IMAGEN
+        let div_visor;
+        let title_visor = 'Visualizador de PDF';
+        if (doc_image_web === 1) {
+            title_visor = 'Visualizador de Imágenes';
+            div_visor = `<img width=100% src="docs/${doc_version_filename}?id=' + n + '" />`;
+        } else if (doc_extension_name.toLowerCase() === 'pdf') {
+            div_visor = `<canvas id="pdf-visualizador"></canvas>`;
+        } else {
+            title_visor = 'Documento sin vista web';
+            div_visor = `<div align="center"><br><br><br><br><br><br><br><br><br><br><br><br><h1>presione "Descargar" para verlo en su computador.</h1></div>`;
         }
+        
+        Ext.getCmp('App.Document.VersionImagenWindow').setTitle(title_visor);
         
         if (doc_extension_name.toLowerCase() === 'pdf') {
             Ext.getCmp('img-rotate-left').hide();
@@ -1099,7 +1107,7 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window, {
         this.imagepanel.add(new Ext.Panel({
             layout: 'fit',
             overflowY: 'scroll',
-            html: (doc_image_web === 1 ? div_img : div_no_img)
+            html: div_visor
         }));
         this.imagepanel.doLayout();
         record = App.Document.Store.getAt(App.Document.currentPosition);
@@ -2262,6 +2270,9 @@ var pdfDoc = null,
     scale = 1;
 
 function pdfViewer(url) {
+    let myMask = new Ext.LoadMask(Ext.getCmp('App.Document.PanelImagen').body, { msg: "Cargando pdf" });
+    myMask.show();
+            
     pdfDoc = null;
     pageNum = 1;
     pageRendering = false;
@@ -2286,11 +2297,12 @@ function pdfViewer(url) {
             ],
             data: paginas
         }));
+        myMask.hide();
     });
 };
 
 function renderPage(num) {
-    var canvas = document.getElementById('the-canvas'),
+    var canvas = document.getElementById('pdf-visualizador'),
             ctx = canvas.getContext('2d');
 
     pageRendering = true;
@@ -2312,7 +2324,7 @@ function renderPage(num) {
                 pageNumPending = null;
             }
         });
-        let pdf = document.getElementById('the-canvas');
+        let pdf = document.getElementById('pdf-visualizador');
         pdf.parentElement.setAttribute('style', `width: ${pdf.width + 4}px; height: ${pdf.height + 4}px;`);
         pdf.parentElement.parentElement.setAttribute('style', `width: ${pdf.width + 4}px;`);
         Ext.getCmp('pdf-paginate').setValue(num);
