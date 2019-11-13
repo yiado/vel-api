@@ -116,7 +116,7 @@ class AssetDocumentController extends APP_Controller {
             }
         } else {
             $success = false;
-            $msg = $this->translateTag('Documen', 'type_extension_not_allowed');
+            $msg = $this->translateTag('Document', 'type_extension_not_allowed');
         }
 
         $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg));
@@ -156,7 +156,7 @@ class AssetDocumentController extends APP_Controller {
             $path = './asset_doc/';
             $file_full_path = $path . $asset_document->asset_document_name;
             unlink($file_full_path);
-            $msg = $this->translateTag('Documen', 'successfully_deleted_document');
+            $msg = $this->translateTag('Document', 'successfully_deleted_document');
         } catch (Exception $e) {
             $success = 'false';
             $msg = $e->getMessage();

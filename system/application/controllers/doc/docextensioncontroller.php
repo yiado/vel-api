@@ -111,7 +111,7 @@ class DocExtensionController extends APP_Controller
         }
         else
         {
-            $msg = $this->translateTag ( 'Documen' , 'failed_delete_extension_document' );
+            $msg = $this->translateTag ( 'Document' , 'failed_delete_extension_document' );
             $success = false;
         }
         $json_data = $this->json->encode ( array ( 'success' => $success , 'msg' => $msg ) );

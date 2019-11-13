@@ -233,9 +233,9 @@ class DocDocumentController extends APP_Controller {
 
         $sheet->setCellValue('A1', $this->translateTag('General', 'file_name'))
                 ->setCellValue('B1', $this->translateTag('General', 'version'))
-                ->setCellValue('C1', $this->translateTag('Documen', 'document_type'))
+                ->setCellValue('C1', $this->translateTag('Document', 'document_type'))
                 ->setCellValue('D1', $this->translateTag('General', 'category'))
-                ->setCellValue('E1', $this->translateTag('Documen', 'keywords'))
+                ->setCellValue('E1', $this->translateTag('Document', 'keywords'))
                 ->setCellValue('F1', $this->translateTag('General', 'comment'))
                 ->setCellValue('G1', 'Fecha Documento')
                 ->setCellValue('H1', $this->translateTag('Plan', 'upload_date'))
@@ -619,7 +619,7 @@ class DocDocumentController extends APP_Controller {
 //Preguntar si el nombre del documento ya existe en la base de datos si existe retornar mensaje "Debe ingresarlo como Version"
         if ($compare === true) {
             $success = false;
-            $msg = $this->translateTag('Documen', 'version_should_be_entered_as');
+            $msg = $this->translateTag('Document', 'version_should_be_entered_as');
             $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg));
             echo $json_data;
             return;
@@ -836,14 +836,14 @@ class DocDocumentController extends APP_Controller {
 
         $to = trim($results['doc_version_notification_email']); //CORREO DESTINATARIO
 
-        $subject = $this->translateTag('Documen', 'contract_expiration_warning_notice'); //ASUNTO
+        $subject = $this->translateTag('Document', 'contract_expiration_warning_notice'); //ASUNTO
 
-        $body = $this->translateTag('Documen', 'mail_document_name') . $results['DocDocument']['doc_document_filename'] . "\n"; //CUERPO DEL MENSAJE
-        $body .= $this->translateTag('Documen', 'mail_category') . $results['DocDocument']['DocCategory']['doc_category_name'] . "\n";
-        $body .= $this->translateTag('Documen', 'mail_version') . $results['doc_version_code_client'] . "\n";
-        $body .= $this->translateTag('Documen', 'mail_description') . $results['DocDocument']['doc_document_description'] . "\n";
-        $body .= $this->translateTag('Documen', 'mail_expiration_date') . $results['doc_version_expiration'] . "\r\n";
-        $body .= $this->translateTag('Documen', 'mail_location') . $node->getPath() . "\r\n";
+        $body = $this->translateTag('Document', 'mail_document_name') . $results['DocDocument']['doc_document_filename'] . "\n"; //CUERPO DEL MENSAJE
+        $body .= $this->translateTag('Document', 'mail_category') . $results['DocDocument']['DocCategory']['doc_category_name'] . "\n";
+        $body .= $this->translateTag('Document', 'mail_version') . $results['doc_version_code_client'] . "\n";
+        $body .= $this->translateTag('Document', 'mail_description') . $results['DocDocument']['doc_document_description'] . "\n";
+        $body .= $this->translateTag('Document', 'mail_expiration_date') . $results['doc_version_expiration'] . "\r\n";
+        $body .= $this->translateTag('Document', 'mail_location') . $node->getPath() . "\r\n";
 
         copy($this->config->item('doc_dir') . $results['doc_version_filename'], $this->config->item('temp_dir') . $results['DocDocument']['doc_document_filename']);
 
@@ -889,10 +889,7 @@ class DocDocumentController extends APP_Controller {
     }
 
     function addMasive() {
-
-
-
-//BORRA ARCHIVOS DE DATA ANTES QUE TODO
+        //BORRA ARCHIVOS DE DATA ANTES QUE TODO
         $dir = $this->config->item('doc_dir') . 'data/*';
         foreach (glob($dir) as $path) {
             if (!is_dir($path)) { //SOLO SI ES ARCHIVO      
@@ -900,17 +897,14 @@ class DocDocumentController extends APP_Controller {
             }
         }
 
-//RESCATA EL ARCHIVO ZIP QUE SE DESEA SUBIR
+        //RESCATA EL ARCHIVO ZIP QUE SE DESEA SUBIR
         $file_uploaded = $this->input->file('documento');
         $file_extension = $this->app->getFileExtension($file_uploaded['name']);
         $file_name_actual = $this->app->getFileName($file_uploaded['name']);
 
-//        echo($file_extension);
-//        exit;
         if ($file_extension != 'zip') {
             $success = 'false';
-            $msg = $this->translateTag('Documen', 'the_file_has_to_be_zip');
-//            $msg = "El Archivo Tiene que ser Zip";
+            $msg = $this->translateTag('Document', 'the_file_has_to_be_zip');
         } else {
 
             $doc_name = md5(time()) . '.' . $file_extension; //CREA UN NOMBRE Y CONCATENA LA EXTENSION
@@ -944,7 +938,7 @@ class DocDocumentController extends APP_Controller {
                 $success = true;
             } else {
                 $success = false;
-                $msg = $this->translateTag('Documen', 'can_not_open_the_zip_file');
+                $msg = $this->translateTag('Document', 'can_not_open_the_zip_file');
                 echo $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg));
                 return;
             }
@@ -972,7 +966,7 @@ class DocDocumentController extends APP_Controller {
                         //Preguntar si el nombre del documento ya existe en la base de datos si existe retornar mensaje "Debe ingresarlo como Version"
                         if ($compare === true) {
                             $success = false;
-                            $msg = $this->translateTag('Documen', 'version_should_be_entered_as');
+                            $msg = $this->translateTag('Document', 'version_should_be_entered_as');
                             $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg));
                             echo $json_data;
                             return;
@@ -1048,7 +1042,7 @@ class DocDocumentController extends APP_Controller {
                             $this->addThumb($doc_name, $file_extension);
                         } else {
                             $success = 'false';
-                            $msg = $this->translateTag('Documen', 'type_extension_not_allowed');
+                            $msg = $this->translateTag('Document', 'type_extension_not_allowed');
                         }
                     }//FIN DEL IF
                 }//FIN DEL FOR 
@@ -1091,7 +1085,7 @@ class DocDocumentController extends APP_Controller {
                 $zip->close();
             } else {
                 $success = 'false';
-                $msg = $this->translateTag('Documen', 'can_not_open_the_zip_file');
+                $msg = $this->translateTag('Document', 'can_not_open_the_zip_file');
                 echo $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg));
                 return;
             }
@@ -1110,7 +1104,7 @@ class DocDocumentController extends APP_Controller {
                     } else {
 //SI HAY POR LO MENOS UN ARCHIVO NO PERMITIDO NO SIGUE
                         $success = 'false';
-                        $msg = $this->translateTag('Documen', 'extensions_not_allowed_in_zip_file');
+                        $msg = $this->translateTag('Document', 'extensions_not_allowed_in_zip_file');
                         echo $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg));
                         return;
                     }
@@ -1140,9 +1134,9 @@ class DocDocumentController extends APP_Controller {
 
                 if ($rowsCountAux != $countMD5carpeta) {
                     $success = 'false';
-//                     $msg = $this->translateTag('Documen', 'the_amount_of_zip_files_is_different_the_line_valid_file_excel');
+//                     $msg = $this->translateTag('Document', 'the_amount_of_zip_files_is_different_the_line_valid_file_excel');
 //                     $msg = "El archivo no coincide";
-                    $msg = $this->translateTag('Documen', 'the_amount_of_zip');
+                    $msg = $this->translateTag('Document', 'the_amount_of_zip');
                     echo $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg));
                     return;
                 }
@@ -1158,7 +1152,7 @@ class DocDocumentController extends APP_Controller {
                     $DocCategory = Doctrine::getTable('DocCategory')->finbByNomCategory($nombreCategoria);
                     if (!$DocCategory) {
                         $success = 'false';
-                        $msg = $nombreDocExcel . ' - ' . $this->translateTag('Documen', 'category_not_valid');
+                        $msg = $nombreDocExcel . ' - ' . $this->translateTag('Document', 'category_not_valid');
                         echo $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg));
                         return;
                     }
@@ -1179,7 +1173,7 @@ class DocDocumentController extends APP_Controller {
                             //Preguntar si el nombre del documento ya existe en la base de datos si existe retornar mensaje "Debe ingresarlo como Version"
                             if ($compare === true) {
                                 $success = 'false';
-                                $msg = $nombreDocExcel . ' ' . $this->translateTag('Documen', 'version_should_be_entered_as');
+                                $msg = $nombreDocExcel . ' ' . $this->translateTag('Document', 'version_should_be_entered_as');
                                 $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg));
                                 echo $json_data;
                                 return;
@@ -1190,7 +1184,7 @@ class DocDocumentController extends APP_Controller {
                     //VALIDA QUE EL ARCHIVO ESTE EN LA RUTA
                     if ($flag == 0) {
                         $success = 'false';
-                        $msg = $nombreDocExcel . ' - ' . $this->translateTag('Documen', 'file_not_found');
+                        $msg = $nombreDocExcel . ' - ' . $this->translateTag('Document', 'file_not_found');
                         echo $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg));
                         return;
                     }
@@ -1307,15 +1301,15 @@ class DocDocumentController extends APP_Controller {
         $this->load->library('PHPExcel');
         $sheetIndex = 0;
         $sheet = $this->phpexcel->setActiveSheetIndex($sheetIndex);
-        $sheet->setTitle($this->translateTag('Documen', 'detail_excel_format'));
+        $sheet->setTitle($this->translateTag('Document', 'detail_excel_format'));
         $sheet->setCellValue('A1', $this->translateTag('General', 'file_name'))
                 ->setCellValue('B1', $this->translateTag('General', 'description'))
                 ->setCellValue('C1', $this->translateTag('General', 'version'))
                 ->setCellValue('D1', $this->translateTag('General', 'category'))
-                ->setCellValue('E1', $this->translateTag('Documen', 'keywords'))
+                ->setCellValue('E1', $this->translateTag('Document', 'keywords'))
                 ->setCellValue('F1', 'Fecha Documento' . ' (YYYY-MM-DD)')
                 ->setCellValue('G1', $this->translateTag('General', 'expiration_date') . ' (YYYY-MM-DD)')
-                ->setCellValue('H1', $this->translateTag('Documen', 'alert_days'))
+                ->setCellValue('H1', $this->translateTag('Document', 'alert_days'))
                 ->setCellValue('I1', $this->translateTag('General', 'expiration_mail_alert'))
                 ->setCellValue('J1', $this->translateTag('General', 'mail_notification'))
                 ->setCellValue('K1', $this->translateTag('General', 'comment'));

@@ -31,7 +31,7 @@ class document extends APP_Controller {
         
         $sheet->setCellValueExplicit('A1', $this->translateTag('General' ,'file_name'))
         	  ->setCellValueExplicit('B1', $this->translateTag('General' ,'version'))
-        	  ->setCellValueExplicit('C1', $this->translateTag('Documen' ,'document_type'))
+        	  ->setCellValueExplicit('C1', $this->translateTag('Document' ,'document_type'))
         	  ->setCellValueExplicit('D1', $this->translateTag('General' ,'category'))
         	  ->setCellValueExplicit('E1', $this->translateTag('General' ,'creation_date'))
         	  ->setCellValueExplicit('F1', $this->translateTag('General' ,'expiration_date'))

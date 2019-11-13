@@ -173,7 +173,7 @@ class SolicitudController extends APP_Controller {
         if ($file_extension_fatura) {
             if ($docExtension->isAllowed($file_extension_fatura) == false) {
                 $success = false;
-                $msg = $this->translateTag('Documen', 'type_extension_not_allowed');
+                $msg = $this->translateTag('Document', 'type_extension_not_allowed');
                 $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg));
                 echo $json_data;
                 return;
@@ -188,7 +188,7 @@ class SolicitudController extends APP_Controller {
         if ($file_extension_oc) {
             if ($docExtension->isAllowed($file_extension_oc) == false) {
                 $success = false;
-                $msg = $this->translateTag('Documen', 'type_extension_not_allowed');
+                $msg = $this->translateTag('Document', 'type_extension_not_allowed');
                 $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg));
                 echo $json_data;
                 return;

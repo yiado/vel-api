@@ -119,13 +119,13 @@ class DocCategoryController extends APP_Controller
             else
             {
                 $exito = false;
-                $msg = $this->translateTag ( 'Documen' , 'category_document_type_cant_be_eliminated' );
+                $msg = $this->translateTag ( 'Document' , 'category_document_type_cant_be_eliminated' );
             }
         }
         else
         {
             $exito = false;
-            $msg = $this->translateTag ( 'Documen' , 'category_document_type_cant_be_eliminated' );
+            $msg = $this->translateTag ( 'Document' , 'category_document_type_cant_be_eliminated' );
         }
 
         $json_data = $this->json->encode ( array ( 'success' => $exito , 'msg' => $msg ) );

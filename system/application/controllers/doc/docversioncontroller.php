@@ -148,7 +148,7 @@ class DocVersionController extends APP_Controller {
             }
         } else {
             $success = false;
-            $msg = $this->translateTag('Documen', 'type_extension_not_allowed');
+            $msg = $this->translateTag('Document', 'type_extension_not_allowed');
         }
 
         $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg));
@@ -200,7 +200,7 @@ class DocVersionController extends APP_Controller {
                 if ($log_id) {
                     $logDetail = new LogDetail();
                     $logDetail->log_id = $log_id;
-                    $logDetail->log_detail_param = $this->translateTag('Documen', 'keywords');
+                    $logDetail->log_detail_param = $this->translateTag('Document', 'keywords');
                     $logDetail->log_detail_value_old = $doc_version_keyword;
                     $logDetail->log_detail_value_new = $this->input->post('doc_version_keyword');
                     $logDetail->save();
@@ -251,7 +251,7 @@ class DocVersionController extends APP_Controller {
                 if ($log_id) {
                     $logDetail = new LogDetail();
                     $logDetail->log_id = $log_id;
-                    $logDetail->log_detail_param = $this->translateTag('Documen', 'alert_days');
+                    $logDetail->log_detail_param = $this->translateTag('Document', 'alert_days');
                     $logDetail->log_detail_value_old = $doc_version_alert;
                     $logDetail->log_detail_value_new = $this->input->post('doc_version_alert');
                     $logDetail->save();
@@ -360,14 +360,14 @@ class DocVersionController extends APP_Controller {
 
         if ($to != null) {
 
-            $subject = $this->translateTag('Documen', 'mail_alert_document'); //ASUNTO
+            $subject = $this->translateTag('Document', 'mail_alert_document'); //ASUNTO
 
-            $body = $this->translateTag('Documen', 'mail_document_name') . $results['DocDocument']['doc_document_filename'] . "\n"; //CUERPO DEL MENSAJE
-            $body .= $this->translateTag('Documen', 'mail_category') . $results['DocDocument']['DocCategory']['doc_category_name'] . "\n";
-            $body .= $this->translateTag('Documen', 'mail_version') . $results['doc_version_code_client'] . "\n";
-            $body .= $this->translateTag('Documen', 'mail_description') . $results['doc_version_comments'] . "\n";
-            $body .= $this->translateTag('Documen', 'mail_expiration_date') . $results['doc_version_expiration'] . "\r\n";
-            $body .= $this->translateTag('Documen', 'mail_location') . $node->getPath() . "\r\n";
+            $body = $this->translateTag('Document', 'mail_document_name') . $results['DocDocument']['doc_document_filename'] . "\n"; //CUERPO DEL MENSAJE
+            $body .= $this->translateTag('Document', 'mail_category') . $results['DocDocument']['DocCategory']['doc_category_name'] . "\n";
+            $body .= $this->translateTag('Document', 'mail_version') . $results['doc_version_code_client'] . "\n";
+            $body .= $this->translateTag('Document', 'mail_description') . $results['doc_version_comments'] . "\n";
+            $body .= $this->translateTag('Document', 'mail_expiration_date') . $results['doc_version_expiration'] . "\r\n";
+            $body .= $this->translateTag('Document', 'mail_location') . $node->getPath() . "\r\n";
 
             copy($this->config->item('doc_dir') . $results['doc_version_filename'], $this->config->item('temp_dir') . $results['DocDocument']['doc_document_filename']);
 

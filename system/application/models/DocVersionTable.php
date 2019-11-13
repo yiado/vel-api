@@ -119,13 +119,13 @@ class DocVersionTable extends Doctrine_Table
             else
             {
                
-                throw new Exception ( $CI->translateTag('Documen', 'problems_associated_document_version') );
+                throw new Exception ( $CI->translateTag('Document', 'problems_associated_document_version') );
             }
         }
         else
         {
 
-            throw new Exception ( $CI->translateTag('Documen', 'you_can_not_delete_the_latest_version'));
+            throw new Exception ( $CI->translateTag('Document', 'you_can_not_delete_the_latest_version'));
         }
     }
 
