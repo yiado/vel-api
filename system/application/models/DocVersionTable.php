@@ -20,6 +20,7 @@ class DocVersionTable extends Doctrine_Table
                 ->from ( 'DocVersion dc' )
                 ->leftJoin ( 'dc.DocDocument dd' )
 		->leftJoin ( 'dd.DocCategory ca' )
+                ->leftJoin('dd.DocExtension de')
                 ->innerJoin ( 'dc.User us' )
                 ->where ( 'doc_document_id = ?' , $doc_document_id )
                 ->orderBy ( 'doc_version_creation' );
