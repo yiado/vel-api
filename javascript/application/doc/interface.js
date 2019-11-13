@@ -1033,11 +1033,11 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window, {
                 }
             }
         }, {
-            text: 'Pág. Anterior',
+            text: App.Language.Document.previous_page,
             id: 'pdf-prev',
             iconCls: 'previous_icon'
         }, {
-            text: 'Pág. Siguiente',
+            text: App.Language.Document.next_page,
             id: 'pdf-next',
             iconCls: 'next_icon'
         }, {
@@ -1068,15 +1068,15 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window, {
     updateImage: function(doc_version_filename, doc_image_web, doc_extension_name) {
         //ACTUALIZA LA IMAGEN
         let div_visor;
-        let title_visor = 'Visualizador de PDF';
+        let title_visor = App.Language.Document.pdf_viewer;
         if (doc_image_web === 1) {
-            title_visor = 'Visualizador de Imágenes';
+            title_visor = App.Language.Document.image_viewer;
             div_visor = `<img width=100% src="docs/${doc_version_filename}?id=' + n + '" />`;
         } else if (doc_extension_name.toLowerCase() === 'pdf') {
             div_visor = `<canvas id="pdf-visualizador"></canvas>`;
         } else {
-            title_visor = 'Documento sin vista web';
-            div_visor = `<div align="center"><br><br><br><br><br><br><br><br><br><br><br><br><h1>presione "Descargar" para verlo en su computador.</h1></div>`;
+            title_visor = App.Language.Document.document_without_web_viewer;
+            div_visor = `<div align="center"><br><br><br><br><br><br><br><br><br><br><br><br><h1>${App.Language.Document.message_download_file}</h1></div>`;
         }
         
         Ext.getCmp('App.Document.VersionImagenWindow').setTitle(title_visor);
@@ -2270,7 +2270,7 @@ var pdfDoc = null,
     scale = 1;
 
 function pdfViewer(url) {
-    let myMask = new Ext.LoadMask(Ext.getCmp('App.Document.PanelImagen').body, { msg: "Cargando pdf" });
+    let myMask = new Ext.LoadMask(Ext.getCmp('App.Document.PanelImagen').body, { msg: App.Language.Document.pdf_loading });
     myMask.show();
             
     pdfDoc = null;
