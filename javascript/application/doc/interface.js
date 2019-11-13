@@ -1075,7 +1075,7 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window, {
         } else if (doc_extension_name.toLowerCase() === 'pdf') {
             div_visor = `<canvas id="pdf-visualizador"></canvas>`;
         } else {
-            title_visor = App.Language.Document.document_without_web_viewer;
+            title_visor = App.Language.Document.document_without_web_view;
             div_visor = `<div align="center"><br><br><br><br><br><br><br><br><br><br><br><br><h1>${App.Language.Document.message_download_file}</h1></div>`;
         }
         
