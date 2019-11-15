@@ -926,7 +926,7 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window, {
                                 success: function(response) {
                                     response = Ext.decode(response.responseText);
                                     doc_image_web = response.data.DocCurrentVersion.doc_image_web;
-                                    Ext.getCmp('App.Document.VersionImagenWindow').updateImage(doc_version_filename, doc_image_web);
+                                    Ext.getCmp('App.Document.VersionImagenWindow').updateImage(doc_version_filename, doc_image_web, response.data.DocExtension.doc_extension_name);
                                     Ext.getCmp('App.Document.VersionImagenWindow').fireEvent('beforerender', Ext.getCmp('App.Document.VersionImagenWindow'));
                                     App.Document.Store.load();
                                 },
@@ -952,7 +952,7 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window, {
                         },
                         success: function(response) {
                             response = Ext.decode(response.responseText);
-                            Ext.getCmp('App.Document.VersionImagenWindow').updateImage(response.data.DocCurrentVersion.doc_version_filename, response.data.DocCurrentVersion.doc_image_web);
+                            Ext.getCmp('App.Document.VersionImagenWindow').updateImage(response.data.DocCurrentVersion.doc_version_filename, response.data.DocCurrentVersion.doc_image_web, response.data.DocExtension.doc_extension_name);
                             Ext.getCmp('App.Document.VersionImagenWindow').fireEvent('beforerender', Ext.getCmp('App.Document.VersionImagenWindow'));
                             App.Document.Store.load();
                         },
@@ -993,7 +993,7 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window, {
                                 success: function(response) {
                                     response = Ext.decode(response.responseText);
                                     doc_image_web = response.data.DocCurrentVersion.doc_image_web;
-                                    Ext.getCmp('App.Document.VersionImagenWindow').updateImage(doc_version_filename, doc_image_web);
+                                    Ext.getCmp('App.Document.VersionImagenWindow').updateImage(doc_version_filename, doc_image_web, response.data.DocExtension.doc_extension_name);
                                     Ext.getCmp('App.Document.VersionImagenWindow').fireEvent('beforerender', Ext.getCmp('App.Document.VersionImagenWindow'));
                                     App.Document.Store.load();
                                 },
@@ -1019,7 +1019,7 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window, {
                         },
                         success: function(response) {
                             response = Ext.decode(response.responseText);
-                            Ext.getCmp('App.Document.VersionImagenWindow').updateImage(response.data.DocCurrentVersion.doc_version_filename, response.data.DocCurrentVersion.doc_image_web);
+                            Ext.getCmp('App.Document.VersionImagenWindow').updateImage(response.data.DocCurrentVersion.doc_version_filename, response.data.DocCurrentVersion.doc_image_web, response.data.DocExtension.doc_extension_name);
                             Ext.getCmp('App.Document.VersionImagenWindow').fireEvent('beforerender', Ext.getCmp('App.Document.VersionImagenWindow'));
                             App.Document.Store.load();
                         },
@@ -1067,11 +1067,13 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window, {
     ],
     updateImage: function(doc_version_filename, doc_image_web, doc_extension_name) {
         //ACTUALIZA LA IMAGEN
+        var d = new Date();
+        var n = d.getTime();
         let div_visor;
         let title_visor = App.Language.Document.pdf_viewer;
         if (doc_image_web === 1) {
             title_visor = App.Language.Document.image_viewer;
-            div_visor = `<img width=100% src="docs/${doc_version_filename}?id=' + n + '" />`;
+            div_visor = `<img width=100% src="docs/${doc_version_filename}?id=${n}" />`;
         } else if (doc_extension_name.toLowerCase() === 'pdf') {
             div_visor = `<canvas id="pdf-visualizador"></canvas>`;
         } else {
@@ -1101,8 +1103,7 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window, {
             Ext.getCmp('pdf-paginate').hide();
         }
         
-        var d = new Date();
-        var n = d.getTime();
+        
         this.imagepanel.removeAll();
         this.imagepanel.add(new Ext.Panel({
             layout: 'fit',
@@ -1124,7 +1125,7 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window, {
                 record = App.Document.Store.getAt(App.Document.currentPosition);
                 //VALIDA QUE NO SEA MAYOR AL TOTAL
                 if (App.Document.currentPosition < App.Document.Store.getCount()) {
-                    Ext.getCmp('App.Document.VersionImagenWindow').updateImage(record.data.doc_version_filename, record.data.doc_image_web);
+                    Ext.getCmp('App.Document.VersionImagenWindow').updateImage(record.data.doc_version_filename, record.data.doc_image_web, null);
                 } else {
                     App.Document.currentPosition = App.Document.currentPosition - 1;
                 }
@@ -1137,7 +1138,7 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window, {
                 record = App.Document.Store.getAt(App.Document.currentPosition);
                 // VALIDA QUE NO SE MENOR A CERO
                 if (App.Document.currentPosition >= 0) {
-                    Ext.getCmp('App.Document.VersionImagenWindow').updateImage(record.data.doc_version_filename, record.data.doc_image_web);
+                    Ext.getCmp('App.Document.VersionImagenWindow').updateImage(record.data.doc_version_filename, record.data.doc_image_web, null);
                 } else {
                     App.Document.currentPosition = App.Document.currentPosition + 1;
                 }

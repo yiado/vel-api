@@ -107,12 +107,10 @@ class DocDocumentTable extends Doctrine_Table {
     function findById($doc_document_id) {
 
         $q = Doctrine_Query::create()
-        ->from('DocDocument dc')
-        ->leftJoin('dc.DocCurrentVersion dvc')
-                ->where('dc.doc_document_id = ?', $doc_document_id);
-
-        
-
+            ->from('DocDocument dc')
+            ->leftJoin('dc.DocExtension de')
+            ->leftJoin('dc.DocCurrentVersion dvc')
+            ->where('dc.doc_document_id = ?', $doc_document_id);
         return $q->fetchOne();
     }
 

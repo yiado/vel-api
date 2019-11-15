@@ -74,8 +74,9 @@
         $config['base_url']	= "http://localhost/igeov4/";
 
 ## CREAR CARPETAS
-    mkdir docs docs/thumb asset_doc temp/qrcode
+    mkdir docs docs/data docs/thumb asset_doc temp/qrcode
     chmod -R 777 plans/ docs/ asset_doc/ style/ temp/ system/application/libraries/tcpdf/cache/
+    chmod -R 755 docs/data
 
 ## PERMISOS SELinux (centos)
     1) vi /etc/selinux/config
