@@ -19,13 +19,11 @@ class InfraConfigurationTable extends Doctrine_Table {
     }
 
     function findByNodeTypeIdConfig($node_type_id) {
-
         $q = Doctrine_Query::create()
                 ->from('InfraConfiguration ic')
                 ->where('ic.node_type_id = ?', $node_type_id)
                 ->andWhere('ic.infra_the_sumary = ?', 1)
                 ->orderBy('ic.infra_configuration_order ASC');
-
         return $q->execute();
     }
     

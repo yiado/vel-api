@@ -1,3 +1,5 @@
+/* global Ext, App, map, google, markers */
+
 Ext.namespace('App.InfraStructure');
 
 App.General.declareNameSpaces('App.InfraStructure', [
@@ -35,7 +37,7 @@ App.InfraStructure.moduleActivate = function() {
     } else {
         return new Ext.Panel({ border: false, title: App.Language.Infrastructure.infrastructure });
     }
-}
+};
 
 App.InfraStructure.OtrosDatos.fields = {
     '1': {
@@ -107,7 +109,7 @@ App.InfraStructure.OtrosDatos.fields = {
             }
         }
     }
-}
+};
 
 App.InfraStructure.OtrosDatos.classFields = {
     '1': Ext.extend(Ext.form.TextField, App.InfraStructure.OtrosDatos.fields[1]),
@@ -118,7 +120,7 @@ App.InfraStructure.OtrosDatos.classFields = {
     '6': Ext.extend(Ext.form.TextField, App.InfraStructure.OtrosDatos.fields[6]),
     '7': Ext.extend(Ext.form.TextField, App.InfraStructure.OtrosDatos.fields[7])
 
-}
+};
 
 App.ModuleActions[5000] = {};
 
@@ -242,12 +244,6 @@ App.ModuleActions[5004] = {
             waitTitle: App.Language.General.message_please_wait,
             waitMsg: App.Language.General.message_guarding_information,
             url: 'index.php/infra/infrainfo/add',
-            //                            success: function (form, action) {
-            //
-            //                                App.InfraStructure.Principal.listener(App.Interface.selectedNode);
-            //
-            //                            }
-
             success: function(form, response) {
                 App.InfraStructure.Principal.listener(App.Interface.selectedNode);
             },
@@ -435,19 +431,6 @@ App.ModuleActions[5006] = {
 
                                                                                 if (field.value == null)
                                                                                     field.value = '';
-
-                                                                                //                                                                            field.fieldLabel = record.infra_other_data_attribute_name;
-                                                                                //                                                                            html = html + '<tr><td style="padding-bottom: 5px;padding-right: 3px;"><label>';
-                                                                                //                                                                            html = html + field.fieldLabel + " : ";
-                                                                                //                                                                            html = html + '</label></td><td style="padding-bottom: 5px;">';
-                                                                                //                                                                            html = html + field.value;
-                                                                                //                                                                            html = html + ' </td></tr>';
-
-
-                                                                                //
-                                                                                //                                                                                    console.log(field.fieldLabel);
-                                                                                //                                                                                    console.log(field.value);
-
                                                                             }
 
                                                                         }
@@ -465,9 +448,6 @@ App.ModuleActions[5006] = {
                                                                         html = html + '</td><td style="padding-bottom: 5px;">';
                                                                         html = html + record.value;
                                                                         html = html + ' </td></tr>';
-                                                                        //
-                                                                        //                                                                            console.log(record.field);
-                                                                        //                                                                            console.log(record.value);
                                                                     }
                                                                 }
                                                             }
@@ -480,7 +460,7 @@ App.ModuleActions[5006] = {
                                                             infowindow.open(map, marker);
                                                         }
                                                     });
-                                                }
+                                                };
                                             })(marker, i));
                                         }
 
@@ -511,7 +491,7 @@ App.ModuleActions[5006] = {
                                             map.setCenter(position_busqueda);
                                             map.setZoom(zoom);
 
-                                        }
+                                        };
                                     }
                                 } else {
 
@@ -531,20 +511,15 @@ App.ModuleActions[5006] = {
                                             center: chile,
                                             zoom: 9
                                         });
-                                        //                                                               
                                     }
                                 }
                             }
                         }
                     }
                 });
-
-
-
             } //FIN toggleHandler
-
     }]
-}
+};
 
 App.ModuleActions[5008] = {
     text: App.Language.General.eexport,
@@ -554,4 +529,4 @@ App.ModuleActions[5008] = {
         w = new App.InfraStructure.exportListWindow();
         w.show();
     }
-}
+};

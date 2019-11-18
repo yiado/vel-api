@@ -1,3 +1,5 @@
+/* global Ext, App */
+
 App.Maintainers.addToModuleMenu('infra', {
     xtype: 'button',
     text: App.Language.Infrastructure.infrastructure,
@@ -176,7 +178,6 @@ App.Maintainers.Infrastructure.Principal = Ext.extend(Ext.TabPanel, {
                                         wmamw.show();
                                     } else {
                                         Ext.Msg.alert(App.Language.Core.notification, response.msg);
-                                        //                                    Ext.FlashMessage.alert(response.msg);
                                     }
                                 }
                             });

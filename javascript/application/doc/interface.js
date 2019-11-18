@@ -292,7 +292,7 @@ App.Document.TBar = {
                 node_id = App.Document.Store.baseParams.node_id;
                 App.Document.Store.baseParams = {};
                 App.Document.Store.setBaseParam('node_id', node_id);
-                App.Document.Store.load()
+                App.Document.Store.load();
             }
         }, {
             xtype: 'tbseparator',
@@ -744,7 +744,8 @@ App.Document.GridView = Ext.extend(Ext.grid.GridPanel, {
                     return doc_path;
                 }
             }],
-            this.sm = new Ext.grid.CheckboxSelectionModel(), App.Document.GridView.superclass.initComponent.call(this);
+            this.sm = new Ext.grid.CheckboxSelectionModel();
+            App.Document.GridView.superclass.initComponent.call(this);
     }
 
 });
@@ -795,7 +796,8 @@ App.Document.GridView2 = Ext.extend(Ext.grid.GridPanel, {
                 format: App.General.DefaultDateTimeFormat,
                 aling: 'center'
             }],
-            this.sm = new Ext.grid.CheckboxSelectionModel(), App.Document.GridView2.superclass.initComponent.call(this);
+            this.sm = new Ext.grid.CheckboxSelectionModel();
+            App.Document.GridView2.superclass.initComponent.call(this);
     }
 
 });
@@ -934,7 +936,7 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window, {
                                     Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
                                 },
                                 callback: function() {
-                                    msg.hide()
+                                    msg.hide();
                                 }
                             });
                         },
@@ -1001,7 +1003,7 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window, {
                                     Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
                                 },
                                 callback: function() {
-                                    msg.hide()
+                                    msg.hide();
                                 }
                             });
                         },
@@ -1027,7 +1029,7 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window, {
                             Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
                         },
                         callback: function() {
-                            msg.hide()
+                            msg.hide();
                         }
                     });
                 }
@@ -1226,7 +1228,7 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window, {
                     dataIndex: 'DocDocument',
                     renderer: function(val, metadata, record) {
                         var class_expiration = '';
-                        if (App.Document.ExpirationDocument(val, record) == true) {
+                        if (App.Document.ExpirationDocument(val, record) === true) {
                             class_expiration = "style='color:red'";
                         }
                         return "<a href='index.php/doc/document/download/" + record.data.doc_version_id + "' " + class_expiration + ">" + val.doc_document_filename + "</a>";
@@ -1289,7 +1291,7 @@ App.Document.Version.Window = Ext.extend(Ext.Window, {
                 dataIndex: 'DocDocument',
                 renderer: function(val, metadata, record) {
                     var class_expiration = '';
-                    if (App.Document.ExpirationDocument(val, record) == true) {
+                    if (App.Document.ExpirationDocument(val, record) === true) {
                         class_expiration = "style='color:red'";
                     }
                     return "<a href='index.php/doc/document/download/" + record.data.doc_version_id + "' " + class_expiration + ">" + val.doc_document_filename + "</a>";
@@ -2109,7 +2111,7 @@ App.Document.ExpirationDocument = function(value, record) {
         }
     }
     return status;
-}
+};
 
 App.Document.addUsersWindow = Ext.extend(Ext.Window, {
     title: App.Language.General.mail_notification,
@@ -2259,7 +2261,7 @@ App.Document.addUsersWindow = Ext.extend(Ext.Window, {
                 }],
                 sm: new Ext.grid.CheckboxSelectionModel()
             }]
-        }]
+        }];
         App.Document.addUsersWindow.superclass.initComponent.call(this);
     }
 });

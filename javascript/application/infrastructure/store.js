@@ -1,3 +1,5 @@
+/* global Ext, App */
+
 Ext.namespace('App.InfraStructure.Store');
 
 App.InfraStructure.FotoConfi.Store = new Ext.data.JsonStore({
@@ -168,7 +170,6 @@ App.InfraStructure.GruposById.Store = new Ext.data.JsonStore({
     ]
 });
 
-
 App.InfraStructure.Node.Store = new Ext.data.JsonStore({
     url: 'index.php/core/nodecontroller/get',
     root: 'results',
@@ -176,7 +177,7 @@ App.InfraStructure.Node.Store = new Ext.data.JsonStore({
     fields: [
         'node_id',
         'node_name',
-        'level',
+        'level'
     ],
     sortInfo: {
         field: 'node_name'
@@ -209,9 +210,9 @@ App.InfraStructure.InfoConfigNuevo.Store = new Ext.data.JsonStore({
             name: 'label',
             convert: function stringMeasure(v, record) {
                 if (record.sumary == 1) {
-                    msg = ' <b>(Ver en Ficha)</b>'
+                    msg = ' <b>(Ver en Ficha)</b>';
                 } else {
-                    msg = ''
+                    msg = '';
                 }
                 return record.label + msg;
             }
@@ -277,10 +278,7 @@ App.InfraStructure.OtrosDatosResumen.Store = new Ext.data.JsonStore({
 
     root: 'results',
     totalProperty: 'total',
-    //    idProperty: 'infra_other_data_attribute_id',
     fields: [
-        //        'infra_other_data_attribute_id', 
-        //        'infra_other_data_attribute_type', 
         'value',
         'label'
 
@@ -288,7 +286,7 @@ App.InfraStructure.OtrosDatosResumen.Store = new Ext.data.JsonStore({
     ],
     sortInfo: {
         field: 'label',
-        direction: 'ASC' // or 'DESC' (case sensitive for local sorting)
+        direction: 'ASC'
     }
 });
 
@@ -430,13 +428,8 @@ App.InfraStructure.DatosDinamicosAsociados.Store = new Ext.data.JsonStore({
     idProperty: 'infra_other_data_attribute_id',
     fields: [
         'infra_other_data_attribute_id',
-        //        {
-        //            name: 'infra_other_data_attribute_name',
-        //            mapping: 'InfraOtherDataAttribute.infra_other_data_attribute_name'
-        //        }, 
         {
             name: 'infra_other_data_attribute_name',
-            //            mapping: 'InfraOtherDataAttribute.infra_other_data_attribute_name',
             convert: function stringMeasure(v, record) {
 
                 if (record.infra_other_data_attribute_node_type_the_sumary == 1) {
@@ -444,7 +437,6 @@ App.InfraStructure.DatosDinamicosAsociados.Store = new Ext.data.JsonStore({
                 } else {
                     msg = '';
                 }
-                //  return record.label  + msg;
                 return record.InfraOtherDataAttribute.infra_other_data_attribute_name + msg;
             }
         }
@@ -560,8 +552,6 @@ App.InfraStructure.Iot.Store = new Ext.data.JsonStore({
     ]
 });
 
-
-
 App.InfraStructure.Coordinate.updateCoordinate = function(lat, lng) {
     App.InfraStructure.Coordinate.Store.setBaseParam('action', 'update');
     record = App.InfraStructure.Coordinate.Store.getAt(0);
@@ -569,21 +559,18 @@ App.InfraStructure.Coordinate.updateCoordinate = function(lat, lng) {
     record.set('node_latitude', lat);
     record.set('node_longitude', lng);
     record.endEdit();
-}
+};
 
 App.InfraStructure.Coordinate.addCoordinate = function(lat, lng) {
     var defaultData = {
         node_latitude: lat,
         node_longitude: lng,
         node_id: App.Interface.selectedNodeId
-    }
+    };
     App.InfraStructure.Coordinate.Store.setBaseParam('action', 'add');
     var u = new App.InfraStructure.Coordinate.Store.recordType(defaultData);
     App.InfraStructure.Coordinate.Store.insert(0, u);
-}
-
-
-
+};
 
 App.InfraStructure.InfoOptionCombosAnidados1.Store = new App.InfraStructure.InfoOptionCombosAnidados.Store;
 App.InfraStructure.InfoOptionCombosAnidados2.Store = new App.InfraStructure.InfoOptionCombosAnidados.Store;

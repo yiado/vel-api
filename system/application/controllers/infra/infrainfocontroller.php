@@ -235,80 +235,9 @@ class infraInfoController extends APP_Controller {
         $infraConfig->save();
     }
 
-// ESTO ES LO QUE ESTABA ANTES DE LA FUNCION "getConfi" AL PARECER YA NO FUNCIONA    
-//    function getConfi()
-//    {
-//        $node_id = $this->input->post('node_id');
-//        $node_type_id = $this->input->post('node_type_id');
-//
-//        if (is_numeric($node_id) || !empty($node_type_id))
-//        {
-//            if (empty($node_type_id))
-//            {
-//                $nodeType = Doctrine_Core::getTable('Node')->find($node_id)->NodeType;
-//                $node_type_id = $nodeType->node_type_id;
-//                $info = Doctrine_Core::getTable('InfraInfo')->findByNodeId($node_id);
-//            } else
-//            {
-//                $info = NULL;
-//            }
-//            $infraConfig = Doctrine_Core::getTable('InfraConfiguration')->findByNodeTypeId($node_type_id);
-//
-//            $result = array();
-//            $cont = 0;
-//            foreach ($infraConfig as $config)
-//            {
-//                $result[$cont] = array();
-//                $result[$cont]['field'] = $config->infra_attribute;
-//                $result[$cont]['value'] = ($info) ? $info->{$config->infra_attribute} : NULL;
-//                $result[$cont]['label'] = $this->translateTag('Infrastructure', $config->infra_attribute);
-//                $cont++;
-//            }
-//
-//            if (empty($node_type_id))
-//            {
-//                $result[$cont] = array();
-//                $result[$cont]['field'] = 'node_id';
-//                $result[$cont]['value'] = $node_id;
-//                $result[$cont]['label'] = $this->translateTag('Infrastructure', $config->infra_attribute);
-//            }
-//            
-//	        $node = Doctrine_Core::getTable ( 'Node' )->findByNodeId ($node_id);
-//	
-//	        $infraGrupo = Doctrine_Core::getTable ( 'InfraGrupo' )->retrieveAllGrupos ($node_id, $node->node_type_id);
-//	        
-//	
-//	        if ( $infraGrupo->count () )
-//	        {
-//	            $infraGrupoAux = $infraGrupo->toArray ();
-//	        }
-//	        else
-//	        {
-//	            $infraGrupoAux = array();
-//	        }
-//
-//            $output = array('total' => ($infraConfig->count() + $infraGrupo->count()), 'resultsInfraInfo' => $result, 'resultsInfraOtherData' => $infraGrupoAux);
-//        } else
-//        {
-//
-//            $output = array('total' => 0, 'results' => array());
-//        }
-//        echo $this->json->encode($output);
-//    }
-
     function add() {
         $node_id = $this->input->post('node_id');
 
-//        if (!$this->input->post('46')) {
-//
-//            $json_data = $this->json->encode(array(
-//                'success' => false,
-//                'msg' => 'Debe Introducir el Código de Recinto '
-//            ));
-//            echo $json_data;
-//            exit;
-//            ;
-//        }
         //VALIDA ANTES DE REALIZAR ALGUNA ACCION QUE EL CODIGO DE RECINTO SEA UNICO
 
         $valueExiste = Doctrine_Core::getTable('InfraOtherDataValue')->retrieveByIdAttribute(46, @$this->input->post('46'));
@@ -324,11 +253,8 @@ class infraInfoController extends APP_Controller {
                 ));
                 echo $json_data;
                 exit;
-                ;
             }
         }
-
-
 
 
         ################
@@ -337,8 +263,6 @@ class infraInfoController extends APP_Controller {
         $infoAntes = Doctrine_Core::getTable('InfraInfo')->findByNodeId($node_id);
         $info = Doctrine_Core::getTable('InfraInfo')->findByNodeId($node_id);
 
-//        echo 'info: '; 
-//        print_r($info); exit();
         if ($info === false) {
             $info = new InfraInfo();
             $info->node_id = $node_id;
