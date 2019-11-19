@@ -64,20 +64,45 @@ $config['fields_infra_info'] = array(
     'infra_info_additional_3' => array('label' => 'infra_info_additional_3'),
     'infra_info_additional_4' => array('label' => 'infra_info_additional_4'),
     'infra_info_option_id_1' => array('label' => 'infra_info_option_id_1'),
-    'infra_info_option_id_2' => array('label' => 'infra_info_option_id_2'),
-    'infra_info_option_id_3' => array('label' => 'infra_info_option_id_3'),
-    'infra_info_option_id_4' => array('label' => 'infra_info_option_id_4')
+    'infra_info_m_terrero_escritura' => array('label' => 'infra_info_m_terrero_escritura'),
+    'infra_info_m_terrero_escritura_total' => array('label' => 'infra_info_m_terrero_escritura_total'),
+    'infra_info_m_terreno_cad' => array('label' => 'infra_info_m_terreno_cad'),
+    'infra_info_m_terreno_cad_total' => array('label' => 'infra_info_m_terreno_cad_total'),
+    'infra_info_m_construidos_ogcu' => array('label' => 'infra_info_m_construidos_ogcu'),
+    'infra_info_m_construidos_ogcu_total' => array('label' => 'infra_info_m_construidos_ogcu_total'),
+    'infra_info_uf_metros' => array('label' => 'infra_info_uf_metros'),
+    'infra_info_uf_m_total' => array('label' => 'infra_info_uf_m_total'),
+    'infra_info_m_emplazamiento' => array('label' => 'infra_info_m_emplazamiento'),
+    'infra_info_p_m_emplazamiento' => array('label' => 'infra_info_p_m_emplazamiento'),
+    'infra_info_m_calles' => array('label' => 'infra_info_m_calles'),
+    'infra_info_p_m_calles' => array('label' => 'infra_info_p_m_calles'),
+    'infra_info_m_areas_verdes' => array('label' => 'infra_info_m_areas_verdes'),
+    'infra_info_p_m_areas_verdes' => array('label' => 'infra_info_p_m_areas_verdes'),
+    'infra_info_m_areas_manejadas' => array('label' => 'infra_info_m_areas_manejadas'),
+    'infra_info_p_m_areas_manejadas' => array('label' => 'infra_info_p_m_areas_manejadas'),
+    'infra_info_m_patios_abiertos' => array('label' => 'infra_info_m_patios_abiertos'),
+    'infra_info_p_m_patios_abiertos' => array('label' => 'infra_info_p_m_patios_abiertos'),
+    'infra_info_m_recintos_deportivos_abiertos' => array('label' => 'infra_info_m_recintos_deportivos_abiertos'),
+    'infra_info_p_m_recintos_deportivos_abiertos' => array('label' => 'infra_info_p_m_recintos_deportivos_abiertos'),
+    'infra_info_m_circulaciones_abiertas' => array('label' => 'infra_info_m_circulaciones_abiertas'),
+    'infra_info_p_m_circulaciones_abiertas' => array('label' => 'infra_info_p_m_circulaciones_abiertas'),
+    'infra_info_m_otras_areas_abiertas' => array('label' => 'infra_info_m_otras_areas_abiertas'),
+    'infra_info_p_m_otras_areas_abiertas' => array('label' => 'infra_info_p_m_otras_areas_abiertas'),
+    'infra_info_n_estacionamientos' => array('label' => 'infra_info_n_estacionamientos'),
+    'infra_info_m_neto_estacionamientos' => array('label' => 'infra_info_m_neto_estacionamientos'),
+    'infra_info_m_sector_estacionamientos' => array('label' => 'infra_info_m_sector_estacionamientos'),
+    'infra_info_p_m_sector_estacionamientos' => array('label' => 'infra_info_p_m_sector_estacionamientos')
 );
 
 $config['user_system'] = array(
-    'user_id'   => 1,
-    'username'  => 'system'
+    'user_id' => 1,
+    'username' => 'system'
 );
 
 $config['bimapi'] = array(
-    'base_url'      => 'https://bimapi.velociti.cl/',
-    'credenciales'  => array(
-        'user'      => 'bim_igeo',
-        'password'  => 'wjsNDHE2h8k9tFvd'
+    'base_url' => 'https://bimapi.velociti.cl/',
+    'credenciales' => array(
+        'user' => 'bim_igeo',
+        'password' => 'wjsNDHE2h8k9tFvd'
     )
 );

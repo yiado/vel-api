@@ -10,9 +10,8 @@ class infraInfoController extends APP_Controller {
         parent::APP_Controller();
     }
 
-    /** get
-     * 
-     * Obtiene la informaci�n de un nodo.
+    /** 
+     * Obtiene la información de un nodo.
      * Recibe como parametro el node_id o el node_type_id
      * 
      * @param integer $node_id
@@ -32,7 +31,7 @@ class infraInfoController extends APP_Controller {
         $nodeParent = $nodes[0]->node_id;
 
         //si el nodo padre es igual al nodo suministrado se procede a obtener los hijos
-        if ( !empty($lat) && !empty($lng)) {
+        if (!empty($lat) && !empty($lng)) {
             $node = Doctrine_Core::getTable('Node')->find($node_id);
             $nodes = $node->getChildren();
             if ($nodes) {
@@ -60,7 +59,7 @@ class infraInfoController extends APP_Controller {
             if ($node_id == $nodeParent) {
 
                 $data = Doctrine_Core::getTable('InfraCoordinate')->getById($node_id);
-            
+
 
                 $result[0] = array();
                 $result[0]['field'] = 'infra_info_terrain_area_total';
@@ -99,22 +98,22 @@ class infraInfoController extends APP_Controller {
                 }
             }
             $node = Doctrine_Core::getTable('Node')->findById($node_id);
-        
+
             $infraGrupo = Doctrine_Core::getTable('InfraGrupo')->retrieveAllGrupos($node_id, $node->node_type_id);
 
-          
+
             if ($infraGrupo->count()) {
-               
+
                 $infraGrupoAux = $infraGrupo->toArray();
             } else {
-            
+
                 $infraGrupoAux = array();
             }
-            
-         
+
+
             $total = ($node_id == $nodeParent) ? (count($result) + $infraGrupo->count()) : ($infraConfig->count() + $infraGrupo->count());
 
-           
+
             $output = array('total' => $total, 'resultsInfraInfo' => $result, 'resultsInfraOtherData' => $infraGrupoAux);
         } else {
 
@@ -191,13 +190,9 @@ class infraInfoController extends APP_Controller {
     }
 
     function getConfi() {
-
         $node_type_id = $this->input->post('node_type_id');
-
         if (!empty($node_type_id)) {
-
             $infraConfig = Doctrine_Core::getTable('InfraConfiguration')->findByNodeTypeId($node_type_id);
-
             $result = array();
             $cont = 0;
             foreach ($infraConfig as $config) {
@@ -208,9 +203,6 @@ class infraInfoController extends APP_Controller {
                 $result[$cont]['label'] = $this->translateTag('Infrastructure', $config->infra_attribute);
                 $cont++;
             }
-
-
-
             $output = array('total' => ($infraConfig->count()), 'resultsInfraInfo' => $result);
         } else {
 
@@ -503,8 +495,6 @@ class infraInfoController extends APP_Controller {
                 if ($value === false) {
                     $value = new InfraOtherDataValue();
                 }
-//                echo 'aqui';
-//                print_r($value); exit();
 
                 $value->infra_other_data_attribute_id = $att;
                 $value->node_id = $node_id;
@@ -568,8 +558,6 @@ class infraInfoController extends APP_Controller {
                         }
                     }
                 }
-
-//                print_r($value); 
 
                 $valueCodigoRecinto = Doctrine_Core::getTable('InfraOtherDataValue')->retrieveByAttributeNode($node_id, 46);
                 if ($valueCodigoRecinto) {
@@ -800,9 +788,6 @@ class infraInfoController extends APP_Controller {
 
 
         $node = Doctrine_Core::getTable('Node')->find($node_id);
-
-//        if ($node->node_type_id == 3){//3  ES SOLO PARA EL NIVEL
-
 
         $q = Doctrine_Query :: create()
                 ->from('Node n')
@@ -1109,7 +1094,6 @@ class infraInfoController extends APP_Controller {
                         ->setCellValueExplicit('Y' . $rcount, $usuario, PHPExcel_Cell_DataType::TYPE_STRING);
             }
         }
-//        }
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -1219,10 +1203,7 @@ class infraInfoController extends APP_Controller {
 
                     $objPHPExcel2->getActiveSheet()->getStyle('X' . $rowIndex2)->getNumberFormat()->setFormatCode('dd/mm/yyyy');
                     $ultima_actualizacion = $objPHPExcel2->getActiveSheet()->getCell('X' . $rowIndex2)->getFormattedValue();
-//                    $ultima_actualizacion = $objWorksheet2->getCell('X' . $rowIndex2)->getCalculatedValue();
                     $usuario = $objWorksheet2->getCell('Y' . $rowIndex2)->getCalculatedValue();
-//                    $superficie = $objWorksheet2->getCell('Z' . $rowIndex2)->getCalculatedValue();
-
 
                     if ($codigo_recinto != NULL) {
                         $nodeOtherData = Doctrine_Core::getTable('InfraOtherDataValue')->retrieveByIdAttribute(46, trim($codigo_recinto));
@@ -1775,8 +1756,6 @@ class infraInfoController extends APP_Controller {
                         }
                     }
 
-//                    var_dump($ultima_actualizacion);
-//                    exit;
                     //VALIDA OBSERVACION RECINTO
                     if ($obeservacion_recinto != NULL) {
                         $nodeOtherDataObservacionRecinto = Doctrine_Core::getTable('InfraOtherDataValue')->retrieveByAttributeNode($node_id, 34);
@@ -1792,22 +1771,11 @@ class infraInfoController extends APP_Controller {
                     //VALIDA ULTIMA ACTUALIZACION
                     //ACTUALIZA ULTIMA ACTIALIZACION
                     if ($ultima_actualizacion != NULL) {
-//                            $timestamp = PHPExcel_Shared_Date::ExcelToPHP($ultima_actualizacion);
-//                            $timestamp = $timestamp + 3600 * 24;
-//                            $ultima_actualizacion = date("d/m/Y", $ultima_actualizacion);
-//                            $time = strtotime($ultima_actualizacion);
-//                            $newformat = date('Y/m/d',$time);
-//
                         $nodeOtherDataUltimaActualizacion = Doctrine_Core::getTable('InfraOtherDataValue')->retrieveByAttributeNode($node_id, 38);
 
-//                            if ($this->validateDate($newformat) == true) {
                         if (trim($ultima_actualizacion) != $nodeOtherDataUltimaActualizacion->infra_other_data_value_value) {
-                            // Actualizar el nombre
-//                                    var_dump($ultima_actualizacion);
-//                                    exit;
                             $nodeOtherDataUltimaActualizacion->infra_other_data_value_value = $ultima_actualizacion;
                             $nodeOtherDataUltimaActualizacion->save();
-//                                }
                         }
                     }
 
@@ -1822,27 +1790,12 @@ class infraInfoController extends APP_Controller {
                             $nodeOtherDataUsuario->save();
                         }
                     }
-
-//                    //VALIDA SUPERFICIE 
-//                    if ($superficie != NULL) {
-//                        if (is_numeric($superficie) != true) {
-//                            $success = 'false';
-//                            $msg = "El numero " . $superficie . ' Celda : Z' . $rowIndex2 . " No es numérico";
-//                            echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
-//                            exit;
-//                        }
-//                    }
                 }
             }
 
-//            $success = 'true';
-//            $msg = "VALIDADO TODO OK";
-//            echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
-//            exit;
             ###########################
             ## AQUI INSERTA LO VALIDADO
             ###########################
-//            $nodos = array();
             $cont = 0;
             try {
 
@@ -1877,16 +1830,13 @@ class infraInfoController extends APP_Controller {
 
                         $objPHPExcel2->getActiveSheet()->getStyle('X' . $rowIndex2)->getNumberFormat()->setFormatCode('dd/mm/yyyy');
                         $ultima_actualizacion = $objPHPExcel2->getActiveSheet()->getCell('X' . $rowIndex2)->getFormattedValue();
-//                        $ultima_actualizacion = $objWorksheet2->getCell('X' . $rowIndex2)->getCalculatedValue();
                         $usuario = $objWorksheet2->getCell('Y' . $rowIndex2)->getCalculatedValue();
-//                        $superficie = $objWorksheet2->getCell('Z' . $rowIndex2)->getCalculatedValue();
 
                         if ($codigo_recinto != NULL) {
                             $nodeOtherData = Doctrine_Core::getTable('InfraOtherDataValue')->retrieveByIdAttribute(46, trim($codigo_recinto));
 
                             if ($nodeOtherData) {
                                 $node_id = $nodeOtherData->node_id;
-//                                $nodos[$cont] = $node_id;
                                 $cont++;
                             } else {
                                 $success = 'false';
@@ -2249,21 +2199,10 @@ class infraInfoController extends APP_Controller {
                         //ACTUALIZA ULTIMA ACTIALIZACION
 
                         if ($ultima_actualizacion != NULL) {
-//                            $timestamp = PHPExcel_Shared_Date::ExcelToPHP($ultima_actualizacion);
-//                            $timestamp = $timestamp + 3600 * 24;
-//                            $ultima_actualizacion = date("Y/m/d", $timestamp);
-//                            $nodeOtherDataUltimaActualizacion = Doctrine_Core::getTable('InfraOtherDataValue')->retrieveByAttributeNode($node_id, 38);
-//
-//                            if ($this->validateDate($ultima_actualizacion) == true) {
-//                                list ($dia, $mes, $anio) = explode("/", $ultima_actualizacion);
-//                                $ultima_actualizacion = $anio . "/" . $mes . "/" . $dia;
-//                                
                             if (trim($ultima_actualizacion) != $nodeOtherDataUltimaActualizacion->infra_other_data_value_value) {
-//                                    // Actualizar el nombre
                                 $nodeOtherDataUltimaActualizacion->infra_other_data_value_value = $ultima_actualizacion;
                                 $nodeOtherDataUltimaActualizacion->save();
                             }
-//                            }
                         }
 
                         //ACTUALIZA USUARIO
@@ -2275,62 +2214,8 @@ class infraInfoController extends APP_Controller {
                                 $nodeOtherDataUsuario->save();
                             }
                         }
-//
-//                        //ACTUALIZA SUPERFICIE
-//                        if ($superficie != NULL) {
-//                            if (is_numeric($superficie) == true) {
-//
-//                                $infoAntes = Doctrine_Core::getTable('InfraInfo')->findByNodeId($node_id);
-//                                $info = Doctrine_Core::getTable('InfraInfo')->findByNodeId($node_id);
-//
-//                                if ($info === false) {
-//                                    $info = new InfraInfo();
-//                                    $info->node_id = $node_id;
-//                                }
-//                                $info->allowListener = true;
-//                                $info->infra_info_usable_area = $superficie;
-//                                $info->save();
-//
-//                                $node = Doctrine::getTable('Node')->find($node_id);
-//                                $log_id = $this->syslog->register('add_info_structural_data', array(
-//                                    $node->node_name,
-//                                    $node->getPath()
-//                                )); // registering log
-//                                //
-//                                if (@$infoAntes->infra_info_usable_area != $info->infra_info_usable_area) {
-//                                    $logDetail = new LogDetail();
-//                                    $logDetail->log_id = $log_id;
-//                                    $logDetail->log_detail_param = $this->translateTag('Infrastructure', 'infra_info_usable_area');
-//                                    $logDetail->log_detail_value_old = @$infoAntes->infra_info_usable_area;
-//                                    $logDetail->log_detail_value_new = $info->infra_info_usable_area;
-//                                    $logDetail->save();
-//                                }
-//                            }
-//                        }
                     }
                 }
-//                //ACTUALIZA LA SUPERFICIE TOTAL 
-//                foreach ($nodos as $value) {
-//                    $fieldMapping = array(
-//                        'infra_info_usable_area' => 'getTotalUsableArea'
-//                    );
-//
-//                    $node = Doctrine_Core::getTable('Node')->find($value)->getNode();
-//                    if ($node->hasParent()) {
-//                        foreach (array_reverse($node->getAncestors()->toArray()) as $ancestor) {
-//                            $ancestorInfo = Doctrine_Core::getTable('InfraInfo')->findByNodeId($ancestor['node_id']);
-//                            if ($ancestorInfo === false) {
-//                                $ancestorInfo = new InfraInfo();
-//                                $ancestorInfo->node_id = $ancestor['node_id'];
-//                            }
-//                            foreach ($fieldMapping as $att => $val) {
-//                                $ancestorInfo->{$att . '_total'} = $this->{$fieldMapping[$att]}($ancestor['node_id']);
-//                            }
-//
-//                            $ancestorInfo->save();
-//                        }
-//                    }
-//                }
             } catch (Exception $e) {
                 $success = false;
                 $msg = $e->getMessage();

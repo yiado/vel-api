@@ -28,6 +28,34 @@
  * @property string $infra_info_additional_2
  * @property string $infra_info_additional_3
  * @property string $infra_info_additional_4
+ * @property float $infra_info_m_terrero_escritura
+ * @property float $infra_info_m_terrero_escritura_total
+ * @property float $infra_info_m_terreno_cad
+ * @property float $infra_info_m_terreno_cad_total
+ * @property float $infra_info_m_construidos_ogcu
+ * @property float $infra_info_m_construidos_ogcu_total
+ * @property float $infra_info_uf_metros
+ * @property integer $infra_info_uf_m_total
+ * @property float $infra_info_m_emplazamiento
+ * @property integer $infra_info_p_m_emplazamiento
+ * @property float $infra_info_m_calles
+ * @property integer $infra_info_p_m_calles
+ * @property float $infra_info_m_areas_verdes
+ * @property integer $infra_info_p_m_areas_verdes
+ * @property float $infra_info_m_areas_manejadas
+ * @property integer $infra_info_p_m_areas_manejadas
+ * @property float $infra_info_m_patios_abiertos
+ * @property integer $infra_info_p_m_patios_abiertos
+ * @property float $infra_info_m_recintos_deportivos_abiertos
+ * @property integer $infra_info_p_m_recintos_deportivos_abiertos
+ * @property float $infra_info_m_circulaciones_abiertas
+ * @property integer $infra_info_p_m_circulaciones_abiertas
+ * @property float $infra_info_m_otras_areas_abiertas
+ * @property integer $infra_info_p_m_otras_areas_abiertas
+ * @property float $infra_info_n_estacionamientos
+ * @property integer $infra_info_m_neto_estacionamientos
+ * @property float $infra_info_m_sector_estacionamientos
+ * @property integer $infra_info_p_m_sector_estacionamientos
  * @property InfraInfoOption $InfraInfoOption
  * @property InfraInfoOption $InfraInfoOption_2
  * @property InfraInfoOption $InfraInfoOption_3
@@ -44,255 +72,527 @@ abstract class BaseInfraInfo extends Doctrine_Record {
     public function setTableDefinition() {
         $this->setTableName('infra_info');
         $this->hasColumn('infra_info_id', 'integer', 4, array(
-             'type' => 'integer',
-             'length' => 4,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => true,
-             'autoincrement' => true,
-             ));
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => true,
+            'autoincrement' => true,
+        ));
         $this->hasColumn('node_id', 'integer', 4, array(
-             'type' => 'integer',
-             'length' => 4,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'notnull' => false,
-             'autoincrement' => false,
-             ));
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('infra_info_option_id_1', 'integer', 4, array(
-             'type' => 'integer',
-             'length' => 4,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'notnull' => false,
-             'autoincrement' => false,
-             ));
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('infra_info_option_id_2', 'integer', 4, array(
-             'type' => 'integer',
-             'length' => 4,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'notnull' => false,
-             'autoincrement' => false,
-             ));
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('infra_info_option_id_3', 'integer', 4, array(
-             'type' => 'integer',
-             'length' => 4,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'notnull' => false,
-             'autoincrement' => false,
-             ));
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('infra_info_option_id_4', 'integer', 4, array(
-             'type' => 'integer',
-             'length' => 4,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'notnull' => false,
-             'autoincrement' => false,
-             ));
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('infra_info_usable_area', 'float', 9, array(
-             'type' => 'float',
-             'length' => 9,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'default' => '0.000',
-             'notnull' => false,
-             'autoincrement' => false,
-             ));
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('infra_info_usable_area_total', 'float', 9, array(
-             'type' => 'float',
-             'length' => 9,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'default' => '0.000',
-             'notnull' => false,
-             'autoincrement' => false,
-             ));
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('infra_info_area', 'float', 9, array(
-             'type' => 'float',
-             'length' => 9,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'default' => '0.000',
-             'notnull' => false,
-             'autoincrement' => false,
-             ));
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('infra_info_area_total', 'float', 9, array(
-             'type' => 'float',
-             'length' => 9,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'default' => '0.000',
-             'notnull' => false,
-             'autoincrement' => false,
-             ));
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('infra_info_volume', 'float', 9, array(
-             'type' => 'float',
-             'length' => 9,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'default' => '0.000',
-             'notnull' => false,
-             'autoincrement' => false,
-             ));
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('infra_info_volume_total', 'float', 9, array(
-             'type' => 'float',
-             'length' => 9,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'default' => '0.000',
-             'notnull' => false,
-             'autoincrement' => false,
-             ));
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('infra_info_length', 'float', 9, array(
-             'type' => 'float',
-             'length' => 9,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'default' => '0.000',
-             'notnull' => false,
-             'autoincrement' => false,
-             ));
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('infra_info_width', 'float', 9, array(
-             'type' => 'float',
-             'length' => 9,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'default' => '0.000',
-             'notnull' => false,
-             'autoincrement' => false,
-             ));
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('infra_info_height', 'float', 9, array(
-             'type' => 'float',
-             'length' => 9,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'default' => '0.000',
-             'notnull' => false,
-             'autoincrement' => false,
-             ));
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('infra_info_capacity', 'integer', 4, array(
-             'type' => 'integer',
-             'length' => 4,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'default' => '0',
-             'notnull' => false,
-             'autoincrement' => false,
-             ));
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('infra_info_capacity_total', 'integer', 4, array(
-             'type' => 'integer',
-             'length' => 4,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'default' => '0',
-             'notnull' => false,
-             'autoincrement' => false,
-             ));
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('infra_info_terrain_area', 'float', 9, array(
-             'type' => 'float',
-             'length' => 9,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'default' => '0.000',
-             'notnull' => false,
-             'autoincrement' => false,
-             ));
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('infra_info_terrain_area_total', 'float', 9, array(
-             'type' => 'float',
-             'length' => 9,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'default' => '0.000',
-             'notnull' => false,
-             'autoincrement' => false,
-             ));
-        /*$this->hasColumn('infra_valorizacion', 'float', 9, array(
-             'type' => 'float',
-             'length' => 9,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'default' => '0.000',
-             'notnull' => false,
-             'autoincrement' => false,
-             ));*/
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('infra_info_additional_1', 'string', 255, array(
-             'type' => 'string',
-             'length' => 255,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'notnull' => false,
-             'autoincrement' => false,
-             ));
+            'type' => 'string',
+            'length' => 255,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('infra_info_additional_2', 'string', 255, array(
-             'type' => 'string',
-             'length' => 255,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'notnull' => false,
-             'autoincrement' => false,
-             ));
+            'type' => 'string',
+            'length' => 255,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('infra_info_additional_3', 'string', 255, array(
-             'type' => 'string',
-             'length' => 255,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'notnull' => false,
-             'autoincrement' => false,
-             ));
+            'type' => 'string',
+            'length' => 255,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('infra_info_additional_4', 'string', 255, array(
-             'type' => 'string',
-             'length' => 255,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'notnull' => false,
-             'autoincrement' => false,
-             ));
+            'type' => 'string',
+            'length' => 255,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_m_terrero_escritura', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_m_terrero_escritura_total', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_m_terreno_cad', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_m_terreno_cad_total', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_m_construidos_ogcu', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_m_construidos_ogcu_total', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_uf_metros', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_uf_m_total', 'integer', 4, array(
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_m_emplazamiento', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_p_m_emplazamiento', 'integer', 4, array(
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_m_calles', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_p_m_calles', 'integer', 4, array(
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_m_areas_verdes', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_p_m_areas_verdes', 'integer', 4, array(
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_m_areas_manejadas', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_p_m_areas_manejadas', 'integer', 4, array(
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_m_patios_abiertos', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_p_m_patios_abiertos', 'integer', 4, array(
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_m_recintos_deportivos_abiertos', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_p_m_recintos_deportivos_abiertos', 'integer', 4, array(
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_m_circulaciones_abiertas', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_p_m_circulaciones_abiertas', 'integer', 4, array(
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_m_otras_areas_abiertas', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_p_m_otras_areas_abiertas', 'integer', 4, array(
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_n_estacionamientos', 'integer', 4, array(
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_m_neto_estacionamientos', 'integer', 4, array(
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_m_sector_estacionamientos', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_p_m_sector_estacionamientos', 'integer', 4, array(
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
     }
+
     public function setUp() {
         parent::setUp();
         $this->hasOne('InfraInfoOption', array(
-             'local' => 'infra_info_option_id_1',
-             'foreign' => 'infra_info_option_id'));
+            'local' => 'infra_info_option_id_1',
+            'foreign' => 'infra_info_option_id'));
 
         $this->hasOne('InfraInfoOption as InfraInfoOption_2', array(
-             'local' => 'infra_info_option_id_2',
-             'foreign' => 'infra_info_option_id'));
+            'local' => 'infra_info_option_id_2',
+            'foreign' => 'infra_info_option_id'));
 
         $this->hasOne('InfraInfoOption as InfraInfoOption_3', array(
-             'local' => 'infra_info_option_id_3',
-             'foreign' => 'infra_info_option_id'));
+            'local' => 'infra_info_option_id_3',
+            'foreign' => 'infra_info_option_id'));
 
         $this->hasOne('InfraInfoOption as InfraInfoOption_4', array(
-             'local' => 'infra_info_option_id_4',
-             'foreign' => 'infra_info_option_id'));
+            'local' => 'infra_info_option_id_4',
+            'foreign' => 'infra_info_option_id'));
 
         $this->hasOne('Node', array(
-             'local' => 'node_id',
-             'foreign' => 'node_id'));
+            'local' => 'node_id',
+            'foreign' => 'node_id'));
     }
+
 }

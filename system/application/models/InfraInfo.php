@@ -9,123 +9,63 @@
 class InfraInfo extends BaseInfraInfo {
 
     var $allowListener = false;
-
-    function getTotalArea($node_id) {
-
+    
+    function sumatoria($node_id, $formula) {
         $sum = Doctrine_Query::create()
-                ->select('SUM(infra_info_area +  infra_info_area_total)')
+                ->select($formula)
                 ->from('Node n')
                 ->innerJoin('n.InfraInfo iff')
                 ->where('n.node_id != ?', $node_id)
                 ->groupBy('n.node_parent_id');
-
+        
         $treeObject = Doctrine_Core::getTable('Node')->getTree();
         $treeObject->setBaseQuery($sum);
         $tree = $treeObject->fetchBranch($node_id, array('depth' => 1));
         $result = $tree->getFirst();
-
         return $result->SUM;
     }
-
-    function getTotalUsableArea($node_id) {
-
-        $sum = Doctrine_Query::create()
-                ->select('SUM(infra_info_usable_area +  infra_info_usable_area_total)')
-                ->from('Node n')
-                ->innerJoin('n.InfraInfo iff')
-                ->where('n.node_id != ?', $node_id)
-                ->groupBy('n.node_parent_id');
-
-        $treeObject = Doctrine_Core::getTable('Node')->getTree();
-        $treeObject->setBaseQuery($sum);
-        $tree = $treeObject->fetchBranch($node_id, array('depth' => 1));
-        $result = $tree->getFirst();
-
-        return $result->SUM;
-    }
-
-    function getTotalVolume($node_id) {
-
-        $sum = Doctrine_Query::create()
-                ->select('SUM(infra_info_volume +  infra_info_volume_total)')
-                ->from('Node n')
-                ->innerJoin('n.InfraInfo iff')
-                ->where('n.node_id != ?', $node_id)
-                ->groupBy('n.node_parent_id');
-
-        $treeObject = Doctrine_Core::getTable('Node')->getTree();
-        $treeObject->setBaseQuery($sum);
-        $tree = $treeObject->fetchBranch($node_id, array('depth' => 1));
-        $result = $tree->getFirst();
-
-        return $result->SUM;
-    }
-
-    function getTotalCapacity($node_id) {
-
-        $sum = Doctrine_Query::create()
-                ->select('SUM(infra_info_capacity +  infra_info_capacity_total)')
-                ->from('Node n')
-                ->innerJoin('n.InfraInfo iff')
-                ->where('n.node_id != ?', $node_id)
-                ->groupBy('n.node_parent_id');
-
-        $treeObject = Doctrine_Core::getTable('Node')->getTree();
-        $treeObject->setBaseQuery($sum);
-        $tree = $treeObject->fetchBranch($node_id, array('depth' => 1));
-        $result = $tree->getFirst();
-
-        return $result->SUM;
-    }
-
-    function getTotalAreaTerrain($node_id) {
-
-        $sum = Doctrine_Query::create()
-                ->select('SUM(infra_info_terrain_area +  infra_info_terrain_area_total)')
-                ->from('Node n')
-                ->innerJoin('n.InfraInfo iff')
-                ->where('n.node_id != ?', $node_id)
-                ->groupBy('n.node_parent_id');
-
-        $treeObject = Doctrine_Core::getTable('Node')->getTree();
-        $treeObject->setBaseQuery($sum);
-        $tree = $treeObject->fetchBranch($node_id, array('depth' => 1));
-        $result = $tree->getFirst();
-
-        return $result->SUM;
-    }
-
-    /*function getTotalValorizacion($node_id) {
-        $sum = Doctrine_Query::create()
-                ->select('SUM(infra_info_terrain_area +  infra_info_terrain_area_total)')
-                ->from('Node n')
-                ->innerJoin('n.InfraInfo iff')
-                ->where('n.node_id != ?', $node_id)
-                ->groupBy('n.node_parent_id');
-
-        $treeObject = Doctrine_Core::getTable('Node')->getTree();
-        $treeObject->setBaseQuery($sum);
-        $tree = $treeObject->fetchBranch($node_id, array('depth' => 1));
-        $result = $tree->getFirst();
-
-        return $result->SUM;
-    }*/
 
     function postUpdate() {
-
+        
         if (!$this->allowListener){
             return;
         }
 
         $fieldMapping = array(
-            'infra_info_area' => 'getTotalArea',
-            'infra_info_usable_area' => 'getTotalUsableArea',
-            'infra_info_volume' => 'getTotalVolume',
-            'infra_info_capacity' => 'getTotalCapacity',
-            'infra_info_terrain_area' => 'getTotalAreaTerrain'
-            //,'infra_valozacion' => 'getTotalValorizacion'
+            'infra_info_area' => array(
+                'formula' => 'SUM(infra_info_area +  infra_info_area_total)',
+                'campo' => 'infra_info_area_total'
+            ),
+            'infra_info_usable_area' => array(
+                'formula' => 'SUM(infra_info_usable_area +  infra_info_usable_area_total)',
+                'campo' => 'infra_info_usable_area_total'
+            ),
+            'infra_info_volume' => array(
+                'formula' => 'SUM(infra_info_volume +  infra_info_volume_total)',
+                'campo' => 'infra_info_volume_total'
+            ),
+            'infra_info_capacity' => array(
+                'formula' => 'SUM(infra_info_capacity +  infra_info_capacity_total)',
+                'campo' => 'infra_info_capacity_total'
+            ),
+            'infra_info_terrain_area' => array(
+                'formula' => 'SUM(infra_info_terrain_area +  infra_info_terrain_area_total)',
+                'campo' => 'infra_info_terrain_area_total'
+            ),
+            'infra_info_m_terrero_escritura' => array(
+                'formula' => 'SUM(infra_info_m_terrero_escritura + infra_info_m_terrero_escritura_total)',
+                'campo' => 'infra_info_m_terrero_escritura_total'
+            ),
+            'infra_info_m_terreno_cad' => array(
+                'formula' => 'SUM(infra_info_m_terreno_cad + infra_info_m_terreno_cad_total)',
+                'campo' => 'infra_info_m_terreno_cad_total'
+            ),
+            'infra_info_m_construidos_ogcu' => array(
+                'formula' => 'SUM(infra_info_m_construidos_ogcu + infra_info_m_construidos_ogcu_total)',
+                'campo' => 'infra_info_m_construidos_ogcu_total'
+            )
         );
-
+        
         $node = Doctrine_Core::getTable('Node')->find($this->node_id)->getNode();
         if ($node->hasParent()) {
             foreach (array_reverse($node->getAncestors()->toArray()) as $ancestor) {
@@ -136,7 +76,7 @@ class InfraInfo extends BaseInfraInfo {
                 }
 
                 foreach ($fieldMapping as $att => $val) {
-                    $ancestorInfo->{$att . '_total'} = $this->{$fieldMapping[$att]}($ancestor['node_id']);
+                    $ancestorInfo->{$val['campo']} = $this->sumatoria($ancestor['node_id'], $val['formula']);
                 }
 
                 $ancestorInfo->save();
