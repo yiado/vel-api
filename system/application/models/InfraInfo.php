@@ -7,17 +7,14 @@
  * 
  */
 class InfraInfo extends BaseInfraInfo {
-
     var $allowListener = false;
-    
-    function sumatoria($node_id, $formula) {
+    function actualizarValores($node_id, $formula) {
         $sum = Doctrine_Query::create()
                 ->select($formula)
                 ->from('Node n')
                 ->innerJoin('n.InfraInfo iff')
                 ->where('n.node_id != ?', $node_id)
                 ->groupBy('n.node_parent_id');
-        
         $treeObject = Doctrine_Core::getTable('Node')->getTree();
         $treeObject->setBaseQuery($sum);
         $tree = $treeObject->fetchBranch($node_id, array('depth' => 1));
@@ -26,45 +23,96 @@ class InfraInfo extends BaseInfraInfo {
     }
 
     function postUpdate() {
-        
         if (!$this->allowListener){
             return;
         }
-
+        
+        $uf_del_dia = Doctrine_Core::getTable('Uf')->retrieveToday(date("Y-m-d"));
+        $uf_valor = $uf_del_dia->uf_value;
+        
         $fieldMapping = array(
             'infra_info_area' => array(
                 'formula' => 'SUM(infra_info_area +  infra_info_area_total)',
-                'campo' => 'infra_info_area_total'
+                'campo_db' => 'infra_info_area_total'
             ),
             'infra_info_usable_area' => array(
                 'formula' => 'SUM(infra_info_usable_area +  infra_info_usable_area_total)',
-                'campo' => 'infra_info_usable_area_total'
+                'campo_db' => 'infra_info_usable_area_total'
             ),
             'infra_info_volume' => array(
                 'formula' => 'SUM(infra_info_volume +  infra_info_volume_total)',
-                'campo' => 'infra_info_volume_total'
+                'campo_db' => 'infra_info_volume_total'
             ),
             'infra_info_capacity' => array(
                 'formula' => 'SUM(infra_info_capacity +  infra_info_capacity_total)',
-                'campo' => 'infra_info_capacity_total'
+                'campo_db' => 'infra_info_capacity_total'
             ),
             'infra_info_terrain_area' => array(
                 'formula' => 'SUM(infra_info_terrain_area +  infra_info_terrain_area_total)',
-                'campo' => 'infra_info_terrain_area_total'
+                'campo_db' => 'infra_info_terrain_area_total'
             ),
             'infra_info_m_terrero_escritura' => array(
                 'formula' => 'SUM(infra_info_m_terrero_escritura + infra_info_m_terrero_escritura_total)',
-                'campo' => 'infra_info_m_terrero_escritura_total'
+                'campo_db' => 'infra_info_m_terrero_escritura_total'
             ),
             'infra_info_m_terreno_cad' => array(
                 'formula' => 'SUM(infra_info_m_terreno_cad + infra_info_m_terreno_cad_total)',
-                'campo' => 'infra_info_m_terreno_cad_total'
+                'campo_db' => 'infra_info_m_terreno_cad_total'
             ),
             'infra_info_m_construidos_ogcu' => array(
                 'formula' => 'SUM(infra_info_m_construidos_ogcu + infra_info_m_construidos_ogcu_total)',
-                'campo' => 'infra_info_m_construidos_ogcu_total'
+                'campo_db' => 'infra_info_m_construidos_ogcu_total'
+            ),
+            'infra_info_m_terreno_cad' => array(
+                'formula' => 'SUM(infra_info_m_terreno_cad + infra_info_m_terreno_cad_total)',
+                'campo_db' => 'infra_info_m_terreno_cad_total'
+            ),
+            'infra_info_m_construidos_ogcu' => array(
+                'formula' => 'SUM(infra_info_m_construidos_ogcu + infra_info_m_construidos_ogcu_total)',
+                'campo_db' => 'infra_info_m_construidos_ogcu_total'
+            ),
+            'infra_info_uf_metros' => array(
+                'formula' => "SUM($uf_valor * infra_info_uf_metros * infra_info_m_terreno_cad_total)",
+                'campo_db' => 'infra_info_uf_m_total'
+            ),
+            'infra_info_m_calles' => array(
+                'formula' => "SUM(infra_info_m_calles/infra_info_m_terreno_cad* 100)",
+                'campo_db' => 'infra_info_p_m_calles'
+            ),
+            'infra_info_m_areas_verdes' => array(
+                'formula' => "SUM(infra_info_m_areas_verdes/infra_info_m_terreno_cad* 100)",
+                'campo_db' => 'infra_info_p_m_areas_verdes'
+            ),
+            'infra_info_m_areas_manejadas' => array(
+                'formula' => "SUM(infra_info_m_areas_manejadas/infra_info_m_terreno_cad* 100)",
+                'campo_db' => 'infra_info_p_m_areas_manejadas'
+            ),
+            'infra_info_m_patios_abiertos' => array(
+                'formula' => "SUM(infra_info_m_patios_abiertos/infra_info_m_terreno_cad* 100)",
+                'campo_db' => 'infra_info_p_m_patios_abiertos'
+            ),
+            'infra_info_m_recintos_deportivos_abiertos' => array(
+                'formula' => "SUM(infra_info_m_recintos_deportivos_abiertos/infra_info_m_terreno_cad* 100)",
+                'campo_db' => 'infra_info_p_m_recintos_deportivos_abiertos'
+            ),
+            'infra_info_m_circulaciones_abiertas' => array(
+                'formula' => "SUM(infra_info_m_circulaciones_abiertas/infra_info_m_terreno_cad* 100)",
+                'campo_db' => 'infra_info_p_m_circulaciones_abiertas'
+            ),
+            'infra_info_m_otras_areas_abiertas' => array(
+                'formula' => "SUM(infra_info_m_otras_areas_abiertas/infra_info_m_terreno_cad* 100)",
+                'campo_db' => 'infra_info_p_m_otras_areas_abiertas'
+            ),
+            'infra_info_n_estacionamientos' => array(
+                'formula' => "SUM(2 * 5 * infra_info_n_estacionamientos)",
+                'campo_db' => 'infra_info_m_neto_estacionamientos'
+            ),
+            'infra_info_m_sector_estacionamientos' => array(
+                'formula' => "SUM(infra_info_m_sector_estacionamientos/infra_info_m_terreno_cad* 100)",
+                'campo_db' => 'infra_info_p_m_sector_estacionamientos'
             )
         );
+        
         
         $node = Doctrine_Core::getTable('Node')->find($this->node_id)->getNode();
         if ($node->hasParent()) {
@@ -74,23 +122,19 @@ class InfraInfo extends BaseInfraInfo {
                     $ancestorInfo = new InfraInfo();
                     $ancestorInfo->node_id = $ancestor['node_id'];
                 }
-
-                foreach ($fieldMapping as $att => $val) {
-                    $ancestorInfo->{$val['campo']} = $this->sumatoria($ancestor['node_id'], $val['formula']);
+                foreach ($fieldMapping as $val) {
+                    $ancestorInfo->{$val['campo_db']} = $this->actualizarValores($ancestor['node_id'], $val['formula']);
                 }
-
                 $ancestorInfo->save();
             }
         }
     }
 
     function postInsert() {
-
         $this->postUpdate();
     }
 
     function postDelete() {
-
         $this->postUpdate();
     }
 

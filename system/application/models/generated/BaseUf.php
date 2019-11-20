@@ -24,7 +24,7 @@ abstract class BaseUf extends Doctrine_Record {
              'fixed' => false,
              'unsigned' => false,
              'primary' => true,
-             'autoincrement' => false,
+             'autoincrement' => true,
              ));
         $this->hasColumn('uf_value', 'float', 10, array(
              'type' => 'float',

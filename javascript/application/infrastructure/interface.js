@@ -3250,10 +3250,10 @@ App.InfraStructure.Info.fields = {
         fieldLabel: App.Language.Infrastructure.infra_info_n_estacionamientos,
         allowNegative: false
     },
-    'infra_info_p_n_estacionamientos': {
+    'infra_info_m_neto_estacionamientos': {
         xtype: 'displayfield',
-        name: 'infra_info_p_n_estacionamientos',
-        fieldLabel: App.Language.Infrastructure.infra_info_p_n_estacionamientos,
+        name: 'infra_info_m_neto_estacionamientos',
+        fieldLabel: App.Language.Infrastructure.infra_info_m_neto_estacionamientos,
         setValue: function(v) {
             this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
             return this;
@@ -3267,8 +3267,8 @@ App.InfraStructure.Info.fields = {
     },
     'infra_info_p_m_sector_estacionamientos': {
         xtype: 'displayfield',
-        name: 'infra_info_p_m_sectos_estacionamientos',
-        fieldLabel: App.Language.Infrastructure.infra_info_p_m_sectos_estacionamientos,
+        name: 'infra_info_p_m_sector_estacionamientos',
+        fieldLabel: App.Language.Infrastructure.infra_info_p_m_sector_estacionamientos,
         setValue: function(v) {
             this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
             return this;

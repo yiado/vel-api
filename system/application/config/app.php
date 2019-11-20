@@ -106,3 +106,9 @@ $config['bimapi'] = array(
         'password' => 'wjsNDHE2h8k9tFvd'
     )
 );
+
+$config['api_uf_sbif'] = array(
+    'base_url' => 'http://api.sbif.cl/api-sbifv3/recursos_api/uf/posteriores',
+    'key' => 'f5be4d9b0a11b3941c2083ba4e6321fc789eba3e',
+    'formato' => 'json'
+);
