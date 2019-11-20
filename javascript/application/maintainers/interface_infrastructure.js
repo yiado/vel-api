@@ -750,14 +750,21 @@ App.Maintainers.GruposWindow = Ext.extend(Ext.Window, {
                         text: App.Language.General.ddelete,
                         iconCls: 'delete_icon',
                         handler: function(b) {
-                            grid = Ext.getCmp('App.Maintainers.Grupos');
+                            let grid = Ext.getCmp('App.Maintainers.Grupos');
                             if (grid.getSelectionModel().getCount()) {
                                 Ext.MessageBox.confirm(App.Language.General.confirmation, App.Language.General.delete_is_really_sure_in_this_configuration_the_state, function(b) {
-                                    if (b == 'yes') {
+                                    if (b === 'yes') {
                                         grid.getSelectionModel().each(function(record) {
-                                            infra_grupo_id = grid.getSelectionModel().getSelected().id;
-                                            App.InfraStructure.Grupos.Store.setBaseParam('infra_grupo_id', infra_grupo_id);
-                                            App.InfraStructure.Grupos.Store.remove(record);
+                                            let infra_grupo_id = grid.getSelectionModel().getSelected().id;
+                                            /**
+                                             * infra_grupo_id 4 = Datos Generales
+                                             */
+                                            if (infra_grupo_id !== '4') {
+                                                App.InfraStructure.Grupos.Store.setBaseParam('infra_grupo_id', infra_grupo_id);
+                                                App.InfraStructure.Grupos.Store.remove(record);
+                                            } else {
+                                                Ext.FlashMessage.alert(`No es posible eliminar ${App.Language.Infrastructure.general_data}`);
+                                            }
                                         });
                                     }
                                 });
