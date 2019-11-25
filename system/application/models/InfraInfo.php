@@ -9,14 +9,28 @@
 class InfraInfo extends BaseInfraInfo {
 
     var $allowListener = false;
+    
+    var $ufDelDia = null;
 
+    function getUfDelDia() {
+        $uf_del_dia = Doctrine_Core::getTable('Uf')->retrieveByDate(date("Y-m-d"));
+        $this->ufDelDia = $uf_del_dia->uf_value;
+    }
+    
+    function postInsert() {
+        $this->postUpdate();
+    }
+
+    function postDelete() {
+        $this->postUpdate();
+    }
+    
     function postUpdate() {
         if (!$this->allowListener) {
             return;
         }
-
-        $uf_del_dia = Doctrine_Core::getTable('Uf')->retrieveByDate(date("Y-m-d"));
-        $uf_valor = $uf_del_dia->uf_value;
+        
+        $this->getUfDelDia();
 
         $fieldMapping = array(
             'infra_info_area' => array(
@@ -60,7 +74,7 @@ class InfraInfo extends BaseInfraInfo {
                 'campo_db' => 'infra_info_construidos_ogcu_total'
             ),
             'infra_info_uf' => array(
-                'formula' => "SUM(($uf_valor * infra_info_uf) + infra_info_uf_total)",
+                'formula' => "SUM(({$this->ufDelDia} * infra_info_uf) + infra_info_uf_total)",
                 'accion' => 'suma',
                 'campo_db' => 'infra_info_uf_total'
             ),
@@ -134,6 +148,10 @@ class InfraInfo extends BaseInfraInfo {
             )
         );
 
+        $this->guardarCambios($fieldMapping);
+    }
+    
+    function guardarCambios($fieldMapping){
         $node = Doctrine_Core::getTable('Node')->find($this->node_id)->getNode();
         $ancestros = array_reverse($node->getAncestors()->toArray());
         
@@ -156,18 +174,18 @@ class InfraInfo extends BaseInfraInfo {
             }
         }
     }
-
-    function postInsert() {
-        $this->postUpdate();
-    }
-
-    function postDelete() {
-        $this->postUpdate();
-    }
     
     function actualizarValorNodoUTFSM(){
-        $this->allowListener = true;
-        $this->postUpdate();
+        $this->getUfDelDia();
+
+        $fieldMapping = array(
+            'infra_info_uf' => array(
+                'formula' => "SUM(({$this->ufDelDia} * infra_info_uf) + infra_info_uf_total)",
+                'accion' => 'suma',
+                'campo_db' => 'infra_info_uf_total'
+            )
+        );
+        $this->guardarCambios($fieldMapping);
     }
 
 }
