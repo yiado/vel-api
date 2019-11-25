@@ -136,7 +136,7 @@ class InfraInfo extends BaseInfraInfo {
 
         $node = Doctrine_Core::getTable('Node')->find($this->node_id)->getNode();
         $ancestros = array_reverse($node->getAncestors()->toArray());
-
+        
         if ($node->hasParent()) {
             foreach ($ancestros as $ancestor) {
                 $ancestorInfo = Doctrine_Core::getTable('InfraInfo')->findByNodeId($ancestor['node_id']);
@@ -162,6 +162,11 @@ class InfraInfo extends BaseInfraInfo {
     }
 
     function postDelete() {
+        $this->postUpdate();
+    }
+    
+    function actualizarValorNodoUTFSM(){
+        $this->allowListener = true;
         $this->postUpdate();
     }
 

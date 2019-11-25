@@ -19,9 +19,6 @@ class infraInfoController extends APP_Controller {
      * @method POST 
      */
     function get() {
-        
-        $this->actualizarUf();
-        
         $node_id = trim($this->input->post('node_id'));
         $node_type_id = $this->input->post('node_type_id');
         $lat = trim($this->input->post('lat'));
@@ -2248,29 +2245,6 @@ class infraInfoController extends APP_Controller {
     function validateDate($date, $format = 'Y/m/d') {
         $d = DateTime::createFromFormat($format, $date);
         return $d && $d->format($format) == $date;
-    }
-    
-    function actualizarUf() {
-        $uf = Doctrine_Core::getTable('Uf')->retrieveByDate(date("Y-m-d"));
-        if ( !$uf ) {
-            $time = strtotime( "-1 month", time());
-            $year = date("Y", $time);
-            $month = date("m", $time);
-            
-            $api_uf = $this->config->item('api_uf_sbif');
-            $api_url = $api_uf["base_url"]."/".$year."/".$month."?apikey=".$api_uf["key"]."&formato=".$api_uf["formato"];
-            $json = file_get_contents($api_url);
-            $ufs = json_decode($json,true);
-            foreach ($ufs['UFs'] as $uf) {
-                $uf['Valor'] = str_replace('.','',$uf['Valor']);
-                $uf['Valor'] = str_replace(',','.',$uf['Valor']);
-                
-                $ufDB = new Uf();
-                $ufDB->uf_value = $uf['Valor'];
-                $ufDB->uf_date = $uf['Fecha'];
-                $ufDB->save();
-            }
-        }
     }
 
 }

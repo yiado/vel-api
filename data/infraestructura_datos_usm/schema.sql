@@ -49,3 +49,12 @@ ADD COLUMN `infra_info_estacionamientos_total` int(11) NULL DEFAULT 0,
 ADD COLUMN `infra_info_estacionamientos` double(11, 3) NULL DEFAULT 0.000,
 ADD COLUMN `infra_info_estacionamientos_total_sector` double(11, 3) NULL DEFAULT 0.000,
 ADD COLUMN `infra_info_estacionamientos_porcent` double(11, 3) NULL DEFAULT 0.000;
+
+
+DROP TABLE IF EXISTS `uf`;
+CREATE TABLE `uf`  (
+  `uf_id` int(11) NOT NULL AUTO_INCREMENT,
+  `uf_value` double(9, 3) NULL DEFAULT NULL,
+  `uf_date` date NULL DEFAULT NULL,
+  PRIMARY KEY (`uf_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 0 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;

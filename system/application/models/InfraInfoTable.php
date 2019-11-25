@@ -17,7 +17,14 @@ class InfraInfoTable extends Doctrine_Table {
                 ->andWhere("ff.{$column} != ?", 0);
         return $q->fetchOne();
     }
-
+    
+    function findNodosValorUTFSM(){
+        $query = Doctrine_Query::create()
+            ->from('InfraInfo iff')
+            ->where('iff.infra_info_uf != ?', 0);
+        return $query->execute();
+    }
+    
     function getSumatoria($node_id, $formula) {
         $sum = Doctrine_Query::create()
             ->select($formula)
