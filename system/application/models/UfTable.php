@@ -12,20 +12,10 @@ class UfTable extends Doctrine_Table {
         return $q->execute();
     }
     
-    function retrieveByMonthAndYear($month, $year) {
+    function retrieveByDate($date) {
         $q = Doctrine_Query :: create()
                 ->from('Uf u')
-                ->where('EXTRACT(month from u.uf_date) = ?', $month)
-                ->andWhere('EXTRACT(year from u.uf_date) = ?', $year)
-                ->limit(1)
-                ->orderBy('u.uf_date DESC');
-        return $q->fetchOne();
-    }
-    
-    function retrieveToday($today) {
-        $q = Doctrine_Query :: create()
-                ->from('Uf u')
-                ->where('u.uf_date = ?', $today)
+                ->where('u.uf_date = ?', $date)
                 ->limit(1)
                 ->orderBy('u.uf_date DESC');
         return $q->fetchOne();

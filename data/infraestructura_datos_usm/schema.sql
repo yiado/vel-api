@@ -1,29 +1,51 @@
 ALTER TABLE `infra_info` 
-ADD COLUMN `infra_info_m_terrero_escritura` double(11, 3) NULL DEFAULT 0.000,
-ADD COLUMN `infra_info_m_terrero_escritura_total` double(11, 3) NULL DEFAULT 0.000,
-ADD COLUMN `infra_info_m_terreno_cad` double(11, 3) NULL DEFAULT 0.000,
-ADD COLUMN `infra_info_m_terreno_cad_total` double(11, 3) NULL DEFAULT 0.000,
-ADD COLUMN `infra_info_m_construidos_ogcu` double(11, 3) NULL DEFAULT 0.000,
-ADD COLUMN `infra_info_m_construidos_ogcu_total` double(11, 3) NULL DEFAULT 0.000,
-ADD COLUMN `infra_info_uf_metros` double(11, 3) NULL DEFAULT 0.000,
-ADD COLUMN `infra_info_uf_m_total` double(11, 3) NULL DEFAULT 0.000,
-ADD COLUMN `infra_info_m_emplazamiento` double(11, 3) NULL DEFAULT 0.000,
-ADD COLUMN `infra_info_p_m_emplazamiento` int(11) NULL DEFAULT 0,
-ADD COLUMN `infra_info_m_calles` double(11, 3) NULL DEFAULT 0.000,
-ADD COLUMN `infra_info_p_m_calles` int(11) NULL DEFAULT 0,
-ADD COLUMN `infra_info_m_areas_verdes` double(11, 3) NULL DEFAULT 0.000,
-ADD COLUMN `infra_info_p_m_areas_verdes` int(11) NULL DEFAULT 0,
-ADD COLUMN `infra_info_m_areas_manejadas` double(11, 3) NULL DEFAULT 0.000,
-ADD COLUMN `infra_info_p_m_areas_manejadas` int(11) NULL DEFAULT 0,
-ADD COLUMN `infra_info_m_patios_abiertos` double(11, 3) NULL DEFAULT 0.000,
-ADD COLUMN `infra_info_p_m_patios_abiertos` int(11) NULL DEFAULT 0,
-ADD COLUMN `infra_info_m_recintos_deportivos_abiertos` double(11, 3) NULL DEFAULT 0.000,
-ADD COLUMN `infra_info_p_m_recintos_deportivos_abiertos` int(11) NULL DEFAULT 0,
-ADD COLUMN `infra_info_m_circulaciones_abiertas` double(11, 3) NULL DEFAULT 0.000,
-ADD COLUMN `infra_info_p_m_circulaciones_abiertas` int(11) NULL DEFAULT 0,
-ADD COLUMN `infra_info_m_otras_areas_abiertas` double(11, 3) NULL DEFAULT 0.000,
-ADD COLUMN `infra_info_p_m_otras_areas_abiertas` int(11) NULL DEFAULT 0,
-ADD COLUMN `infra_info_n_estacionamientos` int(11) NULL DEFAULT 0,
-ADD COLUMN `infra_info_m_neto_estacionamientos` int(11) NULL DEFAULT 0,
-ADD COLUMN `infra_info_m_sector_estacionamientos` double(11, 3) NULL DEFAULT 0.000,
-ADD COLUMN `infra_info_p_m_sector_estacionamientos` int(11) NULL DEFAULT 0;
+ADD COLUMN `infra_info_terrero_escritura` double(11, 3) NULL DEFAULT 0.000,
+ADD COLUMN `infra_info_terrero_escritura_total` double(11, 3) NULL DEFAULT 0.000,
+
+ADD COLUMN `infra_info_terreno_cad` double(11, 3) NULL DEFAULT 0.000,
+ADD COLUMN `infra_info_terreno_cad_total` double(11, 3) NULL DEFAULT 0.000,
+
+ADD COLUMN `infra_info_construidos_ogcu` double(11, 3) NULL DEFAULT 0.000,
+ADD COLUMN `infra_info_construidos_ogcu_total` double(11, 3) NULL DEFAULT 0.000,
+
+ADD COLUMN `infra_info_uf` double(11, 3) NULL DEFAULT 0.000,
+ADD COLUMN `infra_info_uf_total` double(11, 3) NULL DEFAULT 0.000,
+
+ADD COLUMN `infra_info_emplazamiento` double(11, 3) NULL DEFAULT 0.000,
+ADD COLUMN `infra_info_emplazamiento_total` double(11, 3) NULL DEFAULT 0.000,
+ADD COLUMN `infra_info_emplazamiento_porcent` int(11) NULL DEFAULT 0,
+
+ADD COLUMN `infra_info_calles` double(11, 3) NULL DEFAULT 0.000,
+ADD COLUMN `infra_info_calles_total` double(11, 3) NULL DEFAULT 0.000,
+ADD COLUMN `infra_info_porcent_calles` double(11, 3) NULL DEFAULT 0.000,
+
+ADD COLUMN `infra_info_areas_verdes` double(11, 3) NULL DEFAULT 0.000,
+ADD COLUMN `infra_info_areas_verdes_total` double(11, 3) NULL DEFAULT 0.000,
+ADD COLUMN `infra_info_areas_verdes_porcent` double(11, 3) NULL DEFAULT 0.000,
+
+ADD COLUMN `infra_info_areas_manejadas` double(11, 3) NULL DEFAULT 0.000,
+ADD COLUMN `infra_info_areas_manejadas_total` double(11, 3) NULL DEFAULT 0.000,
+ADD COLUMN `infra_info_areas_manejadas_porcent` int(11) NULL DEFAULT 0,
+
+ADD COLUMN `infra_info_patios_abiertos` double(11, 3) NULL DEFAULT 0.000,
+ADD COLUMN `infra_info_patios_abiertos_total` double(11, 3) NULL DEFAULT 0.000,
+ADD COLUMN `infra_info_patios_abiertos_porcent` double(11, 3) NULL DEFAULT 0.000,
+
+ADD COLUMN `infra_info_recintos_deportivos` double(11, 3) NULL DEFAULT 0.000,
+ADD COLUMN `infra_info_recintos_deportivos_total` double(11, 3) NULL DEFAULT 0.000,
+ADD COLUMN `infra_info_recintos_deportivos_porcent` double(11, 3) NULL DEFAULT 0.000,
+
+ADD COLUMN `infra_info_circulaciones_abiertas` double(11, 3) NULL DEFAULT 0.000,
+ADD COLUMN `infra_info_circulaciones_abiertas_total` double(11, 3) NULL DEFAULT 0.000,
+ADD COLUMN `infra_info_circulaciones_abiertas_porcent` double(11, 3) NULL DEFAULT 0.000,
+
+ADD COLUMN `infra_info_otras_areas` double(11, 3) NULL DEFAULT 0.000,
+ADD COLUMN `infra_info_otras_areas_total` double(11, 3) NULL DEFAULT 0.000,
+ADD COLUMN `infra_info_otras_areas_porcent` double(11, 3) NULL DEFAULT 0.000,
+
+ADD COLUMN `infra_info_estacionamientos_num` int(11) NULL DEFAULT 0,
+ADD COLUMN `infra_info_estacionamientos_total` int(11) NULL DEFAULT 0,
+
+ADD COLUMN `infra_info_estacionamientos` double(11, 3) NULL DEFAULT 0.000,
+ADD COLUMN `infra_info_estacionamientos_total_sector` double(11, 3) NULL DEFAULT 0.000,
+ADD COLUMN `infra_info_estacionamientos_porcent` double(11, 3) NULL DEFAULT 0.000;

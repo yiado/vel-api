@@ -21,7 +21,7 @@ class infraInfoController extends APP_Controller {
     function get() {
         
         $this->actualizarUf();
-
+        
         $node_id = trim($this->input->post('node_id'));
         $node_type_id = $this->input->post('node_type_id');
         $lat = trim($this->input->post('lat'));
@@ -2251,18 +2251,14 @@ class infraInfoController extends APP_Controller {
     }
     
     function actualizarUf() {
-        $time = strtotime( "+1 month", time() );
-        $year = date("Y", $time);
-        $month = date("m", $time);
-            
-        $uf = Doctrine_Core::getTable('Uf')->retrieveByMonthAndYear($month, $year);
+        $uf = Doctrine_Core::getTable('Uf')->retrieveByDate(date("Y-m-d"));
         if ( !$uf ) {
-            $year = date("Y");
-            $month = date("m");
+            $time = strtotime( "-1 month", time());
+            $year = date("Y", $time);
+            $month = date("m", $time);
             
             $api_uf = $this->config->item('api_uf_sbif');
             $api_url = $api_uf["base_url"]."/".$year."/".$month."?apikey=".$api_uf["key"]."&formato=".$api_uf["formato"];
-
             $json = file_get_contents($api_url);
             $ufs = json_decode($json,true);
             foreach ($ufs['UFs'] as $uf) {

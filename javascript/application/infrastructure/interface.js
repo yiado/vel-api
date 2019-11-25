@@ -3064,217 +3064,302 @@ App.InfraStructure.Info.fields = {
             }
         }
     },
-    'infra_info_m_terrero_escritura': {
+    'infra_info_terrero_escritura': {
         xtype: 'numberfield',
-        name: 'infra_info_m_terrero_escritura',
-        fieldLabel: App.Language.Infrastructure.infra_info_m_terrero_escritura,
+        name: 'infra_info_terrero_escritura',
+        fieldLabel: App.Language.Infrastructure.infra_info_terrero_escritura,
         allowNegative: false
     },
-    'infra_info_m_terrero_escritura_total': {
+    'infra_info_terrero_escritura_total': {
         xtype: 'displayfield',
-        name: 'infra_info_m_terrero_escritura_total',
-        fieldLabel: App.Language.Infrastructure.infra_info_m_terrero_escritura_total,
+        name: 'infra_info_terrero_escritura_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_terrero_escritura_total,
         setValue: function(v) {
             this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
             return this;
         }
     },
-    'infra_info_m_terreno_cad': {
+    'infra_info_terreno_cad': {
         xtype: 'numberfield',
-        name: 'infra_info_m_terreno_cad',
-        fieldLabel: App.Language.Infrastructure.infra_info_m_terreno_cad,
+        name: 'infra_info_terreno_cad',
+        fieldLabel: App.Language.Infrastructure.infra_info_terreno_cad,
         allowNegative: false
     },
-    'infra_info_m_terreno_cad_total': {
+    'infra_info_terreno_cad_total': {
         xtype: 'displayfield',
-        name: 'infra_info_m_terreno_cad_total',
-        fieldLabel: App.Language.Infrastructure.infra_info_m_terreno_cad_total,
+        name: 'infra_info_terreno_cad_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_terreno_cad_total,
         setValue: function(v) {
             this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
             return this;
         }
     },
-    'infra_info_m_construidos_ogcu': {
+    'infra_info_construidos_ogcu': {
         xtype: 'numberfield',
-        name: 'infra_info_m_construidos_ogcu',
-        fieldLabel: App.Language.Infrastructure.infra_info_m_construidos_ogcu,
+        name: 'infra_info_construidos_ogcu',
+        fieldLabel: App.Language.Infrastructure.infra_info_construidos_ogcu,
         allowNegative: false
     },
-    'infra_info_m_construidos_ogcu_total': {
+    'infra_info_construidos_ogcu_total': {
         xtype: 'displayfield',
-        name: 'infra_info_m_construidos_ogcu_total',
-        fieldLabel: App.Language.Infrastructure.infra_info_m_construidos_ogcu_total,
+        name: 'infra_info_construidos_ogcu_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_construidos_ogcu_total,
         setValue: function(v) {
             this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
             return this;
         }
     },
-    'infra_info_uf_metros': {
+    'infra_info_uf': {
         xtype: 'numberfield',
-        name: 'infra_info_uf_metros',
-        fieldLabel: App.Language.Infrastructure.infra_info_uf_metros,
+        name: 'infra_info_uf',
+        fieldLabel: App.Language.Infrastructure.infra_info_uf,
         allowNegative: false
     },
-    'infra_info_uf_m_total': {
+    'infra_info_uf_total': {
         xtype: 'displayfield',
-        name: 'infra_info_uf_m_total',
-        fieldLabel: App.Language.Infrastructure.infra_info_uf_m_total,
+        name: 'infra_info_uf_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_uf_total,
         setValue: function(v) {
             this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
             return this;
         }
     },
-    'infra_info_m_emplazamiento': {
+    'infra_info_emplazamiento': {
         xtype: 'numberfield',
-        name: 'infra_info_m_emplazamiento',
-        fieldLabel: App.Language.Infrastructure.infra_info_m_emplazamiento,
+        name: 'infra_info_emplazamiento',
+        fieldLabel: App.Language.Infrastructure.infra_info_emplazamiento,
         allowNegative: false
     },
-    'infra_info_p_m_emplazamiento': {
+    'infra_info_emplazamiento_total': {
         xtype: 'displayfield',
-        name: 'infra_info_p_m_emplazamiento',
-        fieldLabel: App.Language.Infrastructure.infra_info_p_m_emplazamiento,
+        name: 'infra_info_emplazamiento_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_emplazamiento_total,
         setValue: function(v) {
             this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
             return this;
         }
     },
-    'infra_info_m_calles': {
+    'infra_info_emplazamiento_porcent': {
+        xtype: 'displayfield',
+        name: 'infra_info_emplazamiento_porcent',
+        fieldLabel: App.Language.Infrastructure.infra_info_emplazamiento_porcent,
+        setValue: function(value) {
+            this.setRawValue(porcentaje(value));
+            return this;
+        }
+    },
+    'infra_info_calles': {
         xtype: 'numberfield',
-        name: 'infra_info_m_calles',
-        fieldLabel: App.Language.Infrastructure.infra_info_m_calles,
+        name: 'infra_info_calles',
+        fieldLabel: App.Language.Infrastructure.infra_info_calles,
         allowNegative: false
     },
-    'infra_info_p_m_calles': {
+    'infra_info_calles_total': {
         xtype: 'displayfield',
-        name: 'infra_info_p_m_calles',
-        fieldLabel: App.Language.Infrastructure.infra_info_p_m_calles,
+        name: 'infra_info_calles_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_calles_total,
         setValue: function(v) {
             this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
             return this;
         }
     },
-    'infra_info_m_areas_verdes': {
+    'infra_info_porcent_calles': {
+        xtype: 'displayfield',
+        name: 'infra_info_porcent_calles',
+        fieldLabel: App.Language.Infrastructure.infra_info_porcent_calles,
+        setValue: function(value) {
+            this.setRawValue(porcentaje(value));
+            return this;
+        }
+    },
+    'infra_info_areas_verdes': {
         xtype: 'numberfield',
-        name: 'infra_info_m_areas_verdes',
-        fieldLabel: App.Language.Infrastructure.infra_info_m_areas_verdes,
+        name: 'infra_info_areas_verdes',
+        fieldLabel: App.Language.Infrastructure.infra_info_areas_verdes,
         allowNegative: false
     },
-    'infra_info_p_m_areas_verdes': {
+    'infra_info_areas_verdes_total': {
         xtype: 'displayfield',
-        name: 'infra_info_p_m_areas_verdes',
-        fieldLabel: App.Language.Infrastructure.infra_info_p_m_areas_verdesinfra_info_p_m_areas_verdes,
+        name: 'infra_info_areas_verdes_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_areas_verdes_total,
         setValue: function(v) {
             this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
             return this;
         }
     },
-    'infra_info_m_areas_manejadas': {
+    'infra_info_areas_verdes_porcent': {
+        xtype: 'displayfield',
+        name: 'infra_info_areas_verdes_porcent',
+        fieldLabel: App.Language.Infrastructure.infra_info_areas_verdes_porcent,
+        setValue: function(value) {
+            this.setRawValue(porcentaje(value));
+            return this;
+        }
+    },
+    'infra_info_areas_manejadas': {
         xtype: 'numberfield',
-        name: 'infra_info_m_areas_manejadas',
-        fieldLabel: App.Language.Infrastructure.infra_info_m_areas_manejadas,
+        name: 'infra_info_areas_manejadas',
+        fieldLabel: App.Language.Infrastructure.infra_info_areas_manejadas,
         allowNegative: false
     },
-    'infra_info_p_m_areas_manejadas': {
+    'infra_info_areas_manejadas_total': {
         xtype: 'displayfield',
-        name: 'infra_info_p_m_areas_manejadas',
-        fieldLabel: App.Language.Infrastructure.infra_info_p_m_areas_manejadas,
+        name: 'infra_info_areas_manejadas_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_areas_manejadas_total,
         setValue: function(v) {
             this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
             return this;
         }
     },
-    'infra_info_m_patios_abiertos': {
+    'infra_info_areas_manejadas_porcent': {
+        xtype: 'displayfield',
+        name: 'infra_info_areas_manejadas_porcent',
+        fieldLabel: App.Language.Infrastructure.infra_info_areas_manejadas_porcent,
+        setValue: function(value) {
+            this.setRawValue(porcentaje(value));
+            return this;
+        }
+    },
+    'infra_info_patios_abiertos': {
         xtype: 'numberfield',
-        name: 'infra_info_m_patios_abiertos',
-        fieldLabel: App.Language.Infrastructure.infra_info_m_patios_abiertos,
+        name: 'infra_info_patios_abiertos',
+        fieldLabel: App.Language.Infrastructure.infra_info_patios_abiertos,
         allowNegative: false
     },
-    'infra_info_p_m_patios_abiertos': {
+    'infra_info_patios_abiertos_total': {
         xtype: 'displayfield',
-        name: 'infra_info_p_m_patios_abiertos',
-        fieldLabel: App.Language.Infrastructure.infra_info_p_m_patios_abiertos,
+        name: 'infra_info_patios_abiertos_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_patios_abiertos_total,
         setValue: function(v) {
             this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
             return this;
         }
     },
-    'infra_info_m_recintos_deportivos_abiertos': {
+    'infra_info_patios_abiertos_porcent': {
+        xtype: 'displayfield',
+        name: 'infra_info_patios_abiertos_porcent',
+        fieldLabel: App.Language.Infrastructure.infra_info_patios_abiertos_porcent,
+        setValue: function(value) {
+            this.setRawValue(porcentaje(value));
+            return this;
+        }
+    },
+    'infra_info_recintos_deportivos': {
         xtype: 'numberfield',
-        name: 'infra_info_m_recintos_deportivos_abiertos',
-        fieldLabel: App.Language.Infrastructure.infra_info_m_recintos_deportivos_abiertos,
+        name: 'infra_info_recintos_deportivos',
+        fieldLabel: App.Language.Infrastructure.infra_info_recintos_deportivos,
         allowNegative: false
     },
-    'infra_info_p_m_recintos_deportivos_abiertos': {
+    'infra_info_recintos_deportivos_total': {
         xtype: 'displayfield',
-        name: 'infra_info_p_m_recintos_deportivos_abiertos',
-        fieldLabel: App.Language.Infrastructure.infra_info_p_m_recintos_deportivos_abiertos,
+        name: 'infra_info_recintos_deportivos_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_recintos_deportivos_total,
         setValue: function(v) {
             this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
             return this;
         }
     },
-    'infra_info_m_circulaciones_abiertas': {
+    'infra_info_recintos_deportivos_porcent': {
+        xtype: 'displayfield',
+        name: 'infra_info_recintos_deportivos_porcent',
+        fieldLabel: App.Language.Infrastructure.infra_info_recintos_deportivos_porcent,
+        setValue: function(value) {
+            this.setRawValue(porcentaje(value));
+            return this;
+        }
+    },
+    'infra_info_circulaciones_abiertas': {
         xtype: 'numberfield',
-        name: 'infra_info_m_circulaciones_abiertas',
-        fieldLabel: App.Language.Infrastructure.infra_info_m_circulaciones_abiertas,
+        name: 'infra_info_circulaciones_abiertas',
+        fieldLabel: App.Language.Infrastructure.infra_info_circulaciones_abiertas,
         allowNegative: false
     },
-    'infra_info_p_m_circulaciones_abiertas': {
+    'infra_info_circulaciones_abiertas_total': {
         xtype: 'displayfield',
-        name: 'infra_info_p_m_circulaciones_abiertas',
-        fieldLabel: App.Language.Infrastructure.infra_info_p_m_circulaciones_abiertas,
+        name: 'infra_info_circulaciones_abiertas_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_circulaciones_abiertas_total,
         setValue: function(v) {
             this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
             return this;
         }
     },
-    'infra_info_m_otras_areas_abiertas': {
+    'infra_info_circulaciones_abiertas_porcent': {
+        xtype: 'displayfield',
+        name: 'infra_info_circulaciones_abiertas_porcent',
+        fieldLabel: App.Language.Infrastructure.infra_info_circulaciones_abiertas_porcent,
+        setValue: function(value) {
+            this.setRawValue(porcentaje(value));
+            return this;
+        }
+    },
+    'infra_info_otras_areas': {
         xtype: 'numberfield',
-        name: 'infra_info_m_otras_areas_abiertas',
-        fieldLabel: App.Language.Infrastructure.infra_info_m_otras_areas_abiertas,
+        name: 'infra_info_otras_areas',
+        fieldLabel: App.Language.Infrastructure.infra_info_otras_areas,
         allowNegative: false
     },
-    'infra_info_p_m_otras_areas_abiertas': {
+    'infra_info_otras_areas_total': {
         xtype: 'displayfield',
-        name: 'infra_info_p_m_otras_areas_abiertas',
-        fieldLabel: App.Language.Infrastructure.infra_info_p_m_otras_areas_abiertas,
+        name: 'infra_info_otras_areas_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_otras_areas_total,
         setValue: function(v) {
             this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
             return this;
         }
     },
-    'infra_info_n_estacionamientos': {
+    'infra_info_otras_areas_porcent': {
+        xtype: 'displayfield',
+        name: 'infra_info_otras_areas_porcent',
+        fieldLabel: App.Language.Infrastructure.infra_info_otras_areas_porcent,
+        setValue: function(value) {
+            this.setRawValue(porcentaje(value));
+            return this;
+        }
+    },
+    'infra_info_estacionamientos_num': {
         xtype: 'numberfield',
-        name: 'infra_info_n_estacionamientos',
-        fieldLabel: App.Language.Infrastructure.infra_info_n_estacionamientos,
+        name: 'infra_info_estacionamientos_num',
+        fieldLabel: App.Language.Infrastructure.infra_info_estacionamientos_num,
         allowNegative: false
     },
-    'infra_info_m_neto_estacionamientos': {
+    'infra_info_estacionamientos_total': {
         xtype: 'displayfield',
-        name: 'infra_info_m_neto_estacionamientos',
-        fieldLabel: App.Language.Infrastructure.infra_info_m_neto_estacionamientos,
+        name: 'infra_info_estacionamientos_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_estacionamientos_total,
         setValue: function(v) {
             this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
             return this;
         }
     },
-    'infra_info_m_sector_estacionamientos': {
+    'infra_info_estacionamientos': {
         xtype: 'numberfield',
-        name: 'infra_info_m_sector_estacionamientos',
-        fieldLabel: App.Language.Infrastructure.infra_info_m_sector_estacionamientos,
+        name: 'infra_info_estacionamientos',
+        fieldLabel: App.Language.Infrastructure.infra_info_estacionamientos,
         allowNegative: false
     },
-    'infra_info_p_m_sector_estacionamientos': {
+    'infra_info_estacionamientos_total_sector': {
         xtype: 'displayfield',
-        name: 'infra_info_p_m_sector_estacionamientos',
-        fieldLabel: App.Language.Infrastructure.infra_info_p_m_sector_estacionamientos,
+        name: 'infra_info_estacionamientos_total_sector',
+        fieldLabel: App.Language.Infrastructure.infra_info_estacionamientos_total_sector,
         setValue: function(v) {
             this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            return this;
+        }
+    },
+    'infra_info_estacionamientos_porcent': {
+        xtype: 'displayfield',
+        name: 'infra_info_estacionamientos_porcent',
+        fieldLabel: App.Language.Infrastructure.infra_info_estacionamientos_porcent,
+        setValue: function(value) {
+            this.setRawValue(porcentaje(value));
             return this;
         }
     }
 };
+
+function porcentaje(value){
+    return `${parseFloat(value).toFixed(2)} %`;
+}
 
 App.InfraStructure.emportListMasiva = Ext.extend(Ext.Window, {
     title: "Carga masiva",

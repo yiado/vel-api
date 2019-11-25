@@ -290,7 +290,7 @@ abstract class BaseInfraInfo extends Doctrine_Record {
             'notnull' => false,
             'autoincrement' => false,
         ));
-        $this->hasColumn('infra_info_m_terrero_escritura', 'float', 9, array(
+        $this->hasColumn('infra_info_terrero_escritura', 'float', 9, array(
             'type' => 'float',
             'length' => 9,
             'fixed' => false,
@@ -300,7 +300,7 @@ abstract class BaseInfraInfo extends Doctrine_Record {
             'notnull' => false,
             'autoincrement' => false,
         ));
-        $this->hasColumn('infra_info_m_terrero_escritura_total', 'float', 9, array(
+        $this->hasColumn('infra_info_terrero_escritura_total', 'float', 9, array(
             'type' => 'float',
             'length' => 9,
             'fixed' => false,
@@ -310,7 +310,7 @@ abstract class BaseInfraInfo extends Doctrine_Record {
             'notnull' => false,
             'autoincrement' => false,
         ));
-        $this->hasColumn('infra_info_m_terreno_cad', 'float', 9, array(
+        $this->hasColumn('infra_info_terreno_cad', 'float', 9, array(
             'type' => 'float',
             'length' => 9,
             'fixed' => false,
@@ -320,7 +320,7 @@ abstract class BaseInfraInfo extends Doctrine_Record {
             'notnull' => false,
             'autoincrement' => false,
         ));
-        $this->hasColumn('infra_info_m_terreno_cad_total', 'float', 9, array(
+        $this->hasColumn('infra_info_terreno_cad_total', 'float', 9, array(
             'type' => 'float',
             'length' => 9,
             'fixed' => false,
@@ -330,7 +330,7 @@ abstract class BaseInfraInfo extends Doctrine_Record {
             'notnull' => false,
             'autoincrement' => false,
         ));
-        $this->hasColumn('infra_info_m_construidos_ogcu', 'float', 9, array(
+        $this->hasColumn('infra_info_construidos_ogcu', 'float', 9, array(
             'type' => 'float',
             'length' => 9,
             'fixed' => false,
@@ -340,7 +340,7 @@ abstract class BaseInfraInfo extends Doctrine_Record {
             'notnull' => false,
             'autoincrement' => false,
         ));
-        $this->hasColumn('infra_info_m_construidos_ogcu_total', 'float', 9, array(
+        $this->hasColumn('infra_info_construidos_ogcu_total', 'float', 9, array(
             'type' => 'float',
             'length' => 9,
             'fixed' => false,
@@ -350,7 +350,7 @@ abstract class BaseInfraInfo extends Doctrine_Record {
             'notnull' => false,
             'autoincrement' => false,
         ));
-        $this->hasColumn('infra_info_uf_metros', 'float', 9, array(
+        $this->hasColumn('infra_info_uf', 'float', 9, array(
             'type' => 'float',
             'length' => 9,
             'fixed' => false,
@@ -360,7 +360,27 @@ abstract class BaseInfraInfo extends Doctrine_Record {
             'notnull' => false,
             'autoincrement' => false,
         ));
-        $this->hasColumn('infra_info_uf_m_total', 'integer', 4, array(
+        $this->hasColumn('infra_info_uf_total', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_emplazamiento', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_emplazamiento_total', 'integer', 4, array(
             'type' => 'integer',
             'length' => 4,
             'fixed' => false,
@@ -370,7 +390,7 @@ abstract class BaseInfraInfo extends Doctrine_Record {
             'notnull' => false,
             'autoincrement' => false,
         ));
-        $this->hasColumn('infra_info_m_emplazamiento', 'float', 9, array(
+        $this->hasColumn('infra_info_emplazamiento_porcent', 'float', 9, array(
             'type' => 'float',
             'length' => 9,
             'fixed' => false,
@@ -380,17 +400,7 @@ abstract class BaseInfraInfo extends Doctrine_Record {
             'notnull' => false,
             'autoincrement' => false,
         ));
-        $this->hasColumn('infra_info_p_m_emplazamiento', 'integer', 4, array(
-            'type' => 'integer',
-            'length' => 4,
-            'fixed' => false,
-            'unsigned' => false,
-            'primary' => false,
-            'default' => '0',
-            'notnull' => false,
-            'autoincrement' => false,
-        ));
-        $this->hasColumn('infra_info_m_calles', 'float', 9, array(
+        $this->hasColumn('infra_info_calles', 'float', 9, array(
             'type' => 'float',
             'length' => 9,
             'fixed' => false,
@@ -400,17 +410,17 @@ abstract class BaseInfraInfo extends Doctrine_Record {
             'notnull' => false,
             'autoincrement' => false,
         ));
-        $this->hasColumn('infra_info_p_m_calles', 'integer', 4, array(
-            'type' => 'integer',
-            'length' => 4,
+        $this->hasColumn('infra_info_calles_total', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
             'fixed' => false,
             'unsigned' => false,
             'primary' => false,
-            'default' => '0',
+            'default' => '0.00',
             'notnull' => false,
             'autoincrement' => false,
         ));
-        $this->hasColumn('infra_info_m_areas_verdes', 'float', 9, array(
+        $this->hasColumn('infra_info_porcent_calles', 'float', 9, array(
             'type' => 'float',
             'length' => 9,
             'fixed' => false,
@@ -420,17 +430,7 @@ abstract class BaseInfraInfo extends Doctrine_Record {
             'notnull' => false,
             'autoincrement' => false,
         ));
-        $this->hasColumn('infra_info_p_m_areas_verdes', 'integer', 4, array(
-            'type' => 'integer',
-            'length' => 4,
-            'fixed' => false,
-            'unsigned' => false,
-            'primary' => false,
-            'default' => '0',
-            'notnull' => false,
-            'autoincrement' => false,
-        ));
-        $this->hasColumn('infra_info_m_areas_manejadas', 'float', 9, array(
+        $this->hasColumn('infra_info_areas_verdes', 'float', 9, array(
             'type' => 'float',
             'length' => 9,
             'fixed' => false,
@@ -440,17 +440,7 @@ abstract class BaseInfraInfo extends Doctrine_Record {
             'notnull' => false,
             'autoincrement' => false,
         ));
-        $this->hasColumn('infra_info_p_m_areas_manejadas', 'integer', 4, array(
-            'type' => 'integer',
-            'length' => 4,
-            'fixed' => false,
-            'unsigned' => false,
-            'primary' => false,
-            'default' => '0',
-            'notnull' => false,
-            'autoincrement' => false,
-        ));
-        $this->hasColumn('infra_info_m_patios_abiertos', 'float', 9, array(
+        $this->hasColumn('infra_info_areas_verdes_total', 'float', 9, array(
             'type' => 'float',
             'length' => 9,
             'fixed' => false,
@@ -460,17 +450,7 @@ abstract class BaseInfraInfo extends Doctrine_Record {
             'notnull' => false,
             'autoincrement' => false,
         ));
-        $this->hasColumn('infra_info_p_m_patios_abiertos', 'integer', 4, array(
-            'type' => 'integer',
-            'length' => 4,
-            'fixed' => false,
-            'unsigned' => false,
-            'primary' => false,
-            'default' => '0',
-            'notnull' => false,
-            'autoincrement' => false,
-        ));
-        $this->hasColumn('infra_info_m_recintos_deportivos_abiertos', 'float', 9, array(
+        $this->hasColumn('infra_info_areas_verdes_porcent', 'float', 9, array(
             'type' => 'float',
             'length' => 9,
             'fixed' => false,
@@ -480,17 +460,7 @@ abstract class BaseInfraInfo extends Doctrine_Record {
             'notnull' => false,
             'autoincrement' => false,
         ));
-        $this->hasColumn('infra_info_p_m_recintos_deportivos_abiertos', 'integer', 4, array(
-            'type' => 'integer',
-            'length' => 4,
-            'fixed' => false,
-            'unsigned' => false,
-            'primary' => false,
-            'default' => '0',
-            'notnull' => false,
-            'autoincrement' => false,
-        ));
-        $this->hasColumn('infra_info_m_circulaciones_abiertas', 'float', 9, array(
+        $this->hasColumn('infra_info_areas_manejadas', 'float', 9, array(
             'type' => 'float',
             'length' => 9,
             'fixed' => false,
@@ -500,17 +470,7 @@ abstract class BaseInfraInfo extends Doctrine_Record {
             'notnull' => false,
             'autoincrement' => false,
         ));
-        $this->hasColumn('infra_info_p_m_circulaciones_abiertas', 'integer', 4, array(
-            'type' => 'integer',
-            'length' => 4,
-            'fixed' => false,
-            'unsigned' => false,
-            'primary' => false,
-            'default' => '0',
-            'notnull' => false,
-            'autoincrement' => false,
-        ));
-        $this->hasColumn('infra_info_m_otras_areas_abiertas', 'float', 9, array(
+        $this->hasColumn('infra_info_areas_manejadas_total', 'float', 9, array(
             'type' => 'float',
             'length' => 9,
             'fixed' => false,
@@ -520,37 +480,7 @@ abstract class BaseInfraInfo extends Doctrine_Record {
             'notnull' => false,
             'autoincrement' => false,
         ));
-        $this->hasColumn('infra_info_p_m_otras_areas_abiertas', 'integer', 4, array(
-            'type' => 'integer',
-            'length' => 4,
-            'fixed' => false,
-            'unsigned' => false,
-            'primary' => false,
-            'default' => '0',
-            'notnull' => false,
-            'autoincrement' => false,
-        ));
-        $this->hasColumn('infra_info_n_estacionamientos', 'integer', 4, array(
-            'type' => 'integer',
-            'length' => 4,
-            'fixed' => false,
-            'unsigned' => false,
-            'primary' => false,
-            'default' => '0',
-            'notnull' => false,
-            'autoincrement' => false,
-        ));
-        $this->hasColumn('infra_info_m_neto_estacionamientos', 'integer', 4, array(
-            'type' => 'integer',
-            'length' => 4,
-            'fixed' => false,
-            'unsigned' => false,
-            'primary' => false,
-            'default' => '0',
-            'notnull' => false,
-            'autoincrement' => false,
-        ));
-        $this->hasColumn('infra_info_m_sector_estacionamientos', 'float', 9, array(
+        $this->hasColumn('infra_info_areas_manejadas_porcent', 'float', 9, array(
             'type' => 'float',
             'length' => 9,
             'fixed' => false,
@@ -560,13 +490,173 @@ abstract class BaseInfraInfo extends Doctrine_Record {
             'notnull' => false,
             'autoincrement' => false,
         ));
-        $this->hasColumn('infra_info_p_m_sector_estacionamientos', 'integer', 4, array(
+        $this->hasColumn('infra_info_patios_abiertos', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_patios_abiertos_total', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_patios_abiertos_porcent', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_recintos_deportivos', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_recintos_deportivos_total', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_recintos_deportivos_porcent', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_circulaciones_abiertas', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_circulaciones_abiertas_total', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_circulaciones_abiertas_porcent', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_otras_areas', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_otras_areas_total', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_otras_areas_porcent', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_estacionamientos_num', 'integer', 4, array(
             'type' => 'integer',
             'length' => 4,
             'fixed' => false,
             'unsigned' => false,
             'primary' => false,
             'default' => '0',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_estacionamientos_total', 'integer', 4, array(
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_estacionamientos', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_estacionamientos_total_sector', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_estacionamientos_porcent', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
             'notnull' => false,
             'autoincrement' => false,
         ));
