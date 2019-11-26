@@ -16,4 +16,57 @@ class Service extends BaseService {
         $data['Node'] = Doctrine_Core::getTable('Node')->findOneByNodeId($data['node_id'])->toArray();
         $event->data = $data;
     }
+    
+    function sendNotificationRecibido() {
+        $body = "La solicitud [{$this->service_commentary}] ha sido recibida.";
+        
+        $CI = & get_instance();
+        $CI->load->library('NotificationUser');
+        $CI->notificationuser->mail($this->User->user_email, 'Solicitud de servicio recibida', $body);
+    }
+
+    function sendNotificationAdministrador($node) {
+        $date = new DateTime($this->service_date);
+        $fecha = $date->format('d/m/Y H:i');
+        $body = '';
+        $nodos_ancestros = array();
+
+        if ($node->getNode()->getLevel()) {
+            foreach ($node->getNode()->getAncestors()->toArray() as $nodo) {
+                $nodos_ancestros[] = $nodo['node_name'];
+            }
+            $nodos_ancestros[] = $node->toArray()['node_name'];
+        }
+
+        $body .= "Nodo: " . implode(' => ', $nodos_ancestros) . "<br>";
+        $body .= "Tipo de Servicio: {$this->ServiceType->service_type_name}<br>";
+        $body .= "Estado del Servicio: {$this->ServiceStatus->service_status_name}<br>";
+        $body .= "Nombre de Usuario: {$this->User->user_username}<br>";
+        $body .= "Fecha de Servicio: {$fecha}<br>";
+        $body .= "Teléfono: {$this->service_phone}<br>";
+        $body .= "Organismo: {$this->service_organism}<br>";
+        $body .= "Requerimiento: {$this->service_commentary}<br>";
+
+        $CI = & get_instance();
+        $CI->load->library('NotificationUser');
+        $CI->notificationuser->mail($this->ServiceType->User->user_email, 'Nueva Solicitud de Servicio', $body);
+    }
+    
+    
+    function sendNotificationUpdate() {
+        $date = new DateTime($this->service_date);
+        $fecha = $date->format('d/m/Y H:i');
+        $body = "Tipo de Servicio: {$this->ServiceType->service_type_name}<br>";
+        $body .= "Estado del Servicio: {$this->ServiceStatus->service_status_name}<br>";
+        $body .= "Nombre de Usuario: {$this->User->user_username}<br>";
+        $body .= "Fecha de Servicio: {$fecha}<br>";
+        $body .= "Teléfono: {$this->service_phone}<br>";
+        $body .= "Organismo: {$this->service_organism}<br>";
+        $body .= "Requerimiento: {$this->service_commentary}<br>";
+
+        $CI = & get_instance();
+        $CI->load->library('NotificationUser');
+        $CI->notificationuser->mail($this->ServiceType->User->user_email, 'Cambio estado de servicio', $body);
+    }
+    
 }

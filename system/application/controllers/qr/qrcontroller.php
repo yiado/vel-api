@@ -19,7 +19,7 @@ class QrController extends APP_Controller {
         header('Content-Type: application/json');
     }
 
-    function get() {
+    function get() {        
         $qrcode_file_name = "qr_node_{$this->input->post('node_id')}.png";
 
         if (!file_exists($this->config->item('qr_dir') . "{$qrcode_file_name}")) {
@@ -34,16 +34,83 @@ class QrController extends APP_Controller {
         echo json_encode($this->config->item('qr_dir') . "{$qrcode_file_name}");
     }
 
-    function redirect($node_id) {
-        echo "Redireccion y nodo {$node_id}";
+    function redirect($node_id) {        
+        $username = $this->input->post('username');
+        $password = $this->input->post('password');
+        $auth_engine_config = $this->config->item('auth_engine');
+        $this->load->library($auth_engine_config);
+
+        //Trae el lenguaje por defecto
+        $dataDefaultLanguage = Doctrine_Core :: getTable('Language')->defaultLanguage();
+        $language_id = $dataDefaultLanguage->language_id;
+
+        //Validar Usuario y Password
+        $validation = $this->$auth_engine_config->isValid($username, $password);
+        if ($validation === TRUE) {
+            $success = true;
+            $user_data = $this->$auth_engine_config->getUser();
+            $user_type = $user_data->user_type;
+            $user_expiration = $user_data->user_expiration;
+            $user_status = $user_data->user_status;
+
+            //Fecha de expiración del usuario
+            $user_expiration = strtotime($user_expiration);
+            //Fecha del día de hoy
+            $now = strtotime(date('Y-m-d'));
+
+            //Validar si expiro la fecha del usuario
+            if ($user_expiration < $now && $user_expiration > 0) {
+                $success = false;
+                $msg = $this->translateTag('General', 'its_validity_expired_user', $language_id);
+            }
+
+            //Validar si es un usuario inhabilitado
+            if ($user_status == 1) {
+                $success = false;
+                $msg = $this->translateTag('General', 'disabled_users', $language_id);
+            }
+        } else {
+            $success = false;
+            if ($validation === FALSE) {
+                $msg = $this->translateTag('General', 'invalid_authentication_data', $language_id);
+            } else {
+                $msg = $validation;
+            }
+        }
+
+        if ($success === true) {
+            $this->auth->session_start($this->$auth_engine_config->getUser());
+            $data_to_json = array(
+                'success' => true,
+                'base_url' => base_url(), 'user_type' => $user_type);
+
+            $this->syslog->register('auth', array(
+                $this->auth->get_user_data('user_name'
+        ))); // registering auth log
+        } else {
+
+            $data_to_json = array(
+                'success' => false,
+                'message' => $msg
+            );
+        }
+
+        $json_data = $this->json->encode($data_to_json);
+        echo $json_data;
     }
 
     function servicios() {
+        if ($this->config->item('auth_require_login') && !$this->auth->is_logged_in()) {
+            die(json_encode(array("status" => false, "msg" => "Usuario no logeado")));            
+        }
         $servicios = Doctrine_Core::getTable('ServiceType')->findAll()->toArray();
         echo $this->json->encode($servicios);
     }
 
     function infraestructura($node_id) {
+        if ($this->config->item('auth_require_login') && !$this->auth->is_logged_in()) {
+            die(json_encode(array("status" => false, "msg" => "Usuario no logeado")));            
+        }
         $node_id = (int) $node_id;
 
         if ($node_id) {
@@ -121,6 +188,9 @@ class QrController extends APP_Controller {
     }
 
     function servicio(){
+        if ($this->config->item('auth_require_login') && !$this->auth->is_logged_in()) {
+            die(json_encode(array("status" => false, "msg" => "Usuario no logeado")));            
+        }
         $node = Doctrine_Core::getTable('Node')->find((int) $this->input->post('node_id'));
 
         //Obtenemos la conexión actual
@@ -132,7 +202,7 @@ class QrController extends APP_Controller {
         try {
             //Insertamos el nuevo documento en la tabla
             $service = new Service();
-            $user_id = 127;
+            $user_id = $this->auth->get_user_data()['user_id'];
             $service->node_id = $this->input->post('node_id');
             $service->user_id = $user_id;
             $service->service_type_id = $this->input->post('service_type_id');
