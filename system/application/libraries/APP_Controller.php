@@ -32,6 +32,7 @@ class APP_Controller extends Controller {
 
             $data_session = $this->auth->get_user_data();
             $language_id = $data_session['language_id'];
+            $language_id = 1;
         }
         return $this->language->translate($language_id, $module, $tag);
     }
