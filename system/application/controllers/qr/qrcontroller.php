@@ -14,14 +14,16 @@ use Endroid\QrCode\QrCode;
  */
 class QrController extends APP_Controller {
 
+    private $dominio_app = 'http://localhost:4200';
+
     function QrController() {
         parent::Controller();
         header('Content-Type: application/json');
+        header("Access-Control-Allow-Origin: {$this->dominio_app}");
     }
 
-    function get() {        
+    function get() {
         $qrcode_file_name = "qr_node_{$this->input->post('node_id')}.png";
-
         if (!file_exists($this->config->item('qr_dir') . "{$qrcode_file_name}")) {
             $url = "{$this->config->item('base_url')}{$this->config->item('index_page')}/qr/redirect/{$this->input->post('node_id')}";
             $qrCode = new QrCode($url);
@@ -30,11 +32,19 @@ class QrController extends APP_Controller {
             //$qrCode->setLabel($url, 10, null, LabelAlignment::CENTER);
             $qrCode->writeFile($this->config->item('qr_dir') . "{$qrcode_file_name}");
         }
-
         echo json_encode($this->config->item('qr_dir') . "{$qrcode_file_name}");
     }
 
-    function redirect($node_id) {        
+    function redirect($node_id) {
+        $node = Doctrine_Core::getTable('Node')->find($node_id);
+        if ($node) {
+            redirect("{$this->dominio_app}/info?node_id={$node_id}");
+        } else {
+            redirect("{$this->dominio_app}/home");
+        }
+    }
+
+    function login() {
         $username = $this->input->post('username');
         $password = $this->input->post('password');
         $auth_engine_config = $this->config->item('auth_engine');
@@ -80,13 +90,24 @@ class QrController extends APP_Controller {
 
         if ($success === true) {
             $this->auth->session_start($this->$auth_engine_config->getUser());
+            
+            $user_login = Doctrine_Core::getTable('User')->find((int) $this->auth->get_user_data('user_id'));
+            $token = sha1(mt_rand(1, 90000) . 'SALT');
+            $user_login->user_token = $token;
+            $user_login->save();
+            
             $data_to_json = array(
                 'success' => true,
-                'base_url' => base_url(), 'user_type' => $user_type);
+                'base_url' => base_url(),
+                'user_type' => $user_type,
+                'user_id' => $this->auth->get_user_data('user_id'),
+                'user_token' => $token
+                 
+            );
 
             $this->syslog->register('auth', array(
-                $this->auth->get_user_data('user_name'
-        ))); // registering auth log
+                $this->auth->get_user_data('user_name')
+            ));
         } else {
 
             $data_to_json = array(
@@ -100,21 +121,16 @@ class QrController extends APP_Controller {
     }
 
     function servicios() {
-        if ($this->config->item('auth_require_login') && !$this->auth->is_logged_in()) {
-            die(json_encode(array("status" => false, "msg" => "Usuario no logeado")));            
-        }
         $servicios = Doctrine_Core::getTable('ServiceType')->findAll()->toArray();
         echo $this->json->encode($servicios);
     }
 
     function infraestructura($node_id) {
-        if ($this->config->item('auth_require_login') && !$this->auth->is_logged_in()) {
-            die(json_encode(array("status" => false, "msg" => "Usuario no logeado")));            
-        }
         $node_id = (int) $node_id;
 
         if ($node_id) {
             $node = Doctrine_Core::getTable('Node')->find($node_id);
+            $output['node_id'] = $node->node_id;
             $output['nodo'] = $node->node_name;
             $output['imagen'] = $this->getImagenNodo($node->node_id);
             $output['datos'] = $this->getResumen($node_id);
@@ -137,14 +153,12 @@ class QrController extends APP_Controller {
             }
         }
         return $imagen;
-        
-        
     }
 
     function getResumen($node_id) {
         $infraestructura = array();
         $camposDinamicos = false;
-        
+
         $nodeType = Doctrine_Core::getTable('Node')->find($node_id)->NodeType;
         $info = Doctrine_Core::getTable('InfraInfo')->findByNodeId($node_id);
 
@@ -163,7 +177,7 @@ class QrController extends APP_Controller {
         $attributes = Doctrine_Core::getTable('InfraOtherDataAttributeNodeType')->retrieveByNodeTypeFichaResumen($nodeType->node_type_id);
         foreach ($attributes as $att) {
             $value = Doctrine_Core::getTable('InfraOtherDataValue')->retrieveByAttributeNode($node_id, $att->infra_other_data_attribute_id);
-            if ($value) {                
+            if ($value) {
                 //SI ES TIPO SELECCION TRAE EL NOMBRE DEL CAMPO
                 if ($att->InfraOtherDataAttribute->infra_other_data_attribute_type == 5) {
                     $valorDelCampo = Doctrine_Core::getTable('InfraOtherDataOption')->retrieveByOptionAndAtribute($value->infra_other_data_option_id, $att->InfraOtherDataAttribute->infra_other_data_attribute_id);
@@ -180,18 +194,28 @@ class QrController extends APP_Controller {
                 'value' => $value
             );
         }
-        
+
         return array(
-            'Infrastructura' => $infraestructura,
+            'Infraestructura' => $infraestructura,
             'Dinamicos' => $camposDinamicos
         );
     }
 
-    function servicio(){
-        if ($this->config->item('auth_require_login') && !$this->auth->is_logged_in()) {
-            die(json_encode(array("status" => false, "msg" => "Usuario no logeado")));            
+    function servicio() {
+        $user_id = (int) $this->input->post('user_id');
+        $node_id = (int) $this->input->post('node_id');
+        $user_token = $this->input->post('user_token');
+        
+        
+        $user = Doctrine_Core::getTable('User')->find($user_id);
+        if (!$user_token && !$user) {
+            die("Solicitud invalida");
+        } else if ($user->user_token !== $user_token) {
+            die("Usuario no autorizado");
         }
-        $node = Doctrine_Core::getTable('Node')->find((int) $this->input->post('node_id'));
+        
+        
+        $node = Doctrine_Core::getTable('Node')->find($node_id);
 
         //Obtenemos la conexión actual
         $conn = Doctrine_Manager::getInstance()->getCurrentConnection();
@@ -202,9 +226,8 @@ class QrController extends APP_Controller {
         try {
             //Insertamos el nuevo documento en la tabla
             $service = new Service();
-            $user_id = $this->auth->get_user_data()['user_id'];
             $service->node_id = $this->input->post('node_id');
-            $service->user_id = $user_id;
+            $service->user_id = $user->user_id;
             $service->service_type_id = $this->input->post('service_type_id');
             $service->service_status_id = 1;
             $service->service_organism = 'UChile';
@@ -236,4 +259,5 @@ class QrController extends APP_Controller {
         $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg));
         echo $json_data;
     }
+
 }

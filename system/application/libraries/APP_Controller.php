@@ -31,7 +31,11 @@ class APP_Controller extends Controller {
         if (is_null($language_id)) {
 
             $data_session = $this->auth->get_user_data();
-            $language_id = $data_session['language_id'];
+            if (isset($data_session['is_logged_in'])) {
+                $language_id = $data_session['language_id'];
+            } else {
+                $language_id = 1;
+            }
         }
         return $this->language->translate($language_id, $module, $tag);
     }
