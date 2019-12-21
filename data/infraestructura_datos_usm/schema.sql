@@ -13,7 +13,7 @@ ADD COLUMN `infra_info_uf_total` double(11, 3) NULL DEFAULT 0.000,
 
 ADD COLUMN `infra_info_emplazamiento` double(11, 3) NULL DEFAULT 0.000,
 ADD COLUMN `infra_info_emplazamiento_total` double(11, 3) NULL DEFAULT 0.000,
-ADD COLUMN `infra_info_emplazamiento_porcent` int(11) NULL DEFAULT 0,
+ADD COLUMN `infra_info_emplazamiento_porcent` double(11, 3) NULL DEFAULT 0,
 
 ADD COLUMN `infra_info_calles` double(11, 3) NULL DEFAULT 0.000,
 ADD COLUMN `infra_info_calles_total` double(11, 3) NULL DEFAULT 0.000,
@@ -25,7 +25,7 @@ ADD COLUMN `infra_info_areas_verdes_porcent` double(11, 3) NULL DEFAULT 0.000,
 
 ADD COLUMN `infra_info_areas_manejadas` double(11, 3) NULL DEFAULT 0.000,
 ADD COLUMN `infra_info_areas_manejadas_total` double(11, 3) NULL DEFAULT 0.000,
-ADD COLUMN `infra_info_areas_manejadas_porcent` int(11) NULL DEFAULT 0,
+ADD COLUMN `infra_info_areas_manejadas_porcent` double(11, 3) NULL DEFAULT 0,
 
 ADD COLUMN `infra_info_patios_abiertos` double(11, 3) NULL DEFAULT 0.000,
 ADD COLUMN `infra_info_patios_abiertos_total` double(11, 3) NULL DEFAULT 0.000,
@@ -45,10 +45,12 @@ ADD COLUMN `infra_info_otras_areas_porcent` double(11, 3) NULL DEFAULT 0.000,
 
 ADD COLUMN `infra_info_estacionamientos_num` int(11) NULL DEFAULT 0,
 ADD COLUMN `infra_info_estacionamientos_total` int(11) NULL DEFAULT 0,
-
+0
 ADD COLUMN `infra_info_estacionamientos` double(11, 3) NULL DEFAULT 0.000,
 ADD COLUMN `infra_info_estacionamientos_total_sector` double(11, 3) NULL DEFAULT 0.000,
 ADD COLUMN `infra_info_estacionamientos_porcent` double(11, 3) NULL DEFAULT 0.000;
+
+ADD COLUMN `infra_info_uf_day_value` double(11, 2) NULL DEFAULT 0.000;
 
 
 DROP TABLE IF EXISTS `uf`;

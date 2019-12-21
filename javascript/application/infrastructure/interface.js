@@ -1,4 +1,4 @@
-/* global Ext, App, google */
+/* global Ext, App, google, parseFloat, parseFloatoat */
 
 App.InfraStructure.copiedNodes = new Array();
 App.InfraStructure.allowRootGui = true;
@@ -1319,6 +1319,7 @@ App.InfraStructure.Principal.listener = function(node) { //--> ACA ENTRA AL HACE
                         /**
                          * infra info estatica (aplica para casos con calculo dinamico)
                          */
+                        console.log(response.resultsInfraInfo)
                         for (i in response.resultsInfraInfo) {
                             let record = response.resultsInfraInfo[i];
                             if (typeof record === 'object') {
@@ -3352,6 +3353,15 @@ App.InfraStructure.Info.fields = {
         fieldLabel: App.Language.Infrastructure.infra_info_estacionamientos_porcent,
         setValue: function(value) {
             this.setRawValue(porcentaje(value));
+            return this;
+        }
+    },
+    'infra_info_uf_day_value': {
+        xtype: 'displayfield',
+        name: 'infra_info_uf_day_value',
+        fieldLabel: App.Language.Infrastructure.infra_info_uf_day_value,
+        setValue: function(v) {
+            this.setRawValue(v);
             return this;
         }
     }

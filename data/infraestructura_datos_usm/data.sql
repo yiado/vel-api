@@ -36,5 +36,10 @@ INSERT INTO `language_tag`(`language_tag_id`, `language_id`, `module_id`, `langu
 INSERT INTO `language_tag`(`language_tag_id`, `language_id`, `module_id`, `language_tag_tag`, `language_tag_value`) VALUES (0, 1, 5, 'infra_info_estacionamientos', 'M² SECTOR ESTACIONAMIENTOS');
 INSERT INTO `language_tag`(`language_tag_id`, `language_id`, `module_id`, `language_tag_tag`, `language_tag_value`) VALUES (0, 1, 5, 'infra_info_estacionamientos_total_sector', 'M² TOTAL SECTOR ESTACIONAMIENTOS');
 INSERT INTO `language_tag`(`language_tag_id`, `language_id`, `module_id`, `language_tag_tag`, `language_tag_value`) VALUES (0, 1, 5, 'infra_info_estacionamientos_porcent', 'PORCENTAJE SECTOR ESTACIONAMIENTOS');
+INSERT INTO `language_tag`(`language_tag_id`, `language_id`, `module_id`, `language_tag_tag`, `language_tag_value`) VALUES (0, 1, 5, 'infra_info_uf_day_value', 'VALOR UF');
 
 INSERT INTO `infra_grupo`(`infra_grupo_id`, `infra_grupo_nombre`, `infra_grupo_order`) VALUES (4, 'Datos Generales', 5);
+INSERT INTO `infra_grupo`(`infra_grupo_id`, `infra_grupo_nombre`, `infra_grupo_order`) VALUES (5, 'Valorización', 6);
+
+INSERT INTO `infra_other_data_attribute`(`infra_other_data_attribute_id`, `infra_grupo_id`, `infra_other_data_attribute_name`, `infra_other_data_attribute_type`) VALUES (417, 5, 'Valor UF', '1');
+

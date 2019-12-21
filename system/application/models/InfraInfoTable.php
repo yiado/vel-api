@@ -53,4 +53,11 @@ class InfraInfoTable extends Doctrine_Table {
         return $result->SUM;
     }
     
+    function setUfValueDay($uf) {
+        $query = Doctrine_Query::create()
+            ->update("InfraInfo iff")
+            ->set("iff.infra_info_uf_day_value","?", floatval($uf));
+        $query->execute();
+    }
+    
 }

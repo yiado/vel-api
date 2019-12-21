@@ -100,7 +100,8 @@ $config['fields_infra_info'] = array(
     'infra_info_estacionamientos_total' => array('label' => 'infra_info_estacionamientos_total'),
     'infra_info_estacionamientos' => array('label' => 'infra_info_estacionamientos'),
     'infra_info_estacionamientos_total_sector' => array('label' => 'infra_info_estacionamientos_total_sector'),
-    'infra_info_estacionamientos_porcent' => array('label' => 'infra_info_estacionamientos_porcent')
+    'infra_info_estacionamientos_porcent' => array('label' => 'infra_info_estacionamientos_porcent'),
+    'infra_info_uf_day_value' => array('label' => 'infra_info_uf_day_value'),
 );
 
 $config['user_system'] = array(

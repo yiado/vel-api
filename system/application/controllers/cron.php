@@ -41,6 +41,8 @@ class cron extends APP_Controller {
     
     public function actualizarUTFSM(){
         error_log("inicio actualizacion UTFSM");
+        $uf_del_dia = Doctrine_Core::getTable('Uf')->retrieveByDate(date("Y-m-d"));
+        Doctrine_Core::getTable('InfraInfo')->setUfValueDay($uf_del_dia->uf_value);
         $nodos = Doctrine_Core::getTable('InfraInfo')->findNodosValorUTFSM();
         foreach ($nodos as $nodo){
             $nodo->actualizarValorNodoUTFSM();
