@@ -258,8 +258,11 @@ class infraInfoController extends APP_Controller {
         $inputPostAll = $this->input->postall();
         foreach ($inputPostAll as $att => $val) {
             if (!is_numeric($att)) {
-                if ($att === 'infra_info_walls' || $att === 'infra_info_area' || 'infra_info_sky_floor_height') {
+                if ($att === 'infra_info_walls' || $att === 'infra_info_area' || $att === 'infra_info_sky_floor_height') {
                     $info->infra_info_walls = sqrt($inputPostAll['infra_info_area']) * 2 + sqrt($inputPostAll['infra_info_area']) * 2 * $inputPostAll['infra_info_sky_floor_height'];
+                    if ($att === 'infra_info_walls') {
+                        continue;
+                    }
                 }
                 $info->{$att} = $val;
             }
