@@ -166,7 +166,7 @@ class InfraInfo extends BaseInfraInfo {
                     $ancestorInfo->node_id = $ancestor['node_id'];
                 }
 
-                foreach ($fieldMapping as $val) {
+                foreach ($fieldMapping as $key => $val) {
                     if (is_array($val['campo_db'])) {
                         $ancestorInfo->{$val['campo_db'][0]} = Doctrine_Core::getTable('InfraInfo')->getSumatoria($ancestor['node_id'], $val['formula1']);
                         $ancestorInfo->{$val['campo_db'][1]} = Doctrine_Core::getTable('InfraInfo')->getSumatoria($ancestor['node_id'], $val['formula2']);
@@ -187,12 +187,14 @@ class InfraInfo extends BaseInfraInfo {
         $this->getUfDelDia();
 
         $fieldMapping = array(
-            'formula1' => "SUM((infra_info_terreno_cad * infra_info_uf) + infra_info_uf_total)",
-            'formula2' => "SUM({$this->ufDelDia} * infra_info_uf * infra_info_terreno_cad)",
-            'accion' => 'suma',
-            'campo_db' => array(
-                0 => 'infra_info_uf_total',
-                1 => 'infra_info_money'
+            array(
+                'formula1' => "SUM((infra_info_terreno_cad * infra_info_uf) + infra_info_uf_total)",
+                'formula2' => "SUM({$this->ufDelDia} * infra_info_uf * infra_info_terreno_cad)",
+                'accion' => 'suma',
+                'campo_db' => array(
+                    0 => 'infra_info_uf_total',
+                    1 => 'infra_info_money'
+                )
             )
         );
         $this->guardarCambios($fieldMapping);
