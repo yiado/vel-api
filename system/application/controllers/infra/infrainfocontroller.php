@@ -11,7 +11,7 @@ class infraInfoController extends APP_Controller {
     }
 
     /** 
-     * Obtiene la información de un nodo.
+     * Obtiene la informaciÃ³n de un nodo.
      * Recibe como parametro el node_id o el node_type_id
      * 
      * @param integer $node_id
@@ -236,7 +236,7 @@ class infraInfoController extends APP_Controller {
 
                 $json_data = $this->json->encode(array(
                     'success' => false,
-                    'msg' => 'El Código de Recinto ' . $this->input->post('46') . ' ya Existe'
+                    'msg' => 'El CÃ³digo de Recinto ' . $this->input->post('46') . ' ya Existe'
                 ));
                 echo $json_data;
                 exit;
@@ -255,14 +255,15 @@ class infraInfoController extends APP_Controller {
             $info->node_id = $node_id;
         }
         $info->allowListener = true;
-
-        foreach ($this->input->postall() as $att => $val) {
+        $inputPostAll = $this->input->postall();
+        foreach ($inputPostAll as $att => $val) {
             if (!is_numeric($att)) {
+                if ($att === 'infra_info_walls' || $att === 'infra_info_area' || 'infra_info_sky_floor_height') {
+                    $info->infra_info_walls = sqrt($inputPostAll['infra_info_area']) * 2 + sqrt($inputPostAll['infra_info_area']) * 2 * $inputPostAll['infra_info_sky_floor_height'];
+                }
                 $info->{$att} = $val;
             }
         }     
-        
-
         $info->save();
 
 
@@ -1208,7 +1209,7 @@ class infraInfoController extends APP_Controller {
                             $node_id = $nodeOtherData->node_id;
                         } else {
                             $success = 'false';
-                            $msg = "El código de recinto no existe " . $codigo_recinto . ' Celda : A' . $rowIndex2;
+                            $msg = "El cÃ³digo de recinto no existe " . $codigo_recinto . ' Celda : A' . $rowIndex2;
                             echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                             exit;
                         }
@@ -1272,14 +1273,14 @@ class infraInfoController extends APP_Controller {
                             if ($InfraOtherDataOptionOrganismo->infra_other_data_option_id != $nodeOtherDataOrganismo->infra_other_data_option_id) {
                                 if ($InfraOtherDataOptionOrganismo->infra_other_data_attribute_id != $nodeOtherDataOrganismo->infra_other_data_attribute_id) {
                                     $success = 'false';
-                                    $msg = "No corresponde a una opción de este campo " . $organismo . ' Celda : E' . $rowIndex2;
+                                    $msg = "No corresponde a una opciÃ³n de este campo " . $organismo . ' Celda : E' . $rowIndex2;
                                     echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                                     exit;
                                 }
                             }
                         } else {
                             $success = 'false';
-                            $msg = "No existe como opción " . $organismo . ' Celda : E' . $rowIndex2;
+                            $msg = "No existe como opciÃ³n " . $organismo . ' Celda : E' . $rowIndex2;
                             echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                             exit;
                         }
@@ -1302,14 +1303,14 @@ class infraInfoController extends APP_Controller {
                             if ($InfraOtherDataOptionDepartamento->infra_other_data_option_id != $nodeOtherDataDepartamento->infra_other_data_option_id) {
                                 if ($InfraOtherDataOptionDepartamento->infra_other_data_attribute_id != $nodeOtherDataDepartamento->infra_other_data_attribute_id) {
                                     $success = 'false';
-                                    $msg = "No corresponde a una opción de este campo " . $departamento . ' Celda : F' . $rowIndex2;
+                                    $msg = "No corresponde a una opciÃ³n de este campo " . $departamento . ' Celda : F' . $rowIndex2;
                                     echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                                     exit;
                                 }
                             }
                         } else {
                             $success = 'false';
-                            $msg = "No existe como opción " . $departamento . ' Celda : F' . $rowIndex2;
+                            $msg = "No existe como opciÃ³n " . $departamento . ' Celda : F' . $rowIndex2;
                             echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                             exit;
                         }
@@ -1332,14 +1333,14 @@ class infraInfoController extends APP_Controller {
                             if ($InfraOtherDataOptionUnidad->infra_other_data_option_id != $nodeOtherDataUnidad->infra_other_data_option_id) {
                                 if ($InfraOtherDataOptionUnidad->infra_other_data_attribute_id != $nodeOtherDataUnidad->infra_other_data_attribute_id) {
                                     $success = 'false';
-                                    $msg = "No corresponde a una opción de este campo " . $unidad . ' Celda : G' . $rowIndex2;
+                                    $msg = "No corresponde a una opciÃ³n de este campo " . $unidad . ' Celda : G' . $rowIndex2;
                                     echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                                     exit;
                                 }
                             }
                         } else {
                             $success = 'false';
-                            $msg = "No existe como opción " . $unidad . ' Celda : G' . $rowIndex2;
+                            $msg = "No existe como opciÃ³n " . $unidad . ' Celda : G' . $rowIndex2;
                             echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                             exit;
                         }
@@ -1362,14 +1363,14 @@ class infraInfoController extends APP_Controller {
                             if ($InfraOtherDataOptionActividad->infra_other_data_option_id != $nodeOtherDataActividad->infra_other_data_option_id) {
                                 if ($InfraOtherDataOptionActividad->infra_other_data_attribute_id != $nodeOtherDataActividad->infra_other_data_attribute_id) {
                                     $success = 'false';
-                                    $msg = "No corresponde a una opción de este campo " . $actividad . ' Celda : H' . $rowIndex2;
+                                    $msg = "No corresponde a una opciÃ³n de este campo " . $actividad . ' Celda : H' . $rowIndex2;
                                     echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                                     exit;
                                 }
                             }
                         } else {
                             $success = 'false';
-                            $msg = "No existe como opción " . $actividad . ' Celda : H' . $rowIndex2;
+                            $msg = "No existe como opciÃ³n " . $actividad . ' Celda : H' . $rowIndex2;
                             echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                             exit;
                         }
@@ -1392,14 +1393,14 @@ class infraInfoController extends APP_Controller {
                             if ($InfraOtherDataOptionUso->infra_other_data_option_id != $nodeOtherDataUso->infra_other_data_option_id) {
                                 if ($InfraOtherDataOptionUso->infra_other_data_attribute_id != $nodeOtherDataUso->infra_other_data_attribute_id) {
                                     $success = 'false';
-                                    $msg = "No corresponde a una opción de este campo " . $uso . ' Celda : I' . $rowIndex2;
+                                    $msg = "No corresponde a una opciÃ³n de este campo " . $uso . ' Celda : I' . $rowIndex2;
                                     echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                                     exit;
                                 }
                             }
                         } else {
                             $success = 'false';
-                            $msg = "No existe como opción " . $uso . ' Celda : I' . $rowIndex2;
+                            $msg = "No existe como opciÃ³n " . $uso . ' Celda : I' . $rowIndex2;
                             echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                             exit;
                         }
@@ -1422,14 +1423,14 @@ class infraInfoController extends APP_Controller {
                             if ($InfraOtherDataOptionUsoParticular->infra_other_data_option_id != $nodeOtherDataUsoParticular->infra_other_data_option_id) {
                                 if ($InfraOtherDataOptionUsoParticular->infra_other_data_attribute_id != $nodeOtherDataUsoParticular->infra_other_data_attribute_id) {
                                     $success = 'false';
-                                    $msg = "No corresponde a una opción de este campo " . $uso_particular . ' Celda : J' . $rowIndex2;
+                                    $msg = "No corresponde a una opciÃ³n de este campo " . $uso_particular . ' Celda : J' . $rowIndex2;
                                     echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                                     exit;
                                 }
                             }
                         } else {
                             $success = 'false';
-                            $msg = "No existe como opción " . $uso_particular . ' Celda : J' . $rowIndex2;
+                            $msg = "No existe como opciÃ³n " . $uso_particular . ' Celda : J' . $rowIndex2;
                             echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                             exit;
                         }
@@ -1452,14 +1453,14 @@ class infraInfoController extends APP_Controller {
                             if ($InfraOtherDataOptionPropiedadRecinto->infra_other_data_option_id != $nodeOtherDataPropiedadRecinto->infra_other_data_option_id) {
                                 if ($InfraOtherDataOptionPropiedadRecinto->infra_other_data_attribute_id != $nodeOtherDataPropiedadRecinto->infra_other_data_attribute_id) {
                                     $success = 'false';
-                                    $msg = "No corresponde a una opción de este campo " . $propiedad_recinto . ' Celda : K' . $rowIndex2;
+                                    $msg = "No corresponde a una opciÃ³n de este campo " . $propiedad_recinto . ' Celda : K' . $rowIndex2;
                                     echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                                     exit;
                                 }
                             }
                         } else {
                             $success = 'false';
-                            $msg = "No existe como opción " . $propiedad_recinto . ' Celda : K' . $rowIndex2;
+                            $msg = "No existe como opciÃ³n " . $propiedad_recinto . ' Celda : K' . $rowIndex2;
                             echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                             exit;
                         }
@@ -1482,14 +1483,14 @@ class infraInfoController extends APP_Controller {
                             if ($InfraOtherDataOptionEstatusRecinto->infra_other_data_option_id != $nodeOtherDataEstatusRecinto->infra_other_data_option_id) {
                                 if ($InfraOtherDataOptionEstatusRecinto->infra_other_data_attribute_id != $nodeOtherDataEstatusRecinto->infra_other_data_attribute_id) {
                                     $success = 'false';
-                                    $msg = "No corresponde a una opción de este campo " . $estatus_recinto . ' Celda : L' . $rowIndex2;
+                                    $msg = "No corresponde a una opciÃ³n de este campo " . $estatus_recinto . ' Celda : L' . $rowIndex2;
                                     echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                                     exit;
                                 }
                             }
                         } else {
                             $success = 'false';
-                            $msg = "No existe como opción " . $estatus_recinto . ' Celda : L' . $rowIndex2;
+                            $msg = "No existe como opciÃ³n " . $estatus_recinto . ' Celda : L' . $rowIndex2;
                             echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                             exit;
                         }
@@ -1512,14 +1513,14 @@ class infraInfoController extends APP_Controller {
                             if ($InfraOtherDataOptionEstadoRecinto->infra_other_data_option_id != $nodeOtherDataEstadoRecinto->infra_other_data_option_id) {
                                 if ($InfraOtherDataOptionEstadoRecinto->infra_other_data_attribute_id != $nodeOtherDataEstadoRecinto->infra_other_data_attribute_id) {
                                     $success = 'false';
-                                    $msg = "No corresponde a una opción de este campo " . $estado_recinto . ' Celda : M' . $rowIndex2;
+                                    $msg = "No corresponde a una opciÃ³n de este campo " . $estado_recinto . ' Celda : M' . $rowIndex2;
                                     echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                                     exit;
                                 }
                             }
                         } else {
                             $success = 'false';
-                            $msg = "No existe como opción " . $estado_recinto . ' Celda : M' . $rowIndex2;
+                            $msg = "No existe como opciÃ³n " . $estado_recinto . ' Celda : M' . $rowIndex2;
                             echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                             exit;
                         }
@@ -1538,7 +1539,7 @@ class infraInfoController extends APP_Controller {
 
                         if (is_numeric($cantidad_usuarios) != true) {
                             $success = 'false';
-                            $msg = "El numero " . $cantidad_usuarios . ' Celda : N' . $rowIndex2 . " No es numérico";
+                            $msg = "El numero " . $cantidad_usuarios . ' Celda : N' . $rowIndex2 . " No es numÃ©rico";
                             echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                             exit;
                         }
@@ -1561,14 +1562,14 @@ class infraInfoController extends APP_Controller {
                             if ($InfraOtherDataOptionVentanas->infra_other_data_option_id != $nodeOtherDataVentanas->infra_other_data_option_id) {
                                 if ($InfraOtherDataOptionVentanas->infra_other_data_attribute_id != $nodeOtherDataVentanas->infra_other_data_attribute_id) {
                                     $success = 'false';
-                                    $msg = "No corresponde a una opción de este campo " . $ventanas . ' Celda : O' . $rowIndex2;
+                                    $msg = "No corresponde a una opciÃ³n de este campo " . $ventanas . ' Celda : O' . $rowIndex2;
                                     echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                                     exit;
                                 }
                             }
                         } else {
                             $success = 'false';
-                            $msg = "No existe como opción " . $ventanas . ' Celda : O' . $rowIndex2;
+                            $msg = "No existe como opciÃ³n " . $ventanas . ' Celda : O' . $rowIndex2;
                             echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                             exit;
                         }
@@ -1591,14 +1592,14 @@ class infraInfoController extends APP_Controller {
                             if ($InfraOtherDataOptionAireAcondicionado->infra_other_data_option_id != $nodeOtherDataAireAcondicionado->infra_other_data_option_id) {
                                 if ($InfraOtherDataOptionAireAcondicionado->infra_other_data_attribute_id != $nodeOtherDataAireAcondicionado->infra_other_data_attribute_id) {
                                     $success = 'false';
-                                    $msg = "No corresponde a una opción de este campo " . $aire_acondicionado . ' Celda : P' . $rowIndex2;
+                                    $msg = "No corresponde a una opciÃ³n de este campo " . $aire_acondicionado . ' Celda : P' . $rowIndex2;
                                     echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                                     exit;
                                 }
                             }
                         } else {
                             $success = 'false';
-                            $msg = "No existe como opción " . $aire_acondicionado . ' Celda : P' . $rowIndex2;
+                            $msg = "No existe como opciÃ³n " . $aire_acondicionado . ' Celda : P' . $rowIndex2;
                             echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                             exit;
                         }
@@ -1621,14 +1622,14 @@ class infraInfoController extends APP_Controller {
                             if ($InfraOtherDataOptionCalefaccion->infra_other_data_option_id != $nodeOtherDataCalefaccion->infra_other_data_option_id) {
                                 if ($InfraOtherDataOptionCalefaccion->infra_other_data_attribute_id != $nodeOtherDataCalefaccion->infra_other_data_attribute_id) {
                                     $success = 'false';
-                                    $msg = "No corresponde a una opción de este campo " . $calefaccion . ' Celda : Q' . $rowIndex2;
+                                    $msg = "No corresponde a una opciÃ³n de este campo " . $calefaccion . ' Celda : Q' . $rowIndex2;
                                     echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                                     exit;
                                 }
                             }
                         } else {
                             $success = 'false';
-                            $msg = "No existe como opción " . $calefaccion . ' Celda : Q' . $rowIndex2;
+                            $msg = "No existe como opciÃ³n " . $calefaccion . ' Celda : Q' . $rowIndex2;
                             echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                             exit;
                         }
@@ -1647,7 +1648,7 @@ class infraInfoController extends APP_Controller {
 
                         if (is_numeric($luminarias) != true) {
                             $success = 'false';
-                            $msg = "El numero " . $luminarias . ' Celda : R' . $rowIndex2 . " No es numérico";
+                            $msg = "El numero " . $luminarias . ' Celda : R' . $rowIndex2 . " No es numÃ©rico";
                             echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                             exit;
                         }
@@ -1666,7 +1667,7 @@ class infraInfoController extends APP_Controller {
 
                         if (is_numeric($enchufes) != true) {
                             $success = 'false';
-                            $msg = "El numero " . $enchufes . ' Celda : S' . $rowIndex2 . " No es numérico";
+                            $msg = "El numero " . $enchufes . ' Celda : S' . $rowIndex2 . " No es numÃ©rico";
                             echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                             exit;
                         }
@@ -1686,7 +1687,7 @@ class infraInfoController extends APP_Controller {
 
                         if (is_numeric($puntos_de_red) != true) {
                             $success = 'false';
-                            $msg = "El numero " . $puntos_de_red . ' Celda : T' . $rowIndex2 . " No es numérico";
+                            $msg = "El numero " . $puntos_de_red . ' Celda : T' . $rowIndex2 . " No es numÃ©rico";
                             echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                             exit;
                         }
@@ -1709,14 +1710,14 @@ class infraInfoController extends APP_Controller {
                             if ($InfraOtherDataOptionProyector->infra_other_data_option_id != $nodeOtherDataProyector->infra_other_data_option_id) {
                                 if ($InfraOtherDataOptionProyector->infra_other_data_attribute_id != $nodeOtherDataProyector->infra_other_data_attribute_id) {
                                     $success = 'false';
-                                    $msg = "No corresponde a una opción de este campo " . $proyector . ' Celda : U' . $rowIndex2;
+                                    $msg = "No corresponde a una opciÃ³n de este campo " . $proyector . ' Celda : U' . $rowIndex2;
                                     echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                                     exit;
                                 }
                             }
                         } else {
                             $success = 'false';
-                            $msg = "No existe como opción " . $proyector . ' Celda : U' . $rowIndex2;
+                            $msg = "No existe como opciÃ³n " . $proyector . ' Celda : U' . $rowIndex2;
                             echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                             exit;
                         }
@@ -1739,14 +1740,14 @@ class infraInfoController extends APP_Controller {
                             if ($InfraOtherDataOptionWifi->infra_other_data_option_id != $nodeOtherDataWifi->infra_other_data_option_id) {
                                 if ($InfraOtherDataOptionWifi->infra_other_data_attribute_id != $nodeOtherDataWifi->infra_other_data_attribute_id) {
                                     $success = 'false';
-                                    $msg = "No corresponde a una opción de este campo " . $wifi . ' Celda : V' . $rowIndex2;
+                                    $msg = "No corresponde a una opciÃ³n de este campo " . $wifi . ' Celda : V' . $rowIndex2;
                                     echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                                     exit;
                                 }
                             }
                         } else {
                             $success = 'false';
-                            $msg = "No existe como opción " . $wifi . ' Celda : V' . $rowIndex2;
+                            $msg = "No existe como opciÃ³n " . $wifi . ' Celda : V' . $rowIndex2;
                             echo '{"success": ' . $success . ', "msg":"' . $msg . '"}';
                             exit;
                         }

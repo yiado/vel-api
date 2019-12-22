@@ -670,6 +670,36 @@ abstract class BaseInfraInfo extends Doctrine_Record {
             'notnull' => false,
             'autoincrement' => false,
         ));
+        $this->hasColumn('infra_info_money', 'float', 22, array(
+            'type' => 'float',
+            'length' => 22,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_sky_floor_height', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('infra_info_walls', 'float', 9, array(
+            'type' => 'float',
+            'length' => 9,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '0.000',
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
     }
 
     public function setUp() {

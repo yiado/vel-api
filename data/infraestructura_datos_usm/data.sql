@@ -37,6 +37,9 @@ INSERT INTO `language_tag`(`language_tag_id`, `language_id`, `module_id`, `langu
 INSERT INTO `language_tag`(`language_tag_id`, `language_id`, `module_id`, `language_tag_tag`, `language_tag_value`) VALUES (0, 1, 5, 'infra_info_estacionamientos_total_sector', 'M² TOTAL SECTOR ESTACIONAMIENTOS');
 INSERT INTO `language_tag`(`language_tag_id`, `language_id`, `module_id`, `language_tag_tag`, `language_tag_value`) VALUES (0, 1, 5, 'infra_info_estacionamientos_porcent', 'PORCENTAJE SECTOR ESTACIONAMIENTOS');
 INSERT INTO `language_tag`(`language_tag_id`, `language_id`, `module_id`, `language_tag_tag`, `language_tag_value`) VALUES (0, 1, 5, 'infra_info_uf_day_value', 'VALOR UF');
+INSERT INTO `language_tag`(`language_tag_id`, `language_id`, `module_id`, `language_tag_tag`, `language_tag_value`) VALUES (0, 1, 5, 'infra_info_money', 'VALORIZACION UTFSM $ TERRENO');
+INSERT INTO `language_tag`(`language_tag_id`, `language_id`, `module_id`, `language_tag_tag`, `language_tag_value`) VALUES (0, 1, 5, 'infra_info_sky_floor_height', 'ALTURA PISO A CIELO');
+INSERT INTO `language_tag`(`language_tag_id`, `language_id`, `module_id`, `language_tag_tag`, `language_tag_value`) VALUES (0, 1, 5, 'infra_info_walls', 'M² MUROS');
 
 INSERT INTO `infra_grupo`(`infra_grupo_id`, `infra_grupo_nombre`, `infra_grupo_order`) VALUES (4, 'Datos Generales', 5);
 INSERT INTO `infra_grupo`(`infra_grupo_id`, `infra_grupo_nombre`, `infra_grupo_order`) VALUES (5, 'Valorización', 6);

@@ -9,14 +9,13 @@
 class InfraInfo extends BaseInfraInfo {
 
     var $allowListener = false;
-    
     var $ufDelDia = null;
 
     function getUfDelDia() {
         $uf_del_dia = Doctrine_Core::getTable('Uf')->retrieveByDate(date("Y-m-d"));
         $this->ufDelDia = $uf_del_dia->uf_value;
     }
-    
+
     function postInsert() {
         $this->postUpdate();
     }
@@ -24,12 +23,12 @@ class InfraInfo extends BaseInfraInfo {
     function postDelete() {
         $this->postUpdate();
     }
-    
+
     function postUpdate() {
         if (!$this->allowListener) {
             return;
         }
-        
+
         $this->getUfDelDia();
 
         $fieldMapping = array(
@@ -74,9 +73,13 @@ class InfraInfo extends BaseInfraInfo {
                 'campo_db' => 'infra_info_construidos_ogcu_total'
             ),
             'infra_info_uf' => array(
-                'formula' => "SUM(({$this->ufDelDia} * infra_info_uf) + infra_info_uf_total)",
+                'formula1' => "SUM((infra_info_terreno_cad * infra_info_uf) + infra_info_uf_total)",
+                'formula2' => "SUM({$this->ufDelDia} * infra_info_uf * infra_info_terreno_cad)",
                 'accion' => 'suma',
-                'campo_db' => 'infra_info_uf_total'
+                'campo_db' => array(
+                    0 => 'infra_info_uf_total',
+                    1 => 'infra_info_money'
+                )
             ),
             'infra_info_emplazamiento' => array(
                 'formula' => 'SUM(infra_info_emplazamiento + infra_info_emplazamiento_total)',
@@ -150,11 +153,11 @@ class InfraInfo extends BaseInfraInfo {
 
         $this->guardarCambios($fieldMapping);
     }
-    
-    function guardarCambios($fieldMapping){
+
+    function guardarCambios($fieldMapping) {
         $node = Doctrine_Core::getTable('Node')->find($this->node_id)->getNode();
         $ancestros = array_reverse($node->getAncestors()->toArray());
-        
+
         if ($node->hasParent()) {
             foreach ($ancestros as $ancestor) {
                 $ancestorInfo = Doctrine_Core::getTable('InfraInfo')->findByNodeId($ancestor['node_id']);
@@ -164,7 +167,12 @@ class InfraInfo extends BaseInfraInfo {
                 }
 
                 foreach ($fieldMapping as $val) {
-                    $ancestorInfo->{$val['campo_db']} = Doctrine_Core::getTable('InfraInfo')->getSumatoria($ancestor['node_id'], $val['formula']);
+                    if (is_array($val['campo_db'])) {
+                        $ancestorInfo->{$val['campo_db'][0]} = Doctrine_Core::getTable('InfraInfo')->getSumatoria($ancestor['node_id'], $val['formula1']);
+                        $ancestorInfo->{$val['campo_db'][1]} = Doctrine_Core::getTable('InfraInfo')->getSumatoria($ancestor['node_id'], $val['formula2']);
+                    } else {
+                        $ancestorInfo->{$val['campo_db']} = Doctrine_Core::getTable('InfraInfo')->getSumatoria($ancestor['node_id'], $val['formula']);
+                    }
                     $ancestorInfo->save();
                     if ($val['accion'] === 'porcentaje') {
                         $ancestorInfo->{$val['campo_db2']} = Doctrine_Core::getTable('InfraInfo')->getPorcentaje($ancestor['node_id'], $val['formula2']);
@@ -174,15 +182,17 @@ class InfraInfo extends BaseInfraInfo {
             }
         }
     }
-    
-    function actualizarValorNodoUTFSM(){
+
+    function actualizarValorNodoUTFSM() {
         $this->getUfDelDia();
 
         $fieldMapping = array(
-            'infra_info_uf' => array(
-                'formula' => "SUM(({$this->ufDelDia} * infra_info_uf) + infra_info_uf_total)",
-                'accion' => 'suma',
-                'campo_db' => 'infra_info_uf_total'
+            'formula1' => "SUM((infra_info_terreno_cad * infra_info_uf) + infra_info_uf_total)",
+            'formula2' => "SUM({$this->ufDelDia} * infra_info_uf * infra_info_terreno_cad)",
+            'accion' => 'suma',
+            'campo_db' => array(
+                0 => 'infra_info_uf_total',
+                1 => 'infra_info_money'
             )
         );
         $this->guardarCambios($fieldMapping);

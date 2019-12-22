@@ -72,6 +72,7 @@ $config['fields_infra_info'] = array(
     'infra_info_construidos_ogcu_total' => array('label' => 'infra_info_construidos_ogcu_total'),
     'infra_info_uf' => array('label' => 'infra_info_uf'),
     'infra_info_uf_total' => array('label' => 'infra_info_uf_total'),
+    'infra_info_money' => array('label' => 'infra_info_money'),
     'infra_info_emplazamiento' => array('label' => 'infra_info_emplazamiento'),
     'infra_info_emplazamiento_total' => array('label' => 'infra_info_emplazamiento_total'),
     'infra_info_emplazamiento_porcent' => array('label' => 'infra_info_emplazamiento_porcent'),
@@ -102,6 +103,8 @@ $config['fields_infra_info'] = array(
     'infra_info_estacionamientos_total_sector' => array('label' => 'infra_info_estacionamientos_total_sector'),
     'infra_info_estacionamientos_porcent' => array('label' => 'infra_info_estacionamientos_porcent'),
     'infra_info_uf_day_value' => array('label' => 'infra_info_uf_day_value'),
+    'infra_info_sky_floor_height' => array('label' => 'infra_info_sky_floor_height'),
+    'infra_info_walls' => array('label' => 'infra_info_walls'),
 );
 
 $config['user_system'] = array(

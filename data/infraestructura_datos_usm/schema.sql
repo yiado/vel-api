@@ -45,12 +45,15 @@ ADD COLUMN `infra_info_otras_areas_porcent` double(11, 3) NULL DEFAULT 0.000,
 
 ADD COLUMN `infra_info_estacionamientos_num` int(11) NULL DEFAULT 0,
 ADD COLUMN `infra_info_estacionamientos_total` int(11) NULL DEFAULT 0,
-0
+
 ADD COLUMN `infra_info_estacionamientos` double(11, 3) NULL DEFAULT 0.000,
 ADD COLUMN `infra_info_estacionamientos_total_sector` double(11, 3) NULL DEFAULT 0.000,
-ADD COLUMN `infra_info_estacionamientos_porcent` double(11, 3) NULL DEFAULT 0.000;
+ADD COLUMN `infra_info_estacionamientos_porcent` double(11, 3) NULL DEFAULT 0.000,
 
-ADD COLUMN `infra_info_uf_day_value` double(11, 2) NULL DEFAULT 0.000;
+ADD COLUMN `infra_info_uf_day_value` double(11, 2) NULL DEFAULT 0.000,
+ADD COLUMN `infra_info_money` double(20, 3) NULL DEFAULT 0.000,
+ADD COLUMN `infra_info_sky_floor_height` double(11, 3) NULL DEFAULT 0.000,
+ADD COLUMN `infra_info_walls` double(11, 3) NULL DEFAULT 0.000;
 
 
 DROP TABLE IF EXISTS `uf`;

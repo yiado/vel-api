@@ -3125,6 +3125,15 @@ App.InfraStructure.Info.fields = {
             return this;
         }
     },
+    'infra_info_money': {
+        xtype: 'displayfield',
+        name: 'infra_info_money',
+        fieldLabel: App.Language.Infrastructure.infra_info_money,
+        setValue: function(v) {
+            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            return this;
+        }
+    },
     'infra_info_emplazamiento': {
         xtype: 'numberfield',
         name: 'infra_info_emplazamiento',
@@ -3361,7 +3370,22 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_uf_day_value',
         fieldLabel: App.Language.Infrastructure.infra_info_uf_day_value,
         setValue: function(v) {
-            this.setRawValue(v);
+            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            return this;
+        }
+    },
+    'infra_info_sky_floor_height': {
+        xtype: 'numberfield',
+        name: 'infra_info_sky_floor_height',
+        fieldLabel: App.Language.Infrastructure.infra_info_sky_floor_height,
+        allowNegative: false
+    },
+    'infra_info_walls': {
+        xtype: 'displayfield',
+        name: 'infra_info_walls',
+        fieldLabel: App.Language.Infrastructure.infra_info_walls,
+        setValue: function(v) {
+            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
             return this;
         }
     }
