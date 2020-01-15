@@ -40,6 +40,9 @@ INSERT INTO `language_tag`(`language_tag_id`, `language_id`, `module_id`, `langu
 INSERT INTO `language_tag`(`language_tag_id`, `language_id`, `module_id`, `language_tag_tag`, `language_tag_value`) VALUES (0, 1, 5, 'infra_info_money', 'VALORIZACION UTFSM $ TERRENO');
 INSERT INTO `language_tag`(`language_tag_id`, `language_id`, `module_id`, `language_tag_tag`, `language_tag_value`) VALUES (0, 1, 5, 'infra_info_sky_floor_height', 'ALTURA PISO A CIELO');
 INSERT INTO `language_tag`(`language_tag_id`, `language_id`, `module_id`, `language_tag_tag`, `language_tag_value`) VALUES (0, 1, 5, 'infra_info_walls', 'M² MUROS');
+INSERT INTO `language_tag`(`language_tag_id`, `language_id`, `module_id`, `language_tag_tag`, `language_tag_value`) VALUES (0, 1, 5, 'infra_info_primer_nivel', 'M² PRIMER NIVEL EDIFICIO');
+INSERT INTO `language_tag`(`language_tag_id`, `language_id`, `module_id`, `language_tag_tag`, `language_tag_value`) VALUES (0, 1, 5, 'infra_info_primer_nivel_total', 'M² TOTAL PRIMER NIVEL EDIFICIO');
+INSERT INTO `language_tag`(`language_tag_id`, `language_id`, `module_id`, `language_tag_tag`, `language_tag_value`) VALUES (0, 1, 5, 'infra_info_primer_nivel_porcent', 'PORCENTAJE PRIMER NIVEL EDIFICIO');
 
 INSERT INTO `infra_grupo`(`infra_grupo_id`, `infra_grupo_nombre`, `infra_grupo_order`) VALUES (4, 'Datos Generales', 5);
 INSERT INTO `infra_grupo`(`infra_grupo_id`, `infra_grupo_nombre`, `infra_grupo_order`) VALUES (5, 'Valorización', 6);

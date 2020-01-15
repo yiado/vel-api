@@ -105,6 +105,9 @@ $config['fields_infra_info'] = array(
     'infra_info_uf_day_value' => array('label' => 'infra_info_uf_day_value'),
     'infra_info_sky_floor_height' => array('label' => 'infra_info_sky_floor_height'),
     'infra_info_walls' => array('label' => 'infra_info_walls'),
+    'infra_info_primer_nivel' => array('label' => 'infra_info_primer_nivel'),
+    'infra_info_primer_nivel_total' => array('label' => 'infra_info_primer_nivel_total'),
+    'infra_info_primer_nivel_porcent' => array('label' => 'infra_info_primer_nivel_porcent'),
 );
 
 $config['user_system'] = array(

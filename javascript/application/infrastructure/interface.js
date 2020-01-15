@@ -3387,6 +3387,30 @@ App.InfraStructure.Info.fields = {
             this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
             return this;
         }
+    },
+    'infra_info_primer_nivel': {
+        xtype: 'numberfield',
+        name: 'infra_info_primer_nivel',
+        fieldLabel: App.Language.Infrastructure.infra_info_primer_nivel,
+        allowNegative: false
+    },
+    'infra_info_primer_nivel_total': {
+        xtype: 'displayfield',
+        name: 'infra_info_primer_nivel_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_primer_nivel_total,
+        setValue: function(v) {
+            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            return this;
+        }
+    },
+    'infra_info_primer_nivel_porcent': {
+        xtype: 'displayfield',
+        name: 'infra_info_primer_nivel_porcent',
+        fieldLabel: App.Language.Infrastructure.infra_info_primer_nivel_porcent,
+        setValue: function(value) {
+            this.setRawValue(porcentaje(value));
+            return this;
+        }
     }
 };
 

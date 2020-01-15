@@ -148,7 +148,14 @@ class InfraInfo extends BaseInfraInfo {
                 'formula' => "SUM( (2 * 5 * infra_info_estacionamientos_num) + infra_info_estacionamientos_total)",
                 'accion' => 'suma',
                 'campo_db' => 'infra_info_estacionamientos_total'
-            )
+            ),
+            'infra_info_primer_nivel' => array(
+                'formula' => 'SUM(infra_info_primer_nivel + infra_info_primer_nivel_total)',
+                'formula2' => "SUM(infra_info_primer_nivel_total / infra_info_terreno_cad_total * 100)",
+                'accion' => 'porcentaje',
+                'campo_db' => 'infra_info_primer_nivel_total',
+                'campo_db2' => 'infra_info_primer_nivel_porcent'
+            ),
         );
 
         $this->guardarCambios($fieldMapping);
