@@ -189,7 +189,7 @@ class InfraInfo extends BaseInfraInfo {
         $fieldMapping = array(
             array(
                 'formula1' => "SUM((infra_info_terreno_cad * infra_info_uf) + infra_info_uf_total)",
-                'formula2' => "SUM({$this->ufDelDia} * infra_info_uf * infra_info_terreno_cad)",
+                'formula2' => "SUM({$this->ufDelDia} * infra_info_uf_total)",
                 'accion' => 'suma',
                 'campo_db' => array(
                     0 => 'infra_info_uf_total',

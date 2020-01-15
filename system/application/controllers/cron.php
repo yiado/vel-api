@@ -11,7 +11,7 @@ class cron extends APP_Controller {
     }
 
     public function actualizarUf() {
-        error_log("inicio actualizacion UF.");
+        error_log("inicio actualizacion UF");
         $uf = Doctrine_Core::getTable('Uf')->retrieveByDate(date("Y-m-d"));
         if (!$uf) {
             $time = strtotime("-1 month", time());

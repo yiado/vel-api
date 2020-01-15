@@ -1319,7 +1319,6 @@ App.InfraStructure.Principal.listener = function(node) { //--> ACA ENTRA AL HACE
                         /**
                          * infra info estatica (aplica para casos con calculo dinamico)
                          */
-                        console.log(response.resultsInfraInfo)
                         for (i in response.resultsInfraInfo) {
                             let record = response.resultsInfraInfo[i];
                             if (typeof record === 'object') {
@@ -1522,7 +1521,7 @@ App.InfraStructure.addNodeWindow = Ext.extend(Ext.Window, {
                         'select': function(cb) {
                             App.NodeType.Store.setBaseParam('node_type_category_id', cb.getValue());
                             App.NodeType.Store.load();
-                            App.InfraStructure.Iot.Store.load();
+                            //App.InfraStructure.Iot.Store.load();
                             if (cb.getValue() == 3) {
 
                                 jQuery('.test_').each(function() {
