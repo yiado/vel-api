@@ -42,24 +42,20 @@ class InfraOtherDataValueController extends APP_Controller {
     }
 
     function getResumen() {
-        
+
         $node_id = $this->input->post('node_id');
 
         if (is_numeric($node_id)) {
-            
+            $number_format = $this->config->item('number_format');
             $this->load->library('TreeNodes');
             $treeObject = Doctrine_Core::getTable('Node')->getTree();
             $nodes = $treeObject->fetchRoots();
 
-
-
             if ($nodes[0]->node_id == $node_id) {
                 $result = Doctrine_Core::getTable('InfraCoordinate')->nodeChildData($node_id);
                 $cont = count($result);
-               
-                
             } else {
-                
+
                 $nodeType = Doctrine_Core::getTable('Node')->find($node_id)->NodeType;
                 $info = Doctrine_Core::getTable('InfraInfo')->findByNodeId($node_id);
 
@@ -73,8 +69,10 @@ class InfraOtherDataValueController extends APP_Controller {
 
                     foreach ($infraConfig as $config) {
                         $result[$cont] = array();
-//                    $result[$cont]['field'] = $config->infra_attribute;
                         $result[$cont]['value'] = ($info) ? $info->{$config->infra_attribute} : NULL;
+                        if (is_numeric($result[$cont]['value'])) {
+                            $result[$cont]['value'] = number_format($result[$cont]['value'], $number_format['decimal'], $number_format['decimal_simbol'], $number_format['miles_simbol']);
+                        }
                         $result[$cont]['label'] = $this->translateTag('Infrastructure', $config->infra_attribute);
                         $cont++;
                     }
@@ -96,6 +94,14 @@ class InfraOtherDataValueController extends APP_Controller {
                     } else {
                         //SI NO ESTA CREADO EL CAMPO EN LA BASE DE DATOS LO PONE EN BLANCO
                         $result[$cont]['value'] = '';
+                    }
+
+                    if ($att->InfraOtherDataAttribute->infra_other_data_attribute_type === '3') {
+                        // tpye float
+                        $result[$cont]['value'] = number_format($result[$cont]['value'], $number_format['decimal'], $number_format['decimal_simbol'], $number_format['miles_simbol']);
+                    } else if ($att->InfraOtherDataAttribute->infra_other_data_attribute_type === '2') {
+                        // type int
+                        $result[$cont]['value'] = number_format($result[$cont]['value'], 0, '', $number_format['miles_simbol']);
                     }
                     $result[$cont]['label'] = $att->InfraOtherDataAttribute->infra_other_data_attribute_name;
                     $cont++;

@@ -49,3 +49,11 @@ INSERT INTO `infra_grupo`(`infra_grupo_id`, `infra_grupo_nombre`, `infra_grupo_o
 
 INSERT INTO `infra_other_data_attribute`(`infra_other_data_attribute_id`, `infra_grupo_id`, `infra_other_data_attribute_name`, `infra_other_data_attribute_type`) VALUES (417, 5, 'Valor UF', '1');
 
+INSERT INTO `infra_other_data_attribute_type`(`infra_other_data_attribute_type`, `name`) VALUES (1, 'text');
+INSERT INTO `infra_other_data_attribute_type`(`infra_other_data_attribute_type`, `name`) VALUES (2, 'number');
+INSERT INTO `infra_other_data_attribute_type`(`infra_other_data_attribute_type`, `name`) VALUES (3, 'decimal');
+INSERT INTO `infra_other_data_attribute_type`(`infra_other_data_attribute_type`, `name`) VALUES (4, 'date');
+INSERT INTO `infra_other_data_attribute_type`(`infra_other_data_attribute_type`, `name`) VALUES (5, 'selection');
+INSERT INTO `infra_other_data_attribute_type`(`infra_other_data_attribute_type`, `name`) VALUES (6, 'not_editable');
+INSERT INTO `infra_other_data_attribute_type`(`infra_other_data_attribute_type`, `name`) VALUES (7, 'checkbox');
+

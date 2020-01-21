@@ -66,3 +66,10 @@ CREATE TABLE `uf`  (
   `uf_date` date NULL DEFAULT NULL,
   PRIMARY KEY (`uf_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 0 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+
+
+CREATE TABLE `infra_other_data_attribute_type`  (
+  `infra_other_data_attribute_type` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NULL,
+  PRIMARY KEY (`infra_other_data_attribute_type`)
+);

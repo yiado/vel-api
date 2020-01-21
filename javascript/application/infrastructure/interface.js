@@ -2811,7 +2811,7 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_area_total',
         fieldLabel: App.Language.Infrastructure.infra_info_area_total,
         setValue: function(v) {
-            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            this.setRawValue(numero(v));
             return this;
         }
     },
@@ -2826,7 +2826,7 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_usable_area_total',
         fieldLabel: App.Language.Infrastructure.infra_info_usable_area_total,
         setValue: function(v) {
-            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            this.setRawValue(numero(v));
             return this;
         }
     },
@@ -2841,7 +2841,7 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_volume_total',
         fieldLabel: App.Language.Infrastructure.infra_info_volume_total,
         setValue: function(v) {
-            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            this.setRawValue(numero(v));
             return this;
         }
     },
@@ -2875,7 +2875,7 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_capacity_total',
         fieldLabel: App.Language.Infrastructure.infra_info_capacity_total,
         setValue: function(v) {
-            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            this.setRawValue(numero(v));
             return this;
         }
     },
@@ -2890,7 +2890,7 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_terrain_area_total',
         fieldLabel: App.Language.Infrastructure.infra_info_terrain_area_total,
         setValue: function(v) {
-            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            this.setRawValue(numero(v));
             return this;
         }
     },
@@ -3075,7 +3075,7 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_terrero_escritura_total',
         fieldLabel: App.Language.Infrastructure.infra_info_terrero_escritura_total,
         setValue: function(v) {
-            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            this.setRawValue(numero(v));
             return this;
         }
     },
@@ -3090,7 +3090,7 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_terreno_cad_total',
         fieldLabel: App.Language.Infrastructure.infra_info_terreno_cad_total,
         setValue: function(v) {
-            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            this.setRawValue(numero(v));
             return this;
         }
     },
@@ -3105,7 +3105,7 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_construidos_ogcu_total',
         fieldLabel: App.Language.Infrastructure.infra_info_construidos_ogcu_total,
         setValue: function(v) {
-            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            this.setRawValue(numero(v));
             return this;
         }
     },
@@ -3120,7 +3120,7 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_uf_total',
         fieldLabel: App.Language.Infrastructure.infra_info_uf_total,
         setValue: function(v) {
-            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            this.setRawValue(numero(v));
             return this;
         }
     },
@@ -3129,7 +3129,7 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_money',
         fieldLabel: App.Language.Infrastructure.infra_info_money,
         setValue: function(v) {
-            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            this.setRawValue(numero(v));
             return this;
         }
     },
@@ -3144,7 +3144,7 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_emplazamiento_total',
         fieldLabel: App.Language.Infrastructure.infra_info_emplazamiento_total,
         setValue: function(v) {
-            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            this.setRawValue(numero(v));
             return this;
         }
     },
@@ -3168,7 +3168,7 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_calles_total',
         fieldLabel: App.Language.Infrastructure.infra_info_calles_total,
         setValue: function(v) {
-            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            this.setRawValue(numero(v));
             return this;
         }
     },
@@ -3192,7 +3192,7 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_areas_verdes_total',
         fieldLabel: App.Language.Infrastructure.infra_info_areas_verdes_total,
         setValue: function(v) {
-            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            this.setRawValue(numero(v));
             return this;
         }
     },
@@ -3216,7 +3216,7 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_areas_manejadas_total',
         fieldLabel: App.Language.Infrastructure.infra_info_areas_manejadas_total,
         setValue: function(v) {
-            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            this.setRawValue(numero(v));
             return this;
         }
     },
@@ -3240,7 +3240,7 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_patios_abiertos_total',
         fieldLabel: App.Language.Infrastructure.infra_info_patios_abiertos_total,
         setValue: function(v) {
-            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            this.setRawValue(numero(v));
             return this;
         }
     },
@@ -3264,7 +3264,7 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_recintos_deportivos_total',
         fieldLabel: App.Language.Infrastructure.infra_info_recintos_deportivos_total,
         setValue: function(v) {
-            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            this.setRawValue(numero(v));
             return this;
         }
     },
@@ -3288,7 +3288,7 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_circulaciones_abiertas_total',
         fieldLabel: App.Language.Infrastructure.infra_info_circulaciones_abiertas_total,
         setValue: function(v) {
-            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            this.setRawValue(numero(v));
             return this;
         }
     },
@@ -3312,7 +3312,7 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_otras_areas_total',
         fieldLabel: App.Language.Infrastructure.infra_info_otras_areas_total,
         setValue: function(v) {
-            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            this.setRawValue(numero(v));
             return this;
         }
     },
@@ -3336,7 +3336,7 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_estacionamientos_total',
         fieldLabel: App.Language.Infrastructure.infra_info_estacionamientos_total,
         setValue: function(v) {
-            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            this.setRawValue(numero(v));
             return this;
         }
     },
@@ -3351,7 +3351,7 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_estacionamientos_total_sector',
         fieldLabel: App.Language.Infrastructure.infra_info_estacionamientos_total_sector,
         setValue: function(v) {
-            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            this.setRawValue(numero(v));
             return this;
         }
     },
@@ -3369,7 +3369,7 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_uf_day_value',
         fieldLabel: App.Language.Infrastructure.infra_info_uf_day_value,
         setValue: function(v) {
-            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            this.setRawValue(numero(v));
             return this;
         }
     },
@@ -3384,7 +3384,7 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_walls',
         fieldLabel: App.Language.Infrastructure.infra_info_walls,
         setValue: function(v) {
-            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            this.setRawValue(numero(v));
             return this;
         }
     },
@@ -3399,7 +3399,7 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_primer_nivel_total',
         fieldLabel: App.Language.Infrastructure.infra_info_primer_nivel_total,
         setValue: function(v) {
-            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            this.setRawValue(numero(v));
             return this;
         }
     },
@@ -3414,8 +3414,17 @@ App.InfraStructure.Info.fields = {
     }
 };
 
+function numero(value){
+    value = parseFloat(value).toFixed(1);
+    value = parseFloat(value);
+    return value.toLocaleString('es-CL', {minimumFractionDigits: 1});
+}
+
 function porcentaje(value){
-    return `${parseFloat(value).toFixed(2)} %`;
+    value = parseFloat(value).toFixed(1);
+    value = parseFloat(value);
+    value = value.toLocaleString('es-CL', {minimumFractionDigits: 1});
+    return `${value} %`;
 }
 
 App.InfraStructure.emportListMasiva = Ext.extend(Ext.Window, {

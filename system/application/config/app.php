@@ -128,3 +128,9 @@ $config['api_uf_sbif'] = array(
     'key' => 'f5be4d9b0a11b3941c2083ba4e6321fc789eba3e',
     'formato' => 'json'
 );
+
+$config['number_format'] = array(
+    'miles_simbol' => '.',
+    'decimal_simbol' => ',',
+    'decimal' => 1
+);
