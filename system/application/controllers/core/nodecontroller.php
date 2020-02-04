@@ -1068,7 +1068,60 @@ class NodeController extends APP_Controller {
             }
         }
     }
-
+    
+    /**
+     * 
+     * @param type $node_id
+     */
+    function importList() {
+        if (is_numeric($this->input->post('node_parent_id'))) {
+            $this->load->library('TreeNodes');
+            $treeNodes = new TreeNodes();
+            $this->load->library('PHPExcel');
+            $nodo = array();
+            $documentoExcel = $this->input->file('documentoExcel');
+            $node_parent_id = $this->input->post('node_parent_id');
+            
+            if ($documentoExcel['tmp_name']) {
+                $objPHPExcel = PHPExcel_IOFactory::load($documentoExcel['tmp_name']);
+                $worksheets = $objPHPExcel->getWorksheetIterator();
+                foreach ($worksheets as $worksheet) {
+                    $highestRow         = $worksheet->getHighestRow(); // e.g. 10
+                    $highestColumn      = $worksheet->getHighestColumn(); // e.g 'F'
+                    $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);
+                    for ($row = 1; $row <= $highestRow; ++ $row) {
+                        if ($row > 1) {
+                            
+                            $node_level = (int) $worksheet->getCellByColumnAndRow(0, $row)->getValue();
+                            $nodeType = Doctrine::getTable('NodeType')->findOneByNodeTypeName($worksheet->getCellByColumnAndRow(2, $row)->getValue());
+                            
+                            $node = new Node();                            
+                            $node['node_name'] = $worksheet->getCellByColumnAndRow(1, $row)->getValue();                            
+                            $node['node_type_id'] = $nodeType->node_type_id;
+                            $node->save();
+                            
+                            $nodo[$node_level] = $node->node_id;
+                            
+                            if ($node_level == 1) {
+                                $nodo = array();
+                                $nodo[$node_level] = $node->node_id;
+                                $node_parent_id = $this->input->post('node_parent_id');
+                            } else {
+                                $node_parent_id = $nodo[$node_level - 1];
+                            }
+                        
+                            $parentNode = Doctrine_Core::getTable('Node')->find($node_parent_id);
+                            $node->getNode()->insertAsLastChildOf($parentNode);
+                            $treeNodes->add($node->node_id, $node->node_name, $node->node_type_id, false, true, "", $nodeType->node_type_name);
+                        }
+                    }
+                }
+            }
+            echo '({"success":"' . 'true' . '", "results":0})';
+        } else {
+            echo '({"success":"' . 'false' . '", "results":0})';            
+        }
+    }
 }
 
 function bulkLoadExcell() {

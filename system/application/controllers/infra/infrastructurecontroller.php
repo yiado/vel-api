@@ -107,10 +107,12 @@ class infrastructureController extends APP_Controller
         echo '{"success": true, "file": "' . $this->input->post('file_name') . '.xls"}';
 
         $node_all = Doctrine_Core::getTable('Node')->find($this->input->post('node_id'));
-        $this->syslog->register('export_list_nodes', array(
-            $this->input->post('file_name'),
-            $node_all->getPath()
-        )); // registering log
+        if (is_numeric($this->input->post('node_id'))) {
+            $this->syslog->register('export_list_nodes', array(
+                $this->input->post('file_name'),
+                $node_all->getPath()
+            )); // registering log
+        }
     }
 
     /**
