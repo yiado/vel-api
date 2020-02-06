@@ -1078,7 +1078,7 @@ class NodeController extends APP_Controller {
             $this->load->library('TreeNodes');
             $treeNodes = new TreeNodes();
             $this->load->library('PHPExcel');
-            $nodo = array();
+            $nodo = array();            
             $documentoExcel = $this->input->file('documentoExcel');
             $node_parent_id = $this->input->post('node_parent_id');
             
@@ -1086,8 +1086,8 @@ class NodeController extends APP_Controller {
                 $objPHPExcel = PHPExcel_IOFactory::load($documentoExcel['tmp_name']);
                 $worksheets = $objPHPExcel->getWorksheetIterator();
                 foreach ($worksheets as $worksheet) {
-                    $highestRow         = $worksheet->getHighestRow(); // e.g. 10
-                    $highestColumn      = $worksheet->getHighestColumn(); // e.g 'F'
+                    $highestRow         = $worksheet->getHighestRow();
+                    $highestColumn      = $worksheet->getHighestColumn();
                     $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);
                     for ($row = 1; $row <= $highestRow; ++ $row) {
                         if ($row > 1) {
@@ -1096,7 +1096,7 @@ class NodeController extends APP_Controller {
                             $nodeType = Doctrine::getTable('NodeType')->findOneByNodeTypeName($worksheet->getCellByColumnAndRow(2, $row)->getValue());
                             
                             $node = new Node();                            
-                            $node['node_name'] = $worksheet->getCellByColumnAndRow(1, $row)->getValue();                            
+                            $node['node_name'] = $worksheet->getCellByColumnAndRow(1, $row)->getValue();                        
                             $node['node_type_id'] = $nodeType->node_type_id;
                             $node->save();
                             
@@ -1113,6 +1113,7 @@ class NodeController extends APP_Controller {
                             $parentNode = Doctrine_Core::getTable('Node')->find($node_parent_id);
                             $node->getNode()->insertAsLastChildOf($parentNode);
                             $treeNodes->add($node->node_id, $node->node_name, $node->node_type_id, false, true, "", $nodeType->node_type_name);
+                            $this->insertInfraInfo($highestColumnIndex, $worksheet, $row, $node);
                         }
                     }
                 }
@@ -1122,7 +1123,47 @@ class NodeController extends APP_Controller {
             echo '({"success":"' . 'false' . '", "results":0})';            
         }
     }
+    
+
+    function insertInfraInfo($highestColumnIndex, $worksheet, $row, $node) {
+        $info = new InfraInfo();
+        $info->node_id = $node->node_id;
+        $info->allowListener = true;
+        for ($col = 3; $col < $highestColumnIndex; ++$col) {
+            $isInfraInfoAttr = false;
+            $columnName = $worksheet->getCellByColumnAndRow($col, 1)->getValue();
+            $languageTag = Doctrine_Core::getTable('LanguageTag')->findOneByLanguageTagValue($columnName);
+
+            $value = $worksheet->getCellByColumnAndRow($col, $row)->getValue();
+            if($languageTag){
+                error_log($languageTag->language_tag_tag);
+                $fieldInfraInfo = $this->config->item('fields_infra_info');                
+                if( isset($fieldInfraInfo[$languageTag->language_tag_tag]) ) {
+                    $isInfraInfoAttr = true;
+                    $info->{$languageTag->language_tag_tag} = $value;
+                }
+            }
+            
+            if(!$isInfraInfoAttr) {
+                $infraOtherDataAttribute = Doctrine_Core::getTable('InfraOtherDataAttribute')->findOneByInfraOtherDataAttributeName($columnName);
+                if ($infraOtherDataAttribute) {
+                    $infraOtherDataValue = new InfraOtherDataValue();
+                    $infraOtherDataValue->infra_other_data_attribute_id = $infraOtherDataAttribute->infra_other_data_attribute_id;
+                    $infraOtherDataValue->node_id = $node->node_id;
+                    if ($infraOtherDataAttribute->infra_other_data_attribute_type <= 4) {                        
+                        $infraOtherDataValue->infra_other_data_value_value = $value;
+                    } else if ($infraOtherDataAttribute->infra_other_data_attribute_type == 5){
+                        $infraOtherDataOption = Doctrine_Core::getTable('InfraOtherDataOption')->findOneByInfraOtherDataAttributeIdAndInfraOtherDataOptionName($infraOtherDataAttribute->infra_other_data_attribute_id,$value);
+                        $infraOtherDataValue->infra_other_data_option_id = $infraOtherDataOption->infra_other_data_option_id;
+                    }
+                    $infraOtherDataValue->save();                    
+                }
+            }
+        }
+        $info->save();
+    }
 }
+
 
 function bulkLoadExcell() {
     ini_set('memory_limit', '512M');

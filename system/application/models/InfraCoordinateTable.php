@@ -211,10 +211,9 @@ class InfraCoordinateTable extends Doctrine_Table {
                 $resp3 = $q->fetchOne();
 
 
-                if ($resp2) {
+                if ($resp2 && $resp3) {
                     $final[$i]['value'] = $resp3->infra_info_area_total; // - SUPERFICIE CONSTRIDA TOTAL
                     $final[$i]['label'] = $resp2->node_name;
-
                     $i++;
                 }
             }

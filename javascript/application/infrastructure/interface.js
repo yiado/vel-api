@@ -1,4 +1,4 @@
-/* global Ext, App, google */
+/* global Ext, App, google, parseFloat, parseFloatoat */
 
 App.InfraStructure.copiedNodes = new Array();
 App.InfraStructure.allowRootGui = true;
@@ -87,7 +87,7 @@ function getMap() {
                                                 success: function(response) {
 
                                                     response = Ext.decode(response.responseText);
-                                                    html = '<h1>Informaci&oacute;n Resumen</h1><hr>'
+                                                    html = '<h1>Información Resumen</h1><hr>'
                                                     html = html + '<div><table style=" padding: 4px; text-align: left;  font: 12 normal;  font: normal 11px tahoma, arial, helvetica, sans-serif;">';
                                                     for (i in response.resultsInfraOtherData) {
                                                         if (typeof response.resultsInfraOtherData[i] === 'object') {
@@ -146,7 +146,6 @@ function getMap() {
                         } else {
 
                             Ext.getCmp('App.InfraStructure.Principal').map.onMapReady = function() {
-                                //                                        mapRef.clearOverlays();
                                 for (var i = 0; i < markers.length; i++) {
                                     markers[i].setMap(null);
                                 }
@@ -175,21 +174,11 @@ function getMap() {
                                     });
 
                                 }
-
-
-                                //                                        mapRef.zoomLevel = parseFloat(infra_default_zoomLevel);
-
                             };
                         }
                     } else {
 
                         if (mapRef) {
-                            //                                    if (mapRef.loaded)
-                            //                                    {
-                            //
-                            //                                        mapRef.clearOverlays();
-                            //                                        mapRef.geoCodeLookup(infra_default_start);
-                            //                                    }
                             if (App.InfraStructure.activeTab == 'App.InfraStructure.fichaResumen' || App.InfraStructure.activeTab == 'App.InfraStructure.mapTab') {
 
                                 if (mapRef == 'mapTab' && !busquedaInterna) {
@@ -257,7 +246,7 @@ App.InfraStructure.treeSearchToolBar = [{
     iconCls: 'keep_add_icon',
     handler: function() {
 
-        Ext.MessageBox.confirm(App.Language.General.confirmation, 'Â¿Desea Marcar Como Ruta Inicial?', function(b) {
+        Ext.MessageBox.confirm(App.Language.General.confirmation, '¿Desea Marcar Como Ruta Inicial?', function(b) {
             if (b == 'yes') {
                 Ext.Ajax.request({
                     waitMsg: App.Language.General.message_generating_file,
@@ -279,11 +268,13 @@ App.InfraStructure.treeSearchToolBar = [{
         });
     }
 }];
+
 App.Interface.addToModuleMenu('infra', {
     text: App.Language.Infrastructure.infrastructure,
     iconCls: 'infrastructure_icon_32',
     module: 'InfraStructure'
 });
+
 App.InfraStructure.Principal = Ext.extend(Ext.TabPanel, {
     activeTab: 0,
     border: false,
@@ -333,9 +324,11 @@ App.InfraStructure.Principal = Ext.extend(Ext.TabPanel, {
             }],
             listeners: {
                 'afterrender': function(panel) {
-                    panel.add(
-                        new App.InfraStructure.QRCode()
-                    );
+                    if ( App.Security.Actions['8015'] ) {
+                        panel.add(
+                            new App.InfraStructure.QRCode()
+                        );
+                    }
                     panel.add(
                         new App.InfraStructure.Foto()
                     );
@@ -492,7 +485,7 @@ App.InfraStructure.Principal = Ext.extend(Ext.TabPanel, {
                         xtype: 'spacer',
                         width: 10
                     }, {
-                        text: 'Actualizar Datos Din&aacute;micos',
+                        text: 'Actualizar Datos Dinámicos',
                         iconCls: 'edit_icon',
                         cls: 'permits',
                         id: 'ModuleAction_5004',
@@ -616,9 +609,8 @@ App.InfraStructure.Principal = Ext.extend(Ext.TabPanel, {
     }
 });
 
-
 App.InfraStructure.OtrosDatosResumen = Ext.extend(Ext.grid.GridPanel, {
-    title: 'Informaci&oacute;n Resumen',
+    title: 'Información Resumen',
     id: 'App.InfraStructure.OtrosDatosResumen',
     store: App.InfraStructure.OtrosDatosResumen.Store,
     loadMask: true,
@@ -662,8 +654,9 @@ App.InfraStructure.OtrosDatosResumen = Ext.extend(Ext.grid.GridPanel, {
         App.InfraStructure.OtrosDatosResumen.superclass.initComponent.call(this);
     }
 });
+
 App.InfraStructure.ActualizarDatosMasivoViewWindow = Ext.extend(Ext.Window, {
-    title: "Subir Excell de actualizaci&oacute;n de Datos Din&aacutemicos",
+    title: "Subir Excel de actualización de Datos Dinámicos",
     width: (screen.width < 550) ? screen.width - 50 : 550,
     height: 180,
     modal: true,
@@ -730,6 +723,7 @@ App.InfraStructure.ActualizarDatosMasivoViewWindow = Ext.extend(Ext.Window, {
         App.InfraStructure.ActualizarDatosMasivoViewWindow.superclass.initComponent.call(this);
     }
 });
+
 App.InfraStructure.FotoConfi.formWindow = Ext.extend(Ext.Window, {
     title: App.Language.General.lis_of_photos,
     width: (screen.width < 1000) ? screen.width - 50 : 1000,
@@ -895,6 +889,7 @@ App.InfraStructure.FotoConfi.formWindow = Ext.extend(Ext.Window, {
         App.InfraStructure.FotoConfi.formWindow.superclass.initComponent.call(this);
     }
 });
+
 App.InfraStructure.Foto = Ext.extend(Ext.Panel, {
     title: App.Language.General.photography_home,
     id: 'App.InfraStructure.FotoResumen',
@@ -1072,6 +1067,7 @@ App.InfraStructure.FotoConfi.GridView = Ext.extend(Ext.grid.GridPanel, {
     ],
     sm: new Ext.grid.CheckboxSelectionModel()
 });
+
 App.InfraStructure.FotoConfi.ThumbView = Ext.extend(Ext.DataView, {
     id: 'App.InfraStructure.Gallery',
     itemSelector: 'div.thumb-wrap',
@@ -1098,6 +1094,7 @@ App.InfraStructure.FotoConfi.ThumbView = Ext.extend(Ext.DataView, {
         }
     }
 });
+
 App.InfraStructure.FotoStandar = Ext.extend(Ext.Panel, {
     title: App.Language.General.photography_home,
     id: 'App.InfraStructure.FotoStandar',
@@ -1318,30 +1315,64 @@ App.InfraStructure.Principal.listener = function(node) { //--> ACA ENTRA AL HACE
                         node_id: node.id
                     },
                     success: function(response) {
-
                         response = Ext.decode(response.responseText);
                         aux = new Ext.form.FieldSet({
-                            title: App.Language.Infrastructure.structural_data,
+                            title: App.Language.Infrastructure.general_data,
                             layout: 'form',
                             collapsible: true,
                             anchor: '100%',
                             labelWidth: 200,
                             bodyCssClass: 'file_style'
                         });
+                        
+                        /**
+                         * infra info estatica (aplica para casos con calculo dinamico)
+                         */
                         for (i in response.resultsInfraInfo) {
-
-                            record = response.resultsInfraInfo[i];
+                            let record = response.resultsInfraInfo[i];
                             if (typeof record === 'object') {
-
                                 field = App.InfraStructure.Info.fields[record.field];
                                 if (field.xtype == 'combo' && parseInt(record.value, 10) > 0) {
                                     field.disabled = false;
                                 }
                                 field.value = record.value;
+                                field.width = 'auto';
                                 aux.add(field);
                             }
-
                         }
+                        /**
+                         * infra info dinamica
+                         */
+                        if (response.resultsInfraOtherData) {
+                            response.resultsInfraOtherData.forEach( function (infra_group){
+                                /**
+                                 * infra_group_id: 4 (datos generales)
+                                 */
+                                if (parseInt(infra_group.infra_grupo_id) === 4){
+                                    infra_group.InfraOtherDataAttribute.forEach(function(record){
+                                        if (typeof record === 'object') {
+                                            let field = App.InfraStructure.OtrosDatos.fields[record.infra_other_data_attribute_type];
+                                            if (record.InfraOtherDataValue[0]) {
+                                                if (parseInt(record.infra_other_data_attribute_type) === 5) {
+                                                    //Tipo Combo
+                                                    field.value = record.InfraOtherDataValue[0].infra_other_data_option_id;
+                                                } else {
+                                                    field.value = (record.InfraOtherDataValue[0] ? record.InfraOtherDataValue[0].infra_other_data_value_value : null);
+                                                }
+                                            } else {
+                                                field.value = (record.InfraOtherDataValue[0] ? record.InfraOtherDataValue[0].infra_other_data_value_value : null);
+                                            }
+                                            field.fieldLabel = record.infra_other_data_attribute_name;
+                                            field.name = record.infra_other_data_attribute_id;
+                                            field.hiddenName = record.infra_other_data_attribute_id;
+                                            field.width = 'auto';
+                                            aux.add(field);
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                                                
                         if (node.id != 'root') {
                             if (response.resultsInfraInfo.length) {
                                 Ext.getCmp('App.InfraStructure.Principal').otherdata.add(aux);
@@ -1352,7 +1383,7 @@ App.InfraStructure.Principal.listener = function(node) { //--> ACA ENTRA AL HACE
                         for (i in response.resultsInfraOtherData) {
 
                             if (typeof response.resultsInfraOtherData[i] === 'object') {
-                                aux = new Ext.form.FieldSet({
+                                let aux = new Ext.form.FieldSet({
                                     title: response.resultsInfraOtherData[i].infra_grupo_nombre,
                                     layout: 'form',
                                     collapsible: true,
@@ -1360,29 +1391,35 @@ App.InfraStructure.Principal.listener = function(node) { //--> ACA ENTRA AL HACE
                                     labelWidth: 200,
                                     bodyCssClass: 'file_style'
                                 });
-                                for (x in response.resultsInfraOtherData[i].InfraOtherDataAttribute) {
+                                for (let x in response.resultsInfraOtherData[i].InfraOtherDataAttribute) {
+                                    /**
+                                     * infra_group_id: 4 (datos generales)
+                                     */
+                                    if (parseInt(response.resultsInfraOtherData[i].infra_grupo_id) !== 4){
+                                        let record = response.resultsInfraOtherData[i].InfraOtherDataAttribute[x];
+                                        if (typeof record === 'object') {
 
-                                    record = response.resultsInfraOtherData[i].InfraOtherDataAttribute[x];
-                                    if (typeof record === 'object') {
-
-                                        field = App.InfraStructure.OtrosDatos.fields[record.infra_other_data_attribute_type];
-                                        if (record.InfraOtherDataValue[0]) {
-                                            if (record.infra_other_data_attribute_type == 5) { //Tipo Combo
-                                                field.value = record.InfraOtherDataValue[0].infra_other_data_option_id;
+                                            let field = App.InfraStructure.OtrosDatos.fields[record.infra_other_data_attribute_type];
+                                            if (record.InfraOtherDataValue[0]) {
+                                                if (parseInt(record.infra_other_data_attribute_type) === 5) {
+                                                    //Tipo Combo
+                                                    field.value = record.InfraOtherDataValue[0].infra_other_data_option_id;
+                                                } else {
+                                                    field.value = (record.InfraOtherDataValue[0] ? record.InfraOtherDataValue[0].infra_other_data_value_value : null);
+                                                }
                                             } else {
                                                 field.value = (record.InfraOtherDataValue[0] ? record.InfraOtherDataValue[0].infra_other_data_value_value : null);
                                             }
-                                        } else {
-                                            field.value = (record.InfraOtherDataValue[0] ? record.InfraOtherDataValue[0].infra_other_data_value_value : null);
+
+                                            field.fieldLabel = record.infra_other_data_attribute_name;
+                                            field.name = record.infra_other_data_attribute_id;
+                                            field.hiddenName = record.infra_other_data_attribute_id;
+                                            field.width = 'auto';
+                                            aux.add(field);
                                         }
-
-                                        field.fieldLabel = record.infra_other_data_attribute_name;
-                                        field.name = record.infra_other_data_attribute_id;
-                                        field.hiddenName = record.infra_other_data_attribute_id;
-                                        field.width = 'auto';
-                                        aux.add(field);
+                                    } else {
+                                        aux.hide();
                                     }
-
                                 }
 
                                 Ext.getCmp('App.InfraStructure.Principal').otherdata.add(aux);
@@ -1399,23 +1436,26 @@ App.InfraStructure.Principal.listener = function(node) { //--> ACA ENTRA AL HACE
         }
     });
     
-    Ext.Ajax.request({
-        waitTitle: App.Language.General.message_please_wait,
-        waitMsg: App.Language.General.message_generating_file,
-        url: 'index.php/qr/get',
-        params: {
-            node_id: App.Interface.selectedNodeId
-        },
-        method: 'POST',
-        success: function(response) {
-            response = Ext.decode(response.responseText);
-            w = Ext.getCmp('App-InfraStructure-QRCode');
-            w.updateImage(response);
-        },
-        failure: function(response) {
-            Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
-        }
-    });
+    if ( App.Security.Actions['8015'] ) {
+        Ext.Ajax.request({
+            waitTitle: App.Language.General.message_please_wait,
+            waitMsg: App.Language.General.message_generating_file,
+            url: 'index.php/qr/get',
+            params: {
+                node_id: App.Interface.selectedNodeId
+            },
+            method: 'POST',
+            success: function(response) {
+                response = Ext.decode(response.responseText);
+                w = Ext.getCmp('App-InfraStructure-QRCode');
+                w.updateImage(response);
+            },
+            failure: function(response) {
+                Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
+            }
+        });
+    }
+    
     //SI ESTA ACTIVA EL TAB FICHA DE RESUMEN ELIGE EL MAPA SELECCIONADO
 
     if (Ext.getCmp('App.InfraStructure.fichaResumen').isVisible()) {
@@ -1440,6 +1480,7 @@ App.InfraStructure.Principal.listener = function(node) { //--> ACA ENTRA AL HACE
 
 
 };
+
 App.InfraStructure.Principal.expand = function(node_id) {
     App.Interface.selectedNodeId = node_id;
     node = Ext.getCmp('App.StructureTree.Tree').getNodeById(node_id);
@@ -1489,8 +1530,7 @@ App.InfraStructure.addNodeWindow = Ext.extend(Ext.Window, {
                         'select': function(cb) {
                             App.NodeType.Store.setBaseParam('node_type_category_id', cb.getValue());
                             App.NodeType.Store.load();
-                            App.InfraStructure.Iot.Store.load();
-                            //                                                                
+                            //App.InfraStructure.Iot.Store.load();
                             if (cb.getValue() == 3) {
 
                                 jQuery('.test_').each(function() {
@@ -1516,7 +1556,6 @@ App.InfraStructure.addNodeWindow = Ext.extend(Ext.Window, {
                                 jQuery('.test_1').parent('div').show();
                                 $('.test_1').css('width', '100%');
                                 jQuery('.test_1 fieldset div').css('width', '100%');
-                                //                                                                      
                                 jQuery('.test_2').show();
                                 jQuery('.test_2').removeClass('x-hide-display');
                                 jQuery('.test_2').parent('div').removeClass('x-hide-display');
@@ -1706,7 +1745,6 @@ App.InfraStructure.addNodeWindow = Ext.extend(Ext.Window, {
                             App.NodeType.Store.setBaseParam('node_type_category_id', cb.getValue());
                             App.NodeType.Store.load();
                             App.InfraStructure.Iot.Store.load();
-                            //                                                                
                             if (cb.getValue() == 3) {
 
                                 jQuery('.test_ad').each(function() {
@@ -1732,7 +1770,6 @@ App.InfraStructure.addNodeWindow = Ext.extend(Ext.Window, {
                                 jQuery('.test_ad_1').parent('div').show();
                                 $('.test_ad_1').css('width', '100%');
                                 jQuery('.test_ad_1 fieldset div').css('width', '100%');
-                                //                                                                      
                                 jQuery('.test_ad_2').show();
                                 jQuery('.test_ad_2').removeClass('x-hide-display');
                                 jQuery('.test_ad_2').parent('div').removeClass('x-hide-display');
@@ -1772,7 +1809,6 @@ App.InfraStructure.addNodeWindow = Ext.extend(Ext.Window, {
                                 jQuery('.test_ad_2').parent('div').addClass('x-hide-display');
                                 jQuery('.test_ad_2').parents('.x-form-item').addClass('x-hide-label');
                                 jQuery('.test_ad_2').parent('div').hide();
-                                //                                                                   
                             }
                         }
                     }
@@ -1938,6 +1974,7 @@ App.InfraStructure.addNodeWindow = Ext.extend(Ext.Window, {
         App.InfraStructure.addNodeWindow.superclass.initComponent.call(this);
     }
 });
+
 App.InfraStructure.editNode = function(node) {
     w = new App.InfraStructure.editNodeWindow({
         node: node
@@ -2027,6 +2064,7 @@ App.InfraStructure.exportListWindow = Ext.extend(Ext.Window, {
         App.InfraStructure.exportListWindow.superclass.initComponent.call(this);
     }
 });
+
 App.InfraStructure.editNodeWindow = Ext.extend(Ext.Window, {
     title: App.Language.Infrastructure.edit_title_node,
     width: 400,
@@ -2099,6 +2137,7 @@ App.InfraStructure.editNodeWindow = Ext.extend(Ext.Window, {
         App.InfraStructure.editNodeWindow.superclass.initComponent.call(this);
     }
 });
+
 App.InfraStructure.searchWindow = Ext.extend(Ext.Window, {
     title: App.Language.General.search,
     width: (screen.width < 780) ? screen.width - 50 : 780,
@@ -2214,7 +2253,7 @@ App.InfraStructure.searchWindow = Ext.extend(Ext.Window, {
                 }, {
                     xtype: 'panel',
                     columnWidth: 1,
-                    title: App.Language.Infrastructure.structural_data,
+                    title: App.Language.Infrastructure.general_data,
                     bodyStyle: 'padding:20px 40px 10',
                     autoScroll: true,
                     layout: 'column',
@@ -2718,7 +2757,9 @@ App.InfraStructure.searchWindow = Ext.extend(Ext.Window, {
         App.InfraStructure.searchWindow.superclass.initComponent.call(this);
     }
 });
+
 App.InfraStructure.searchWindowObject = new App.InfraStructure.searchWindow();
+
 App.InfraStructure.expandDeepNode = function(node_id) {
     Ext.Ajax.request({
         url: 'index.php/core/nodecontroller/expanddeep',
@@ -2761,7 +2802,7 @@ App.InfraStructure.expandDeepNodeCallback = function(node_id, children) {
             App.InfraStructure.expandDeepNodeCallback(node_id, children[i].children);
         }
     }
-}
+};
 
 App.InfraStructure.Info.fields = {
     'node_id': {
@@ -2779,7 +2820,7 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_area_total',
         fieldLabel: App.Language.Infrastructure.infra_info_area_total,
         setValue: function(v) {
-            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            this.setRawValue(numero(v));
             return this;
         }
     },
@@ -2794,7 +2835,7 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_usable_area_total',
         fieldLabel: App.Language.Infrastructure.infra_info_usable_area_total,
         setValue: function(v) {
-            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            this.setRawValue(numero(v));
             return this;
         }
     },
@@ -2809,7 +2850,7 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_volume_total',
         fieldLabel: App.Language.Infrastructure.infra_info_volume_total,
         setValue: function(v) {
-            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            this.setRawValue(numero(v));
             return this;
         }
     },
@@ -2843,7 +2884,7 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_capacity_total',
         fieldLabel: App.Language.Infrastructure.infra_info_capacity_total,
         setValue: function(v) {
-            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            this.setRawValue(numero(v));
             return this;
         }
     },
@@ -2858,7 +2899,7 @@ App.InfraStructure.Info.fields = {
         name: 'infra_info_terrain_area_total',
         fieldLabel: App.Language.Infrastructure.infra_info_terrain_area_total,
         setValue: function(v) {
-            this.setRawValue(Ext.util.Format.formatNumber(v, App.Localization));
+            this.setRawValue(numero(v));
             return this;
         }
     },
@@ -3031,8 +3072,369 @@ App.InfraStructure.Info.fields = {
                 });
             }
         }
+    },
+    'infra_info_terrero_escritura': {
+        xtype: 'numberfield',
+        name: 'infra_info_terrero_escritura',
+        fieldLabel: App.Language.Infrastructure.infra_info_terrero_escritura,
+        allowNegative: false
+    },
+    'infra_info_terrero_escritura_total': {
+        xtype: 'displayfield',
+        name: 'infra_info_terrero_escritura_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_terrero_escritura_total,
+        setValue: function(v) {
+            this.setRawValue(numero(v));
+            return this;
+        }
+    },
+    'infra_info_terreno_cad': {
+        xtype: 'numberfield',
+        name: 'infra_info_terreno_cad',
+        fieldLabel: App.Language.Infrastructure.infra_info_terreno_cad,
+        allowNegative: false
+    },
+    'infra_info_terreno_cad_total': {
+        xtype: 'displayfield',
+        name: 'infra_info_terreno_cad_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_terreno_cad_total,
+        setValue: function(v) {
+            this.setRawValue(numero(v));
+            return this;
+        }
+    },
+    'infra_info_construidos_ogcu': {
+        xtype: 'numberfield',
+        name: 'infra_info_construidos_ogcu',
+        fieldLabel: App.Language.Infrastructure.infra_info_construidos_ogcu,
+        allowNegative: false
+    },
+    'infra_info_construidos_ogcu_total': {
+        xtype: 'displayfield',
+        name: 'infra_info_construidos_ogcu_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_construidos_ogcu_total,
+        setValue: function(v) {
+            this.setRawValue(numero(v));
+            return this;
+        }
+    },
+    'infra_info_uf': {
+        xtype: 'numberfield',
+        name: 'infra_info_uf',
+        fieldLabel: App.Language.Infrastructure.infra_info_uf,
+        allowNegative: false
+    },
+    'infra_info_uf_total': {
+        xtype: 'displayfield',
+        name: 'infra_info_uf_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_uf_total,
+        setValue: function(v) {
+            this.setRawValue(numero(v));
+            return this;
+        }
+    },
+    'infra_info_money': {
+        xtype: 'displayfield',
+        name: 'infra_info_money',
+        fieldLabel: App.Language.Infrastructure.infra_info_money,
+        setValue: function(v) {
+            this.setRawValue(numero(v));
+            return this;
+        }
+    },
+    'infra_info_emplazamiento': {
+        xtype: 'numberfield',
+        name: 'infra_info_emplazamiento',
+        fieldLabel: App.Language.Infrastructure.infra_info_emplazamiento,
+        allowNegative: false
+    },
+    'infra_info_emplazamiento_total': {
+        xtype: 'displayfield',
+        name: 'infra_info_emplazamiento_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_emplazamiento_total,
+        setValue: function(v) {
+            this.setRawValue(numero(v));
+            return this;
+        }
+    },
+    'infra_info_emplazamiento_porcent': {
+        xtype: 'displayfield',
+        name: 'infra_info_emplazamiento_porcent',
+        fieldLabel: App.Language.Infrastructure.infra_info_emplazamiento_porcent,
+        setValue: function(value) {
+            this.setRawValue(porcentaje(value));
+            return this;
+        }
+    },
+    'infra_info_calles': {
+        xtype: 'numberfield',
+        name: 'infra_info_calles',
+        fieldLabel: App.Language.Infrastructure.infra_info_calles,
+        allowNegative: false
+    },
+    'infra_info_calles_total': {
+        xtype: 'displayfield',
+        name: 'infra_info_calles_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_calles_total,
+        setValue: function(v) {
+            this.setRawValue(numero(v));
+            return this;
+        }
+    },
+    'infra_info_porcent_calles': {
+        xtype: 'displayfield',
+        name: 'infra_info_porcent_calles',
+        fieldLabel: App.Language.Infrastructure.infra_info_porcent_calles,
+        setValue: function(value) {
+            this.setRawValue(porcentaje(value));
+            return this;
+        }
+    },
+    'infra_info_areas_verdes': {
+        xtype: 'numberfield',
+        name: 'infra_info_areas_verdes',
+        fieldLabel: App.Language.Infrastructure.infra_info_areas_verdes,
+        allowNegative: false
+    },
+    'infra_info_areas_verdes_total': {
+        xtype: 'displayfield',
+        name: 'infra_info_areas_verdes_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_areas_verdes_total,
+        setValue: function(v) {
+            this.setRawValue(numero(v));
+            return this;
+        }
+    },
+    'infra_info_areas_verdes_porcent': {
+        xtype: 'displayfield',
+        name: 'infra_info_areas_verdes_porcent',
+        fieldLabel: App.Language.Infrastructure.infra_info_areas_verdes_porcent,
+        setValue: function(value) {
+            this.setRawValue(porcentaje(value));
+            return this;
+        }
+    },
+    'infra_info_areas_manejadas': {
+        xtype: 'numberfield',
+        name: 'infra_info_areas_manejadas',
+        fieldLabel: App.Language.Infrastructure.infra_info_areas_manejadas,
+        allowNegative: false
+    },
+    'infra_info_areas_manejadas_total': {
+        xtype: 'displayfield',
+        name: 'infra_info_areas_manejadas_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_areas_manejadas_total,
+        setValue: function(v) {
+            this.setRawValue(numero(v));
+            return this;
+        }
+    },
+    'infra_info_areas_manejadas_porcent': {
+        xtype: 'displayfield',
+        name: 'infra_info_areas_manejadas_porcent',
+        fieldLabel: App.Language.Infrastructure.infra_info_areas_manejadas_porcent,
+        setValue: function(value) {
+            this.setRawValue(porcentaje(value));
+            return this;
+        }
+    },
+    'infra_info_patios_abiertos': {
+        xtype: 'numberfield',
+        name: 'infra_info_patios_abiertos',
+        fieldLabel: App.Language.Infrastructure.infra_info_patios_abiertos,
+        allowNegative: false
+    },
+    'infra_info_patios_abiertos_total': {
+        xtype: 'displayfield',
+        name: 'infra_info_patios_abiertos_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_patios_abiertos_total,
+        setValue: function(v) {
+            this.setRawValue(numero(v));
+            return this;
+        }
+    },
+    'infra_info_patios_abiertos_porcent': {
+        xtype: 'displayfield',
+        name: 'infra_info_patios_abiertos_porcent',
+        fieldLabel: App.Language.Infrastructure.infra_info_patios_abiertos_porcent,
+        setValue: function(value) {
+            this.setRawValue(porcentaje(value));
+            return this;
+        }
+    },
+    'infra_info_recintos_deportivos': {
+        xtype: 'numberfield',
+        name: 'infra_info_recintos_deportivos',
+        fieldLabel: App.Language.Infrastructure.infra_info_recintos_deportivos,
+        allowNegative: false
+    },
+    'infra_info_recintos_deportivos_total': {
+        xtype: 'displayfield',
+        name: 'infra_info_recintos_deportivos_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_recintos_deportivos_total,
+        setValue: function(v) {
+            this.setRawValue(numero(v));
+            return this;
+        }
+    },
+    'infra_info_recintos_deportivos_porcent': {
+        xtype: 'displayfield',
+        name: 'infra_info_recintos_deportivos_porcent',
+        fieldLabel: App.Language.Infrastructure.infra_info_recintos_deportivos_porcent,
+        setValue: function(value) {
+            this.setRawValue(porcentaje(value));
+            return this;
+        }
+    },
+    'infra_info_circulaciones_abiertas': {
+        xtype: 'numberfield',
+        name: 'infra_info_circulaciones_abiertas',
+        fieldLabel: App.Language.Infrastructure.infra_info_circulaciones_abiertas,
+        allowNegative: false
+    },
+    'infra_info_circulaciones_abiertas_total': {
+        xtype: 'displayfield',
+        name: 'infra_info_circulaciones_abiertas_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_circulaciones_abiertas_total,
+        setValue: function(v) {
+            this.setRawValue(numero(v));
+            return this;
+        }
+    },
+    'infra_info_circulaciones_abiertas_porcent': {
+        xtype: 'displayfield',
+        name: 'infra_info_circulaciones_abiertas_porcent',
+        fieldLabel: App.Language.Infrastructure.infra_info_circulaciones_abiertas_porcent,
+        setValue: function(value) {
+            this.setRawValue(porcentaje(value));
+            return this;
+        }
+    },
+    'infra_info_otras_areas': {
+        xtype: 'numberfield',
+        name: 'infra_info_otras_areas',
+        fieldLabel: App.Language.Infrastructure.infra_info_otras_areas,
+        allowNegative: false
+    },
+    'infra_info_otras_areas_total': {
+        xtype: 'displayfield',
+        name: 'infra_info_otras_areas_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_otras_areas_total,
+        setValue: function(v) {
+            this.setRawValue(numero(v));
+            return this;
+        }
+    },
+    'infra_info_otras_areas_porcent': {
+        xtype: 'displayfield',
+        name: 'infra_info_otras_areas_porcent',
+        fieldLabel: App.Language.Infrastructure.infra_info_otras_areas_porcent,
+        setValue: function(value) {
+            this.setRawValue(porcentaje(value));
+            return this;
+        }
+    },
+    'infra_info_estacionamientos_num': {
+        xtype: 'numberfield',
+        name: 'infra_info_estacionamientos_num',
+        fieldLabel: App.Language.Infrastructure.infra_info_estacionamientos_num,
+        allowNegative: false
+    },
+    'infra_info_estacionamientos_total': {
+        xtype: 'displayfield',
+        name: 'infra_info_estacionamientos_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_estacionamientos_total,
+        setValue: function(v) {
+            this.setRawValue(numero(v));
+            return this;
+        }
+    },
+    'infra_info_estacionamientos': {
+        xtype: 'numberfield',
+        name: 'infra_info_estacionamientos',
+        fieldLabel: App.Language.Infrastructure.infra_info_estacionamientos,
+        allowNegative: false
+    },
+    'infra_info_estacionamientos_total_sector': {
+        xtype: 'displayfield',
+        name: 'infra_info_estacionamientos_total_sector',
+        fieldLabel: App.Language.Infrastructure.infra_info_estacionamientos_total_sector,
+        setValue: function(v) {
+            this.setRawValue(numero(v));
+            return this;
+        }
+    },
+    'infra_info_estacionamientos_porcent': {
+        xtype: 'displayfield',
+        name: 'infra_info_estacionamientos_porcent',
+        fieldLabel: App.Language.Infrastructure.infra_info_estacionamientos_porcent,
+        setValue: function(value) {
+            this.setRawValue(porcentaje(value));
+            return this;
+        }
+    },
+    'infra_info_uf_day_value': {
+        xtype: 'displayfield',
+        name: 'infra_info_uf_day_value',
+        fieldLabel: App.Language.Infrastructure.infra_info_uf_day_value,
+        setValue: function(v) {
+            this.setRawValue(numero(v));
+            return this;
+        }
+    },
+    'infra_info_sky_floor_height': {
+        xtype: 'numberfield',
+        name: 'infra_info_sky_floor_height',
+        fieldLabel: App.Language.Infrastructure.infra_info_sky_floor_height,
+        allowNegative: false
+    },
+    'infra_info_walls': {
+        xtype: 'displayfield',
+        name: 'infra_info_walls',
+        fieldLabel: App.Language.Infrastructure.infra_info_walls,
+        setValue: function(v) {
+            this.setRawValue(numero(v));
+            return this;
+        }
+    },
+    'infra_info_primer_nivel': {
+        xtype: 'numberfield',
+        name: 'infra_info_primer_nivel',
+        fieldLabel: App.Language.Infrastructure.infra_info_primer_nivel,
+        allowNegative: false
+    },
+    'infra_info_primer_nivel_total': {
+        xtype: 'displayfield',
+        name: 'infra_info_primer_nivel_total',
+        fieldLabel: App.Language.Infrastructure.infra_info_primer_nivel_total,
+        setValue: function(v) {
+            this.setRawValue(numero(v));
+            return this;
+        }
+    },
+    'infra_info_primer_nivel_porcent': {
+        xtype: 'displayfield',
+        name: 'infra_info_primer_nivel_porcent',
+        fieldLabel: App.Language.Infrastructure.infra_info_primer_nivel_porcent,
+        setValue: function(value) {
+            this.setRawValue(porcentaje(value));
+            return this;
+        }
     }
 };
+
+function numero(value){
+    value = parseFloat(value).toFixed(1);
+    value = parseFloat(value);
+    return value.toLocaleString('es-CL', {minimumFractionDigits: 1});
+}
+
+function porcentaje(value){
+    value = parseFloat(value).toFixed(1);
+    value = parseFloat(value);
+    value = value.toLocaleString('es-CL', {minimumFractionDigits: 1});
+    return `${value} %`;
+}
 
 App.InfraStructure.emportListMasiva = Ext.extend(Ext.Window, {
     title: "Carga masiva",
