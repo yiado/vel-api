@@ -1093,10 +1093,10 @@ class NodeController extends APP_Controller {
                         if ($row > 1) {
                             
                             $node_level = (int) $worksheet->getCellByColumnAndRow(0, $row)->getValue();
-                            $nodeType = Doctrine::getTable('NodeType')->findOneByNodeTypeName($worksheet->getCellByColumnAndRow(2, $row)->getValue());
+                            $nodeType = Doctrine::getTable('NodeType')->findOneByNodeTypeName(trim($worksheet->getCellByColumnAndRow(2, $row)->getValue()));
                             
                             $node = new Node();                            
-                            $node['node_name'] = $worksheet->getCellByColumnAndRow(1, $row)->getValue();                        
+                            $node['node_name'] = trim($worksheet->getCellByColumnAndRow(1, $row)->getValue());
                             $node['node_type_id'] = $nodeType->node_type_id;
                             $node->save();
                             
@@ -1131,12 +1131,11 @@ class NodeController extends APP_Controller {
         $info->allowListener = true;
         for ($col = 3; $col < $highestColumnIndex; ++$col) {
             $isInfraInfoAttr = false;
-            $columnName = $worksheet->getCellByColumnAndRow($col, 1)->getValue();
+            $columnName = trim($worksheet->getCellByColumnAndRow($col, 1)->getValue());
             $languageTag = Doctrine_Core::getTable('LanguageTag')->findOneByLanguageTagValue($columnName);
 
-            $value = $worksheet->getCellByColumnAndRow($col, $row)->getValue();
+            $value = trim($worksheet->getCellByColumnAndRow($col, $row)->getValue());
             if($languageTag){
-                error_log($languageTag->language_tag_tag);
                 $fieldInfraInfo = $this->config->item('fields_infra_info');                
                 if( isset($fieldInfraInfo[$languageTag->language_tag_tag]) ) {
                     $isInfraInfoAttr = true;
