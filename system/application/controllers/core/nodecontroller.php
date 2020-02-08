@@ -1093,27 +1093,31 @@ class NodeController extends APP_Controller {
                         if ($row > 1) {
                             
                             $node_level = (int) $worksheet->getCellByColumnAndRow(0, $row)->getValue();
-                            $nodeType = Doctrine::getTable('NodeType')->findOneByNodeTypeName(trim($worksheet->getCellByColumnAndRow(2, $row)->getValue()));
-                            
-                            $node = new Node();                            
-                            $node['node_name'] = trim($worksheet->getCellByColumnAndRow(1, $row)->getValue());
-                            $node['node_type_id'] = $nodeType->node_type_id;
-                            $node->save();
-                            
-                            $nodo[$node_level] = $node->node_id;
-                            
-                            if ($node_level == 1) {
-                                $nodo = array();
-                                $nodo[$node_level] = $node->node_id;
-                                $node_parent_id = $this->input->post('node_parent_id');
+                            $nodeTypeName = trim($worksheet->getCellByColumnAndRow(2, $row)->getValue());
+                            $nodeType = Doctrine::getTable('NodeType')->findOneByNodeTypeName($nodeTypeName);
+                            if (!$nodeType) {
+                                error_log("No existe el nodo tipo {$nodeTypeName}");
                             } else {
-                                $node_parent_id = $nodo[$node_level - 1];
+                                $node = new Node();                            
+                                $node['node_name'] = trim($worksheet->getCellByColumnAndRow(1, $row)->getValue());
+                                $node['node_type_id'] = $nodeType->node_type_id;
+                                $node->save();
+
+                                $nodo[$node_level] = $node->node_id;
+
+                                if ($node_level == 1) {
+                                    $nodo = array();
+                                    $nodo[$node_level] = $node->node_id;
+                                    $node_parent_id = $this->input->post('node_parent_id');
+                                } else {
+                                    $node_parent_id = $nodo[$node_level - 1];
+                                }
+
+                                $parentNode = Doctrine_Core::getTable('Node')->find($node_parent_id);
+                                $node->getNode()->insertAsLastChildOf($parentNode);
+                                $treeNodes->add($node->node_id, $node->node_name, $node->node_type_id, false, true, "", $nodeType->node_type_name);
+                                $this->insertInfraInfo($highestColumnIndex, $worksheet, $row, $node);
                             }
-                        
-                            $parentNode = Doctrine_Core::getTable('Node')->find($node_parent_id);
-                            $node->getNode()->insertAsLastChildOf($parentNode);
-                            $treeNodes->add($node->node_id, $node->node_name, $node->node_type_id, false, true, "", $nodeType->node_type_name);
-                            $this->insertInfraInfo($highestColumnIndex, $worksheet, $row, $node);
                         }
                     }
                 }
@@ -1153,6 +1157,14 @@ class NodeController extends APP_Controller {
                         $infraOtherDataValue->infra_other_data_value_value = $value;
                     } else if ($infraOtherDataAttribute->infra_other_data_attribute_type == 5){
                         $infraOtherDataOption = Doctrine_Core::getTable('InfraOtherDataOption')->findOneByInfraOtherDataAttributeIdAndInfraOtherDataOptionName($infraOtherDataAttribute->infra_other_data_attribute_id,$value);
+                        if(!$infraOtherDataOption){
+                            error_log("nuevo valor a agregar {$value}");
+                            $newInfraOtherDataOption = new InfraOtherDataOption();
+                            $newInfraOtherDataOption->infra_other_data_attribute_id = $infraOtherDataAttribute->infra_other_data_attribute_id;
+                            $newInfraOtherDataOption->infra_other_data_option_name = $value;
+                            $newInfraOtherDataOption->save();
+                            $infraOtherDataOption = $newInfraOtherDataOption;
+                        }
                         $infraOtherDataValue->infra_other_data_option_id = $infraOtherDataOption->infra_other_data_option_id;
                     }
                     $infraOtherDataValue->save();                    
