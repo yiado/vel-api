@@ -124,7 +124,7 @@
 			foreach ($module_gui_files as $file) {
 				
 				if (strpos($file, 'css') === false) {
-					if (strpos($file, 'http://') === false) {
+					if (strpos($file, 'http') === false) {
 						echo '    <script type="text/javascript" src="' . base_url() . 'javascript' . $file . '"></script>' . PHP_EOL;
 					} else {
 						echo '    <script type="text/javascript" src="' . $file . '"></script>' . PHP_EOL;
