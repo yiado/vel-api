@@ -90,13 +90,6 @@ class infraInfoController extends APP_Controller {
                     $result[$cont]['label'] = $this->translateTag('Infrastructure', $config->infra_attribute);
                     $cont++;
                 }
-
-                if (empty($node_type_id)) {
-                    $result[$cont] = array();
-                    $result[$cont]['field'] = 'node_id';
-                    $result[$cont]['value'] = $node_id;
-                    $result[$cont]['label'] = $this->translateTag('Infrastructure', $config->infra_attribute);
-                }
             }
             $node = Doctrine_Core::getTable('Node')->findById($node_id);
         

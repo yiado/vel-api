@@ -147,8 +147,10 @@ class PlanController extends APP_Controller {
                 'p.node_id = ?' => $this->input->post('node_id')
             );
 
-            if ((!is_null($NodeType->plan_category_id)) && (!empty($NodeType->plan_category_id))) {
-                $filters['nt.plan_category_id = ?'] = $NodeType->plan_category_id;
+            if ($NodeType) {
+                if ((!is_null($NodeType->plan_category_id)) && (!empty($NodeType->plan_category_id))) {
+                    $filters['nt.plan_category_id = ?'] = $NodeType->plan_category_id;
+                }
             }
 
             $plans = Doctrine_Core::getTable('Plan')->retrieveByNodeResumen($filters);
