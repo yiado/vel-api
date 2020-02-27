@@ -5,7 +5,7 @@ $config['infra_gui_files'] = array(
     '/application/infrastructure/store.js',
     '/application/infrastructure/interface.js',
     //'http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=AIzaSyCMwoqOMW2Wx5kSO8cA5hC74wLW1saBpEI',
-    'http://maps.googleapis.com/maps/api/js?key=AIzaSyBN6C_ynpkC6Tq4QquMgOo7c-mJ7SOF0ZY',
+    'https://maps.googleapis.com/maps/api/js?key=AIzaSyBN6C_ynpkC6Tq4QquMgOo7c-mJ7SOF0ZY',
     '/extjs/ux/GMapPanel.js'
 );
 
