@@ -149,13 +149,13 @@ App.Request.SolicitudLog.Store = new Ext.data.JsonStore({
     autoSave: true,
     root: 'results',
     totalProperty: 'total',
-    idProperty: 'rdi_log_id',
+    idProperty: 'solicitud_log_id',
     fields: [
-        'rdi_log_id',
+        'solicitud_log_id',
         'solicitud_id',
         'user_id',
-        'rdi_log_fecha',
-        'rdi_log_detalle',
+        'solicitud_log_fecha',
+        'solicitud_log_detalle',
         'User',
         'Solicitud'
     ],
@@ -435,11 +435,280 @@ App.Request.ServicesOrganismChart.Store = new Ext.data.JsonStore({
     ]
 });
 
+
+/**
+ * Servicios
+ */
+App.Request.Services.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
+            read: 'index.php/request/service/get',
+            create: 'index.php/request/service/add',
+            update: 'index.php/request/service/update'
+        },
+        listeners: {
+            'exception': function(DataProxy, type, action, options, response, arg) {
+                if (type === 'remote') {
+                    Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
+                } else if (type === 'response') {
+                    response = Ext.decode(response.responseText);
+                    if (response.success === false) {
+                        alert(response.msg);
+                    }
+                }
+            }
+        }
+    }),
+    writer: new Ext.data.JsonWriter({
+        encode: true,
+        writeAllFields: true,
+        encodeDelete: true
+    }),
+    autoSave: true,
+    root: 'results',
+    totalProperty: 'total',
+    idProperty: 'service_id',
+    fields: [
+        'service_id',
+        'node_id',
+        'user_id',
+        'service_type_id',
+        'service_status_id',
+        'service_date',
+        'service_organism',
+        'service_phone',
+        'service_commentary',
+        'Node',
+        'User',
+        'ServiceType',
+        'ServiceStatus'
+    ],
+    listeners: {
+        'save': function() {
+            this.load({ params: { node_id: App.Interface.selectedNodeId,start: 0, limit: App.GridLimit } });
+        }
+    }
+});
+
+App.Request.ServicesStatus.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
+            read: 'index.php/request/servicestatus/get',
+            update: 'index.php/request/servicestatus/update',
+            destroy: 'index.php/request/servicestatus/delete'
+        },
+        listeners: {
+            'exception': function(DataProxy, type, action, options, response, arg) {
+                if (type === 'remote') {
+                    Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
+                }
+            }
+        }
+    }),
+    writer: new Ext.data.JsonWriter({
+        encode: true,
+        writeAllFields: true,
+        encodeDelete: true
+    }),
+    autoSave: true,
+    root: 'results',
+    totalProperty: 'total',
+    idProperty: 'service_status_id',
+    fields: [
+        'service_status_id',
+        'service_status_name',
+        'service_status_commentary'
+    ],
+    listeners: {
+        'save': function() {
+            this.load();
+        }
+    }
+});
+
+App.Request.ServicesType.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
+            read: 'index.php/request/servicetype/get',
+            update: 'index.php/request/servicetype/update',
+            destroy: 'index.php/request/servicetype/delete'
+        }
+    }),
+    writer: new Ext.data.JsonWriter({
+        encode: true,
+        writeAllFields: true,
+        encodeDelete: true
+    }),
+    autoSave: true,
+    root: 'results',
+    totalProperty: 'total',
+    idProperty: 'service_type_id',
+    fields: [
+        'service_type_id',
+        'service_type_name',
+        'service_type_commentary',
+        'user_id',
+        'User'
+    ],
+    listeners: {
+        'save': function() {
+            this.load();
+        }
+    }
+});
+
+App.Request.ServicesLog.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
+            read: 'index.php/request/servicelog/get'
+        },
+        listeners: {
+            'exception': function(DataProxy, type, action, options, response, arg) {
+                if (type === 'remote') {
+                    Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
+                } else if (type === 'response') {
+                    response = Ext.decode(response.responseText);
+                    if (response.success === false)
+                        alert(response.msg);
+                }
+            }
+        }
+    }),
+    writer: new Ext.data.JsonWriter({
+        encode: true,
+        writeAllFields: true,
+        encodeDelete: true
+    }),
+    autoSave: true,
+    root: 'results',
+    totalProperty: 'total',
+    idProperty: 'service_log_id',
+    fields: [
+        'service_log_id',
+        'service_id',
+        'user_id',
+        'service_log_date',
+        'service_log_detail',
+        'User',
+        'Service'
+    ],
+    listeners: {
+        'save': function() {
+            this.load();
+        }
+    }
+});
+
+App.Request.ServicesStatusChart.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
+            read: 'index.php/request/service/getServiceStatus'
+        },
+        listeners: {
+            'exception': function(DataProxy, type, action, options, response, arg) {
+                if (type === 'remote') {
+                    Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
+                }
+            }
+        }
+    }),
+    writer: new Ext.data.JsonWriter({
+        encode: true,
+        writeAllFields: true,
+        encodeDelete: true
+    }),
+    root: 'results',
+    totalProperty: 'total',
+    fields: [
+        'count',
+        'ServiceStatus'
+    ]
+});
+
+App.Request.ServicesTypeChart.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
+            read: 'index.php/request/service/getServiceType'
+        },
+        listeners: {
+            'exception': function(DataProxy, type, action, options, response, arg) {
+                if (type === 'remote') {
+                    Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
+                }
+            }
+        }
+    }),
+    writer: new Ext.data.JsonWriter({
+        encode: true,
+        writeAllFields: true,
+        encodeDelete: true
+    }),
+    root: 'results',
+    totalProperty: 'total',
+    fields: [
+        'count',
+        'ServiceType'
+    ]
+});
+
+App.Request.ServicesDateChart.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
+            read: 'index.php/request/service/getServiceDate'
+        },
+        listeners: {
+            'exception': function(DataProxy, type, action, options, response, arg) {
+                if (type === 'remote') {
+                    Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
+                }
+            }
+        }
+    }),
+    writer: new Ext.data.JsonWriter({
+        encode: true,
+        writeAllFields: true,
+        encodeDelete: true
+    }),
+    root: 'results',
+    totalProperty: 'total',
+    fields: [
+        'count',
+        'month_year',
+        'ServiceType'
+    ]
+});
+
+App.Request.ServicesOrganismChart.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
+            read: 'index.php/request/service/getServiceOrganism'
+        },
+        listeners: {
+            'exception': function(DataProxy, type, action, options, response, arg) {
+                if (type === 'remote') {
+                    Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
+                }
+            }
+        }
+    }),
+    writer: new Ext.data.JsonWriter({
+        encode: true,
+        writeAllFields: true,
+        encodeDelete: true
+    }),
+    root: 'results',
+    totalProperty: 'total',
+    fields: [
+        'count',
+        'service_organism'
+    ]
+});
+
 /**
  * 
  * Rdi
  */
-App.Request.Rdi.Store = new Ext.data.JsonStore({
+App.Request.Information.Store = new Ext.data.JsonStore({
     proxy: new Ext.data.HttpProxy({
         api: {
             read: 'index.php/request/rdi/get',
@@ -485,7 +754,7 @@ App.Request.Rdi.Store = new Ext.data.JsonStore({
     }
 });
 
-App.Request.RdiStatus.Store = new Ext.data.JsonStore({
+App.Request.InformationStatus.Store = new Ext.data.JsonStore({
     proxy: new Ext.data.HttpProxy({
         api: {
             read: 'index.php/request/rdistatus/get',
@@ -520,7 +789,7 @@ App.Request.RdiStatus.Store = new Ext.data.JsonStore({
     }
 });
 
-App.Request.RdiLog.Store = new Ext.data.JsonStore({
+App.Request.InformationLog.Store = new Ext.data.JsonStore({
     proxy: new Ext.data.HttpProxy({
         api: {
             read: 'index.php/request/rdilog/get'

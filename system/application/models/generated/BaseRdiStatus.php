@@ -7,7 +7,6 @@
  * 
  * @property integer $rdi_status_id
  * @property string $rdi_status_name
- * @property string $rdi_status_commentary
  * @property Doctrine_Collection $Service
  * 
  * @package    ##PACKAGE##

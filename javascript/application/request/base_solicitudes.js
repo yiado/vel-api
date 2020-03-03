@@ -15,9 +15,9 @@ App.General.declareNameSpaces('App.Request', [
     'ServicesTypeChart',
     'ServicesDateChart',
     'ServicesOrganismChart',
-    'Rdi',
-    'RdiStatus',
-    'RdiLog'
+    'Information',
+    'InformationStatus',
+    'InformationLog'
 ]);
 
 App.Request.moduleActivate = function() {
@@ -344,8 +344,8 @@ App.ModuleActions[8017] = {
             
             records.forEach(function (rdiHistory){
                 App.Request.Rdi_id = rdiHistory.data.rdi_id;
-                App.Request.RdisLog.Store.setBaseParam('rdi_id', App.Request.Rdi_id);
-                App.Request.RdisLog.Store.load();
+                App.Request.InformationLog.Store.setBaseParam('rdi_id', App.Request.Rdi_id);
+                App.Request.InformationLog.Store.load();
             });
             w = new App.Request.historialRdiWindow({ title: App.Language.Request.rdi_history });
             w.show();
@@ -354,79 +354,3 @@ App.ModuleActions[8017] = {
         }
     }
 };
-/*
-App.ModuleActions[8012] = {
-    id: 'ModuleAction_8012',
-    hidden: true,
-    text: App.Language.General.search,
-    iconCls: 'search_icon_16',
-    enableToggle: true,
-    handler: function(b) {
-        if (b.ownerCt.ownerCt.form.isVisible()) {
-            b.ownerCt.ownerCt.form.hide();
-        } else {
-            b.ownerCt.ownerCt.form.show();
-        }
-        b.ownerCt.ownerCt.doLayout();
-    }
-};
-
-App.ModuleActions[8013] = {
-    xtype: 'splitbutton',
-    text: 'Estados',
-    hidden: true,
-    iconCls: 'edit_icon',
-    id: 'btn-service-status',
-    menu: [],
-    listeners: {
-        beforerender: function(){
-            let btn = Ext.getCmp('btn-service-status');            
-            App.Request.ServicesStatus.Store.data.items.forEach(function(serviceStatus){
-                if (serviceStatus.id === '1') {
-                    return;
-                }
-                btn.menu.add({
-                    text:  serviceStatus.data.service_status_name,
-                    iconCls: 'add_icon',
-                    handler: function() {
-                        let record = Ext.getCmp('App.Request.Service.Grid').getSelectionModel().getSelected();
-                        if ( record ) {
-                            let data = record.data;
-                            if (data.service_status_id === '4') {
-                                Ext.FlashMessage.alert(`El servicio esta en estado ${data.ServiceStatus.service_status_name}`);
-                                return;
-                            }
-                            w = new App.Request.changeServiceStatusWindow({ title: 'Cambio estado de Servicio' });
-                            w.show();
-                            App.Request.Service_id = data.service_id;
-                            Ext.getCmp('App.Service.Request.btnChangeServiceStatusWindow').setText(serviceStatus.data.service_status_name);
-                            Ext.getCmp('App.Request.Service.Usuario').setValue(data.User.user_username);
-                            Ext.getCmp('App.Request.Service.Email').setValue(data.User.user_email);
-                            Ext.getCmp('App.Request.Service.Phone').setValue(data.service_phone);
-                            Ext.getCmp('App.Request.Service.Organism').setValue(data.service_organism);
-                            Ext.getCmp('App.Request.Service.ServiceType').setValue(data.ServiceType.service_type_id).setDisabled(true);
-                            Ext.getCmp('App.Request.Service.ServiceStatus').setValue(data.ServiceStatus.service_status_id).setDisabled(true);
-                            Ext.getCmp('App.Request.Service.ServiceStatusNew').setValue(serviceStatus.data.service_status_id).setDisabled(true);
-                            Ext.getCmp('App.Request.Service.Commentary').setValue(data.service_commentary);
-                        } else {
-                            Ext.FlashMessage.alert('Debe Seleccionar un Servicio');
-                        }
-                    }
-                });
-            });
-        }
-    }
-};
-
-App.ModuleActions[8014] = {
-    text: 'Estadísticas',
-    id: 'ModuleAction_8014',
-    hidden: true,
-    iconCls: 'filter_icon',
-    handler: function(b) {
-        w = new App.Request.statistics({
-            title: 'Estadísticas'
-        });
-        w.show();
-    }
-};*/

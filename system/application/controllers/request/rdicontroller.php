@@ -12,10 +12,10 @@ class RdiController extends APP_Controller {
         $this->CI->load->library('NotificationUser');
     }
 
-    function get() {
-        $request = Doctrine_Core::getTable('Rdi')->retrieveAll($this->filtrosRdis(),$this->input->post('start'), $this->input->post('limit'));
+    function get() {        
+        $request = Doctrine_Core::getTable('Rdi')->retrieveAll($this->filtrosRdi(),$this->input->post('start'), $this->input->post('limit'));
         if ($request->count()) {
-            $countAllRequest = Doctrine_Core::getTable('Rdi')->retrieveAll($this->filtrosRdis(), false, false, true);
+            $countAllRequest = Doctrine_Core::getTable('Rdi')->retrieveAll($this->filtrosRdi(), false, false, true);
             echo '({"total":"' . $countAllRequest . '", "results":' . $this->json->encode($request->toArray()) . '})';
         } else {
             echo '({"total":"0", "results":[]})';
@@ -120,7 +120,7 @@ class RdiController extends APP_Controller {
         echo $json_data;
     }
 
-    function filtrosRdis() {
+    function filtrosRdi() {
         $user_id = $this->session->userdata('user_id');
         $user_type = $this->session->userdata('user_type');
 
@@ -132,8 +132,8 @@ class RdiController extends APP_Controller {
         $user_username = $this->input->post('user_username');
         $user_email = $this->input->post('user_email');
 
-        $start_date = $this->input->post('start_date');
-        $end_date = $this->input->post('end_date');
+        //$start_date = $this->input->post('start_date');
+        //$end_date = $this->input->post('end_date');
 
         $filters = array(            
             'rs.rdi_status_id = ?' => $rdi_status_id,
@@ -161,7 +161,7 @@ class RdiController extends APP_Controller {
     function export() {
         $this->load->library('PHPExcel');
 
-        $requests = Doctrine_Core::getTable('Rdi')->retrieveAll($this->filtrosRdis());
+        $requests = Doctrine_Core::getTable('Rdi')->retrieveAll($this->filtrosRdi());
 
         $titulos[] = 'Tipo de Servicio';
         $titulos[] = 'Estado';
@@ -286,12 +286,12 @@ class RdiController extends APP_Controller {
     }
     
     function getRdiStatus() {
-        $request = Doctrine_Core::getTable('Rdi')->groupAllByStatus($this->filtrosRdis());
+        $request = Doctrine_Core::getTable('Rdi')->groupAllByStatus($this->filtrosRdi());
         $this->sendRes($request);
     }
     
     function getRdiDate() {
-        $request = Doctrine_Core::getTable('Rdi')->groupAllByDate($this->filtrosRdis());
+        $request = Doctrine_Core::getTable('Rdi')->groupAllByDate($this->filtrosRdi());
         $this->sendRes($request);
     }
     

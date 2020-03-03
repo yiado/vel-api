@@ -45,20 +45,20 @@ App.Request.Rdi.formSearching = {
             text: App.Language.General.search,
             handler: function (b) {
                 form = b.ownerCt.ownerCt.getForm();
-                node_id = App.Request.Rdi.Store.baseParams.node_id;
-                App.Request.Rdi.Store.baseParams = form.getSubmitValues();
-                App.Request.Rdi.Store.setBaseParam('node_id', node_id);
-                App.Request.Rdi.Store.load({ params: { start: 0, limit: App.GridLimit } });
+                node_id = App.Request.Information.Store.baseParams.node_id;
+                App.Request.Information.Store.baseParams = form.getSubmitValues();
+                App.Request.Information.Store.setBaseParam('node_id', node_id);
+                App.Request.Information.Store.load({ params: { start: 0, limit: App.GridLimit } });
             }
         }, {
             text: App.Language.General.clean,
             handler: function (b) {
                 form = b.ownerCt.ownerCt.getForm();
                 form.reset();
-                node_id = App.Request.Rdi.Store.baseParams.node_id;
-                App.Request.Rdi.Store.baseParams = {};
-                App.Request.Rdi.Store.setBaseParam('node_id', node_id);
-                App.Request.Rdi.Store.load({ params: { start: 0, limit: App.GridLimit } });
+                node_id = App.Request.Information.Store.baseParams.node_id;
+                App.Request.Information.Store.baseParams = {};
+                App.Request.Information.Store.setBaseParam('node_id', node_id);
+                App.Request.Information.Store.load({ params: { start: 0, limit: App.GridLimit } });
             }
         }],
     items: [{
@@ -73,7 +73,7 @@ App.Request.Rdi.formSearching = {
                             triggerAction: 'all',
                             anchor: '95%',
                             id: 'App.Request.SearchRdiStatus',
-                            store: App.Request.RdiStatus.Store,
+                            store: App.Request.InformationStatus.Store,
                             hiddenName: 'rdi_status_id',
                             displayField: 'rdi_status_name',
                             valueField: 'rdi_status_id',
@@ -192,25 +192,26 @@ App.Request.Rdi.Grilla = {
     loadMask: true,
     listeners: {
         'beforerender': function (w) {
-            App.Request.Rdi.Store.load({ params: { node_id: App.Interface.selectedNodeId, start: 0, limit: App.GridLimit } });
+            console.log("App.Interface.selectedNodeId", App.Interface.selectedNodeId)
+            App.Request.Information.Store.load({ params: { node_id: App.Interface.selectedNodeId, start: 0, limit: App.GridLimit } });
         },
         'rowdblclick': function (grid, rowIndex) {
             record = grid.getStore().getAt(rowIndex);
             if (App.Security.Session.user_username === record.data.User.user_username) {
                 if (record.data.RdiStatus.rdi_status_id === '4') {
-                    Ext.FlashMessage.alert(`No es posible editar solicitudes finalizadas.`);
+                    Ext.FlashMessage.alert(`No es posible editar requerimientos finalizados.`);
                     return;
                 }
                 w = new App.Request.editRequestRdiByNodeWindow({title: App.Language.Request.edit_request_rdi});
                 w.show();
                 App.Request.Rdi_id = record.data.rdi_id;
-                Ext.getCmp('App.RequestRdiEdit.Alta').setValue(record.data.RdiType.rdi_type_id);
+                /*Ext.getCmp('App.RequestRdiEdit.Alta').setValue(record.data.RdiType.rdi_type_id);
                 Ext.getCmp('App.RequestRdiEdit.Alta').setDisabled(true);
                 Ext.getCmp('App.RequestRdiEdit.Usuario').setValue(record.data.User.user_username);
                 Ext.getCmp('App.RequestRdiEdit.Email').setValue(record.data.User.user_email);
                 Ext.getCmp('App.RequestRdiEdit.Telefono').setValue(record.data.rdi_phone);
                 Ext.getCmp('App.RequestRdiEdit.Organismo').setValue(record.data.rdi_organism);
-                Ext.getCmp('App.RequestRdiEdit.Coment').setValue(record.data.rdi_commentary);
+                Ext.getCmp('App.RequestRdiEdit.Coment').setValue(record.data.rdi_description);*/
 
                 var iso_date = Date.parseDate(record.data.rdi_date, "Y-m-d H:i:s");
                 Ext.getCmp('App.RequestRdiEdit.Fecha').setValue(iso_date.format("d/m/Y H:i"));
@@ -228,7 +229,7 @@ App.Request.Rdi.Grilla = {
             }
         }
     },
-    store: App.Request.Rdi.Store,
+    store: App.Request.Information.Store,
     columns: [
         new Ext.grid.CheckboxSelectionModel(),
         {
@@ -240,14 +241,6 @@ App.Request.Rdi.Grilla = {
                 return `<a href='javascript: App.InfraStructure.expandDeepNode(${record.data.node_id})'>${Node.node_name}</a>`;
             }
         }, {
-            header: 'Tipo',
-            sortable: true,
-            width: 50,
-            dataIndex: 'RdiType',
-            renderer: function (RdiType) {
-                return RdiType.rdi_type_name;
-            }
-        }, {
             dataIndex: 'RdiStatus',
             header: 'Estado',
             sortable: true,
@@ -256,11 +249,6 @@ App.Request.Rdi.Grilla = {
                 return RdiStatus.rdi_status_name;
             }
         }, {
-            dataIndex: 'rdi_organism',
-            header: 'Organismo',
-            width: 100,
-            sortable: true
-        }, {
             dataIndex: 'User',
             header: 'Nombre',
             width: 60,
@@ -268,22 +256,8 @@ App.Request.Rdi.Grilla = {
             renderer: function (User) {
                 return User.user_username;
             }
-        }, {
-            dataIndex: 'rdi_phone',
-            header: 'Teléfono',
-            align: 'center',
-            width: 55,
-            sortable: true
-        }, {
-            xtype: 'datecolumn',
-            header: 'Fecha',
-            sortable: true,
-            dataIndex: 'rdi_date',
-            width: 60,
-            format: App.General.DefaultDateTimeFormat,
-            align: 'center'
         }, {                    
-            dataIndex: 'rdi_commentary',
+            dataIndex: 'rdi_description',
             header: 'Requerimiento',
             width: 100,
             sortable: true
@@ -293,20 +267,20 @@ App.Request.Rdi.Grilla = {
         singleSelect: true
     }),
     bbar: new Ext.PagingToolbar({
-        store: App.Request.Rdi.Store,
+        store: App.Request.Information.Store,
         displayInfo: true,
         pageSize: App.GridLimit,
         prependButtons: true,
         listeners: {
             'beforerender': function(w) {
-                App.Request.Rdi.Store.setBaseParam('node_id', App.Interface.selectedNodeId);
+                App.Request.Information.Store.setBaseParam('node_id', App.Interface.selectedNodeId);
             }
 
         }
     })
 };
 
-App.Request.addRequestRdiByNodeWindow = Ext.extend(Ext.Window, {
+App.Request.addRdiByNodeWindow = Ext.extend(Ext.Window, {
     width: (screen.width < 500) ? screen.width - 50 : 500,
     height: 370,
     modal: true,
@@ -344,24 +318,12 @@ App.Request.addRequestRdiByNodeWindow = Ext.extend(Ext.Window, {
                 }]
             }, {
                 xtype: 'fieldset',
-                title: 'Datos Solicitud',
+                title: 'Datos del Requerimiento',
                 ref: 'solicitud',
                 items: [{
-                    xtype: 'textfield',
-                    fieldLabel: 'Teléfono',
-                    name: 'rdi_phone',
-                    anchor: '100%',
-                    allowBlank: false
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Organismo',
-                    name: 'rdi_organism',
-                    anchor: '100%',
-                    allowBlank: false
-                }, {
                     xtype: 'textarea',
                     anchor: '100%',
-                    name: 'rdi_commentary',
+                    name: 'rdi_description',
                     fieldLabel: 'Requerimiento',
                     allowBlank: false
                 }]
@@ -386,7 +348,7 @@ App.Request.addRequestRdiByNodeWindow = Ext.extend(Ext.Window, {
                                 if (o.result.success === "false") {
                                     Ext.FlashMessage.alert('Error al Ingreso de Datos');
                                 } else {
-                                    App.Request.Rdi.Store.load({ params: { node_id: App.Interface.selectedNodeId, start: 0, limit: App.GridLimit } });
+                                    App.Request.Information.Store.load({ params: { node_id: App.Interface.selectedNodeId, start: 0, limit: App.GridLimit } });
 
                                     b.ownerCt.ownerCt.ownerCt.close();
                                     Ext.FlashMessage.alert(o.result.msg);
@@ -401,7 +363,7 @@ App.Request.addRequestRdiByNodeWindow = Ext.extend(Ext.Window, {
                 }
             }]
         }];
-        App.Request.addRequestByNodeWindow.superclass.initComponent.call(this);
+        App.Request.addRdiByNodeWindow.superclass.initComponent.call(this);
     }
 });
 
@@ -464,7 +426,7 @@ App.Request.editRequestRdiByNodeWindow = Ext.extend(Ext.Window, {
                     xtype: 'textarea',
                     fieldLabel: 'Requerimiento',
                     id: 'App.RequestRdiEdit.Coment',
-                    name: 'rdi_commentary',
+                    name: 'rdi_description',
                     anchor: '100%',
                     allowBlank: false
                 }]
@@ -489,7 +451,7 @@ App.Request.editRequestRdiByNodeWindow = Ext.extend(Ext.Window, {
                                 if (o.result.success === "false") {
                                     Ext.FlashMessage.alert('Error al Ingreso de Datos');
                                 } else {
-                                    App.Request.Rdi.Store.load({ params: { node_id: App.Interface.selectedNodeId, start: 0, limit: App.GridLimit } });
+                                    App.Request.Information.Store.load({ params: { node_id: App.Interface.selectedNodeId, start: 0, limit: App.GridLimit } });
 
                                     b.ownerCt.ownerCt.ownerCt.close();
                                     Ext.FlashMessage.alert(o.result.msg);
@@ -589,7 +551,7 @@ App.Request.historialRdiWindow = Ext.extend(Ext.Window, {
             items: [{
                 border: false,
                 xtype: 'grid',
-                store: App.Request.RdisLog.Store,
+                store: App.Request.InformationLog.Store,
                 height: 420,
                 viewConfig: {
                     forceFit: true
@@ -693,7 +655,7 @@ App.Request.changeRdiStatusWindow = Ext.extend(Ext.Window, {
                     fieldLabel: 'Estado actual',
                     anchor: '100%',
                     id: 'App.Request.Rdi.RdiStatus',
-                    store: App.Request.RdiStatus.Store,
+                    store: App.Request.InformationStatus.Store,
                     hiddenName: 'rdi_status_id',
                     triggerAction: 'all',
                     displayField: 'rdi_status_name',
@@ -710,7 +672,7 @@ App.Request.changeRdiStatusWindow = Ext.extend(Ext.Window, {
                     fieldLabel: 'Estado nuevo',
                     anchor: '100%',
                     id: 'App.Request.Rdi.RdiStatusNew',
-                    store: App.Request.RdiStatus.Store,
+                    store: App.Request.InformationStatus.Store,
                     hiddenName: 'rdi_status_id',
                     triggerAction: 'all',
                     displayField: 'rdi_status_name',
@@ -725,7 +687,7 @@ App.Request.changeRdiStatusWindow = Ext.extend(Ext.Window, {
                 }, {
                     xtype: 'displayfield',
                     anchor: '100%',
-                    name: 'rdi_commentary',
+                    name: 'rdi_description',
                     fieldLabel: 'Requerimiento',
                     id: 'App.Request.Rdi.Commentary'
                 }]
@@ -752,7 +714,7 @@ App.Request.changeRdiStatusWindow = Ext.extend(Ext.Window, {
                                 if (o.result.success === "false") {
                                     Ext.FlashMessage.alert('Error al Ingreso de Datos');
                                 } else {
-                                    App.Request.Rdi.Store.load({ params: { node_id: App.Interface.selectedNodeId, start: 0, limit: App.GridLimit } });
+                                    App.Request.Information.Store.load({ params: { node_id: App.Interface.selectedNodeId, start: 0, limit: App.GridLimit } });
                                     b.ownerCt.ownerCt.ownerCt.close();
                                     Ext.FlashMessage.alert(o.result.msg);
                                 }

@@ -1,11 +1,11 @@
 CREATE TABLE `rdi_status`  (
   `rdi_status_id` int(11) NOT NULL AUTO_INCREMENT,
-  `service_status_name` varchar(255) NULL DEFAULT NULL,
+  `rdi_status_name` varchar(255) NULL DEFAULT NULL,
   PRIMARY KEY (`rdi_status_id`)
 );
 
 CREATE TABLE `rdi`  (
-  `rdi_id` int(11) NOT NULL,
+  `rdi_id` int(11) NOT NULL AUTO_INCREMENT,
   `node_id` int(11) NULL DEFAULT NULL,
   `user_id` int(11) NULL DEFAULT NULL,
   `rdi_description` varchar(1000) NULL DEFAULT NULL,
