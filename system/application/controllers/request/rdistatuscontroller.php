@@ -2,16 +2,16 @@
 
 /**
  * @package    Controller
- * @subpackage ServiceStatusController
+ * @subpackage RdiStatusController
  */
-class ServiceStatusController extends APP_Controller{
+class RdiStatusController extends APP_Controller {
 
-    function ServiceStatusController() {
+    function RdiStatusController() {
         parent::APP_Controller();
     }
 
     function get() {
-        $request = Doctrine_Core::getTable('ServiceStatus')->retrieveAll($this->input->post('query'));
+        $request = Doctrine_Core::getTable('RdiStatus')->retrieveAll($this->input->post('query'));
         if ($request->count()) {
             echo '({"total":"' . $request->count() . '", "results":' . $this->json->encode($request->toArray()) . '})';
         } else {
@@ -21,10 +21,9 @@ class ServiceStatusController extends APP_Controller{
 
     function add() {
         try {
-            $serviceStatus = new ServiceStatus();
-            $serviceStatus->service_status_name = $this->input->post('service_status_name');
-            $serviceStatus->service_status_commentary = $this->input->post('service_status_commentary');
-            $serviceStatus->save();
+            $rdiStatus = new RdiStatus();
+            $rdiStatus->rdi_status_name = $this->input->post('rdi_status_name');
+            $rdiStatus->save();
 
             $success = true;
             $msg = $this->translateTag('General', 'operation_successful');
@@ -39,10 +38,9 @@ class ServiceStatusController extends APP_Controller{
 
     function update() {
         try {
-            $serviceStatus = Doctrine_Core::getTable('ServiceStatus')->find($this->input->post('service_status_id'));
-            $serviceStatus->service_status_name = $this->input->post('service_status_name');
-            $serviceStatus->service_status_commentary = $this->input->post('service_status_commentary');
-            $serviceStatus->save();
+            $rdiStatus = Doctrine_Core::getTable('RdiStatus')->find($this->input->post('rdi_status_id'));
+            $rdiStatus->rdi_status_name = $this->input->post('rdi_status_name');
+            $rdiStatus->save();
 
             $success = true;
             $msg = $this->translateTag('General', 'operation_successful');
@@ -57,11 +55,11 @@ class ServiceStatusController extends APP_Controller{
 
     function delete() {
         try {
-            $service_status_id = $this->input->post('service_status_id');
-            $service = Doctrine::getTable('Service')->findByServiceStatusId($service_status_id);
-            if (!count($service)) {
-                $serviceStatus = Doctrine::getTable('ServiceStatus')->find($service_status_id);
-                if ($serviceStatus->delete()) {
+            $rdi_status_id = $this->input->post('rdi_status_id');
+            $rdi = Doctrine::getTable('Rdi')->findByRdiStatusId($rdi_status_id);
+            if (!count($rdi)) {
+                $rdiStatus = Doctrine::getTable('RdiStatus')->find($rdi_status_id);
+                if ($rdiStatus->delete()) {
                     $success = true;
                     $msg = $this->translateTag('General', 'operation_successful');
                 } else {
@@ -80,5 +78,5 @@ class ServiceStatusController extends APP_Controller{
         $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg));
         echo $json_data;
     }
-    
+
 }

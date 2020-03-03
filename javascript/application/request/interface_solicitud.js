@@ -11,7 +11,7 @@ App.Request.Principal = Ext.extend(Ext.TabPanel, {
         this.items = [
             new App.Request.Asset(),
             new App.Request.Service(),
-            new App.Request.Information()
+            new App.Request.Rdi()
         ];
         App.Request.ServicesStatus.Store.load();
         App.Request.Principal.superclass.initComponent.call(this);

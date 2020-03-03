@@ -149,13 +149,13 @@ App.Request.SolicitudLog.Store = new Ext.data.JsonStore({
     autoSave: true,
     root: 'results',
     totalProperty: 'total',
-    idProperty: 'solicitud_log_id',
+    idProperty: 'rdi_log_id',
     fields: [
-        'solicitud_log_id',
+        'rdi_log_id',
         'solicitud_id',
         'user_id',
-        'solicitud_log_fecha',
-        'solicitud_log_detalle',
+        'rdi_log_fecha',
+        'rdi_log_detalle',
         'User',
         'Solicitud'
     ],
@@ -433,4 +433,131 @@ App.Request.ServicesOrganismChart.Store = new Ext.data.JsonStore({
         'count',
         'service_organism'
     ]
+});
+
+/**
+ * 
+ * Rdi
+ */
+App.Request.Rdi.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
+            read: 'index.php/request/rdi/get',
+            create: 'index.php/request/rdi/add',
+            update: 'index.php/request/rdi/update'
+        },
+        listeners: {
+            'exception': function (DataProxy, type, action, options, response, arg) {
+                if (type === 'remote') {
+                    Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
+                } else if (type === 'response') {
+                    response = Ext.decode(response.responseText);
+                    if (response.success === false) {
+                        alert(response.msg);
+                    }
+                }
+            }
+        }
+    }),
+    writer: new Ext.data.JsonWriter({
+        encode: true,
+        writeAllFields: true,
+        encodeDelete: true
+    }),
+    autoSave: true,
+    root: 'results',
+    totalProperty: 'total',
+    idProperty: 'rdi_id',
+    fields: [
+        'rdi_id',
+        'node_id',
+        'user_id',
+        'rdi_description',
+        'rdi_status_id',
+        'Node',
+        'RdiStatus',
+        'User'
+    ],
+    listeners: {
+        'save': function () {
+            this.load();
+        }
+    }
+});
+
+App.Request.RdiStatus.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
+            read: 'index.php/request/rdistatus/get',
+            update: 'index.php/request/rdistatus/update',
+            destroy: 'index.php/request/rdistatus/delete'
+        },
+        listeners: {
+            'exception': function (DataProxy, type, action, options, response, arg) {
+                if (type === 'remote') {
+                    Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
+                }
+            }
+        }
+    }),
+    writer: new Ext.data.JsonWriter({
+        encode: true,
+        writeAllFields: true,
+        encodeDelete: true
+    }),
+    autoSave: true,
+    root: 'results',
+    totalProperty: 'total',
+    idProperty: 'rdi_status_id',
+    fields: [
+        'rdi_status_id',
+        'rdi_status_name'
+    ],
+    listeners: {
+        'save': function () {
+            this.load();
+        }
+    }
+});
+
+App.Request.RdiLog.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
+            read: 'index.php/request/rdilog/get'
+        },
+        listeners: {
+            'exception': function (DataProxy, type, action, options, response, arg) {
+                if (type === 'remote') {
+                    Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
+                } else if (type === 'response') {
+                    response = Ext.decode(response.responseText);
+                    if (response.success === false)
+                        alert(response.msg);
+                }
+            }
+        }
+    }),
+    writer: new Ext.data.JsonWriter({
+        encode: true,
+        writeAllFields: true,
+        encodeDelete: true
+    }),
+    autoSave: true,
+    root: 'results',
+    totalProperty: 'total',
+    idProperty: 'rdi_log_id',
+    fields: [
+        'rdi_log_id',
+        'rdi_id',
+        'user_id',
+        'rdi_log_date',
+        'rdi_log_detail',
+        'User',
+        'Rdi'
+    ],
+    listeners: {
+        'save': function () {
+            this.load();
+        }
+    }
 });
