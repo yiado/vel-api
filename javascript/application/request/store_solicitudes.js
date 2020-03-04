@@ -743,6 +743,8 @@ App.Request.Information.Store = new Ext.data.JsonStore({
         'user_id',
         'rdi_description',
         'rdi_status_id',
+        'rdi_created_at',
+        'rdi_updated_at',
         'Node',
         'RdiStatus',
         'User'

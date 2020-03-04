@@ -7,9 +7,11 @@ CREATE TABLE `rdi_status`  (
 CREATE TABLE `rdi`  (
   `rdi_id` int(11) NOT NULL AUTO_INCREMENT,
   `node_id` int(11) NULL DEFAULT NULL,
-  `user_id` int(11) NULL DEFAULT NULL,
+  `user_id` int(11) NULL DEFAULT NULL,  
   `rdi_description` varchar(1000) NULL DEFAULT NULL,
   `rdi_status_id` int(11) NULL DEFAULT NULL,
+  `rdi_created_at` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP,
+  `rdi_updated_at` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`rdi_id`),
   INDEX `rdi_ibfk_1`(`node_id`),
   INDEX `rdi_ibfk_2`(`user_id`),

@@ -65,6 +65,22 @@ abstract class BaseRdi extends Doctrine_Record {
             'notnull' => false,
             'autoincrement' => false,
         ));
+        $this->hasColumn('rdi_created_at', 'timestamp', null, array(
+            'type' => 'timestamp',
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => true,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('rdi_updated_at', 'timestamp', null, array(
+            'type' => 'timestamp',
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => true,
+            'autoincrement' => false,
+        ));
     }
 
     public function setUp() {

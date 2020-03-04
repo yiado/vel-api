@@ -76,7 +76,7 @@ class RdiController extends APP_Controller {
         $conn = Doctrine_Manager::getInstance()->getCurrentConnection();
         $conn->beginTransaction();
         try {
-
+            
             $rdi_description = $this->input->post('rdi_description');
             if ($rdi->rdi_description !== $rdi_description) {
                 $rdiLog = new RdiLog();
@@ -87,6 +87,7 @@ class RdiController extends APP_Controller {
                 $rdiLog->save();
                 $rdi->rdi_description = $rdi_description;
             }
+
 
             $rdi_status_id = $this->input->post('rdi_status_id');
             $cambio_estado = false;
@@ -103,12 +104,13 @@ class RdiController extends APP_Controller {
             }
 
             $rdi->save();
+
             $success = true;
             $msg = $this->translateTag('General', 'operation_successful');
             $conn->commit();
             
             if ($cambio_estado) {
-                $this->sendNotificationUpdate($rdi);
+                //$this->sendNotificationUpdate($rdi);
             }
         } catch (Exception $e) {
             $conn->rollback();
@@ -132,19 +134,24 @@ class RdiController extends APP_Controller {
         $user_username = $this->input->post('user_username');
         $user_email = $this->input->post('user_email');
 
-        //$start_date = $this->input->post('start_date');
-        //$end_date = $this->input->post('end_date');
+        $start_date = $this->input->post('start_date');
+        $end_date = $this->input->post('end_date');
+        
+        $start_updated_at = $this->input->post('start_updated_at');
+        $end_updated_at = $this->input->post('end_updated_at');
 
         $filters = array(            
             'rs.rdi_status_id = ?' => $rdi_status_id,
             'u.user_username LIKE ?' => (!empty($user_username) ? '%' . $user_username . '%' : NULL),
             'u.user_email = ?' => $user_email,
-            //'rdi_date >= ?' => (!empty($start_date) ? $start_date . ' 00:00:00' : NULL ),
-            //'rdi_date <= ?' => (!empty($end_date) ? $end_date . ' 23:59:59' : NULL ),
+            'rdi_created_at >= ?' => (!empty($start_date) ? $start_date . ' 00:00:00' : NULL ),
+            'rdi_created_at <= ?' => (!empty($end_date) ? $end_date . ' 23:59:59' : NULL ),
+            'rdi_updated_at >= ?' => (!empty($start_updated_at) ? $start_updated_at . ' 00:00:00' : NULL ),
+            'rdi_updated_at <= ?' => (!empty($end_updated_at) ? $end_updated_at . ' 23:59:59' : NULL ),
         );
         
         if ($this->input->post('date_interval')) {
-            //$filters['DATE_FORMAT(rdi_date,\'%m-%Y\') = ?'] = $this->input->post('date_interval');
+            $filters['DATE_FORMAT(rdi_created_at,\'%m-%Y\') = ?'] = $this->input->post('date_interval');
         }
             
         if ($ancestros) {
@@ -163,28 +170,29 @@ class RdiController extends APP_Controller {
 
         $requests = Doctrine_Core::getTable('Rdi')->retrieveAll($this->filtrosRdi());
 
-        $titulos[] = 'Tipo de Servicio';
         $titulos[] = 'Estado';
         $titulos[] = 'Nombre Usuario';
         $titulos[] = 'Email Usuario';
-        $titulos[] = 'Teléfono';
-        $titulos[] = 'Fecha Servicio';
-        $titulos[] = 'Organismo';
-        $titulos[] = 'Comentario';
+        $titulos[] = 'Descripción';
+        $titulos[] = 'Fecha Creación';
+        $titulos[] = 'Fecha Modificación';
 
         $rdis = array();
         foreach ($requests as $request) {
-            $date = new DateTime($request->rdi_date);
-            $fecha = $date->format('d/m/Y H:i');
+            
+            $date = new DateTime($request->rdi_created_at);
+            $created_date = $date->format('d/m/Y H:i');
+            
+            $date2 = new DateTime($request->rdi_updated_at);
+            $updated_date = $date2->format('d/m/Y H:i');
+            
             $rdi = array();
-            $rdi[] = $request->RdiType->rdi_type_name;
             $rdi[] = $request->RdiStatus->rdi_status_name;
             $rdi[] = $request->User->user_username;
             $rdi[] = $request->User->user_email;
-            $rdi[] = $request->rdi_phone;
-            $rdi[] = PHPExcel_Shared_Date::stringToExcel($fecha);
-            $rdi[] = $request->rdi_organism;
             $rdi[] = $request->rdi_description;
+            $rdi[] = PHPExcel_Shared_Date::stringToExcel($created_date);
+            $rdi[] = PHPExcel_Shared_Date::stringToExcel($updated_date);
             $rdis[] = $rdi;
         }
 
@@ -200,10 +208,7 @@ class RdiController extends APP_Controller {
         $sheet->setAutoFilter($dimensionHoja);
 
         /** Formato de tipo de datos en celdas */
-        $sheet->getStyle("E2:E{$ultimaFila}")
-                ->getNumberFormat()
-                ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER);
-        $sheet->getStyle("F2:F{$ultimaFila}")
+        $sheet->getStyle("E2:F{$ultimaFila}")
                 ->getNumberFormat()
                 ->setFormatCode('dd/mm/yyyy hh:mm');
 
