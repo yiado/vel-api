@@ -22,8 +22,6 @@ App.Iot.Principal.listener = function(node) {
     if (node && node.id) {
         Ext.getCmp('App.Iot.Principal').deviceIot.removeAll();
         Ext.getCmp('App.Iot.Principal').deviceIot.doLayout();
-        //        App.Iot.Device.Store.setBaseParam('node_id', node.id);
-        //        App.Iot.Device.Store.load();
 
         if (typeof Ext.getCmp('App.Iot.Principal') != "undefined") {
 
@@ -35,7 +33,6 @@ App.Iot.Principal.listener = function(node) {
                 success: function(response) {
 
                     response = Ext.decode(response.responseText);
-                    //                    console.log('>> response: ', response);
                     if (response.total > 0) {
 
                         var date_value = response.results[0]['node']['updated_at'].split("T");
@@ -153,7 +150,6 @@ App.Iot.Principal.listener = function(node) {
                                 id: 'App.Iot.Tabs',
                                 listeners: {
                                     'tabchange': function(cb) {
-                                        //                                                console.log('>>cb: ', cb);
                                         params = cb.activeTab.id.split("_");
 
                                         App.Iot.Sensors.Store.setBaseParam('element_id', params[1]);

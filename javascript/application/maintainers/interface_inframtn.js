@@ -1061,12 +1061,9 @@ App.InfraMtn.NodePlanTask.taskWindow = Ext.extend(Ext.Window, {
                             },
                             waitMsg: 'Espere...',
                             success: function(fp, o) {
-                                //w.form.ownerCt.close();
                                 b.ownerCt.ownerCt.ownerCt.close();
-                                //b.ownerCt.ownerCt.ownerCt.hide();
                                 App.InfraMtn.NodePlanTask.Store.setBaseParam('mtn_node_plan_id', o.result.mtn_node_plan_id);
                                 App.InfraMtn.NodePlanTask.Store.load();
-                                //Ext.MessageBox.alert(App.Language.Core.notification, o.result.msg );
                             },
                             failure: function(fp, o) {
                                 alert('Error:\n' + o.result.msg);
@@ -1757,12 +1754,9 @@ App.InfraMtn.NodePriceList.addTask = Ext.extend(Ext.Window, {
                             },
                             waitMsg: App.Language.General.please_wait,
                             success: function(fp, o) {
-                                //w.form.ownerCt.close();
                                 b.ownerCt.ownerCt.ownerCt.close();
-                                //b.ownerCt.ownerCt.ownerCt.hide();
                                 App.InfraMtn.NodePriceListTask.Store.setBaseParam('mtn_node_price_list_id', App.InfraMtn.NodePriceList.Id);
                                 App.InfraMtn.NodePriceListTask.Store.load();
-                                //Ext.MessageBox.alert(App.Language.Core.notification, o.result.msg );
                             },
                             failure: function(fp, o) {
                                 alert('Error:\n' + o.result.msg);

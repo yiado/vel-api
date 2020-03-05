@@ -369,9 +369,6 @@ App.Asset.subirActivosMasivoViewWindow = Ext.extend(Ext.Window, {
                         success: function(response) {
                             response = Ext.decode(response.responseText);
 
-                            //                            console.log(response);
-
-
                             Ext.getCmp('asset_load_foot_signature1').setValue(response.results.asset_load_foot_signature1);
                             Ext.getCmp('asset_load_foot_signature2').setValue(response.results.asset_load_foot_signature2);
                             Ext.getCmp('asset_load_foot_signature3').setValue(response.results.asset_load_foot_signature3);

@@ -1129,11 +1129,6 @@ App.Mtn.generateWorkOrderNodeWindow = Ext.extend(Ext.Window, {
                 text: App.Language.General.save,
                 id: 'App.Mtn.Wo.FormWoNode.BtnSaveWo',
                 handler: function(b) {
-                        //                    if (undefined == window.asset_id && undefined == window.App.Mtn.Wo.Id) 
-                        //                    {
-                        //                        Ext.Msg.alert(App.Language.Core.notification, App.Language.Maintenance.do_not_believe_the_ot_you_must_first_select_an_asset);
-                        //                        b.ownerCt.ownerCt.ownerCt.close();
-                        //                    } else {
                         form = Ext.getCmp('App.Mtn.Wo.FormWoNode').getForm();
                         if (form.isValid() && App.Interface.selectedNodeId != 'root') {
                             form.submit({

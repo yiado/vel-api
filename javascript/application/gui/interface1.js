@@ -482,11 +482,7 @@ App.Interface.ViewPort.displayModuleGui = function(node) {
     //AQUI ABRE SI TIENE UNA RUTA DE INICIO
     if (App.Security.Session.user_path != 'root') {
         App.InfraStructure.expandDeepNode(App.Security.Session.user_path);
-        //             App.InfraStructure.expandDeepNode(3000); 
     }
-
-    //Panel infraestructura y panimetria to modulo planimetria
-    //    console.log('>>Modulo activo: ', App.Interface.activeModule);
 
     if (App.Interface.activeModule == 'Plan' && screen.width > 700 && ((App.Security.Actions['2006'] != undefined) || (App.Security.Actions['5000'] != undefined))) {
 
@@ -579,7 +575,6 @@ Ext.onReady(function() {
     });
 
 
-    //    console.log('>>App.Interface.ModuleMenu: ',App.Interface.ModuleMenu);
     vp = new App.Interface.ViewPort();
     // tree loading mask
 
@@ -588,9 +583,7 @@ Ext.onReady(function() {
 
         Ext.getCmp('App.PrincipalPanel').removeAll();
         App.Interface.activeModule = App.ModuleSelect;
-        //if (App.Interface.selectedNodeId != 'root') {
         Ext.getCmp('App.StructureTree.Tree').fireEvent('click', Ext.getCmp('App.StructureTree.Tree').getNodeById(App.Interface.selectedNodeId));
-        //}
 
         // tree toolbar search
         Ext.getCmp('App.StructureTree.ToolBarSearch').removeAll();

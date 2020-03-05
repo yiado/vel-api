@@ -1297,47 +1297,6 @@ App.Mtn.generateWorkOrderNodeWindow = Ext.extend(Ext.Window, {
                         xtype: 'grid',
                         title: App.Language.Maintenance.direct_costs,
                         ref: 'othercostgrid',
-                        //                        tbar: 
-                        //                        {
-                        //                            xtype: 'toolbar',
-                        //                            items: 
-                        //                            [{
-                        //                                xtype: 'button',
-                        //                                text: App.Language.General.add,
-                        //                                iconCls: 'add_icon',
-                        //                                handler: function()
-                        //                                {
-                        //                                    w = new App.Mtn.addOtherCostsNodeWindow();
-                        //                                    w.show();
-                        //                                }
-                        //                            }, {
-                        //                                xtype: 'spacer',
-                        //                                width: 5
-                        //                            }, {
-                        //                                xtype: 'button',
-                        //                                text: App.Language.General.ddelete,
-                        //                                iconCls: 'delete_icon',
-                        //                                handler: function(b)
-                        //                                {
-                        //                                    grid = Ext.getCmp('App.Mtn.WoOtherCostsNodeGrid');
-                        //                                    if (grid.getSelectionModel().getCount()) 
-                        //                                    {
-                        //                                        Ext.MessageBox.confirm(App.Language.General.confirmation, App.Language.General.are_you_sure_you_want_to_delete, function(b){
-                        //                                            if (b == 'yes') 
-                        //                                            {
-                        //                                                grid.getSelectionModel().each(function(record)
-                        //                                                {
-                        //                                                    App.Mtn.OtherCostsWo.Store.remove(record);
-                        //                                                    Ext.getCmp('App.Mtn.Wo.WinWoNode').fireEvent('beforerender', Ext.getCmp('App.Mtn.Wo.WinWoNode'));
-                        //                                                });
-                        //                                            }
-                        //                                        });
-                        //                                    } else {
-                        //                                        Ext.FlashMessage.alert(App.Language.General.message_delete_items);
-                        //                                    }
-                        //                                }
-                        //                            }]
-                        //                        },
                         id: 'App.Mtn.WoOtherCostsNodeGrid',
                         store: App.Mtn.OtherCostsWo.Store,
                         border: true,
@@ -1493,11 +1452,6 @@ App.Mtn.generateWorkOrderNodeWindow = Ext.extend(Ext.Window, {
                 hidden: (App.Security.Actions[7007] === undefined ? true : false),
                 id: 'App.Mtn.Wo.FormWoNode.BtnSaveWo',
                 handler: function(b) {
-                        //                    if (undefined == window.asset_id && undefined == window.App.Mtn.Wo.Id) 
-                        //                    {
-                        //                        Ext.Msg.alert(App.Language.Core.notification, App.Language.Maintenance.do_not_believe_the_ot_you_must_first_select_an_asset);
-                        //                        b.ownerCt.ownerCt.ownerCt.close();
-                        //                    } else {
                         form = Ext.getCmp('App.Mtn.Wo.FormWoNode').getForm();
                         if (form.isValid() && App.Interface.selectedNodeId != 'root') {
                             form.submit({

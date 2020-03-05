@@ -141,7 +141,6 @@ App.Report.exportListWindow = Ext.extend(Ext.Window, {
                                 node_id: App.Interface.selectedNodeId
                             },
                             success: function(form, response) {
-                                console.log(response);
                                 document.location = 'index.php/app/download/' + response.result.file;
                                 b.ownerCt.ownerCt.ownerCt.close();
                             },

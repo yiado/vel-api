@@ -143,44 +143,6 @@ App.Document.TBar = [App.ModuleActions[2001], {
         xtype: 'spacer',
         width: 10
     },
-    //    {
-    //        text: 'Editar Categoría',
-    //        iconCls: 'edit_icon',
-    //        handler: function()
-    //        {
-    //            grid = Ext.getCmp('App.Document.GridDoc');
-    //            if (grid === undefined) {
-    //                //ENTRA CUANDO ES XTEMPLATE
-    //    
-    //            } else {//ENTRA CUANDO ES GRILLA
-    //                if (grid.getSelectionModel().getCount()) {
-    //                    records = Ext.getCmp('App.Document.GridDoc').getSelectionModel().getSelections();
-    //                    aux = new Array();
-    ////                    App.InfraStructure.copiedNodes = new Array();
-    //                    for (var i = 0; i < records.length; i++) {
-    //                        aux.push(records[i].data.doc_document_id);
-    ////                        App.InfraStructure.copiedNodes.push(Ext.getCmp('App.StructureTree.Tree').getNodeById(records[i].data.node_id));
-    //                    }
-    //                    doc_document_id = (aux.join(','));
-    //                    
-    //                    if ( aux.length == 1 ){
-    //                        w = new App.Document.updateCategoryWindow();
-    //                        w.show();
-    //                    } else {
-    //                        Ext.FlashMessage.alert('Solo se puede cambiar 1 categoría a la vez');
-    //                    }
-    //
-    ////                    App.Document.CutProxy(doc_document_id, function(){});
-    //                } else {
-    //                    Ext.FlashMessage.alert(App.Language.General.you_must_select_at_least_one_record);
-    //                }
-    //            }
-    //            
-    //        }
-    //    }, {
-    //        xtype: 'spacer',
-    //        width: 10
-    //    }, 
     {
         text: App.Language.General.send_to_trash,
         iconCls: 'bin_icon',
@@ -1415,7 +1377,6 @@ App.Document.updateCategoryWindow = Ext.extend(Ext.Window, {
             }, {
                 text: App.Language.General.add,
                 handler: function(b) {
-                    //                    console.log(Ext.getCmp('App.Document.updateCate').getValue());
                     if (Ext.getCmp('App.Document.updateCate').getValue() != '') {
                         Ext.Ajax.request({
                             waitMsg: App.Language.General.message_generating_file,
