@@ -108,6 +108,15 @@ abstract class BaseService extends Doctrine_Record {
             'notnull' => false,
             'autoincrement' => false,
         ));
+        $this->hasColumn('service_reject', 'string', 2000, array(
+            'type' => 'string',
+            'length' => 2000,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
     }
 
     public function setUp() {

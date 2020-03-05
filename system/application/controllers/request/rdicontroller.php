@@ -75,12 +75,12 @@ class RdiController extends APP_Controller {
         $rdi = Doctrine_Core::getTable('Rdi')->find($this->input->post('rdi_id'));
         $conn = Doctrine_Manager::getInstance()->getCurrentConnection();
         $conn->beginTransaction();
+        $user_id = $this->auth->get_user_data('user_id');
         try {
             
             $rdi_description = $this->input->post('rdi_description');
             if ($rdi->rdi_description !== $rdi_description) {
                 $rdiLog = new RdiLog();
-                $user_id = $this->auth->get_user_data('user_id');
                 $rdiLog->user_id = $user_id;
                 $rdiLog->rdi_id = $rdi->rdi_id;
                 $rdiLog->rdi_log_detail = 'Cambio de descripción:' . $rdi->rdi_description . ' Por  :' . $rdi_description;
@@ -94,13 +94,24 @@ class RdiController extends APP_Controller {
             if ($rdi->rdi_status_id != $rdi_status_id && isset($rdi_status_id)) {
                 $rdiStatusNew = Doctrine_Core::getTable('RdiStatus')->find((int) $rdi_status_id);
                 $rdiLog = new RdiLog();
-                $user_id = $this->auth->get_user_data('user_id');
                 $rdiLog->user_id = $user_id;
                 $rdiLog->rdi_id = $rdi->rdi_id;
                 $rdiLog->rdi_log_detail = "Cambio de estado: {$rdi->RdiStatus->rdi_status_name} Por  : {$rdiStatusNew->rdi_status_name}";
                 $rdiLog->save();
                 $rdi->rdi_status_id = $rdi_status_id;
                 $cambio_estado = true;
+            }
+            
+            $rdi_reject = $this->input->post('rdi_reject');
+            if ($rdi_status_id === '2') {
+                $rdiLog = new RdiLog();
+                $rdiLog->user_id = $user_id;
+                $rdiLog->rdi_id = $rdi->rdi_id;
+                $rdiLog->rdi_log_detail = 'Rechazado por: ' . $rdi_reject;
+                $rdiLog->save();
+                $rdi->rdi_reject = $rdi_reject;
+            } else {
+                $rdi->rdi_reject = null;
             }
 
             $rdi->save();

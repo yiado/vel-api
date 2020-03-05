@@ -38,7 +38,7 @@ App.Request.Rdi = Ext.extend(Ext.Panel, {
             App.Request.Rdi.formSearching,
             App.Request.Rdi.Grilla
         ],
-        App.Request.Rdi.superclass.initComponent.call(this);
+                App.Request.Rdi.superclass.initComponent.call(this);
     }
 });
 
@@ -647,7 +647,7 @@ App.Request.changeRdiStatusWindow = Ext.extend(Ext.Window, {
     modal: true,
     border: true,
     width: screen.width < 600 ? screen.width - 100 : 600,
-    height: 370,
+    height: 400,
     layout: 'fit',
     padding: 2,
     initComponent: function () {
@@ -718,6 +718,19 @@ App.Request.changeRdiStatusWindow = Ext.extend(Ext.Window, {
                                 fieldLabel: 'Requerimiento',
                                 id: 'App.Request.Rdi.Description'
                             }]
+                    }, {
+                        xtype: 'fieldset',
+                        title: App.Language.Request.rejection,
+                        id: "App.Request.Rdi.Reject.Comentary",
+                        hidden: true,
+                        items: [{
+                                xtype: 'textarea',
+                                anchor: '100%',
+                                name: 'rdi_reject',
+                                fieldLabel: App.Language.Request.rejected_by,
+                                id: "App.Request.Rdi.Reject.Comentary.Box",
+                                allowBlank: true
+                            }]
                     }],
                 buttons: [{
                         text: App.Language.General.close,
@@ -730,8 +743,6 @@ App.Request.changeRdiStatusWindow = Ext.extend(Ext.Window, {
                         ref: '../saveButton',
                         handler: function (b) {
                             let form = b.ownerCt.ownerCt.getForm();
-                            console.log(form)
-                            console.log(form.isValid())
                             if (form.isValid()) {
                                 form.submit({
                                     url: 'index.php/request/rdi/update',

@@ -78,12 +78,12 @@ class ServiceController extends APP_Controller {
         $service = Doctrine_Core::getTable('Service')->find($this->input->post('service_id'));
         $conn = Doctrine_Manager::getInstance()->getCurrentConnection();
         $conn->beginTransaction();
+        $user_id = $this->auth->get_user_data('user_id');
+        
         try {
-
             $service_organism = $this->input->post('service_organism');
             if ($service->service_organism != $service_organism) {
                 $serviceLog = new ServiceLog();
-                $user_id = $this->auth->get_user_data('user_id');
                 $serviceLog->user_id = $user_id;
                 $serviceLog->service_id = $service->service_id;
                 $serviceLog->service_log_detail = 'Cambio de organismo:' . $service->service_organism . ' Por  :' . $service_organism;
@@ -95,7 +95,6 @@ class ServiceController extends APP_Controller {
             $service_phone = $this->input->post('service_phone');
             if ($service->service_phone != $service_phone) {
                 $serviceLog = new ServiceLog();
-                $user_id = $this->auth->get_user_data('user_id');
                 $serviceLog->user_id = $user_id;
                 $serviceLog->service_id = $service->service_id;
                 $serviceLog->service_log_detail = 'Cambio de teléfono:' . $service->service_phone . ' Por  :' . $service_phone;
@@ -106,7 +105,6 @@ class ServiceController extends APP_Controller {
             $service_commentary = $this->input->post('service_commentary');
             if ($service->service_commentary != $service_commentary) {
                 $serviceLog = new ServiceLog();
-                $user_id = $this->auth->get_user_data('user_id');
                 $serviceLog->user_id = $user_id;
                 $serviceLog->service_id = $service->service_id;
                 $serviceLog->service_log_detail = 'Cambio de comentario:' . $service->service_commentary . ' Por  :' . $service_commentary;
@@ -119,13 +117,24 @@ class ServiceController extends APP_Controller {
             if ($service->service_status_id != $service_status_id && isset($service_status_id)) {
                 $serviceStatusNew = Doctrine_Core::getTable('ServiceStatus')->find((int) $service_status_id);
                 $serviceLog = new ServiceLog();
-                $user_id = $this->auth->get_user_data('user_id');
                 $serviceLog->user_id = $user_id;
                 $serviceLog->service_id = $service->service_id;
                 $serviceLog->service_log_detail = "Cambio de estado: {$service->ServiceStatus->service_status_name} Por  : {$serviceStatusNew->service_status_name}";
                 $serviceLog->save();
                 $service->service_status_id = $service_status_id;
                 $cambio_estado = true;
+            }
+            
+            $service_reject = $this->input->post('service_reject');
+            if ($service_status_id === '6') {
+                $serviceLog = new ServiceLog();
+                $serviceLog->user_id = $user_id;
+                $serviceLog->service_id = $service->service_id;
+                $serviceLog->service_log_detail = 'Rechazado por: ' . $service_reject;
+                $serviceLog->save();
+                $service->service_reject = $service_reject;
+            } else {
+                $service->service_reject = null;
             }
 
             $service->save();

@@ -785,7 +785,7 @@ App.Request.addRechazarWindow = Ext.extend(Ext.Window, {
                     name: 'request_comentario',
                     fieldLabel: App.Language.Request.rejected_by,
                     id: 'App.RequestRechazar.ComentarioAdmin',
-                    allowBlank: false
+                    allowBlank: true
                 }]
             }],
             buttons: [{

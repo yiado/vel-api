@@ -834,6 +834,19 @@ App.Request.changeServiceStatusWindow = Ext.extend(Ext.Window, {
                     fieldLabel: 'Requerimiento',
                     id: 'App.Request.Service.Commentary'
                 }]
+            }, {
+                xtype: 'fieldset',
+                title: App.Language.Request.rejection,
+                id: "App.Request.Service.Reject.Comentary",
+                hidden: true,
+                items: [{
+                    xtype: 'textarea',
+                    anchor: '100%',
+                    name: 'service_reject',
+                    fieldLabel: App.Language.Request.rejected_by,
+                    id: "App.Request.Service.Reject.Comentary.Box",
+                    allowBlank: true
+                }]
             }],
             buttons: [{
                 text: App.Language.General.close,

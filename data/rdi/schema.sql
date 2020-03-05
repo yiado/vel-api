@@ -9,6 +9,7 @@ CREATE TABLE `rdi`  (
   `node_id` int(11) NULL DEFAULT NULL,
   `user_id` int(11) NULL DEFAULT NULL,  
   `rdi_description` varchar(1000) NULL DEFAULT NULL,
+  `rdi_reject` varchar(2000) NULL DEFAULT NULL,
   `rdi_status_id` int(11) NULL DEFAULT NULL,
   `rdi_created_at` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP,
   `rdi_updated_at` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
