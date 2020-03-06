@@ -118,13 +118,6 @@ App.Mtn.Principal = Ext.extend(Ext.Panel, {
                             name: 'include_closed_wo',
                             inputValue: 1
                         }
-                        //                    , {
-                        //                        xtype: 'checkbox',
-                        //                        hideLabel: true,
-                        //                        boxLabel: App.Language.General.perform_internal_search,
-                        //                        name: 'search_branch',
-                        //                        inputValue: 1
-                        //                    }
                     ]
                 }, {
                     columnWidth: .5,
@@ -222,13 +215,7 @@ App.Mtn.Principal = Ext.extend(Ext.Panel, {
                     dataIndex: 'mtn_system_work_order_status_name',
                     header: App.Language.General.state,
                     sortable: true
-                },
-                //            {
-                //                dataIndex: 'asset_name',
-                //                header: App.Language.General.asset,
-                //                sortable: true
-                //            }, 
-                {
+                }, {
                     dataIndex: 'mtn_work_order_type_name',
                     header: App.Language.Maintenance.type_ot,
                     sortable: true
@@ -262,107 +249,6 @@ App.Mtn.generateWorkOrderNodeWindow = Ext.extend(Ext.Window, {
     id: 'App.Mtn.Wo.WinWoNode',
     listeners: {
         'beforerender': function(w) {
-
-            //            if (App.Security.Actions[7002] === undefined) 
-            //            {
-            //                App.Asset.Store.setBaseParam('node_id', App.Interface.selectedNodeId);
-            //                w.panel.form_wo_node.getForm().load
-            //                ({
-            //                    url: 'index.php/mtn/wo/getOneNode',
-            //                    params: 
-            //                    {
-            //                        mtn_work_order_id: w.mtn_work_order_id
-            //                    },
-            //                    success: function(fp, o)
-            //                    {
-            //                        record = o.result;
-            //						
-            //                        App.Mtn.Wo.CurrentWoData = record.data;
-            //						
-            //                        App.Mtn.Wo.Id = record.data.mtn_work_order_id;
-            //                        mtn_work_order_comment = record.data.mtn_work_order_comment;
-            //						
-            //                        total_task = record.data.total_task;
-            //                        total_other_costs = record.data.total_other_costs;
-            //                        total_work_order = record.data.total_work_order;
-            //						
-            //                        w.setHeight(600);
-            //                        w.setWidth(780);
-            //                        w.panel.form_wo_node.tab_panel_node.panel_comment.comment.setValue(mtn_work_order_comment);
-            //                        w.panel.form_wo_node.panel4.colum_11.form_11_node.total_task_dd_node.setValue('$ ' + total_task);
-            //                        w.panel.form_wo_node.panel4.colum_11.form_11_node.total_other_costs_dd_node.setValue('$ ' + total_other_costs);
-            //                        w.panel.form_wo_node.panel4.colum_11.form_11_node.total_work_order_dd_node.setValue('$ ' + total_work_order);
-            //                        w.setTitle(App.Language.Maintenance.work_order_number + record.data.mtn_work_order_folio);
-            //						
-            //                        App.Mtn.ConfigStateAsociados.Store.setBaseParam('mtn_config_state_id', record.data.MtnConfigState.mtn_config_state_id);
-            //						
-            //                        App.Mtn.ConfigStateAsociados.Store.load();
-            //                        Ext.getCmp('App.Mtn.Wo.TypeId').setVisible(false);
-            //                        Ext.getCmp('App.Mtn.Wo.TypeId').setDisabled(true);
-            //                        Ext.getCmp('App.Mtn.Wo.Type1Node').setVisible(false);
-            //						
-            //                        Ext.getCmp('App.Mtn.StateDisplayNode').setValue(record.data.MtnConfigState.MtnSystemWorkOrderStatus.mtn_system_work_order_status_name);
-            //                        Ext.getCmp('App.Mtn.ColumStateNode').setVisible(true);
-            //						
-            //                        Ext.getCmp('App.Mtn.Wo.Type2Node').setVisible(true);
-            //                        Ext.getCmp('App.Mtn.Wo.Label1').setVisible(false);
-            //                        Ext.getCmp('App.Mtn.Wo.TextOtNode').setVisible(true);
-            //                        Ext.getCmp('App.Mtn.Wo.TextOtNode').setValue(record.data.MtnConfigState.MtnWorkOrderType.mtn_work_order_type_name);
-            //						
-            //                        App.Mtn.ConfigStateAsociados.Store.setBaseParam('mtn_work_order_type_id', record.data.MtnConfigState.mtn_work_order_type_id);
-            //                        App.Mtn.ConfigStateAsociados.Store.load();
-            //						
-            //						
-            //                        Ext.getCmp('App.Mtn.WoStateLabel1Node').setVisible(false);
-            //                        Ext.getCmp('App.Mtn.WoStateComboNode').setVisible(false);
-            //						
-            //                        Ext.getCmp('App.Mtn.Wo.DateNode').setDisabled(true);
-            //						
-            //                        Ext.getCmp('App.Mtn.HiddenPanelNode').setVisible(true);
-            //                        Ext.getCmp('App.Mtn.PanelTotaleslNode').setVisible(true);
-            //                        Ext.getCmp('App.Mtn.Wo.TbarStateNode').setDisabled(false);
-            //                        Ext.getCmp('App.Mtn.Wo.TbarPrintIcon').setDisabled(false);
-            ////                        Ext.getCmp('App.Mtn.Wo.TbaDetail').setDisabled(false);
-            //						
-            //                        //Cargamos las tareas de la OT   
-            //                        App.Mtn.WoTask.Store.setBaseParam('mtn_work_order_id', App.Mtn.Wo.Id);
-            //                        App.Mtn.WoTask.Store.load();
-            //						
-            //                        //Cargamos los otros costos asociados a la OT
-            //                        App.Mtn.OtherCostsWo.Store.setBaseParam('mtn_work_order_id', App.Mtn.Wo.Id);
-            //                        App.Mtn.OtherCostsWo.Store.load();
-            //						
-            //                        //Cargamos la tabla de los Log
-            //                        App.Mtn.Log.Store.setBaseParam('mtn_work_order_id', App.Mtn.Wo.Id);
-            //                        App.Mtn.Log.Store.load()
-            //						
-            //                        //Seteamos un flag para identificar que la ot en ediciÃ³n saliÃ³ de la grid. (solo para actualizar la grid del buscador de OT)
-            //                        App.Mtn.Wo.EditModeFromGrid = true;
-            //						
-            //                        //Escondemos los Botones para hacer funcionar el Permiso
-            //                        App.Mtn.Wo.CurrentWoData.mtn_work_order_closed = 1;
-            //						
-            //                        // deshabilitando botones de cambio cuando estah cerrada
-            //                        if (App.Mtn.Wo.CurrentWoData.mtn_work_order_closed == 1) 
-            //                        {
-            //                            w.panel.form_wo_node.tab_panel_node.taskgridnode.getTopToolbar().hide();
-            //                            w.panel.form_wo_node.tab_panel_node.taskgridnode.doLayout();
-            //							
-            //                            w.panel.form_wo_node.tab_panel_node.othercostgrid.getTopToolbar().hide();
-            //                            w.panel.form_wo_node.tab_panel_node.othercostgrid.doLayout();
-            //							
-            //                            Ext.getCmp('App.Mtn.Wo.FormWoNode.BtnSaveWo').hide();
-            //                            Ext.getCmp('App.Mtn.Wo.TbarStateNode').hide();
-            //							
-            //                        }
-            //						
-            //                        // creator user
-            //                        Ext.getCmp('App.Mtn.Wo.CreatorUserNode').setText(App.Mtn.Wo.CurrentWoData.User.user_name);
-            //                        App.Mtn.WoNode.Store.load({params: {node_id: App.Interface.selectedNodeId,start: 0, limit: App.GridLimitNumOT}});
-            //                    }
-            //                })
-            //            } else {
-            //                App.Asset.Store.setBaseParam('node_id', App.Interface.selectedNodeId);
             w.panel.form_wo_node.getForm().load({
                     url: 'index.php/mtn/wo/getOneNode',
                     params: {

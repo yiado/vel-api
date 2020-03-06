@@ -265,24 +265,7 @@ App.Interface.ViewPort = Ext.extend(Ext.Viewport, {
                                                     fieldLabel: App.Language.General.document,
                                                     anchor: '95%',
                                                     name: 'doc_document_filename'
-                                                }
-                                                //                                        ,  {
-                                                //                                            xtype: 'combo',
-                                                //                                            fieldLabel: App.Language.General.category,
-                                                //                                            anchor: '95%',
-                                                //                                            store: App.Document.Categoria.Store,
-                                                //                                            hiddenName: 'doc_category_id',
-                                                //                                            triggerAction: 'all',
-                                                //                                            displayField: 'doc_category_name',
-                                                //                                            valueField: 'doc_category_id',
-                                                //                                            editable: true,
-                                                //                                            typeAhead: true,
-                                                //                                            selectOnFocus: true,
-                                                //                                            forceSelection: true,
-                                                //                                            mode: 'remote',
-                                                //                                            minChars: 0
-                                                //                                        }
-                                                , {
+                                                }, {
                                                     xtype: 'checkbox',
                                                     hideLabel: true,
                                                     boxLabel: App.Language.General.perform_internal_search,
@@ -294,42 +277,6 @@ App.Interface.ViewPort = Ext.extend(Ext.Viewport, {
                                     }]
                                 },
                                 new App.Document.PrincipalClase2()
-                                //                                    {
-                                //                                xtype: 'grid',
-                                //                                margins: '5 0 0 0',
-                                //                                plugins: [new Ext.ux.OOSubmit()],
-                                //                                region: 'center',
-                                //                                border: true,
-                                //                                loadMask: true,
-                                //                                listeners:
-                                //                                {
-                                //                                    'beforerender': function(w)
-                                //                                    {
-                                //                                        App.Document.Store.load();
-                                //                                    }
-                                //                                },
-                                //                                viewConfig:
-                                //                                {
-                                //                                    forceFit: true
-                                //                                },
-                                //                                store: App.Document.Store,
-                                //                                columns: 
-                                //                                [{
-                                //                                    header: App.Language.General.file_name,
-                                //                                    sortable: true,
-                                //                                    dataIndex: 'doc_document_filename',
-                                //                                    renderer: function(val, metadata, record)
-                                //                                    {
-                                //                                        return "<a href='index.php/doc/document/download/" + record.data.doc_current_version_id + "'>" + val + "</a>";
-                                //                                    }
-                                //                                }, {
-                                //                                    header: App.Language.General.category,
-                                //                                    sortable: true,
-                                //                                    dataIndex: 'doc_category_name',
-                                //                                    width: 50
-                                //                                }]
-                                //                            }
-
                             ]
                         }
                     ]

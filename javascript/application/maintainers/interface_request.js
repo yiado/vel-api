@@ -1,12 +1,8 @@
 /* global App, Ext */
 
 App.Maintainers.addToModuleMenu('request', {
-    //    xtype: 'button',
-    //   
     iconCls: 'request_icon_32',
     text: App.Language.Request.requests,
-    //    scale: 'large',
-    //    iconAlign: 'top',
     module: 'Request'
 });
 

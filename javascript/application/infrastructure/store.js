@@ -277,10 +277,7 @@ App.InfraStructure.OtrosDatosResumen.Store = new Ext.data.JsonStore({
 
     root: 'results',
     totalProperty: 'total',
-    //    idProperty: 'infra_other_data_attribute_id',
     fields: [
-        //        'infra_other_data_attribute_id', 
-        //        'infra_other_data_attribute_type', 
         'value',
         'label'
 
@@ -430,13 +427,8 @@ App.InfraStructure.DatosDinamicosAsociados.Store = new Ext.data.JsonStore({
     idProperty: 'infra_other_data_attribute_id',
     fields: [
         'infra_other_data_attribute_id',
-        //        {
-        //            name: 'infra_other_data_attribute_name',
-        //            mapping: 'InfraOtherDataAttribute.infra_other_data_attribute_name'
-        //        }, 
         {
             name: 'infra_other_data_attribute_name',
-            //            mapping: 'InfraOtherDataAttribute.infra_other_data_attribute_name',
             convert: function stringMeasure(v, record) {
 
                 if (record.infra_other_data_attribute_node_type_the_sumary == 1) {
@@ -444,7 +436,6 @@ App.InfraStructure.DatosDinamicosAsociados.Store = new Ext.data.JsonStore({
                 } else {
                     msg = '';
                 }
-                //  return record.label  + msg;
                 return record.InfraOtherDataAttribute.infra_other_data_attribute_name + msg;
             }
         }

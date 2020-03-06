@@ -1,13 +1,9 @@
 App.Iot.allowRootGui = true;
 //se agrega el modulo al menu
 App.Interface.addToModuleMenu('iot', {
-    //    xtype: 'button',
     iconCls: 'general_icon_32',
     text: App.Language.Iot.iot,
-
-    //    scale: 'large',
     module: 'Iot',
-    //    iconAlign: 'top'
 });
 //se Crea el tab principal
 App.Iot.Principal = Ext.extend(Ext.TabPanel, {
@@ -166,8 +162,6 @@ App.Iot.Principal.listener = function(node) {
                                                         App.Iot.Sensors.Store.each(function(record) {
 
                                                             data_sensors.push(record.data.data);
-                                                            //                                                            var date_sensors = record.data.created_at.split(" ");
-                                                            //                                                    date_sensors[1] = date_sensors[1].split(".");
                                                             categories.push(record.data.created_at);
 
                                                         });
@@ -196,12 +190,6 @@ App.Iot.Principal.listener = function(node) {
                                                                 verticalAlign: 'middle'
                                                             },
                                                             plotOptions: {
-                                                                //                                                            series: {
-                                                                //                                                                label: {
-                                                                //                                                                    connectorAllowed: false
-                                                                //                                                                },
-                                                                ////                                                pointStart: 2010
-                                                                //                                                            }
                                                             },
                                                             series: [{
                                                                 name: 'Data',
@@ -214,11 +202,6 @@ App.Iot.Principal.listener = function(node) {
                                                                         maxWidth: 500
                                                                     },
                                                                     chartOptions: {
-                                                                        //                                                        legend: {
-                                                                        //                                                            layout: 'horizontal',
-                                                                        //                                                            align: 'center',
-                                                                        //                                                            verticalAlign: 'bottom'
-                                                                        //                                                        }
                                                                     }
                                                                 }]
                                                             }
@@ -227,11 +210,8 @@ App.Iot.Principal.listener = function(node) {
 
 
 
-                                                    } else {
-                                                        // the store didn't load, deal with it
                                                     }
                                                 }
-                                                // scope: this,
                                         });
 
 

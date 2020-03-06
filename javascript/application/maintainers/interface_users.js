@@ -1039,8 +1039,6 @@ App.Maintainers.Users.AddUserWindow = Ext.extend(Ext.Window, {
                         ref: 'user_password',
                         inputType: 'password',
                         anchor: '100%',
-                        //                    maxLength: 12,
-                        //                    minLength: 8,
                         maskRe: /([a-zA-Z0-9\s]+)$/
                     }, {
                         xtype: 'datefield',

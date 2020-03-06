@@ -774,9 +774,6 @@ App.InfraMtn.NodePlan.Edit = Ext.extend(Ext.Window, {
                     App.InfraMtn.NodePlan.plan = action.result.data.mtn_node_plan_id;
                     mtn_node_plan_status = action.result.data.mtn_node_plan_status;
 
-                    //                    App.InfraMtn.NodePlanTask.Store.setBaseParam('mtn_node_plan_id', App.InfraMtn.NodePlan.plan);
-                    //                    App.InfraMtn.NodePlanTask.Store.load();
-
                     if (mtn_node_plan_status == 0) {
                         w.closeButton.hide();
                         w.saveButton.hide();
@@ -791,7 +788,6 @@ App.InfraMtn.NodePlan.Edit = Ext.extend(Ext.Window, {
         }
     },
     initComponent: function() {
-        //var wotask = new Ext.ux.grid.RowEditor({});  
         var otDocumentos = new Ext.grid.CheckboxSelectionModel({
             singleSelect: true
         });
@@ -1463,7 +1459,6 @@ App.InfraMtn.NodePriceList.editWindow = Ext.extend(Ext.Window, {
         },
     },
     initComponent: function() {
-        //var wotask = new Ext.ux.grid.RowEditor({});  
         var otDocumentos = new Ext.grid.CheckboxSelectionModel({
             singleSelect: true
         });

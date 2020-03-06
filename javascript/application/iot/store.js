@@ -1,29 +1,5 @@
 Ext.namespace('App.Iot.Store');
 
-//App.Iot.Device.Store = new Ext.data.JsonStore
-//({
-//    url: 'index.php/iot/iot/getDeviceInfo',
-//    root: 'results',
-//    idProperty: 'iot_device_info',
-//    fields: 
-//    [
-//              
-//       {
-//            name: 'manufacterName',
-//            mapping: 'node.manufacterName'
-//        },
-//         {
-//            name: 'modelName',
-//            mapping: 'node.modelName'
-//        },
-//        
-//        {
-//            name: 'description',
-//            mapping: 'node.description'
-//        }
-//    ]
-//});
-
 App.Iot.Device.Store = new Ext.data.JsonStore({
     proxy: new Ext.data.HttpProxy({
         api: {

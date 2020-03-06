@@ -126,8 +126,6 @@ App.Costs.Principal = Ext.extend(Ext.Panel, {
                 }],
                 items: [{
                     layout: 'column',
-                    /*-------------COMBOS-------------*/
-                    //id: 'column_form_column_start_date',
                     items: [{
                         columnWidth: .5,
                         layout: 'form',

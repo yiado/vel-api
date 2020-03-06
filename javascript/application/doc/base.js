@@ -42,17 +42,14 @@ App.ModuleActions[2008] = {
                 Ext.getCmp('App.Document.EditCate').enable();
                 b.menu.items.get(0).enable();
             } else {
-                //                Ext.getCmp('App.Document.EditCate').enable();
                 b.menu.items.get(0).disable();
             }
         } else { //ENTRA CUANDO ES GRILLA
             checkCount = grid.getSelectionModel().getCount();
             for (i = 0; i < b.menu.items.length - 1; i++) {
                 if (checkCount) {
-                    //                    Ext.getCmp('App.Document.EditCate').enable();
                     b.menu.items.get(i).enable();
                 } else {
-                    //                    Ext.getCmp('App.Document.EditCate').enable();
                     b.menu.items.get(i).disable();
                 }
             }
@@ -64,17 +61,13 @@ App.ModuleActions[2008] = {
         id: 'App.Document.EditCate',
         handler: function() {
             grid = Ext.getCmp('App.Document.GridDoc');
-            if (grid === undefined) {
-                //ENTRA CUANDO ES XTEMPLATE
-
-            } else { //ENTRA CUANDO ES GRILLA
+            if (grid !== undefined) {
+                //ENTRA CUANDO ES GRILLA
                 if (grid.getSelectionModel().getCount()) {
                     records = Ext.getCmp('App.Document.GridDoc').getSelectionModel().getSelections();
                     aux = new Array();
-                    //                    App.InfraStructure.copiedNodes = new Array();
                     for (var i = 0; i < records.length; i++) {
                         aux.push(records[i].data.doc_document_id);
-                        //                        App.InfraStructure.copiedNodes.push(Ext.getCmp('App.StructureTree.Tree').getNodeById(records[i].data.node_id));
                     }
                     doc_document_id = (aux.join(','));
 
@@ -84,8 +77,6 @@ App.ModuleActions[2008] = {
                     } else {
                         Ext.FlashMessage.alert('Solo se puede cambiar 1 categoría a la vez');
                     }
-
-                    //                    App.Document.CutProxy(doc_document_id, function(){});
                 } else {
                     Ext.FlashMessage.alert(App.Language.General.you_must_select_at_least_one_record);
                 }
@@ -256,12 +247,8 @@ App.ModuleActions[2005] = {
 }
 
 App.ModuleActions[2006] = {
-    //    xtype: 'button',
     iconCls: 'document_icon_32',
     text: App.Language.General.documents,
-
-    //    scale: 'large',
-    //    iconAlign: 'top',
     module: 'Document'
 }
 

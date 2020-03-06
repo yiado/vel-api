@@ -242,12 +242,6 @@ App.ModuleActions[5004] = {
             waitTitle: App.Language.General.message_please_wait,
             waitMsg: App.Language.General.message_guarding_information,
             url: 'index.php/infra/infrainfo/add',
-            //                            success: function (form, action) {
-            //
-            //                                App.InfraStructure.Principal.listener(App.Interface.selectedNode);
-            //
-            //                            }
-
             success: function(form, response) {
                 App.InfraStructure.Principal.listener(App.Interface.selectedNode);
             },
@@ -363,8 +357,8 @@ App.ModuleActions[5006] = {
                 App.InfraStructure.Coordinate.Store.setBaseParam('search_branch', App.InfraStructure.SearchNodeBranches);
                 App.InfraStructure.Coordinate.Store.load({
                     callback: function(records) {
-                        if (typeof Ext.getCmp('App.InfraStructure.Principal') !== "undefined") { //Fix
-                            if (Ext.getCmp('App.InfraStructure.Principal').map) { //Fix
+                        if (typeof Ext.getCmp('App.InfraStructure.Principal') !== "undefined") {
+                            if (Ext.getCmp('App.InfraStructure.Principal').map) {
                                 mapRef = 'mapTab';
 
                                 if (App.InfraStructure.Coordinate.Store.getTotalCount()) {

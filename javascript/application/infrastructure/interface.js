@@ -175,21 +175,11 @@ function getMap() {
                                     });
 
                                 }
-
-
-                                //                                        mapRef.zoomLevel = parseFloat(infra_default_zoomLevel);
-
                             };
                         }
                     } else {
 
                         if (mapRef) {
-                            //                                    if (mapRef.loaded)
-                            //                                    {
-                            //
-                            //                                        mapRef.clearOverlays();
-                            //                                        mapRef.geoCodeLookup(infra_default_start);
-                            //                                    }
                             if (App.InfraStructure.activeTab == 'App.InfraStructure.fichaResumen' || App.InfraStructure.activeTab == 'App.InfraStructure.mapTab') {
 
                                 if (mapRef == 'mapTab' && !busquedaInterna) {
@@ -1486,7 +1476,6 @@ App.InfraStructure.addNodeWindow = Ext.extend(Ext.Window, {
                             App.NodeType.Store.setBaseParam('node_type_category_id', cb.getValue());
                             App.NodeType.Store.load();
                             App.InfraStructure.Iot.Store.load();
-                            //                                                                
                             if (cb.getValue() == 3) {
 
                                 jQuery('.test_').each(function() {
@@ -1512,7 +1501,6 @@ App.InfraStructure.addNodeWindow = Ext.extend(Ext.Window, {
                                 jQuery('.test_1').parent('div').show();
                                 $('.test_1').css('width', '100%');
                                 jQuery('.test_1 fieldset div').css('width', '100%');
-                                //                                                                      
                                 jQuery('.test_2').show();
                                 jQuery('.test_2').removeClass('x-hide-display');
                                 jQuery('.test_2').parent('div').removeClass('x-hide-display');
@@ -1702,7 +1690,6 @@ App.InfraStructure.addNodeWindow = Ext.extend(Ext.Window, {
                             App.NodeType.Store.setBaseParam('node_type_category_id', cb.getValue());
                             App.NodeType.Store.load();
                             App.InfraStructure.Iot.Store.load();
-                            //                                                                
                             if (cb.getValue() == 3) {
 
                                 jQuery('.test_ad').each(function() {

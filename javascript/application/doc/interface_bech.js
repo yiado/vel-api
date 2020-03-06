@@ -321,7 +321,6 @@ App.Document.TBar = [App.ModuleActions[2001], {
         xtype: 'tbseparator',
         width: 10
     },
-    //    '->', 
     {
         text: App.Language.General.list,
         iconCls: 'list_icon',
@@ -675,7 +674,6 @@ App.Document.GridView = Ext.extend(Ext.grid.GridPanel, {
             App.Document.doc_image_web = grid.getStore().getAt(rowIndex).data.DocCurrentVersion.doc_image_web;
             //VENTANA AMPLIADA CON SUS VERSIONES
             App.Document.currentPosition = rowIndex;
-            //            doc_version_filename = grid.getStore().getAt(rowIndex).data.doc_version_filename;
             w = new App.Document.VersionImagenWindow();
             w.show();
 
@@ -685,7 +683,6 @@ App.Document.GridView = Ext.extend(Ext.grid.GridPanel, {
             App.Document.Version.Store.setBaseParam('doc_document_id', App.Document.selectedDocumentId);
             App.Document.Version.Store.setBaseParam('doc_category_name', App.Document.CategoryName);
             App.Document.Version.Store.load();
-            //            App.Document.doc_version_filename = grid.getStore().getAt(rowIndex).data.doc_version_filename;
         }
     },
     viewConfig: {
@@ -1078,7 +1075,6 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window, {
             layout: 'fit',
             overflowY: 'scroll',
             html: (doc_image_web == 1 ? '<img width=100% src="docs/' + doc_version_filename + '?id=' + n + '" />' : '<div align="center"><br><br><br><br><br><br><br><br><br><br><br><br><img  src="docs/thumb/not_image_icon.png" /></div>')
-                //html: (doc_image_web == 1 ? '<img width=100% src="docs/' + doc_version_filename + '" />' : '<div align="center"><br><br><br><br><br><br><br><br><br><br><br><br><img  src="docs/thumb/not_image_icon.png" /></div>')
         }));
         this.imagepanel.doLayout();
         record = App.Document.Store.getAt(App.Document.currentPosition);

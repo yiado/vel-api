@@ -662,7 +662,6 @@ ExpirationState = function(asset_insurance_begin_date, asset_insurance_expiratio
     return status;
 }
 
-//Usado para el grid de los attributos
 App.Asset.DatosDinamicos.Store = new Ext.data.JsonStore({
     proxy: new Ext.data.HttpProxy({
         api: {

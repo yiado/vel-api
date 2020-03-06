@@ -251,17 +251,6 @@ App.Request.InfraEstructura = Ext.extend(Ext.Panel, {
                             return node_ruta;
                         }
                     }
-                    //                    , {
-                    //                        dataIndex: 'Asset',
-                    //                        header: App.Language.Core.location,
-                    //                        sortable: true,
-                    //                        width: 100,
-                    //                        renderer: function(Asset, metadata, record, rowIndex, colIndex, store)
-                    //                        {
-                    //                            metadata.attr = 'ext:qtip="' + Asset.asset_path + '"';
-                    //                            return Asset.asset_path;
-                    //                        }
-                    //                    }
                     , {
                         dataIndex: 'RequestProblem',
                         header: App.Language.Request.failure,
