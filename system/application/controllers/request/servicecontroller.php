@@ -205,6 +205,7 @@ class ServiceController extends APP_Controller {
 
         $requests = Doctrine_Core::getTable('Service')->retrieveAll($this->filtrosServices());
 
+        $titulos[] = 'Nodo';
         $titulos[] = 'Tipo de Servicio';
         $titulos[] = 'Estado';
         $titulos[] = 'Nombre Usuario';
@@ -213,12 +214,16 @@ class ServiceController extends APP_Controller {
         $titulos[] = 'Fecha Servicio';
         $titulos[] = 'Organismo';
         $titulos[] = 'Comentario';
+        $titulos[] = 'Motivo Rechazo';
 
         $services = array();
         foreach ($requests as $request) {
             $date = new DateTime($request->service_date);
             $fecha = $date->format('d/m/Y H:i');
+            $requestArray = $request->toArray();
+            
             $service = array();
+            $service[] = $requestArray['Node']['node_name'];
             $service[] = $request->ServiceType->service_type_name;
             $service[] = $request->ServiceStatus->service_status_name;
             $service[] = $request->User->user_username;
@@ -227,6 +232,7 @@ class ServiceController extends APP_Controller {
             $service[] = PHPExcel_Shared_Date::stringToExcel($fecha);
             $service[] = $request->service_organism;
             $service[] = $request->service_commentary;
+            $service[] = $request->service_reject;
             $services[] = $service;
         }
 
@@ -242,10 +248,10 @@ class ServiceController extends APP_Controller {
         $sheet->setAutoFilter($dimensionHoja);
 
         /** Formato de tipo de datos en celdas */
-        $sheet->getStyle("E2:E{$ultimaFila}")
+        $sheet->getStyle("F2:F{$ultimaFila}")
                 ->getNumberFormat()
                 ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER);
-        $sheet->getStyle("F2:F{$ultimaFila}")
+        $sheet->getStyle("G2:G{$ultimaFila}")
                 ->getNumberFormat()
                 ->setFormatCode('dd/mm/yyyy hh:mm');
 

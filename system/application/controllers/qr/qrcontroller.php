@@ -121,7 +121,15 @@ class QrController extends APP_Controller {
     }
 
     function servicios() {
-        $servicios = Doctrine_Core::getTable('ServiceType')->findAll()->toArray();
+        $servicios = array(
+            array(
+                'service_type_id' => 0,
+                'service_type_name' => "RDI",
+                'user_id' => 4,
+                'service_type_comentary' => null
+            )
+        );
+        $servicios = array_merge($servicios, Doctrine_Core::getTable('ServiceType')->findAll()->toArray());
         echo $this->json->encode($servicios);
     }
 
@@ -142,7 +150,7 @@ class QrController extends APP_Controller {
 
     function getImagenNodo($node_id) {
         $imagen = null;
-        $findGrId = Doctrine_Core::getTable('Node')->find($node_id);
+        $findGrId = Doctrine_Core::getTable('Node')->find((int) $node_id);
         if ($findGrId) {
             $doc_document_id = (int) $findGrId->node_document_id_default;
 
@@ -224,31 +232,60 @@ class QrController extends APP_Controller {
         $conn->beginTransaction();
 
         try {
-            //Insertamos el nuevo documento en la tabla
-            $service = new Service();
-            $service->node_id = $this->input->post('node_id');
-            $service->user_id = $user->user_id;
-            $service->service_type_id = $this->input->post('service_type_id');
-            $service->service_status_id = 1;
-            $service->service_organism = 'UChile';
-            $service->service_phone = 987654321;
-            $service->service_commentary = $this->input->post('service_commentary');
-            $service->save();
+            if ($this->input->post('service_type_id') === '0') {
+                /**
+                 * Solicitud de requerimiento de informacion
+                 */
+                $rdi = new Rdi();
+                $rdi->node_id = $this->input->post('node_id');
+                $rdi->user_id = $user->user_id;
+                $rdi->rdi_status_id = 1;
+                $rdi->rdi_description = $this->input->post('service_commentary');
+                $rdi->save();
 
-            $serviceLog = new ServiceLog();
-            $serviceLog->user_id = $service->user_id;
-            $serviceLog->service_id = $service->service_id;
-            $serviceLog->service_log_detail = 'Creación de Solicitud de Servicio';
-            $serviceLog->save();
+                $rdiLog = new RdiLog();
+                $rdiLog->user_id = $rdi->user_id;
+                $rdiLog->rdi_id = $rdi->rdi_id;
+                $rdiLog->rdi_log_detail = 'Creación de Requerimiento de Información desde QR';
+                $rdiLog->save();
 
-            $success = true;
-            $msg = $this->translateTag('General', 'operation_successful');
+                $success = true;
+                $msg = $this->translateTag('General', 'operation_successful');
 
-            $conn->commit();
+                $conn->commit();
 
-            //Enviar correo de Alerta de creación de Service
-            $service->sendNotificationAdministrador($node);
-            $service->sendNotificationRecibido();
+                //Enviar correo de Alerta de creación de Service
+                /* $service->sendNotificationAdministrador($node);
+                $service->sendNotificationRecibido(); */
+            } else {
+                /**
+                 * Solicitud de tipo servicio
+                 */
+                $service = new Service();
+                $service->node_id = $this->input->post('node_id');
+                $service->user_id = $user->user_id;
+                $service->service_type_id = $this->input->post('service_type_id');
+                $service->service_status_id = 1;
+                $service->service_organism = 'UChile';
+                $service->service_phone = 987654321;
+                $service->service_commentary = $this->input->post('service_commentary');
+                $service->save();
+
+                $serviceLog = new ServiceLog();
+                $serviceLog->user_id = $service->user_id;
+                $serviceLog->service_id = $service->service_id;
+                $serviceLog->service_log_detail = 'Creación de Solicitud de Servicio';
+                $serviceLog->save();
+
+                $success = true;
+                $msg = $this->translateTag('General', 'operation_successful');
+
+                $conn->commit();
+
+                //Enviar correo de Alerta de creación de Service
+                $service->sendNotificationAdministrador($node);
+                $service->sendNotificationRecibido();
+            }
         } catch (Exception $e) {
             //Si hay error, rollback de los cambios en la base de datos
             $conn->rollback();

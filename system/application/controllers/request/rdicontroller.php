@@ -181,10 +181,12 @@ class RdiController extends APP_Controller {
 
         $requests = Doctrine_Core::getTable('Rdi')->retrieveAll($this->filtrosRdi());
 
+        $titulos[] = 'Nodo';
         $titulos[] = 'Estado';
         $titulos[] = 'Nombre Usuario';
         $titulos[] = 'Email Usuario';
         $titulos[] = 'Descripción';
+        $titulos[] = 'Motivo Rechazo';
         $titulos[] = 'Fecha Creación';
         $titulos[] = 'Fecha Modificación';
 
@@ -196,12 +198,15 @@ class RdiController extends APP_Controller {
             
             $date2 = new DateTime($request->rdi_updated_at);
             $updated_date = $date2->format('d/m/Y H:i');
+            $requestArray = $request->toArray();
             
             $rdi = array();
+            $rdi[] = $requestArray['Node']['node_name'];
             $rdi[] = $request->RdiStatus->rdi_status_name;
             $rdi[] = $request->User->user_username;
             $rdi[] = $request->User->user_email;
             $rdi[] = $request->rdi_description;
+            $rdi[] = $request->rdi_reject;
             $rdi[] = PHPExcel_Shared_Date::stringToExcel($created_date);
             $rdi[] = PHPExcel_Shared_Date::stringToExcel($updated_date);
             $rdis[] = $rdi;
@@ -219,7 +224,7 @@ class RdiController extends APP_Controller {
         $sheet->setAutoFilter($dimensionHoja);
 
         /** Formato de tipo de datos en celdas */
-        $sheet->getStyle("E2:F{$ultimaFila}")
+        $sheet->getStyle("G2:H{$ultimaFila}")
                 ->getNumberFormat()
                 ->setFormatCode('dd/mm/yyyy hh:mm');
 
