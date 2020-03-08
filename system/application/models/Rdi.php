@@ -34,6 +34,7 @@ class Rdi extends BaseRdi {
         );
         $CI->load->library('NotificationUser');
         $CI->notificationuser->mail($this->User->user_email, 'Solicitud de información recibida', $body);
+        //$CI->notificationuser->mail($this->RdiAdmin->User->user_email, 'Nueva Solicitud de información', $body);
     }
 
     function sendNotificationUpdate($serviceStatus) {

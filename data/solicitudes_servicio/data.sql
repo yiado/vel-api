@@ -5,7 +5,6 @@ INSERT INTO `service_status` VALUES (4, 'Terminadas', NULL);
 INSERT INTO `service_status` VALUES (5, 'En Presupuesto', NULL);
 INSERT INTO `service_status` VALUES (6, 'Rechazada', NULL);
 
-
 INSERT INTO `service_type`(`service_type_id`, `service_type_name`, `service_type_commentary`) VALUES (1, 'Infraestructura', NULL);
 INSERT INTO `service_type`(`service_type_id`, `service_type_name`, `service_type_commentary`) VALUES (2, 'Pintura', NULL);
 INSERT INTO `service_type`(`service_type_id`, `service_type_name`, `service_type_commentary`) VALUES (3, 'Ventana o Vidrios', NULL);

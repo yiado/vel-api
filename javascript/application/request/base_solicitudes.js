@@ -403,6 +403,8 @@ App.ModuleActions[8019] = {
                             App.Request.Rdi_id = data.rdi_id;
                             Ext.getCmp('App.Rdi.Request.btnChangeRdiStatusWindow').setText(rdiStatus.data.rdi_status_name);
                             Ext.getCmp('App.Request.Rdi.Usuario').setValue(data.User.user_username);
+                            Ext.getCmp('App.Request.Rdi.Phone').setValue(data.rdi_phone);
+                            Ext.getCmp('App.Request.Rdi.Organism').setValue(data.rdi_organism);
                             Ext.getCmp('App.Request.Rdi.Email').setValue(data.User.user_email);
                             Ext.getCmp('App.Request.Rdi.RdiStatus').setValue(data.RdiStatus.rdi_status_id).setDisabled(true);
                             Ext.getCmp('App.Request.Rdi.RdiStatusNew').setValue(rdiStatus.data.rdi_status_id).setDisabled(true);

@@ -32,6 +32,7 @@ CREATE TABLE `service`  (
   `service_phone` varchar(255) NULL DEFAULT NULL,
   `service_commentary` varchar(255) NULL DEFAULT NULL,
   `service_reject` varchar(2000) NULL DEFAULT NULL,
+  `service_token` varchar(255) NULL DEFAULT NULL,
   PRIMARY KEY (`service_id`),
   INDEX `user_id`(`user_id`),
   INDEX `service_type_id`(`service_type_id`),

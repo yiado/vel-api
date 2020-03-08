@@ -6,6 +6,8 @@ INSERT INTO `rdi_status`(`rdi_status_id`, `rdi_status_name`) VALUES (4, 'Termina
 INSERT INTO `request_evaluation`(`request_evaluation_id`, `request_evaluation_name`) VALUES (1, 'Conforme');
 INSERT INTO `request_evaluation`(`request_evaluation_id`, `request_evaluation_name`) VALUES (2, 'No conforme');
 
+INSERT INTO `rdi_admin`(`rdi_admin_id`, `user_id`) VALUES (1, 4);
+
 
 
 INSERT INTO `language_tag`(`language_tag_id`, `language_id`, `module_id`, `language_tag_tag`, `language_tag_value`) VALUES (0, 1, 1, 'rdi', 'Requerimiento de información');

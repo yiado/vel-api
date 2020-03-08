@@ -43,11 +43,13 @@ class RdiController extends APP_Controller {
             $rdi->node_id = $this->input->post('node_id');
             $rdi->user_id = $user_id;
             $rdi->rdi_status_id = 1;
+            $rdi->rdi_admin_id = 1;
             $rdi->request_evaluation_id = 1;
             $rdi->rdi_organism = $this->input->post('rdi_organism');
             $rdi->rdi_phone = $this->input->post('rdi_phone');
             $rdi->rdi_description = $this->input->post('rdi_description');
             $rdi->save();
+            
 
             $rdiLog = new RdiLog();
             $rdiLog->user_id = $user_id;
@@ -135,6 +137,8 @@ class RdiController extends APP_Controller {
             } else {
                 $rdi->rdi_reject = null;
             }
+            
+            $rdi->rdi_token = sha1(mt_rand(1, 90000) . 'SALT');
 
             $rdi->save();
 

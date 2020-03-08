@@ -137,7 +137,8 @@ class ServiceController extends APP_Controller {
             } else {
                 $service->service_reject = null;
             }
-
+            
+            $service->service_token = sha1(mt_rand(1, 90000) . 'SALT');
 
             $service->save();
             $success = true;

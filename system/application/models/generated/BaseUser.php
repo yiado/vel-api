@@ -238,6 +238,10 @@ abstract class BaseUser extends Doctrine_Record {
         $this->hasMany('ServiceType', array(
             'local' => 'user_id',
             'foreign' => 'user_id'));
+        
+        $this->hasMany('RdiAdmin', array(
+            'local' => 'user_id',
+            'foreign' => 'user_id'));
     }
 
 }

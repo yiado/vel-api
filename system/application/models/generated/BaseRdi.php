@@ -47,6 +47,15 @@ abstract class BaseRdi extends Doctrine_Record {
             'notnull' => false,
             'autoincrement' => false,
         ));
+        $this->hasColumn('rdi_admin_id', 'integer', 4, array(
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('rdi_description', 'string', 1000, array(
             'type' => 'string',
             'length' => 1000,
@@ -84,6 +93,15 @@ abstract class BaseRdi extends Doctrine_Record {
             'autoincrement' => false,
         ));
         $this->hasColumn('rdi_phone', 'string', 255, array(
+            'type' => 'string',
+            'length' => 255,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('rdi_token', 'string', 255, array(
             'type' => 'string',
             'length' => 255,
             'fixed' => false,
@@ -132,6 +150,10 @@ abstract class BaseRdi extends Doctrine_Record {
         $this->hasOne('RdiStatus', array(
             'local' => 'rdi_status_id',
             'foreign' => 'rdi_status_id'));
+        
+        $this->hasOne('RdiAdmin', array(
+            'local' => 'rdi_admin_id',
+            'foreign' => 'rdi_admin_id'));
        
         $this->hasOne('RequestEvaluation', array(
             'local' => 'request_evaluation_id',

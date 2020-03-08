@@ -14,6 +14,7 @@
  * @property string $service_organism
  * @property string $service_phone
  * @property string $service_commentary
+ * @property string $service_token
  * @property Node $Node
  * @property User $User
  * @property ServiceType $ServiceType
@@ -112,6 +113,15 @@ abstract class BaseService extends Doctrine_Record {
         $this->hasColumn('service_reject', 'string', 2000, array(
             'type' => 'string',
             'length' => 2000,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('service_token', 'string', 255, array(
+            'type' => 'string',
+            'length' => 255,
             'fixed' => false,
             'unsigned' => false,
             'primary' => false,
