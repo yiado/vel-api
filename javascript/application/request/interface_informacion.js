@@ -16,19 +16,19 @@ App.Request.Rdi = Ext.extend(Ext.Panel, {
             {
                 xtype: 'tbseparator',
                 width: 10,
-                hidden: false
+                hidden: App.Security.Actions[8016] === undefined && App.Security.Actions[8019] === undefined ? true : false
             },
             App.ModuleActions[8017],
             {
                 xtype: 'tbseparator',
                 width: 10,
-                hidden: false
+                hidden: App.Security.Actions[8017] === undefined ? true : false
             },
             App.ModuleActions[8020],
             {
                 xtype: 'tbseparator',
                 width: 10,
-                hidden: false
+                hidden: App.Security.Actions[8020] === undefined ? true : false
             },
             App.ModuleActions[8018]
         ]
@@ -128,6 +128,12 @@ App.Request.Rdi.formSearching = {
                             disabled: App.Security.Session.user_type === 'A' ? false : true,
                             value: App.Security.Session.user_type === 'A' ? '' : App.Security.Session.user_email
                         }, {
+                            xtype: 'textfield',
+                            id: 'App.Request.SearchRdiPhone',
+                            fieldLabel: 'Teléfono',
+                            name: 'rdi_phone',
+                            anchor: '95%'
+                        }, {
                             xtype: 'combo',
                             fieldLabel: 'Evaluación',
                             triggerAction: 'all',
@@ -204,57 +210,15 @@ App.Request.Rdi.formSearching = {
                                             }
                                         }]
                                 }]
-                        }]
-                }, {
-                    columnWidth: .5,
-                    layout: 'form',
-                    labelWidth: 150,
-                    id: 'form_column_start_rdi_updated_at',
-                    items: [{
-                            columnWidth: .2,
-                            layout: 'form',
-                            items: [{
-                                    xtype: 'label',
-                                    text: "Fecha de modificación"
-                                }]
                         }, {
-                            columnWidth: .4,
-                            layout: 'column',
-                            id: 'column_start_rdi_updated_at',
-                            frame: true,
-                            items: [{
-                                    bodyStyle: 'margin-right: 50px;',
-                                    layout: 'form',
-                                    id: 'column_start_rdi_updated_at1',
-                                    items: [{
-                                            xtype: 'datefield',
-                                            id: 'start_rdi_updated_at',
-                                            ref: '../start_rdi_updated_at',
-                                            fieldLabel: App.Language.General.start_date,
-                                            name: 'start_updated_at',
-                                            anchor: '95%',
-                                            listeners: {
-                                                'select': function (fd, date) {
-                                                    fd.ownerCt.ownerCt.end_date.setMinValue(date);
-                                                }
-                                            }
-                                        }]
-                                }, {
-                                    layout: 'form',
-                                    items: [{
-                                            xtype: 'datefield',
-                                            id: 'end_rdi_updated_at',
-                                            ref: '../end_rdi_updated_at',
-                                            fieldLabel: App.Language.General.end_date,
-                                            name: 'end_updated_at',
-                                            anchor: '95%',
-                                            listeners: {
-                                                'select': function (fd, date) {
-                                                    fd.ownerCt.ownerCt.start_date.setMaxValue(date);
-                                                }
-                                            }
-                                        }]
-                                }]
+                            xtype: 'spacer',
+                            height: 10
+                        }, {
+                            xtype: 'textfield',
+                            id: 'App.Request.SearchRdiOrganism',
+                            fieldLabel: 'Organismo',
+                            name: 'rdi_organism',
+                            anchor: '100%'
                         }]
                 }]
         }]
@@ -286,6 +250,8 @@ App.Request.Rdi.Grilla = {
                 Ext.getCmp('App.RequestRdiEdit.Usuario').setValue(record.data.User.user_username);
                 Ext.getCmp('App.RequestRdiEdit.Email').setValue(record.data.User.user_email);
                 Ext.getCmp('App.RequestRdiEdit.Description').setValue(record.data.rdi_description);
+                Ext.getCmp('App.RequestRdiEdit.Telefono').setValue(record.data.rdi_phone);
+                Ext.getCmp('App.RequestRdiEdit.Organismo').setValue(record.data.rdi_organism);
 
                 var iso_date = Date.parseDate(record.data.rdi_created_at, "Y-m-d H:i:s");
                 Ext.getCmp('App.RequestRdiEdit.Fecha').setValue(iso_date.format("d/m/Y H:i"));
@@ -323,6 +289,11 @@ App.Request.Rdi.Grilla = {
                 return RdiStatus.rdi_status_name;
             }
         }, {
+            dataIndex: 'rdi_organism',
+            header: 'Organismo',
+            width: 100,
+            sortable: true
+        }, {
             dataIndex: 'User',
             header: 'Nombre',
             width: 60,
@@ -331,6 +302,12 @@ App.Request.Rdi.Grilla = {
                 return User.user_username;
             }
         }, {
+            dataIndex: 'rdi_phone',
+            header: 'Teléfono',
+            align: 'center',
+            width: 55,
+            sortable: true
+        }, {
             dataIndex: 'rdi_description',
             header: 'Requerimiento',
             width: 100,
@@ -338,11 +315,6 @@ App.Request.Rdi.Grilla = {
         }, {
             dataIndex: 'rdi_created_at',
             header: 'Fecha de creación',
-            width: 100,
-            sortable: true
-        }, {
-            dataIndex: 'rdi_updated_at',
-            header: 'Fecha de modificación',
             width: 100,
             sortable: true
         }, {
@@ -374,7 +346,7 @@ App.Request.Rdi.Grilla = {
 
 App.Request.addRdiByNodeWindow = Ext.extend(Ext.Window, {
     width: (screen.width < 500) ? screen.width - 50 : 500,
-    height: 300,
+    height: 340,
     modal: true,
     resizable: false,
     layout: 'fit',
@@ -413,6 +385,18 @@ App.Request.addRdiByNodeWindow = Ext.extend(Ext.Window, {
                         title: 'Datos del Requerimiento',
                         ref: 'solicitud',
                         items: [{
+                                xtype: 'textfield',
+                                fieldLabel: 'Teléfono',
+                                name: 'rdi_phone',
+                                anchor: '100%',
+                                allowBlank: false
+                            }, {
+                                xtype: 'textfield',
+                                fieldLabel: 'Organismo',
+                                name: 'rdi_organism',
+                                anchor: '100%',
+                                allowBlank: false
+                            }, {
                                 xtype: 'textarea',
                                 anchor: '100%',
                                 name: 'rdi_description',
@@ -500,6 +484,20 @@ App.Request.editRequestRdiByNodeWindow = Ext.extend(Ext.Window, {
                                 name: 'rdi_created_at',
                                 id: 'App.RequestRdiEdit.Fecha',
                                 anchor: '100%'
+                            }, {
+                                xtype: 'textfield',
+                                fieldLabel: 'Organismo',
+                                id: 'App.RequestRdiEdit.Organismo',
+                                name: 'rdi_organism',
+                                anchor: '100%',
+                                allowBlank: false
+                            }, {
+                                xtype: 'textfield',
+                                fieldLabel: 'Teléfono',
+                                id: 'App.RequestRdiEdit.Telefono',
+                                name: 'rdi_phone',
+                                anchor: '100%',
+                                allowBlank: false
                             }, {
                                 xtype: 'textarea',
                                 fieldLabel: 'Descripción',
@@ -590,10 +588,12 @@ App.Request.exportRdiListByNodeWindow = Ext.extend(Ext.Window, {
                                     node_id: App.Interface.selectedNodeId,
                                     file_name: Ext.getCmp('App.Request.SearchRdiName').getValue(),
                                     rdi_status_id: Ext.getCmp('App.Request.SearchRdiStatus').getValue(),
+                                    rdi_phone: Ext.getCmp('App.Request.SearchRdiPhone').getValue(),
                                     user_username: Ext.getCmp('App.Request.SearchRdiUser').getValue(),
                                     user_email: Ext.getCmp('App.Request.SearchRdiMail').getValue(),
                                     start_date: Ext.getCmp('start_rdi_date').getValue(),
-                                    end_date: Ext.getCmp('end_rdi_date').getValue()
+                                    end_date: Ext.getCmp('end_rdi_date').getValue(),
+                                    rdi_organism: Ext.getCmp('App.Request.SearchRdiOrganism').getValue()
                                 },
                                 success: function (response) {
                                     response = Ext.decode(response.responseText);
@@ -681,7 +681,7 @@ App.Request.changeRdiStatusWindow = Ext.extend(Ext.Window, {
     modal: true,
     border: true,
     width: screen.width < 600 ? screen.width - 100 : 600,
-    height: 400,
+    height: 460,
     layout: 'fit',
     padding: 2,
     initComponent: function () {
@@ -712,6 +712,19 @@ App.Request.changeRdiStatusWindow = Ext.extend(Ext.Window, {
                         title: 'Datos Requerimiento',
                         ref: 'rdi',
                         items: [{
+                                xtype: 'displayfield',
+                                fieldLabel: 'Teléfono',
+                                name: 'rdi_phone',
+                                id: 'App.Request.Rdi.Phone',
+                                anchor: '100%'
+                            }, {
+                                xtype: 'displayfield',
+                                fieldLabel: 'Organismo',
+                                name: 'rdi_organism',
+                                id: 'App.Request.Rdi.Organism',
+                                anchor: '100%',
+                                allowBlank: false
+                            }, {
                                 xtype: 'combo',
                                 fieldLabel: 'Estado actual',
                                 anchor: '100%',

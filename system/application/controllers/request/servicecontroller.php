@@ -62,8 +62,8 @@ class ServiceController extends APP_Controller {
             $conn->commit();
 
             //Enviar correo de Alerta de creación de Service
-            $service->sendNotificationAdministrador($node);
-            $service->sendNotificationRecibido();
+            //$service->sendNotificationAdministrador($node);
+            $service->sendNotificationRecibido($node);
         } catch (Exception $e) {
             //Si hay error, rollback de los cambios en la base de datos
             $conn->rollback();
@@ -149,7 +149,7 @@ class ServiceController extends APP_Controller {
                  * Estado finalizado
                  */
                 if ($service_status_id === '4') {
-                    $service->sendEvaluation();
+                    $service->sendEvaluation($serviceStatusNew);
                 } else {
                     /**
                      * Estados diferentes de finalizados

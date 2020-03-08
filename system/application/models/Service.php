@@ -17,73 +17,72 @@ class Service extends BaseService {
         $event->data = $data;
     }
     
-    function sendNotificationRecibido() {
-        $body = "La solicitud [{$this->service_commentary}] ha sido recibida.";
+    function sendNotificationRecibido($node) {
         $CI = & get_instance();
-        $CI->load->library('NotificationUser');
-        $CI->notificationuser->mail($this->User->user_email, 'Solicitud de servicio recibida', $body);
-    }
-
-    function sendNotificationAdministrador($node) {
+        $nodos_ancestros = $this->getAncestros($node);
         $date = new DateTime($this->service_date);
         $fecha = $date->format('d/m/Y H:i');
-        $body = '';
-        $nodos_ancestros = array();
+        $body = $CI->load->view('mails/service',
+                array(
+                    'service' => $this,
+                    'fecha' => $fecha,
+                    'nodos_ancestros' => $nodos_ancestros,
+                    'serviceStatus' => $this->ServiceStatus
+                ),
+                true
+        );
+        $CI->notificationuser->mail($this->User->user_email, 'Solicitud de servicio recibida', $body);
+        $CI->notificationuser->mail($this->ServiceType->User->user_email, 'Nueva Solicitud de Servicio', $body);
+    }
 
+    function sendNotificationUpdate($serviceStatus) {
+        $CI = & get_instance();
+        $node = Doctrine_Core::getTable('Node')->find($this->node_id);
+        $nodos_ancestros = $this->getAncestros($node);
+        $date = new DateTime($this->service_date);
+        $fecha = $date->format('d/m/Y H:i');
+        $body = $CI->load->view('mails/service_change_status',
+                array(
+                    'service' => $this,
+                    'fecha' => $fecha,
+                    'nodos_ancestros' => $nodos_ancestros,
+                    'serviceStatus' => $serviceStatus
+                ),
+                true
+        );
+        $CI->load->library('NotificationUser');
+        $CI->notificationuser->mail($this->User->user_email, 'Cambio estado de información', $body);
+    }
+    
+    function sendEvaluation($serviceStatus) {
+        $CI = & get_instance();
+        $node = Doctrine_Core::getTable('Node')->find($this->node_id);
+        $nodos_ancestros = $this->getAncestros($node);
+        $date = new DateTime($this->service_date);
+        $fecha = $date->format('d/m/Y H:i');
+        $body = $CI->load->view('mails/service_evaluation',
+                array(
+                    'service' => $this,
+                    'fecha' => $fecha,
+                    'nodos_ancestros' => $nodos_ancestros,
+                    'serviceStatus' => $serviceStatus
+                ),
+                true
+        );
+        $CI->load->library('NotificationUser');
+        $CI->notificationuser->mail($this->User->user_email, 'Evaluación de satisfacción', $body);
+    }
+    
+    function getAncestros($node) {
+        $nodos_ancestros = array();
         if ($node->getNode()->getLevel()) {
             foreach ($node->getNode()->getAncestors()->toArray() as $nodo) {
                 $nodos_ancestros[] = $nodo['node_name'];
             }
             $nodos_ancestros[] = $node->toArray()['node_name'];
+        } else {
+            $nodos_ancestros[] = $node->toArray()['node_name'];
         }
-
-        $body .= "Nodo: " . implode(' => ', $nodos_ancestros) . "<br>";
-        $body .= "Tipo de Servicio: {$this->ServiceType->service_type_name}<br>";
-        $body .= "Estado del Servicio: {$this->ServiceStatus->service_status_name}<br>";
-        $body .= "Nombre de Usuario: {$this->User->user_username}<br>";
-        $body .= "Fecha de Servicio: {$fecha}<br>";
-        $body .= "Teléfono: {$this->service_phone}<br>";
-        $body .= "Organismo: {$this->service_organism}<br>";
-        $body .= "Requerimiento: {$this->service_commentary}<br>";
-        
-        $CI = & get_instance();
-        $CI->load->library('NotificationUser');
-        $CI->notificationuser->mail($this->ServiceType->User->user_email, 'Nueva Solicitud de Servicio', $body);
-    
-    }
-
-    function sendNotificationUpdate($serviceStatus) {
-
-        $date = new DateTime($this->service_date);
-        $fecha = $date->format('d/m/Y H:i');
-        $body = "Tipo de Servicio: {$this->ServiceType->service_type_name}<br>";
-        $body .= "Estado del Servicio: {$serviceStatus->service_status_name}<br>";
-        $body .= "Nombre de Usuario: {$this->User->user_username}<br>";
-        $body .= "Fecha de Servicio: {$fecha}<br>";
-        $body .= "Teléfono: {$this->service_phone}<br>";
-        $body .= "Organismo: {$this->service_organism}<br>";
-        $body .= "Requerimiento: {$this->service_commentary}<br>";
-
-        /**
-         * Rechazado
-         */
-        if ($serviceStatus->service_status_id == 6) {
-            $body .= "Motivo rechazo: {$this->service_reject}<br>";
-        }
-
-        $CI = & get_instance();
-        $CI->load->library('NotificationUser');
-        $CI->notificationuser->mail($this->User->user_email, 'Cambio estado de información', $body);
-    }
-    
-    function sendEvaluation() {
-
-        $date = new DateTime($this->service_date);
-        $fecha = $date->format('d/m/Y H:i');
-        $body = "La evaluacion ha sido finalizada... evaluacion (yn) (y)";
-
-        $CI = & get_instance();
-        $CI->load->library('NotificationUser');
-        $CI->notificationuser->mail($this->User->user_email, 'Evaluación de satisfacción', $body);
+        return $nodos_ancestros;
     }
 }

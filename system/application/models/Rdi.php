@@ -17,44 +17,74 @@ class Rdi extends BaseRdi {
         $data['Node'] = Doctrine_Core::getTable('Node')->findOneByNodeId($data['node_id'])->toArray();
         $event->data = $data;
     }
-    
-    function sendNotificationRecibido() {
-        $body = "La solicitud [{$this->rdi_description}] ha sido recibida.";
+
+    function sendNotificationRecibido($node) {
         $CI = & get_instance();
+        $nodos_ancestros = $this->getAncestros($node);
+        $date = new DateTime($this->rdi_created_at);
+        $fecha = $date->format('d/m/Y H:i');
+        $body = $CI->load->view('mails/rdi',
+                array(
+                    'rdi' => $this,
+                    'fecha' => $fecha,
+                    'nodos_ancestros' => $nodos_ancestros,
+                    'serviceStatus' => $this->RdiStatus
+                ),
+                true
+        );
         $CI->load->library('NotificationUser');
         $CI->notificationuser->mail($this->User->user_email, 'Solicitud de información recibida', $body);
     }
 
     function sendNotificationUpdate($serviceStatus) {
-
-        $date = new DateTime($this->rdi_created_at);
+        $CI = & get_instance();
+        $node = Doctrine_Core::getTable('Node')->find($this->node_id);
+        $nodos_ancestros = $this->getAncestros($node);
+        $date = new DateTime($this->rdi_updated_at);
         $fecha = $date->format('d/m/Y H:i');
-        $body = "Estado del Requerimiento: {$serviceStatus->rdi_status_name}<br>";
-        $body .= "Nombre de Usuario: {$this->User->user_username}<br>";
-        $body .= "Fecha de Requerimiento: {$fecha}<br>";
-        $body .= "Teléfono: {$this->rdi_phone}<br>";
-        $body .= "Organismo: {$this->rdi_organism}<br>";
-        $body .= "Requerimiento: {$this->rdi_description}<br>";
+        $body = $CI->load->view('mails/rdi_change_status',
+                array(
+                    'rdi' => $this,
+                    'fecha' => $fecha,
+                    'nodos_ancestros' => $nodos_ancestros,
+                    'serviceStatus' => $serviceStatus
+                ),
+                true
+        );
+        $CI->load->library('NotificationUser');
+        $CI->notificationuser->mail($this->User->user_email, 'Cambio estado de solicitud', $body);
+    }
 
-        /**
-         * Rechazado
-         */
-        if ($serviceStatus->rdi_status_id == 2) {
-            $body .= "Motivo rechazo: {$this->rdi_reject}<br>";
+    function sendEvaluation($serviceStatus) {
+        $CI = & get_instance();
+        $node = Doctrine_Core::getTable('Node')->find($this->node_id);
+        $nodos_ancestros = $this->getAncestros($node);
+        $date = new DateTime($this->rdi_updated_at);
+        $fecha = $date->format('d/m/Y H:i');
+        $body = $CI->load->view('mails/rdi_evaluation',
+                array(
+                    'rdi' => $this,
+                    'fecha' => $fecha,
+                    'nodos_ancestros' => $nodos_ancestros,
+                    'serviceStatus' => $serviceStatus
+                ),
+                true
+        );
+        $CI->load->library('NotificationUser');
+        $CI->notificationuser->mail($this->User->user_email, 'Para seguir mejorando evaluanos', $body);
+    }
+
+    function getAncestros($node) {
+        $nodos_ancestros = array();
+        if ($node->getNode()->getLevel()) {
+            foreach ($node->getNode()->getAncestors()->toArray() as $nodo) {
+                $nodos_ancestros[] = $nodo['node_name'];
+            }
+            $nodos_ancestros[] = $node->toArray()['node_name'];
+        } else {
+            $nodos_ancestros[] = $node->toArray()['node_name'];
         }
-
-        $CI = & get_instance();
-        $CI->load->library('NotificationUser');
-        $CI->notificationuser->mail($this->User->user_email, 'Cambio estado de información', $body);
+        return $nodos_ancestros;
     }
-    
-    function sendEvaluation() {
-        $date = new DateTime($this->rdi_created_at);
-        $fecha = $date->format('d/m/Y H:i');
-        $body = "La evaluacion ha sido finalizada... evaluacion (yn) (y)";
 
-        $CI = & get_instance();
-        $CI->load->library('NotificationUser');
-        $CI->notificationuser->mail($this->User->user_email, 'Evaluación de satisfacción', $body);
-    }
 }

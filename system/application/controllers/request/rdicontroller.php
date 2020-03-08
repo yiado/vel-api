@@ -61,7 +61,7 @@ class RdiController extends APP_Controller {
             $conn->commit();
 
             //Enviar correo de Alerta de creación de Rdi
-            $rdi->sendNotificationRecibido();
+            $rdi->sendNotificationRecibido($node);
         } catch (Exception $e) {
             //Si hay error, rollback de los cambios en la base de datos
             $conn->rollback();
@@ -147,7 +147,7 @@ class RdiController extends APP_Controller {
                  * Estado finalizado
                  */
                 if ($rdi_status_id === '4') {
-                    $rdi->sendEvaluation();
+                    $rdi->sendEvaluation($rdiStatusNew);
                 } else {
                     /**
                      * Estados diferentes de finalizados
