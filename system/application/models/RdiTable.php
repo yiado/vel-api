@@ -8,7 +8,8 @@ class RdiTable extends Doctrine_Table {
         $q = Doctrine_Query::create()
                 ->from('Rdi r')
                 ->innerJoin('r.RdiStatus rs')
-                ->innerJoin('r.User u');
+                ->innerJoin('r.User u')
+                ->innerJoin('r.RequestEvaluation re');
         $this->addFilter($q, $filters);
         if (!is_null($start)) {
             $q->offset($start);
@@ -24,6 +25,7 @@ class RdiTable extends Doctrine_Table {
                 ->from('Rdi r')
                 ->innerJoin('r.RdiStatus rs')
                 ->innerJoin('r.User u')
+                ->innerJoin('r.RequestEvaluation re')
                 ->where('rdi_id = ?', $rdi_id);
         return $q->execute();
     }

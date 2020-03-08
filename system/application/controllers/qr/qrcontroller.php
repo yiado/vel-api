@@ -90,19 +90,18 @@ class QrController extends APP_Controller {
 
         if ($success === true) {
             $this->auth->session_start($this->$auth_engine_config->getUser());
-            
+
             $user_login = Doctrine_Core::getTable('User')->find((int) $this->auth->get_user_data('user_id'));
             $token = sha1(mt_rand(1, 90000) . 'SALT');
             $user_login->user_token = $token;
             $user_login->save();
-            
+
             $data_to_json = array(
                 'success' => true,
                 'base_url' => base_url(),
                 'user_type' => $user_type,
                 'user_id' => $this->auth->get_user_data('user_id'),
                 'user_token' => $token
-                 
             );
 
             $this->syslog->register('auth', array(
@@ -213,16 +212,16 @@ class QrController extends APP_Controller {
         $user_id = (int) $this->input->post('user_id');
         $node_id = (int) $this->input->post('node_id');
         $user_token = $this->input->post('user_token');
-        
-        
+
+
         $user = Doctrine_Core::getTable('User')->find($user_id);
         if (!$user_token && !$user) {
             die("Solicitud invalida");
         } else if ($user->user_token !== $user_token) {
             die("Usuario no autorizado");
         }
-        
-        
+
+
         $node = Doctrine_Core::getTable('Node')->find($node_id);
 
         //Obtenemos la conexión actual
@@ -240,6 +239,7 @@ class QrController extends APP_Controller {
                 $rdi->node_id = $this->input->post('node_id');
                 $rdi->user_id = $user->user_id;
                 $rdi->rdi_status_id = 1;
+                $rdi->request_evaluation_id = 1;
                 $rdi->rdi_description = $this->input->post('service_commentary');
                 $rdi->save();
 
@@ -255,8 +255,7 @@ class QrController extends APP_Controller {
                 $conn->commit();
 
                 //Enviar correo de Alerta de creación de Service
-                /* $service->sendNotificationAdministrador($node);
-                $service->sendNotificationRecibido(); */
+                $rdi->sendNotificationRecibido();
             } else {
                 /**
                  * Solicitud de tipo servicio
@@ -266,6 +265,7 @@ class QrController extends APP_Controller {
                 $service->user_id = $user->user_id;
                 $service->service_type_id = $this->input->post('service_type_id');
                 $service->service_status_id = 1;
+                $service->request_evaluation_id = 1;
                 $service->service_organism = 'UChile';
                 $service->service_phone = 987654321;
                 $service->service_commentary = $this->input->post('service_commentary');

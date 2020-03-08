@@ -17,7 +17,8 @@ App.General.declareNameSpaces('App.Request', [
     'ServicesOrganismChart',
     'Information',
     'InformationStatus',
-    'InformationLog'
+    'InformationLog',
+    'RequestEvaluation'
 ]);
 
 App.Request.moduleActivate = function() {
@@ -283,9 +284,15 @@ App.ModuleActions[8013] = {
                             Ext.getCmp('App.Request.Service.ServiceStatus').setValue(data.ServiceStatus.service_status_id).setDisabled(true);
                             Ext.getCmp('App.Request.Service.ServiceStatusNew').setValue(serviceStatus.data.service_status_id).setDisabled(true);
                             Ext.getCmp('App.Request.Service.Commentary').setValue(data.service_commentary);
+                            
+                            let comentary = Ext.getCmp("App.Request.Service.Reject.Comentary");
+                            let comentary_box = Ext.getCmp("App.Request.Service.Reject.Comentary.Box");
                             if (serviceStatus.data.service_status_id === '6') {
-                                Ext.getCmp("App.Request.Service.Reject.Comentary").setVisible(true);
-                                Ext.getCmp("App.Request.Service.Reject.Comentary.Box").allowBlank = false;
+                                comentary.show();
+                                comentary_box.allowBlank = false;
+                            } else {
+                                comentary.hide();
+                                comentary_box.allowBlank = true;
                             }
                         } else {
                             Ext.FlashMessage.alert('Debe seleccionar un registro');
@@ -400,10 +407,14 @@ App.ModuleActions[8019] = {
                             Ext.getCmp('App.Request.Rdi.RdiStatus').setValue(data.RdiStatus.rdi_status_id).setDisabled(true);
                             Ext.getCmp('App.Request.Rdi.RdiStatusNew').setValue(rdiStatus.data.rdi_status_id).setDisabled(true);
                             Ext.getCmp('App.Request.Rdi.Description').setValue(data.rdi_description);
-                            
-                            if (rdiStatus.data.rdi_status_id === '2') {
-                                Ext.getCmp("App.Request.Rdi.Reject.Comentary").setVisible(true);
-                                Ext.getCmp("App.Request.Rdi.Reject.Comentary.Box").allowBlank = false;
+                            let comentary = Ext.getCmp("App.Request.Rdi.Reject.Comentary");
+                            let comentary_box = Ext.getCmp("App.Request.Rdi.Reject.Comentary.Box");
+                            if (rdiStatus.data.rdi_status_id == '2') {
+                                comentary.show();
+                                comentary_box.allowBlank = false;
+                            } else {
+                                comentary.hide();
+                                comentary_box.allowBlank = true;
                             }
                         } else {
                             Ext.FlashMessage.alert('Debe seleccionar un registro');

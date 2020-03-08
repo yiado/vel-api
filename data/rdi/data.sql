@@ -3,6 +3,9 @@ INSERT INTO `rdi_status`(`rdi_status_id`, `rdi_status_name`) VALUES (2, 'Rechaza
 INSERT INTO `rdi_status`(`rdi_status_id`, `rdi_status_name`) VALUES (3, 'En proceso');
 INSERT INTO `rdi_status`(`rdi_status_id`, `rdi_status_name`) VALUES (4, 'Terminada');
 
+INSERT INTO `request_evaluation`(`request_evaluation_id`, `request_evaluation_name`) VALUES (1, 'Conforme');
+INSERT INTO `request_evaluation`(`request_evaluation_id`, `request_evaluation_name`) VALUES (2, 'No conforme');
+
 
 
 INSERT INTO `language_tag`(`language_tag_id`, `language_id`, `module_id`, `language_tag_tag`, `language_tag_value`) VALUES (0, 1, 1, 'rdi', 'Requerimiento de información');

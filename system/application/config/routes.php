@@ -164,6 +164,8 @@ $route['request/rdi/(:any)']                     					= "request/rdicontroller/$
 $route['request/rdistatus/(:any)']                                                      = "request/rdistatuscontroller/$1";
 $route['request/rdilog/(:any)']                     					= "request/rdilogcontroller/$1";
 
+$route['request/evaluation/(:any)']                                                     = "request/evaluationcontroller/$1";
+
 $route['network/fo/(:any)']                     					= "network/focontroller/$1";
 
 /** administrator **/

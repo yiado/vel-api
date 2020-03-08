@@ -43,6 +43,9 @@ class RdiController extends APP_Controller {
             $rdi->node_id = $this->input->post('node_id');
             $rdi->user_id = $user_id;
             $rdi->rdi_status_id = 1;
+            $rdi->request_evaluation_id = 1;
+            $rdi->rdi_organism = $this->input->post('rdi_organism');
+            $rdi->rdi_phone = $this->input->post('rdi_phone');
             $rdi->rdi_description = $this->input->post('rdi_description');
             $rdi->save();
 
@@ -58,8 +61,7 @@ class RdiController extends APP_Controller {
             $conn->commit();
 
             //Enviar correo de Alerta de creación de Rdi
-            //$this->sendNotificationAdministrador($rdi, $node);
-            //$this->sendNotificationRecibido($rdi);
+            $rdi->sendNotificationRecibido();
         } catch (Exception $e) {
             //Si hay error, rollback de los cambios en la base de datos
             $conn->rollback();
@@ -77,6 +79,26 @@ class RdiController extends APP_Controller {
         $conn->beginTransaction();
         $user_id = $this->auth->get_user_data('user_id');
         try {
+            $rdi_organism = $this->input->post('rdi_organism');
+            if ($rdi->rdi_organism != $rdi_organism) {
+                $rdiLog = new RdiLog();
+                $rdiLog->user_id = $user_id;
+                $rdiLog->rdi_id = $rdi->rdi_id;
+                $rdiLog->rdi_log_detail = 'Cambio de organismo:' . $rdi->rdi_organism . ' Por  :' . $rdi_organism;
+                $rdiLog->save();
+
+                $rdi->rdi_organism = $rdi_organism;
+            }
+
+            $rdi_phone = $this->input->post('rdi_phone');
+            if ($rdi->rdi_phone != $rdi_phone) {
+                $rdiLog = new RdiLog();
+                $rdiLog->user_id = $user_id;
+                $rdiLog->rdi_id = $rdi->rdi_id;
+                $rdiLog->rdi_log_detail = 'Cambio de teléfono:' . $rdi->rdi_phone . ' Por  :' . $rdi_phone;
+                $rdiLog->save();
+                $rdi->rdi_phone = $rdi_phone;
+            }
             
             $rdi_description = $this->input->post('rdi_description');
             if ($rdi->rdi_description !== $rdi_description) {
@@ -121,7 +143,17 @@ class RdiController extends APP_Controller {
             $conn->commit();
             
             if ($cambio_estado) {
-                //$this->sendNotificationUpdate($rdi);
+                /**
+                 * Estado finalizado
+                 */
+                if ($rdi_status_id === '4') {
+                    $rdi->sendEvaluation();
+                } else {
+                    /**
+                     * Estados diferentes de finalizados
+                     */
+                    $rdi->sendNotificationUpdate($rdiStatusNew);
+                }
             }
         } catch (Exception $e) {
             $conn->rollback();
@@ -141,6 +173,7 @@ class RdiController extends APP_Controller {
         
         $ancestros = Doctrine_Core::getTable('Node')->findOneByNodeId($node_id)->getNode()->getAncestors();
 
+        $request_evaluation_id = $this->input->post('request_evaluation_id');
         $rdi_status_id = $this->input->post('rdi_status_id');
         $user_username = $this->input->post('user_username');
         $user_email = $this->input->post('user_email');
@@ -150,11 +183,17 @@ class RdiController extends APP_Controller {
         
         $start_updated_at = $this->input->post('start_updated_at');
         $end_updated_at = $this->input->post('end_updated_at');
+        
+        $rdi_phone = $this->input->post('rdi_phone');
+        $rdi_organism = $this->input->post('rdi_organism');
 
         $filters = array(            
+            're.request_evaluation_id = ?' => $request_evaluation_id,
             'rs.rdi_status_id = ?' => $rdi_status_id,
             'u.user_username LIKE ?' => (!empty($user_username) ? '%' . $user_username . '%' : NULL),
             'u.user_email = ?' => $user_email,
+            'rdi_phone = ?' => $rdi_phone,
+            'rdi_organism LIKE ?' => (!empty($rdi_organism) ? '%' . $rdi_organism . '%' : NULL),
             'rdi_created_at >= ?' => (!empty($start_date) ? $start_date . ' 00:00:00' : NULL ),
             'rdi_created_at <= ?' => (!empty($end_date) ? $end_date . ' 23:59:59' : NULL ),
             'rdi_updated_at >= ?' => (!empty($start_updated_at) ? $start_updated_at . ' 00:00:00' : NULL ),
@@ -185,10 +224,13 @@ class RdiController extends APP_Controller {
         $titulos[] = 'Estado';
         $titulos[] = 'Nombre Usuario';
         $titulos[] = 'Email Usuario';
-        $titulos[] = 'Descripción';
-        $titulos[] = 'Motivo Rechazo';
+        $titulos[] = 'Teléfono';
+        $titulos[] = 'Organismo';
         $titulos[] = 'Fecha Creación';
         $titulos[] = 'Fecha Modificación';
+        $titulos[] = 'Descripción';
+        $titulos[] = 'Motivo Rechazo';
+        $titulos[] = 'Evaluación';
 
         $rdis = array();
         foreach ($requests as $request) {
@@ -205,10 +247,13 @@ class RdiController extends APP_Controller {
             $rdi[] = $request->RdiStatus->rdi_status_name;
             $rdi[] = $request->User->user_username;
             $rdi[] = $request->User->user_email;
-            $rdi[] = $request->rdi_description;
-            $rdi[] = $request->rdi_reject;
+            $rdi[] = $request->rdi_phone;
+            $rdi[] = $request->rdi_organism;
             $rdi[] = PHPExcel_Shared_Date::stringToExcel($created_date);
             $rdi[] = PHPExcel_Shared_Date::stringToExcel($updated_date);
+            $rdi[] = $request->rdi_description;
+            $rdi[] = $request->rdi_reject;
+            $rdi[] = $request->RequestEvaluation->request_evaluation_name;
             $rdis[] = $rdi;
         }
 
@@ -224,6 +269,9 @@ class RdiController extends APP_Controller {
         $sheet->setAutoFilter($dimensionHoja);
 
         /** Formato de tipo de datos en celdas */
+        $sheet->getStyle("E2:E{$ultimaFila}")
+                ->getNumberFormat()
+                ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER);
         $sheet->getStyle("G2:H{$ultimaFila}")
                 ->getNumberFormat()
                 ->setFormatCode('dd/mm/yyyy hh:mm');
@@ -258,52 +306,6 @@ class RdiController extends APP_Controller {
         $objWriter->save('./temp/' . $this->input->post('file_name') . '.xlsx');
 
         echo '{"success": true, "file": "temp/' . $this->input->post('file_name') . '.xlsx"}';
-    }
-
-    function sendNotificationRecibido($rdi) {
-        $body = "La solicitud [{$rdi->rdi_description}] ha sido recibida.";
-        $this->CI->notificationuser->mail($rdi->User->user_email, 'Solicitud de servicio recibida', $body);
-    }
-
-    function sendNotificationAdministrador($rdi, $node) {
-        $date = new DateTime($rdi->rdi_date);
-        $fecha = $date->format('d/m/Y H:i');
-        $body = '';
-        $nodos_ancestros = array();
-
-        if ($node->getNode()->getLevel()) {
-            foreach ($node->getNode()->getAncestors()->toArray() as $nodo) {
-                $nodos_ancestros[] = $nodo['node_name'];
-            }
-            $nodos_ancestros[] = $node->toArray()['node_name'];
-        }
-
-        $body .= "Nodo: " . implode(' => ', $nodos_ancestros) . "<br>";
-        $body .= "Tipo de Servicio: {$rdi->RdiType->rdi_type_name}<br>";
-        $body .= "Estado del Servicio: {$rdi->RdiStatus->rdi_status_name}<br>";
-        $body .= "Nombre de Usuario: {$rdi->User->user_username}<br>";
-        $body .= "Fecha de Servicio: {$fecha}<br>";
-        $body .= "Teléfono: {$rdi->rdi_phone}<br>";
-        $body .= "Organismo: {$rdi->rdi_organism}<br>";
-        $body .= "Requerimiento: {$rdi->rdi_description}<br>";
-
-        $this->CI->notificationuser->mail($rdi->RdiType->User->user_email, 'Nueva Solicitud de Servicio', $body);
-    }
-
-    function sendNotificationUpdate($rdi) {
-        $date = new DateTime($rdi->rdi_date);
-        $fecha = $date->format('d/m/Y H:i');
-        $body = "Tipo de Servicio: {$rdi->RdiType->rdi_type_name}<br>";
-        $body .= "Estado del Servicio: {$rdi->RdiStatus->rdi_status_name}<br>";
-        $body .= "Nombre de Usuario: {$rdi->User->user_username}<br>";
-        $body .= "Fecha de Servicio: {$fecha}<br>";
-        $body .= "Teléfono: {$rdi->rdi_phone}<br>";
-        $body .= "Organismo: {$rdi->rdi_organism}<br>";
-        $body .= "Requerimiento: {$rdi->rdi_description}<br>";
-
-        $CI = & get_instance();
-        $CI->load->library('NotificationUser');
-        $CI->notificationuser->mail($rdi->RdiType->User->user_email, 'Cambio estado de servicio', $body);
     }
     
     function getRdiStatus() {

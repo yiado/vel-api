@@ -12,7 +12,7 @@ App.Request.Solicitudes.Store = new Ext.data.JsonStore({
             update: 'index.php/request/solicitud/update'
         },
         listeners: {
-            'exception': function(DataProxy, type, action, options, response, arg) {
+            'exception': function (DataProxy, type, action, options, response, arg) {
                 if (type === 'remote') {
                     Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
                 } else if (type === 'response') {
@@ -53,7 +53,7 @@ App.Request.Solicitudes.Store = new Ext.data.JsonStore({
         'User'
     ],
     listeners: {
-        'save': function() {
+        'save': function () {
             this.load();
         }
     }
@@ -67,7 +67,7 @@ App.Request.SolicitudEstados.Store = new Ext.data.JsonStore({
             destroy: 'index.php/request/estado/delete'
         },
         listeners: {
-            'exception': function(DataProxy, type, action, options, response, arg) {
+            'exception': function (DataProxy, type, action, options, response, arg) {
                 if (type === 'remote') {
                     Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
                 }
@@ -89,7 +89,7 @@ App.Request.SolicitudEstados.Store = new Ext.data.JsonStore({
         'solicitud_estado_comentario'
     ],
     listeners: {
-        'save': function() {
+        'save': function () {
             this.load();
         }
     }
@@ -118,7 +118,7 @@ App.Request.SolicitudTipos.Store = new Ext.data.JsonStore({
         'solicitud_type_comentario'
     ],
     listeners: {
-        'save': function() {
+        'save': function () {
             this.load();
         }
     }
@@ -130,7 +130,7 @@ App.Request.SolicitudLog.Store = new Ext.data.JsonStore({
             read: 'index.php/request/log/get'
         },
         listeners: {
-            'exception': function(DataProxy, type, action, options, response, arg) {
+            'exception': function (DataProxy, type, action, options, response, arg) {
                 if (type === 'remote') {
                     Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
                 } else if (type === 'response') {
@@ -160,7 +160,7 @@ App.Request.SolicitudLog.Store = new Ext.data.JsonStore({
         'Solicitud'
     ],
     listeners: {
-        'save': function() {
+        'save': function () {
             this.load();
         }
     }
@@ -178,7 +178,7 @@ App.Request.Services.Store = new Ext.data.JsonStore({
             update: 'index.php/request/service/update'
         },
         listeners: {
-            'exception': function(DataProxy, type, action, options, response, arg) {
+            'exception': function (DataProxy, type, action, options, response, arg) {
                 if (type === 'remote') {
                     Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
                 } else if (type === 'response') {
@@ -209,14 +209,16 @@ App.Request.Services.Store = new Ext.data.JsonStore({
         'service_organism',
         'service_phone',
         'service_commentary',
+        'request_evaluation_id',
         'Node',
         'User',
         'ServiceType',
-        'ServiceStatus'
+        'ServiceStatus',
+        'RequestEvaluation'
     ],
     listeners: {
-        'save': function() {
-            this.load({ params: { node_id: App.Interface.selectedNodeId,start: 0, limit: App.GridLimit } });
+        'save': function () {
+            this.load({params: {node_id: App.Interface.selectedNodeId, start: 0, limit: App.GridLimit}});
         }
     }
 });
@@ -229,7 +231,7 @@ App.Request.ServicesStatus.Store = new Ext.data.JsonStore({
             destroy: 'index.php/request/servicestatus/delete'
         },
         listeners: {
-            'exception': function(DataProxy, type, action, options, response, arg) {
+            'exception': function (DataProxy, type, action, options, response, arg) {
                 if (type === 'remote') {
                     Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
                 }
@@ -251,7 +253,7 @@ App.Request.ServicesStatus.Store = new Ext.data.JsonStore({
         'service_status_commentary'
     ],
     listeners: {
-        'save': function() {
+        'save': function () {
             this.load();
         }
     }
@@ -282,7 +284,7 @@ App.Request.ServicesType.Store = new Ext.data.JsonStore({
         'User'
     ],
     listeners: {
-        'save': function() {
+        'save': function () {
             this.load();
         }
     }
@@ -294,7 +296,7 @@ App.Request.ServicesLog.Store = new Ext.data.JsonStore({
             read: 'index.php/request/servicelog/get'
         },
         listeners: {
-            'exception': function(DataProxy, type, action, options, response, arg) {
+            'exception': function (DataProxy, type, action, options, response, arg) {
                 if (type === 'remote') {
                     Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
                 } else if (type === 'response') {
@@ -324,7 +326,7 @@ App.Request.ServicesLog.Store = new Ext.data.JsonStore({
         'Service'
     ],
     listeners: {
-        'save': function() {
+        'save': function () {
             this.load();
         }
     }
@@ -336,7 +338,7 @@ App.Request.ServicesStatusChart.Store = new Ext.data.JsonStore({
             read: 'index.php/request/service/getServiceStatus'
         },
         listeners: {
-            'exception': function(DataProxy, type, action, options, response, arg) {
+            'exception': function (DataProxy, type, action, options, response, arg) {
                 if (type === 'remote') {
                     Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
                 }
@@ -362,7 +364,7 @@ App.Request.ServicesTypeChart.Store = new Ext.data.JsonStore({
             read: 'index.php/request/service/getServiceType'
         },
         listeners: {
-            'exception': function(DataProxy, type, action, options, response, arg) {
+            'exception': function (DataProxy, type, action, options, response, arg) {
                 if (type === 'remote') {
                     Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
                 }
@@ -388,7 +390,7 @@ App.Request.ServicesDateChart.Store = new Ext.data.JsonStore({
             read: 'index.php/request/service/getServiceDate'
         },
         listeners: {
-            'exception': function(DataProxy, type, action, options, response, arg) {
+            'exception': function (DataProxy, type, action, options, response, arg) {
                 if (type === 'remote') {
                     Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
                 }
@@ -415,276 +417,7 @@ App.Request.ServicesOrganismChart.Store = new Ext.data.JsonStore({
             read: 'index.php/request/service/getServiceOrganism'
         },
         listeners: {
-            'exception': function(DataProxy, type, action, options, response, arg) {
-                if (type === 'remote') {
-                    Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
-                }
-            }
-        }
-    }),
-    writer: new Ext.data.JsonWriter({
-        encode: true,
-        writeAllFields: true,
-        encodeDelete: true
-    }),
-    root: 'results',
-    totalProperty: 'total',
-    fields: [
-        'count',
-        'service_organism'
-    ]
-});
-
-
-/**
- * Servicios
- */
-App.Request.Services.Store = new Ext.data.JsonStore({
-    proxy: new Ext.data.HttpProxy({
-        api: {
-            read: 'index.php/request/service/get',
-            create: 'index.php/request/service/add',
-            update: 'index.php/request/service/update'
-        },
-        listeners: {
-            'exception': function(DataProxy, type, action, options, response, arg) {
-                if (type === 'remote') {
-                    Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
-                } else if (type === 'response') {
-                    response = Ext.decode(response.responseText);
-                    if (response.success === false) {
-                        alert(response.msg);
-                    }
-                }
-            }
-        }
-    }),
-    writer: new Ext.data.JsonWriter({
-        encode: true,
-        writeAllFields: true,
-        encodeDelete: true
-    }),
-    autoSave: true,
-    root: 'results',
-    totalProperty: 'total',
-    idProperty: 'service_id',
-    fields: [
-        'service_id',
-        'node_id',
-        'user_id',
-        'service_type_id',
-        'service_status_id',
-        'service_date',
-        'service_organism',
-        'service_phone',
-        'service_commentary',
-        'Node',
-        'User',
-        'ServiceType',
-        'ServiceStatus'
-    ],
-    listeners: {
-        'save': function() {
-            this.load({ params: { node_id: App.Interface.selectedNodeId,start: 0, limit: App.GridLimit } });
-        }
-    }
-});
-
-App.Request.ServicesStatus.Store = new Ext.data.JsonStore({
-    proxy: new Ext.data.HttpProxy({
-        api: {
-            read: 'index.php/request/servicestatus/get',
-            update: 'index.php/request/servicestatus/update',
-            destroy: 'index.php/request/servicestatus/delete'
-        },
-        listeners: {
-            'exception': function(DataProxy, type, action, options, response, arg) {
-                if (type === 'remote') {
-                    Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
-                }
-            }
-        }
-    }),
-    writer: new Ext.data.JsonWriter({
-        encode: true,
-        writeAllFields: true,
-        encodeDelete: true
-    }),
-    autoSave: true,
-    root: 'results',
-    totalProperty: 'total',
-    idProperty: 'service_status_id',
-    fields: [
-        'service_status_id',
-        'service_status_name',
-        'service_status_commentary'
-    ],
-    listeners: {
-        'save': function() {
-            this.load();
-        }
-    }
-});
-
-App.Request.ServicesType.Store = new Ext.data.JsonStore({
-    proxy: new Ext.data.HttpProxy({
-        api: {
-            read: 'index.php/request/servicetype/get',
-            update: 'index.php/request/servicetype/update',
-            destroy: 'index.php/request/servicetype/delete'
-        }
-    }),
-    writer: new Ext.data.JsonWriter({
-        encode: true,
-        writeAllFields: true,
-        encodeDelete: true
-    }),
-    autoSave: true,
-    root: 'results',
-    totalProperty: 'total',
-    idProperty: 'service_type_id',
-    fields: [
-        'service_type_id',
-        'service_type_name',
-        'service_type_commentary',
-        'user_id',
-        'User'
-    ],
-    listeners: {
-        'save': function() {
-            this.load();
-        }
-    }
-});
-
-App.Request.ServicesLog.Store = new Ext.data.JsonStore({
-    proxy: new Ext.data.HttpProxy({
-        api: {
-            read: 'index.php/request/servicelog/get'
-        },
-        listeners: {
-            'exception': function(DataProxy, type, action, options, response, arg) {
-                if (type === 'remote') {
-                    Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
-                } else if (type === 'response') {
-                    response = Ext.decode(response.responseText);
-                    if (response.success === false)
-                        alert(response.msg);
-                }
-            }
-        }
-    }),
-    writer: new Ext.data.JsonWriter({
-        encode: true,
-        writeAllFields: true,
-        encodeDelete: true
-    }),
-    autoSave: true,
-    root: 'results',
-    totalProperty: 'total',
-    idProperty: 'service_log_id',
-    fields: [
-        'service_log_id',
-        'service_id',
-        'user_id',
-        'service_log_date',
-        'service_log_detail',
-        'User',
-        'Service'
-    ],
-    listeners: {
-        'save': function() {
-            this.load();
-        }
-    }
-});
-
-App.Request.ServicesStatusChart.Store = new Ext.data.JsonStore({
-    proxy: new Ext.data.HttpProxy({
-        api: {
-            read: 'index.php/request/service/getServiceStatus'
-        },
-        listeners: {
-            'exception': function(DataProxy, type, action, options, response, arg) {
-                if (type === 'remote') {
-                    Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
-                }
-            }
-        }
-    }),
-    writer: new Ext.data.JsonWriter({
-        encode: true,
-        writeAllFields: true,
-        encodeDelete: true
-    }),
-    root: 'results',
-    totalProperty: 'total',
-    fields: [
-        'count',
-        'ServiceStatus'
-    ]
-});
-
-App.Request.ServicesTypeChart.Store = new Ext.data.JsonStore({
-    proxy: new Ext.data.HttpProxy({
-        api: {
-            read: 'index.php/request/service/getServiceType'
-        },
-        listeners: {
-            'exception': function(DataProxy, type, action, options, response, arg) {
-                if (type === 'remote') {
-                    Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
-                }
-            }
-        }
-    }),
-    writer: new Ext.data.JsonWriter({
-        encode: true,
-        writeAllFields: true,
-        encodeDelete: true
-    }),
-    root: 'results',
-    totalProperty: 'total',
-    fields: [
-        'count',
-        'ServiceType'
-    ]
-});
-
-App.Request.ServicesDateChart.Store = new Ext.data.JsonStore({
-    proxy: new Ext.data.HttpProxy({
-        api: {
-            read: 'index.php/request/service/getServiceDate'
-        },
-        listeners: {
-            'exception': function(DataProxy, type, action, options, response, arg) {
-                if (type === 'remote') {
-                    Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
-                }
-            }
-        }
-    }),
-    writer: new Ext.data.JsonWriter({
-        encode: true,
-        writeAllFields: true,
-        encodeDelete: true
-    }),
-    root: 'results',
-    totalProperty: 'total',
-    fields: [
-        'count',
-        'month_year',
-        'ServiceType'
-    ]
-});
-
-App.Request.ServicesOrganismChart.Store = new Ext.data.JsonStore({
-    proxy: new Ext.data.HttpProxy({
-        api: {
-            read: 'index.php/request/service/getServiceOrganism'
-        },
-        listeners: {
-            'exception': function(DataProxy, type, action, options, response, arg) {
+            'exception': function (DataProxy, type, action, options, response, arg) {
                 if (type === 'remote') {
                     Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
                 }
@@ -742,12 +475,16 @@ App.Request.Information.Store = new Ext.data.JsonStore({
         'node_id',
         'user_id',
         'rdi_description',
+        'rdi_phone',
+        'rdi_organism',
         'rdi_status_id',
         'rdi_created_at',
         'rdi_updated_at',
+        'request_evaluation_id',
         'Node',
         'RdiStatus',
-        'User'
+        'User',
+        'RequestEvaluation'
     ],
     listeners: {
         'save': function () {
@@ -831,4 +568,34 @@ App.Request.InformationLog.Store = new Ext.data.JsonStore({
             this.load();
         }
     }
+});
+
+/**
+ * RequestEvaluation
+ */
+App.Request.RequestEvaluation.Store = new Ext.data.JsonStore({
+    proxy: new Ext.data.HttpProxy({
+        api: {
+            read: 'index.php/request/evaluation/get'
+        },
+        listeners: {
+            'exception': function (DataProxy, type, action, options, response, arg) {
+                if (type === 'remote') {
+                    Ext.MessageBox.alert(App.Language.General.oops, response.raw.msg);
+                }
+            }
+        }
+    }),
+    writer: new Ext.data.JsonWriter({
+        encode: true,
+        writeAllFields: true,
+        encodeDelete: true
+    }),
+    root: 'results',
+    totalProperty: 'total',
+    idProperty: 'request_evaluation_id',
+    fields: [
+        'request_evaluation_id',
+        'request_evaluation_name'
+    ]
 });

@@ -13,7 +13,7 @@ class ServiceController extends APP_Controller {
     }
 
     function get() {
-        $request = Doctrine_Core::getTable('Service')->retrieveAll($this->filtrosServices(),$this->input->post('start'), $this->input->post('limit'));
+        $request = Doctrine_Core::getTable('Service')->retrieveAll($this->filtrosServices(), $this->input->post('start'), $this->input->post('limit'));
         if ($request->count()) {
             $countAllRequest = Doctrine_Core::getTable('Service')->retrieveAll($this->filtrosServices(), false, false, true);
             echo '({"total":"' . $countAllRequest . '", "results":' . $this->json->encode($request->toArray()) . '})';
@@ -44,6 +44,7 @@ class ServiceController extends APP_Controller {
             $service->user_id = $user_id;
             $service->service_type_id = $this->input->post('service_type_id');
             $service->service_status_id = 1;
+            $service->request_evaluation_id = 1;
             $service->service_organism = $this->input->post('service_organism');
             $service->service_phone = $this->input->post('service_phone');
             $service->service_commentary = $this->input->post('service_commentary');
@@ -61,8 +62,8 @@ class ServiceController extends APP_Controller {
             $conn->commit();
 
             //Enviar correo de Alerta de creación de Service
-            $this->sendNotificationAdministrador($service, $node);
-            $this->sendNotificationRecibido($service);
+            $service->sendNotificationAdministrador($node);
+            $service->sendNotificationRecibido();
         } catch (Exception $e) {
             //Si hay error, rollback de los cambios en la base de datos
             $conn->rollback();
@@ -79,7 +80,7 @@ class ServiceController extends APP_Controller {
         $conn = Doctrine_Manager::getInstance()->getCurrentConnection();
         $conn->beginTransaction();
         $user_id = $this->auth->get_user_data('user_id');
-        
+
         try {
             $service_organism = $this->input->post('service_organism');
             if ($service->service_organism != $service_organism) {
@@ -124,7 +125,7 @@ class ServiceController extends APP_Controller {
                 $service->service_status_id = $service_status_id;
                 $cambio_estado = true;
             }
-            
+
             $service_reject = $this->input->post('service_reject');
             if ($service_status_id === '6') {
                 $serviceLog = new ServiceLog();
@@ -137,19 +138,32 @@ class ServiceController extends APP_Controller {
                 $service->service_reject = null;
             }
 
+
             $service->save();
             $success = true;
             $msg = $this->translateTag('General', 'operation_successful');
             $conn->commit();
-            
+
             if ($cambio_estado) {
-                $this->sendNotificationUpdate($service);
+                /**
+                 * Estado finalizado
+                 */
+                if ($service_status_id === '4') {
+                    $service->sendEvaluation();
+                } else {
+                    /**
+                     * Estados diferentes de finalizados
+                     */
+                    $service->sendNotificationUpdate($serviceStatusNew);
+                }
             }
         } catch (Exception $e) {
             $conn->rollback();
             $success = false;
             $msg = $e->getMessage();
         }
+
+
 
         $json_data = $this->json->encode(array('success' => $success, 'msg' => $msg));
         echo $json_data;
@@ -160,9 +174,10 @@ class ServiceController extends APP_Controller {
         $user_type = $this->session->userdata('user_type');
 
         $node_id = (int) $this->input->post('node_id');
-        
+
         $ancestros = Doctrine_Core::getTable('Node')->findOneByNodeId($node_id)->getNode()->getAncestors();
 
+        $request_evaluation_id = $this->input->post('request_evaluation_id');
         $service_type_id = $this->input->post('service_type_id');
         $service_status_id = $this->input->post('service_status_id');
         $user_username = $this->input->post('user_username');
@@ -175,6 +190,7 @@ class ServiceController extends APP_Controller {
         $service_organism = $this->input->post('service_organism');
 
         $filters = array(
+            're.request_evaluation_id = ?' => $request_evaluation_id,
             'st.service_type_id = ?' => $service_type_id,
             'se.service_status_id = ?' => $service_status_id,
             'u.user_username LIKE ?' => (!empty($user_username) ? '%' . $user_username . '%' : NULL),
@@ -184,11 +200,11 @@ class ServiceController extends APP_Controller {
             'service_date <= ?' => (!empty($end_date) ? $end_date . ' 23:59:59' : NULL ),
             'service_organism LIKE ?' => (!empty($service_organism) ? '%' . $service_organism . '%' : NULL)
         );
-        
+
         if ($this->input->post('date_interval')) {
             $filters['DATE_FORMAT(service_date,\'%m-%Y\') = ?'] = $this->input->post('date_interval');
         }
-            
+
         if ($ancestros) {
             $filters['node_id = ?'] = $node_id;
         }
@@ -215,13 +231,14 @@ class ServiceController extends APP_Controller {
         $titulos[] = 'Organismo';
         $titulos[] = 'Comentario';
         $titulos[] = 'Motivo Rechazo';
+        $titulos[] = 'Evaluación';
 
         $services = array();
         foreach ($requests as $request) {
             $date = new DateTime($request->service_date);
             $fecha = $date->format('d/m/Y H:i');
             $requestArray = $request->toArray();
-            
+
             $service = array();
             $service[] = $requestArray['Node']['node_name'];
             $service[] = $request->ServiceType->service_type_name;
@@ -233,6 +250,7 @@ class ServiceController extends APP_Controller {
             $service[] = $request->service_organism;
             $service[] = $request->service_commentary;
             $service[] = $request->service_reject;
+            $service[] = $request->RequestEvaluation->request_evaluation_name;
             $services[] = $service;
         }
 
@@ -287,73 +305,27 @@ class ServiceController extends APP_Controller {
         echo '{"success": true, "file": "temp/' . $this->input->post('file_name') . '.xlsx"}';
     }
 
-    function sendNotificationRecibido($service) {
-        $body = "La solicitud [{$service->service_commentary}] ha sido recibida.";
-        $this->CI->notificationuser->mail($service->User->user_email, 'Solicitud de servicio recibida', $body);
-    }
-
-    function sendNotificationAdministrador($service, $node) {
-        $date = new DateTime($service->service_date);
-        $fecha = $date->format('d/m/Y H:i');
-        $body = '';
-        $nodos_ancestros = array();
-
-        if ($node->getNode()->getLevel()) {
-            foreach ($node->getNode()->getAncestors()->toArray() as $nodo) {
-                $nodos_ancestros[] = $nodo['node_name'];
-            }
-            $nodos_ancestros[] = $node->toArray()['node_name'];
-        }
-
-        $body .= "Nodo: " . implode(' => ', $nodos_ancestros) . "<br>";
-        $body .= "Tipo de Servicio: {$service->ServiceType->service_type_name}<br>";
-        $body .= "Estado del Servicio: {$service->ServiceStatus->service_status_name}<br>";
-        $body .= "Nombre de Usuario: {$service->User->user_username}<br>";
-        $body .= "Fecha de Servicio: {$fecha}<br>";
-        $body .= "Teléfono: {$service->service_phone}<br>";
-        $body .= "Organismo: {$service->service_organism}<br>";
-        $body .= "Requerimiento: {$service->service_commentary}<br>";
-
-        $this->CI->notificationuser->mail($service->ServiceType->User->user_email, 'Nueva Solicitud de Servicio', $body);
-    }
-
-    function sendNotificationUpdate($service) {
-        $date = new DateTime($service->service_date);
-        $fecha = $date->format('d/m/Y H:i');
-        $body = "Tipo de Servicio: {$service->ServiceType->service_type_name}<br>";
-        $body .= "Estado del Servicio: {$service->ServiceStatus->service_status_name}<br>";
-        $body .= "Nombre de Usuario: {$service->User->user_username}<br>";
-        $body .= "Fecha de Servicio: {$fecha}<br>";
-        $body .= "Teléfono: {$service->service_phone}<br>";
-        $body .= "Organismo: {$service->service_organism}<br>";
-        $body .= "Requerimiento: {$service->service_commentary}<br>";
-
-        $CI = & get_instance();
-        $CI->load->library('NotificationUser');
-        $CI->notificationuser->mail($service->ServiceType->User->user_email, 'Cambio estado de servicio', $body);
-    }
-    
     function getServiceStatus() {
         $request = Doctrine_Core::getTable('Service')->groupAllByStatus($this->filtrosServices());
         $this->sendRes($request);
     }
-    
+
     function getServiceType() {
         $request = Doctrine_Core::getTable('Service')->groupAllByType($this->filtrosServices());
         $this->sendRes($request);
     }
-    
+
     function getServiceDate() {
         $request = Doctrine_Core::getTable('Service')->groupAllByDate($this->filtrosServices());
         $this->sendRes($request);
     }
-    
+
     function getServiceOrganism() {
         $request = Doctrine_Core::getTable('Service')->groupAllByOrganism($this->filtrosServices());
         $this->sendRes($request);
     }
-    
-    function sendRes ($request) {
+
+    function sendRes($request) {
         if ($request->count()) {
             echo '({"total":"' . $request->count() . '", "results":' . $this->json->encode($request->toArray()) . '})';
         } else {

@@ -17,5 +17,44 @@ class Rdi extends BaseRdi {
         $data['Node'] = Doctrine_Core::getTable('Node')->findOneByNodeId($data['node_id'])->toArray();
         $event->data = $data;
     }
+    
+    function sendNotificationRecibido() {
+        $body = "La solicitud [{$this->rdi_description}] ha sido recibida.";
+        $CI = & get_instance();
+        $CI->load->library('NotificationUser');
+        $CI->notificationuser->mail($this->User->user_email, 'Solicitud de información recibida', $body);
+    }
 
+    function sendNotificationUpdate($serviceStatus) {
+
+        $date = new DateTime($this->rdi_created_at);
+        $fecha = $date->format('d/m/Y H:i');
+        $body = "Estado del Requerimiento: {$serviceStatus->rdi_status_name}<br>";
+        $body .= "Nombre de Usuario: {$this->User->user_username}<br>";
+        $body .= "Fecha de Requerimiento: {$fecha}<br>";
+        $body .= "Teléfono: {$this->rdi_phone}<br>";
+        $body .= "Organismo: {$this->rdi_organism}<br>";
+        $body .= "Requerimiento: {$this->rdi_description}<br>";
+
+        /**
+         * Rechazado
+         */
+        if ($serviceStatus->rdi_status_id == 2) {
+            $body .= "Motivo rechazo: {$this->rdi_reject}<br>";
+        }
+
+        $CI = & get_instance();
+        $CI->load->library('NotificationUser');
+        $CI->notificationuser->mail($this->User->user_email, 'Cambio estado de información', $body);
+    }
+    
+    function sendEvaluation() {
+        $date = new DateTime($this->rdi_created_at);
+        $fecha = $date->format('d/m/Y H:i');
+        $body = "La evaluacion ha sido finalizada... evaluacion (yn) (y)";
+
+        $CI = & get_instance();
+        $CI->load->library('NotificationUser');
+        $CI->notificationuser->mail($this->User->user_email, 'Evaluación de satisfacción', $body);
+    }
 }

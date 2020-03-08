@@ -127,6 +127,32 @@ App.Request.Rdi.formSearching = {
                             anchor: '95%',
                             disabled: App.Security.Session.user_type === 'A' ? false : true,
                             value: App.Security.Session.user_type === 'A' ? '' : App.Security.Session.user_email
+                        }, {
+                            xtype: 'combo',
+                            fieldLabel: 'Evaluación',
+                            triggerAction: 'all',
+                            anchor: '95%',
+                            store: App.Request.RequestEvaluation.Store,
+                            hiddenName: 'request_evaluation_id',
+                            displayField: 'request_evaluation_name',
+                            valueField: 'request_evaluation_id',
+                            editable: true,
+                            selecOnFocus: true,
+                            typeAhead: true,
+                            selectOnFocus: true,
+                            mode: 'remote',
+                            minChars: 0,
+                            listeners: {
+                                'afterrender': function (cb) {
+                                    cb.__value = cb.value;
+                                    cb.setValue('');
+                                    cb.getStore().load({
+                                        callback: function () {
+                                            cb.setValue(cb.__value);
+                                        }
+                                    });
+                                }
+                            }
                         }]
                 }, {
                     columnWidth: .5,
@@ -319,6 +345,14 @@ App.Request.Rdi.Grilla = {
             header: 'Fecha de modificación',
             width: 100,
             sortable: true
+        }, {
+            dataIndex: 'RequestEvaluation',
+            header: 'Evaluación',
+            width: 60,
+            sortable: true,
+            renderer: function (RequestEvaluation) {
+                return RequestEvaluation.request_evaluation_name;
+            }
         }
     ],
     sm: new Ext.grid.CheckboxSelectionModel({
@@ -722,7 +756,7 @@ App.Request.changeRdiStatusWindow = Ext.extend(Ext.Window, {
                         xtype: 'fieldset',
                         title: App.Language.Request.rejection,
                         id: "App.Request.Rdi.Reject.Comentary",
-                        hidden: true,
+                        hidden: false,
                         items: [{
                                 xtype: 'textarea',
                                 anchor: '100%',

@@ -19,7 +19,6 @@ class Service extends BaseService {
     
     function sendNotificationRecibido() {
         $body = "La solicitud [{$this->service_commentary}] ha sido recibida.";
-        
         $CI = & get_instance();
         $CI->load->library('NotificationUser');
         $CI->notificationuser->mail($this->User->user_email, 'Solicitud de servicio recibida', $body);
@@ -46,27 +45,45 @@ class Service extends BaseService {
         $body .= "Teléfono: {$this->service_phone}<br>";
         $body .= "Organismo: {$this->service_organism}<br>";
         $body .= "Requerimiento: {$this->service_commentary}<br>";
-
+        
         $CI = & get_instance();
         $CI->load->library('NotificationUser');
         $CI->notificationuser->mail($this->ServiceType->User->user_email, 'Nueva Solicitud de Servicio', $body);
+    
     }
-    
-    
-    function sendNotificationUpdate() {
+
+    function sendNotificationUpdate($serviceStatus) {
+
         $date = new DateTime($this->service_date);
         $fecha = $date->format('d/m/Y H:i');
         $body = "Tipo de Servicio: {$this->ServiceType->service_type_name}<br>";
-        $body .= "Estado del Servicio: {$this->ServiceStatus->service_status_name}<br>";
+        $body .= "Estado del Servicio: {$serviceStatus->service_status_name}<br>";
         $body .= "Nombre de Usuario: {$this->User->user_username}<br>";
         $body .= "Fecha de Servicio: {$fecha}<br>";
         $body .= "Teléfono: {$this->service_phone}<br>";
         $body .= "Organismo: {$this->service_organism}<br>";
         $body .= "Requerimiento: {$this->service_commentary}<br>";
 
+        /**
+         * Rechazado
+         */
+        if ($serviceStatus->service_status_id == 6) {
+            $body .= "Motivo rechazo: {$this->service_reject}<br>";
+        }
+
         $CI = & get_instance();
         $CI->load->library('NotificationUser');
-        $CI->notificationuser->mail($this->ServiceType->User->user_email, 'Cambio estado de servicio', $body);
+        $CI->notificationuser->mail($this->User->user_email, 'Cambio estado de información', $body);
     }
     
+    function sendEvaluation() {
+
+        $date = new DateTime($this->service_date);
+        $fecha = $date->format('d/m/Y H:i');
+        $body = "La evaluacion ha sido finalizada... evaluacion (yn) (y)";
+
+        $CI = & get_instance();
+        $CI->load->library('NotificationUser');
+        $CI->notificationuser->mail($this->User->user_email, 'Evaluación de satisfacción', $body);
+    }
 }
