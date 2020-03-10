@@ -143,44 +143,6 @@ App.Document.TBar = [App.ModuleActions[2001], {
         xtype: 'spacer',
         width: 10
     },
-    //    {
-    //        text: 'Editar Categoría',
-    //        iconCls: 'edit_icon',
-    //        handler: function()
-    //        {
-    //            grid = Ext.getCmp('App.Document.GridDoc');
-    //            if (grid === undefined) {
-    //                //ENTRA CUANDO ES XTEMPLATE
-    //    
-    //            } else {//ENTRA CUANDO ES GRILLA
-    //                if (grid.getSelectionModel().getCount()) {
-    //                    records = Ext.getCmp('App.Document.GridDoc').getSelectionModel().getSelections();
-    //                    aux = new Array();
-    ////                    App.InfraStructure.copiedNodes = new Array();
-    //                    for (var i = 0; i < records.length; i++) {
-    //                        aux.push(records[i].data.doc_document_id);
-    ////                        App.InfraStructure.copiedNodes.push(Ext.getCmp('App.StructureTree.Tree').getNodeById(records[i].data.node_id));
-    //                    }
-    //                    doc_document_id = (aux.join(','));
-    //                    
-    //                    if ( aux.length == 1 ){
-    //                        w = new App.Document.updateCategoryWindow();
-    //                        w.show();
-    //                    } else {
-    //                        Ext.FlashMessage.alert('Solo se puede cambiar 1 categoría a la vez');
-    //                    }
-    //
-    ////                    App.Document.CutProxy(doc_document_id, function(){});
-    //                } else {
-    //                    Ext.FlashMessage.alert(App.Language.General.you_must_select_at_least_one_record);
-    //                }
-    //            }
-    //            
-    //        }
-    //    }, {
-    //        xtype: 'spacer',
-    //        width: 10
-    //    }, 
     {
         text: App.Language.General.send_to_trash,
         iconCls: 'bin_icon',
@@ -359,7 +321,6 @@ App.Document.TBar = [App.ModuleActions[2001], {
         xtype: 'tbseparator',
         width: 10
     },
-    //    '->', 
     {
         text: App.Language.General.list,
         iconCls: 'list_icon',
@@ -713,7 +674,6 @@ App.Document.GridView = Ext.extend(Ext.grid.GridPanel, {
             App.Document.doc_image_web = grid.getStore().getAt(rowIndex).data.DocCurrentVersion.doc_image_web;
             //VENTANA AMPLIADA CON SUS VERSIONES
             App.Document.currentPosition = rowIndex;
-            //            doc_version_filename = grid.getStore().getAt(rowIndex).data.doc_version_filename;
             w = new App.Document.VersionImagenWindow();
             w.show();
 
@@ -723,7 +683,6 @@ App.Document.GridView = Ext.extend(Ext.grid.GridPanel, {
             App.Document.Version.Store.setBaseParam('doc_document_id', App.Document.selectedDocumentId);
             App.Document.Version.Store.setBaseParam('doc_category_name', App.Document.CategoryName);
             App.Document.Version.Store.load();
-            //            App.Document.doc_version_filename = grid.getStore().getAt(rowIndex).data.doc_version_filename;
         }
     },
     viewConfig: {
@@ -1116,7 +1075,6 @@ App.Document.VersionImagenWindow = Ext.extend(Ext.Window, {
             layout: 'fit',
             overflowY: 'scroll',
             html: (doc_image_web == 1 ? '<img width=100% src="docs/' + doc_version_filename + '?id=' + n + '" />' : '<div align="center"><br><br><br><br><br><br><br><br><br><br><br><br><img  src="docs/thumb/not_image_icon.png" /></div>')
-                //html: (doc_image_web == 1 ? '<img width=100% src="docs/' + doc_version_filename + '" />' : '<div align="center"><br><br><br><br><br><br><br><br><br><br><br><br><img  src="docs/thumb/not_image_icon.png" /></div>')
         }));
         this.imagepanel.doLayout();
         record = App.Document.Store.getAt(App.Document.currentPosition);
@@ -1415,7 +1373,6 @@ App.Document.updateCategoryWindow = Ext.extend(Ext.Window, {
             }, {
                 text: App.Language.General.add,
                 handler: function(b) {
-                    //                    console.log(Ext.getCmp('App.Document.updateCate').getValue());
                     if (Ext.getCmp('App.Document.updateCate').getValue() != '') {
                         Ext.Ajax.request({
                             waitMsg: App.Language.General.message_generating_file,

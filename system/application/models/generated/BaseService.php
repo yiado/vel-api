@@ -14,10 +14,12 @@
  * @property string $service_organism
  * @property string $service_phone
  * @property string $service_commentary
+ * @property string $service_token
  * @property Node $Node
  * @property User $User
  * @property ServiceType $ServiceType
  * @property ServiceStatus $ServiceStatus
+ * @property RequestEvaluation $RequestEvaluation
  * @property Doctrine_Collection $ServiceLog
  * 
  * @package    ##PACKAGE##
@@ -108,6 +110,33 @@ abstract class BaseService extends Doctrine_Record {
             'notnull' => false,
             'autoincrement' => false,
         ));
+        $this->hasColumn('service_reject', 'string', 2000, array(
+            'type' => 'string',
+            'length' => 2000,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('service_token', 'string', 255, array(
+            'type' => 'string',
+            'length' => 255,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('request_evaluation_id', 'integer', 4, array(
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
     }
 
     public function setUp() {
@@ -127,6 +156,10 @@ abstract class BaseService extends Doctrine_Record {
         $this->hasOne('ServiceStatus', array(
             'local' => 'service_status_id',
             'foreign' => 'service_status_id'));
+        
+        $this->hasOne('RequestEvaluation', array(
+            'local' => 'request_evaluation_id',
+            'foreign' => 'request_evaluation_id'));
 
         $this->hasMany('ServiceLog', array(
             'local' => 'service_id',

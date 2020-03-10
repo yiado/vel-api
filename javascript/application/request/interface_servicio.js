@@ -170,6 +170,33 @@ App.Request.Service.formSearching = {
                             fieldLabel: 'Teléfono',
                             name: 'service_phone',
                             anchor: '95%'
+                        }, {
+                            xtype: 'combo',
+                            fieldLabel: 'Evaluación',
+                            triggerAction: 'all',
+                            anchor: '95%',
+                            id: 'App.Request.SearchRequestEvaluation',
+                            store: App.Request.RequestEvaluation.Store,
+                            hiddenName: 'request_evaluation_id',
+                            displayField: 'request_evaluation_name',
+                            valueField: 'request_evaluation_id',
+                            editable: true,
+                            selecOnFocus: true,
+                            typeAhead: true,
+                            selectOnFocus: true,
+                            mode: 'remote',
+                            minChars: 0,
+                            listeners: {
+                                'afterrender': function (cb) {
+                                    cb.__value = cb.value;
+                                    cb.setValue('');
+                                    cb.getStore().load({
+                                        callback: function () {
+                                            cb.setValue(cb.__value);
+                                        }
+                                    });
+                                }
+                            }
                         }]
                 }, {
                     columnWidth: .5,
@@ -341,6 +368,14 @@ App.Request.Service.Grilla = {
             header: 'Requerimiento',
             width: 100,
             sortable: true
+        }, {
+            dataIndex: 'RequestEvaluation',
+            header: 'Evaluación',
+            width: 60,
+            sortable: true,
+            renderer: function (RequestEvaluation) {
+                return RequestEvaluation.request_evaluation_name;
+            }
         }
     ],
     sm: new Ext.grid.CheckboxSelectionModel({
@@ -834,6 +869,18 @@ App.Request.changeServiceStatusWindow = Ext.extend(Ext.Window, {
                     fieldLabel: 'Requerimiento',
                     id: 'App.Request.Service.Commentary'
                 }]
+            }, {
+                xtype: 'fieldset',
+                title: App.Language.Request.rejection,
+                id: "App.Request.Service.Reject.Comentary",
+                items: [{
+                    xtype: 'textarea',
+                    anchor: '100%',
+                    name: 'service_reject',
+                    fieldLabel: App.Language.Request.rejected_by,
+                    id: "App.Request.Service.Reject.Comentary.Box",
+                    allowBlank: true
+                }]
             }],
             buttons: [{
                 text: App.Language.General.close,
@@ -885,11 +932,11 @@ App.Request.statistics = Ext.extend(Ext.Window, {
     padding: 1,
     id:'statistics_window',
     html: `
-        <div id="grupos_chart" style="width: ${screen.width < 1024?screen.width*0.8:1004}; height: ${screen.width < 1024?screen.height * 0.8:'auto'}; ${screen.width < 1024?'overflow:auto':''};">
-            <div id="service_status_chart" style="border: #99bbe8 1px solid;display: block; width: ${screen.width < 1024?screen.width*0.8:500}; height: ${screen.width < 1024?screen.height*0.8:350}; float:right;"></div>
-            <div id="service_type_chart" style="border: #99bbe8 1px solid;display: block; width:${screen.width < 1024?screen.width*0.8:500}; height: ${screen.width < 1024?screen.height*0.8:350}; float:right;"></div>
-            <div id="service_date_chart" style="border: #99bbe8 1px solid;display: block; width: ${screen.width < 1024?screen.width*0.8:500}; height: ${screen.width < 1024?screen.height*0.8:350}; float:right;"></div>
-            <div id="service_organism_chart" style="border: #99bbe8 1px solid;display: block; width: ${screen.width < 1024?screen.width*0.8:500}; height: ${screen.width < 1024?screen.height*0.8:350}; float:right;"></div>
+        <div id="grupos_chart" style="width: ${screen.width < 1024?screen.width*0.8:1004}; height: ${screen.width < 1024?screen.height * 0.7:'auto'}; ${screen.width < 1024?'overflow:auto':''};">
+            <div id="service_status_chart" style="border: #99bbe8 1px solid;display: block; width: ${screen.width < 1024?screen.width*0.7:500}; height: ${screen.width < 1024?screen.height*0.8:350}; float:right;"></div>
+            <div id="service_type_chart" style="border: #99bbe8 1px solid;display: block; width:${screen.width < 1024?screen.width*0.7:500}; height: ${screen.width < 1024?screen.height*0.8:350}; float:right;"></div>
+            <div id="service_date_chart" style="border: #99bbe8 1px solid;display: block; width: ${screen.width < 1024?screen.width*0.7:500}; height: ${screen.width < 1024?screen.height*0.8:350}; float:right;"></div>
+            <div id="service_organism_chart" style="border: #99bbe8 1px solid;display: block; width: ${screen.width < 1024?screen.width*0.7:500}; height: ${screen.width < 1024?screen.height*0.8:350}; float:right;"></div>
         </div>
     `,
     afterRender: function() {

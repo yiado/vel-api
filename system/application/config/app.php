@@ -23,6 +23,7 @@ $config['company_logo'] = 'style/default/images/escudo_Uchile/escudo-uchile-hori
 
 //Directorio para almacenar los documentos
 $config['doc_dir'] = FCPATH . 'docs/';
+$config['doc_dir2'] = 'docs/';
 
 //Directoriod de los iconos de los nodos (url)
 $config['plan_default_layer_color'] = 'FF0000';
@@ -43,6 +44,8 @@ $config['listener_config'] = array(
         'AssetMeasurementTriggerListener'
     )
 );
+
+$config['doc_image_web'] = array('GIF', 'PNG', 'JPEG', 'JPG');
 
 //Arreglo de etiquetas para Datos Estructurales
 $config['fields_infra_info'] = array(

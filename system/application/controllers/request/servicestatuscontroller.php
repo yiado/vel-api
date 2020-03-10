@@ -39,10 +39,10 @@ class ServiceStatusController extends APP_Controller{
 
     function update() {
         try {
-            $serviceType = Doctrine_Core::getTable('ServiceStatus')->find($this->input->post('service_status_id'));
-            $serviceType->service_status_name = $this->input->post('service_status_name');
-            $serviceType->service_status_commentary = $this->input->post('service_status_commentary');
-            $serviceType->save();
+            $serviceStatus = Doctrine_Core::getTable('ServiceStatus')->find($this->input->post('service_status_id'));
+            $serviceStatus->service_status_name = $this->input->post('service_status_name');
+            $serviceStatus->service_status_commentary = $this->input->post('service_status_commentary');
+            $serviceStatus->save();
 
             $success = true;
             $msg = $this->translateTag('General', 'operation_successful');
@@ -60,8 +60,8 @@ class ServiceStatusController extends APP_Controller{
             $service_status_id = $this->input->post('service_status_id');
             $service = Doctrine::getTable('Service')->findByServiceStatusId($service_status_id);
             if (!count($service)) {
-                $serviceType = Doctrine::getTable('ServiceStatus')->find($service_status_id);
-                if ($serviceType->delete()) {
+                $serviceStatus = Doctrine::getTable('ServiceStatus')->find($service_status_id);
+                if ($serviceStatus->delete()) {
                     $success = true;
                     $msg = $this->translateTag('General', 'operation_successful');
                 } else {

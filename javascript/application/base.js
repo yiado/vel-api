@@ -369,7 +369,6 @@ customEvents.on('nodeItemClick', function(node, callback) {
                     Ext.getCmp('App.PrincipalPanel').removeAll();
                     Ext.getCmp('App.PrincipalPanel').doLayout();
                 } else {
-                    alert('ok');
                     App.Interface.ViewPort.displayModuleGui(node);
                 }
             },

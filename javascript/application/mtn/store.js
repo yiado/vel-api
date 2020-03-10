@@ -1016,10 +1016,6 @@ App.Mtn.PriceListComponentNode.Store = new Ext.data.JsonStore({
     proxy: new Ext.data.HttpProxy({
         api: {
             read: 'index.php/mtn/pricelistcomponent/getByNode'
-                //    ,
-                //            create: 	'index.php/mtn/pricelistcomponent/add',
-                //            update: 	'index.php/mtn/pricelistcomponent/update',
-                //            destroy: 	'index.php/mtn/pricelistcomponent/delete'
         }
     }),
     writer: new Ext.data.JsonWriter({

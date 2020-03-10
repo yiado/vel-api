@@ -16,4 +16,74 @@ class Service extends BaseService {
         $data['Node'] = Doctrine_Core::getTable('Node')->findOneByNodeId($data['node_id'])->toArray();
         $event->data = $data;
     }
+    
+    function sendNotificationRecibido($node) {
+        $CI = & get_instance();
+        $nodos_ancestros = $this->getAncestros($node);
+        $date = new DateTime($this->service_date);
+        $fecha = $date->format('d/m/Y H:i');
+        $body = $CI->load->view('mails/service',
+                array(
+                    'service' => $this,
+                    'fecha' => $fecha,
+                    'nodos_ancestros' => $nodos_ancestros,
+                    'serviceStatus' => $this->ServiceStatus
+                ),
+                true
+        );
+        $CI->load->library('NotificationUser');
+        $CI->notificationuser->mail($this->User->user_email, 'Solicitud de servicio recibida', $body);
+        $CI->notificationuser->mail($this->ServiceType->User->user_email, 'Nueva Solicitud de Servicio', $body);
+    }
+
+    function sendNotificationUpdate($serviceStatus) {
+        $CI = & get_instance();
+        $node = Doctrine_Core::getTable('Node')->find($this->node_id);
+        $nodos_ancestros = $this->getAncestros($node);
+        $date = new DateTime($this->service_date);
+        $fecha = $date->format('d/m/Y H:i');
+        $body = $CI->load->view('mails/service_change_status',
+                array(
+                    'service' => $this,
+                    'fecha' => $fecha,
+                    'nodos_ancestros' => $nodos_ancestros,
+                    'serviceStatus' => $serviceStatus
+                ),
+                true
+        );
+        $CI->load->library('NotificationUser');
+        $CI->notificationuser->mail($this->User->user_email, 'Cambio estado de información', $body);
+    }
+    
+    function sendEvaluation($serviceStatus) {
+        $CI = & get_instance();
+        $node = Doctrine_Core::getTable('Node')->find($this->node_id);
+        $nodos_ancestros = $this->getAncestros($node);
+        $date = new DateTime($this->service_date);
+        $fecha = $date->format('d/m/Y H:i');
+        $body = $CI->load->view('mails/service_evaluation',
+                array(
+                    'service' => $this,
+                    'fecha' => $fecha,
+                    'nodos_ancestros' => $nodos_ancestros,
+                    'serviceStatus' => $serviceStatus
+                ),
+                true
+        );
+        $CI->load->library('NotificationUser');
+        $CI->notificationuser->mail($this->User->user_email, 'Evaluación de satisfacción', $body);
+    }
+    
+    function getAncestros($node) {
+        $nodos_ancestros = array();
+        if ($node->getNode()->getLevel()) {
+            foreach ($node->getNode()->getAncestors()->toArray() as $nodo) {
+                $nodos_ancestros[] = $nodo['node_name'];
+            }
+            $nodos_ancestros[] = $node->toArray()['node_name'];
+        } else {
+            $nodos_ancestros[] = $node->toArray()['node_name'];
+        }
+        return $nodos_ancestros;
+    }
 }

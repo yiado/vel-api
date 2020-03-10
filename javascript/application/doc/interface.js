@@ -653,16 +653,14 @@ App.Document.GridView = Ext.extend(Ext.grid.GridPanel, {
             App.Document.doc_image_web = grid.getStore().getAt(rowIndex).data.DocCurrentVersion.doc_image_web;
             //VENTANA AMPLIADA CON SUS VERSIONES
             App.Document.currentPosition = rowIndex;
-            //            doc_version_filename = grid.getStore().getAt(rowIndex).data.doc_version_filename;
             w = new App.Document.VersionImagenWindow();
             w.show();
-            //STORE DE LAS VERSIONES    
+            
             App.Document.selectedDocumentId = grid.getStore().getAt(rowIndex).data.doc_document_id;
             App.Document.CategoryName = grid.getStore().getAt(rowIndex).data.doc_category_name;
             App.Document.Version.Store.setBaseParam('doc_document_id', App.Document.selectedDocumentId);
             App.Document.Version.Store.setBaseParam('doc_category_name', App.Document.CategoryName);
             App.Document.Version.Store.load();
-            //            App.Document.doc_version_filename = grid.getStore().getAt(rowIndex).data.doc_version_filename;
         }
     },
     viewConfig: {
@@ -803,7 +801,8 @@ App.Document.GridView2 = Ext.extend(Ext.grid.GridPanel, {
 });
 App.Document.AbrirImagen = function(doc_document_id, position) {
     App.Document.selectedDocumentId = doc_document_id;
-    App.Document.currentPosition = position - 1; // SE RESTA 1 PORQUE EL STORE PARTE EN 0 Y EL XTemplate PARTE EN 1 
+    App.Document.currentPosition = position - 1;
+    //// SE RESTA 1 PORQUE EL STORE PARTE EN 0 Y EL XTemplate PARTE EN 1 
     //VENTANA AMPLIADA CON SUS VERSIONES
     w = new App.Document.VersionImagenWindow();
     w.show();

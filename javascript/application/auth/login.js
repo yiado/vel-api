@@ -80,9 +80,7 @@ Ext.onReady(function() {
                                 },
                                 waitMsg: App.Language.General.validating_user,
                                 success: function(form, response) {
-                                    console.log('response: ', response);
                                     if (response.result.user_type == 'N') {
-                                        console.log('Search permisos: ');
                                         var msg = Ext.MessageBox.wait(App.Language.General.please_wait, App.Language.General.loading_permissions);
                                         Ext.Ajax.request({
                                             timeout: 10000000000,

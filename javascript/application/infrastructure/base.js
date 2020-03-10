@@ -244,12 +244,6 @@ App.ModuleActions[5004] = {
             waitTitle: App.Language.General.message_please_wait,
             waitMsg: App.Language.General.message_guarding_information,
             url: 'index.php/infra/infrainfo/add',
-            //                            success: function (form, action) {
-            //
-            //                                App.InfraStructure.Principal.listener(App.Interface.selectedNode);
-            //
-            //                            }
-
             success: function(form, response) {
                 App.InfraStructure.Principal.listener(App.Interface.selectedNode);
             },
@@ -365,8 +359,8 @@ App.ModuleActions[5006] = {
                 App.InfraStructure.Coordinate.Store.setBaseParam('search_branch', App.InfraStructure.SearchNodeBranches);
                 App.InfraStructure.Coordinate.Store.load({
                     callback: function(records) {
-                        if (typeof Ext.getCmp('App.InfraStructure.Principal') !== "undefined") { //Fix
-                            if (Ext.getCmp('App.InfraStructure.Principal').map) { //Fix
+                        if (typeof Ext.getCmp('App.InfraStructure.Principal') !== "undefined") {
+                            if (Ext.getCmp('App.InfraStructure.Principal').map) {
                                 mapRef = 'mapTab';
 
                                 if (App.InfraStructure.Coordinate.Store.getTotalCount()) {
@@ -414,10 +408,9 @@ App.ModuleActions[5006] = {
 
                                                             response = Ext.decode(response.responseText);
 
-                                                            //                                                                console.log(response.resultsInfraOtherData[0].InfraOtherDataAttribute);
-                                                            html = '<h1>Informaci&oacute;n Resumen</h1><hr>'
+                                                            let html = '<h1>Informaci&oacute;n Resumen</h1><hr>'
                                                             html = html + '<div><table style=" padding: 4px; text-align: left;  font: 12 normal;  font: normal 11px tahoma, arial, helvetica, sans-serif;">';
-                                                            //                                                             
+
                                                             for (i in response.resultsInfraOtherData) {
                                                                 if (typeof response.resultsInfraOtherData[i] === 'object') {
                                                                     for (x in response.resultsInfraOtherData[i].InfraOtherDataAttribute) {
@@ -435,20 +428,9 @@ App.ModuleActions[5006] = {
                                                                                     field.value = (record.InfraOtherDataValue[0] ? record.InfraOtherDataValue[0].infra_other_data_value_value : '');
                                                                                 }
 
-                                                                                if (field.value == null)
+                                                                                if (field.value == null) {
                                                                                     field.value = '';
-
-                                                                                //                                                                            field.fieldLabel = record.infra_other_data_attribute_name;
-                                                                                //                                                                            html = html + '<tr><td style="padding-bottom: 5px;padding-right: 3px;"><label>';
-                                                                                //                                                                            html = html + field.fieldLabel + " : ";
-                                                                                //                                                                            html = html + '</label></td><td style="padding-bottom: 5px;">';
-                                                                                //                                                                            html = html + field.value;
-                                                                                //                                                                            html = html + ' </td></tr>';
-
-
-                                                                                //
-                                                                                //                                                                                    console.log(field.fieldLabel);
-                                                                                //                                                                                    console.log(field.value);
+                                                                                }
 
                                                                             }
 
@@ -467,9 +449,6 @@ App.ModuleActions[5006] = {
                                                                         html = html + '</td><td style="padding-bottom: 5px;">';
                                                                         html = html + record.value;
                                                                         html = html + ' </td></tr>';
-                                                                        //
-                                                                        //                                                                            console.log(record.field);
-                                                                        //                                                                            console.log(record.value);
                                                                     }
                                                                 }
                                                             }

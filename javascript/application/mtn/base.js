@@ -80,12 +80,9 @@ App.ModuleActions[7001] = {
     hidden: true,
     handler: function() {
         w = new App.Mtn.generateWorkOrderWindow();
-        //        Ext.getCmp('App.Mtn.HiddenPanel').setVisible(false);
-        //        Ext.getCmp('App.Mtn.PanelTotales').setVisible(false);
         App.Mtn.Wo.EditModeFromGrid = false;
         App.Mtn.WoTypes.Store.setBaseParam('show_predictive_ot', 0);
         w.show();
-        //        w.setHeight(270);
         w.setWidth(780);
         w.center();
     }

@@ -1530,7 +1530,7 @@ App.InfraStructure.addNodeWindow = Ext.extend(Ext.Window, {
                         'select': function(cb) {
                             App.NodeType.Store.setBaseParam('node_type_category_id', cb.getValue());
                             App.NodeType.Store.load();
-                            //App.InfraStructure.Iot.Store.load();
+                            App.InfraStructure.Iot.Store.load();
                             if (cb.getValue() == 3) {
 
                                 jQuery('.test_').each(function() {

@@ -268,7 +268,6 @@ App.Document.Version.Store = new Ext.data.JsonStore({
         }
     }),
     writer: new Ext.data.JsonWriter({
-        //encode: true,
         writeAllFields: true,
         encodeDelete: true
     }),

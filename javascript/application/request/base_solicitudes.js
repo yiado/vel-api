@@ -14,7 +14,11 @@ App.General.declareNameSpaces('App.Request', [
     'ServicesStatusChart',
     'ServicesTypeChart',
     'ServicesDateChart',
-    'ServicesOrganismChart'
+    'ServicesOrganismChart',
+    'Information',
+    'InformationStatus',
+    'InformationLog',
+    'RequestEvaluation'
 ]);
 
 App.Request.moduleActivate = function() {
@@ -77,7 +81,7 @@ App.ModuleActions[8002] = {
                 Ext.getCmp('App.Request.Comentario').setValue(records[i].data.solicitud_comen_user);
             }
         } else {
-            Ext.FlashMessage.alert('Debe Seleccionar una Solicitud');
+            Ext.FlashMessage.alert('Debe seleccionar una Solicitud');
         }
     }
 };
@@ -88,12 +92,12 @@ App.ModuleActions[8003] = {
     id: 'ModuleAction_8003',
     hidden: true,
     handler: function(b) {
-        grid = Ext.getCmp('App.Request.Grid');
+        let grid = Ext.getCmp('App.Request.Grid');
         if (grid.getSelectionModel().getCount()) {
-            w = new App.Request.addRechazarWindow({ title: 'Rechazar Solicitud' });
+            let w = new App.Request.addRechazarWindow({ title: 'Rechazar Solicitud' });
             w.show();
-            records = grid.getSelectionModel().getSelections();
-            aux = new Array();
+            let records = grid.getSelectionModel().getSelections();
+            let aux = new Array();
             for (var i = 0; i < records.length; i++) {
                 App.Request.Solicitud_id = records[i].data.solicitud_id;
                 Ext.getCmp('App.RequestRechazar.Folio').setValue(records[i].data.solicitud_folio);
@@ -111,7 +115,7 @@ App.ModuleActions[8003] = {
                 Ext.getCmp('App.RequestRechazar.Comentario').setValue(records[i].data.solicitud_comen_user);
             }
         } else {
-            Ext.FlashMessage.alert('Debe Seleccionar una Solicitud');
+            Ext.FlashMessage.alert('Debe seleccionar una Solicitud');
         }
     }
 };
@@ -218,7 +222,7 @@ App.ModuleActions[8011] = {
             w = new App.Request.historialServiceWindow({ title: 'Historial Servicio' });
             w.show();
         } else {
-            Ext.FlashMessage.alert('Debe Seleccionar un Servicio');
+            Ext.FlashMessage.alert('Debe Seleccionar un registro');
         }
     }
 };
@@ -239,6 +243,7 @@ App.ModuleActions[8012] = {
     }
 };
 
+var type = null;
 App.ModuleActions[8013] = {
     xtype: 'splitbutton',
     text: 'Estados',
@@ -261,10 +266,13 @@ App.ModuleActions[8013] = {
                         if ( record ) {
                             let data = record.data;
                             if (data.service_status_id === '4') {
-                                Ext.FlashMessage.alert(`El servicio esta en estado ${data.ServiceStatus.service_status_name}`);
+                                Ext.FlashMessage.alert(`El servicio esta ${data.ServiceStatus.service_status_name}`);
+                                return;
+                            } else if (serviceStatus.data.service_status_id === data.service_status_id) {
+                                Ext.FlashMessage.alert(`El servicio ya esta ${data.ServiceStatus.service_status_name}`);
                                 return;
                             }
-                            w = new App.Request.changeServiceStatusWindow({ title: 'Cambio estado de Servicio' });
+                            w = new App.Request.changeServiceStatusWindow({ title: 'Cambio estado de requerimiento' });
                             w.show();
                             App.Request.Service_id = data.service_id;
                             Ext.getCmp('App.Service.Request.btnChangeServiceStatusWindow').setText(serviceStatus.data.service_status_name);
@@ -276,8 +284,18 @@ App.ModuleActions[8013] = {
                             Ext.getCmp('App.Request.Service.ServiceStatus').setValue(data.ServiceStatus.service_status_id).setDisabled(true);
                             Ext.getCmp('App.Request.Service.ServiceStatusNew').setValue(serviceStatus.data.service_status_id).setDisabled(true);
                             Ext.getCmp('App.Request.Service.Commentary').setValue(data.service_commentary);
+                            
+                            let comentary = Ext.getCmp("App.Request.Service.Reject.Comentary");
+                            let comentary_box = Ext.getCmp("App.Request.Service.Reject.Comentary.Box");
+                            if (serviceStatus.data.service_status_id === '6') {
+                                comentary.show();
+                                comentary_box.allowBlank = false;
+                            } else {
+                                comentary.hide();
+                                comentary_box.allowBlank = true;
+                            }
                         } else {
-                            Ext.FlashMessage.alert('Debe Seleccionar un Servicio');
+                            Ext.FlashMessage.alert('Debe seleccionar un registro');
                         }
                     }
                 });
@@ -296,5 +314,132 @@ App.ModuleActions[8014] = {
             title: 'Estadísticas'
         });
         w.show();
+    }
+};
+
+
+
+/**
+ * Rdi
+ */
+App.ModuleActions[8016] = {
+    text: App.Language.General.add,
+    iconCls: 'add_icon',
+    id: 'ModuleAction_8016',
+    hidden: true,
+    handler: function() {
+        w = new App.Request.addRdiByNodeWindow({
+            title: App.Language.Request.rdi_add
+        });
+        w.show();
+    }
+};
+
+App.ModuleActions[8017] = {
+    text: App.Language.General.eexport,
+    iconCls: 'export_icon',
+    id: 'ModuleAction_8017',
+    hidden: true,
+    handler: function() {
+        w = new App.Request.exportRdiListByNodeWindow();
+        w.show();
+    }
+};
+
+App.ModuleActions[8018] = {
+    text: App.Language.Request.rdi_history,
+    id: 'ModuleAction_8018',
+    hidden: true,
+    iconCls: 'config_icon',
+    handler: function(b) {
+        grid = Ext.getCmp('App.Request.Rdi.Grid');
+        if (grid.getSelectionModel().getCount()) {
+            records = grid.getSelectionModel().getSelections();
+            aux = new Array();
+            
+            records.forEach(function (rdiHistory){
+                App.Request.Rdi_id = rdiHistory.data.rdi_id;
+                App.Request.InformationLog.Store.setBaseParam('rdi_id', App.Request.Rdi_id);
+                App.Request.InformationLog.Store.load();
+            });
+            w = new App.Request.historialRdiWindow({ title: App.Language.Request.rdi_history });
+            w.show();
+        } else {
+            Ext.FlashMessage.alert('Debe seleccionar un registro');
+        }
+    }
+};
+
+App.ModuleActions[8019] = {
+    xtype: 'splitbutton',
+    text: App.Language.Request.rdi_status,
+    hidden: true,
+    iconCls: 'edit_icon',
+    id: 'btn-rdi-status',
+    menu: [],
+    listeners: {
+        beforerender: function(){
+            let btn = Ext.getCmp('btn-rdi-status');            
+            App.Request.InformationStatus.Store.data.items.forEach(function(rdiStatus){
+                if (rdiStatus.id === '1') {
+                    return;
+                }
+                btn.menu.add({
+                    text:  rdiStatus.data.rdi_status_name,
+                    iconCls: 'add_icon',
+                    handler: function() {
+                        let record = Ext.getCmp('App.Request.Rdi.Grid').getSelectionModel().getSelected();
+                        if ( record ) {
+                            let data = record.data;
+                            if (data.rdi_status_id === '4') {
+                                Ext.FlashMessage.alert(`El requerimiento esta en estado ${data.RdiStatus.rdi_status_name}`);
+                                return;
+                            } else if (rdiStatus.data.rdi_status_id === data.rdi_status_id) {
+                                Ext.FlashMessage.alert(`El requerimiento ya esta en estado ${data.RdiStatus.rdi_status_name}`);
+                                return;
+                            }
+                            w = new App.Request.changeRdiStatusWindow({ title: 'Cambio de estado' });
+                            w.show();
+                            App.Request.Rdi_id = data.rdi_id;
+                            Ext.getCmp('App.Rdi.Request.btnChangeRdiStatusWindow').setText(rdiStatus.data.rdi_status_name);
+                            Ext.getCmp('App.Request.Rdi.Usuario').setValue(data.User.user_username);
+                            Ext.getCmp('App.Request.Rdi.Phone').setValue(data.rdi_phone);
+                            Ext.getCmp('App.Request.Rdi.Organism').setValue(data.rdi_organism);
+                            Ext.getCmp('App.Request.Rdi.Email').setValue(data.User.user_email);
+                            Ext.getCmp('App.Request.Rdi.RdiStatus').setValue(data.RdiStatus.rdi_status_id).setDisabled(true);
+                            Ext.getCmp('App.Request.Rdi.RdiStatusNew').setValue(rdiStatus.data.rdi_status_id).setDisabled(true);
+                            Ext.getCmp('App.Request.Rdi.Description').setValue(data.rdi_description);
+                            let comentary = Ext.getCmp("App.Request.Rdi.Reject.Comentary");
+                            let comentary_box = Ext.getCmp("App.Request.Rdi.Reject.Comentary.Box");
+                            if (rdiStatus.data.rdi_status_id == '2') {
+                                comentary.show();
+                                comentary_box.allowBlank = false;
+                            } else {
+                                comentary.hide();
+                                comentary_box.allowBlank = true;
+                            }
+                        } else {
+                            Ext.FlashMessage.alert('Debe seleccionar un registro');
+                        }
+                    }
+                });
+            });
+        }
+    }
+};
+
+App.ModuleActions[8020] = {
+    id: 'ModuleAction_8020',
+    hidden: true,
+    text: App.Language.General.search,
+    iconCls: 'search_icon_16',
+    enableToggle: true,
+    handler: function(b) {
+        if (b.ownerCt.ownerCt.form.isVisible()) {
+            b.ownerCt.ownerCt.form.hide();
+        } else {
+            b.ownerCt.ownerCt.form.show();
+        }
+        b.ownerCt.ownerCt.doLayout();
     }
 };

@@ -99,7 +99,6 @@ App.Asset.Inventory.window = Ext.extend(Ext.Window, {
                                         aux.push(records[i].data.asset_inventory_auxiliar_proceso_id);
                                     }
 
-                                    console.log(aux.join(','));
                                     Ext.Ajax.request({
                                         url: 'index.php/asset/assetinventory/move',
                                         params: {

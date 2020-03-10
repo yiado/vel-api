@@ -24,7 +24,6 @@ App.Interface.addToModuleMenu = function(ns, button) {
 }
 
 App.Maintainers.getUserModuleMenuBar = function() {
-    //    console.log('>>App.UserModulesMenu: ', App.UserModulesMenu);
     App.UserModulesMenu.push('paneladmin');
     var aux = new Array();
     for (i in App.UserModulesMenu) {
@@ -35,12 +34,8 @@ App.Maintainers.getUserModuleMenuBar = function() {
 };
 
 App.Interface.panel = {
-    //    xtype: 'button',
     iconCls: 'people_icon_32',
     text: 'Panel de Administración',
-
-    //    scale: 'large',
-    //    iconAlign: 'top',
     module: 'panelAdmin',
     hidden: (App.Security.Session.user_type == 'N' || App.Security.Session.user_type == 'P' ? true : false)
 }
@@ -137,19 +132,13 @@ Ext.onReady(function() {
         iconCls: 'list_icon',
         ref: '../btn_menu',
         id: 'btn_menu',
-        menu: { // <-- submenu by nested config object
+        menu: {
             xtype: 'menu',
             plain: true,
             cls: 'menu_class',
             items: App.Maintainers.getUserModuleMenuBar(),
             defaults: {
                 handler: function(btn, state) {
-                    //                    if (state == false) {
-                    //                        return;
-                    //                    }
-
-                    console.log('>>module: ', btn);
-
                     if (btn.module != 'panelAdmin') {
                         Ext.Ajax.request({
                             url: 'index.php/gui/administrator/getModule',

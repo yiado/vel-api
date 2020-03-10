@@ -16,20 +16,13 @@ function InitHTML() {
     try {
         svgDocument = embed.getSVGDocument();
     } catch (exception) {
-        //            alert('The GetSVGDocument interface is not supported');
     }
     if (svgDocument && svgDocument.defaultView) {
         svgWindow = svgDocument.defaultView;
-    }
-    //    else if (embed.window) 
-    //		{
-    //            svgWindow = embed.window;
-    //        } 
-    else {
+    } else {
         try {
             svgDocument = embed.getWindow();
         } catch (exception) {
-            //                alert('SVG fail');
         }
     }
 
@@ -41,12 +34,10 @@ function InitHTML() {
         dchangeStroke(App.Plan.Handler);
         App.Plan.Handler = null;
     }
-    //afterSVGLoad();
 }
 
 function dchangeStroke(handles, zll) {
 
-    //    console.log('>>handles: ', handles);
     var view = new Array();
     var fact = 20;
     view[1] = 1000000.0;

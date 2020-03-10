@@ -626,10 +626,6 @@ App.Asset.PrincipalClase = Ext.extend(Ext.Panel, {
                     'afterrender': function() {
                         App.Asset.Store.load({ params: { node_id: App.Interface.selectedNodeId, start: 0, limit: App.GridLimitAsset } });
                     },
-                    //                'beforerender': function(w)
-                    //                 {
-                    //                    App.Asset.Store.load();
-                    //                 },
                     'rowdblclick': function(grid, rowIndex) {
 
                         if ((App.Security.Actions[4002] === undefined) || (App.Interface.permits == false)) {
@@ -1015,7 +1011,6 @@ App.Asset.exportListWindow = Ext.extend(Ext.Window, {
                             params: App.Asset.Store.baseParams,
                             success: function(form, response) {
                                 document.location = 'index.php/app/download/' + response.result.file;
-                                //                                document.location = 'temp/' + response.result.file;
                                 b.ownerCt.ownerCt.ownerCt.hide();
                             },
                             failure: function(form, action) {

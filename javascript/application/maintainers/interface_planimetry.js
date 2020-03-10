@@ -138,16 +138,7 @@ App.Maintainers.addPlanConfigCategoryWindow = Ext.extend(Ext.Window, {
                         header: App.Language.Infrastructure.node_type,
                         sortable: true,
                         width: 100
-                    }
-                    //                , 
-                    //                {
-                    //                    xtype: 'gridcolumn',
-                    //                    dataIndex: 'node_type_category_name',
-                    //                    header: App.Language.General.category,
-                    //                    sortable: true,
-                    //                    width: 100
-                    //                }
-                    , {
+                    }, {
                         xtype: 'gridcolumn',
                         dataIndex: 'PlanCategory',
                         header: 'Categoria',

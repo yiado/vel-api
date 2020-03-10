@@ -1,13 +1,9 @@
 App.Iot.allowRootGui = true;
 //se agrega el modulo al menu
 App.Interface.addToModuleMenu('iot', {
-    //    xtype: 'button',
     iconCls: 'general_icon_32',
     text: App.Language.Iot.iot,
-
-    //    scale: 'large',
     module: 'Iot',
-    //    iconAlign: 'top'
 });
 //se Crea el tab principal
 App.Iot.Principal = Ext.extend(Ext.TabPanel, {
@@ -22,8 +18,6 @@ App.Iot.Principal.listener = function(node) {
     if (node && node.id) {
         Ext.getCmp('App.Iot.Principal').deviceIot.removeAll();
         Ext.getCmp('App.Iot.Principal').deviceIot.doLayout();
-        //        App.Iot.Device.Store.setBaseParam('node_id', node.id);
-        //        App.Iot.Device.Store.load();
 
         if (typeof Ext.getCmp('App.Iot.Principal') != "undefined") {
 
@@ -35,7 +29,6 @@ App.Iot.Principal.listener = function(node) {
                 success: function(response) {
 
                     response = Ext.decode(response.responseText);
-                    //                    console.log('>> response: ', response);
                     if (response.total > 0) {
 
                         var date_value = response.results[0]['node']['updated_at'].split("T");
@@ -153,7 +146,6 @@ App.Iot.Principal.listener = function(node) {
                                 id: 'App.Iot.Tabs',
                                 listeners: {
                                     'tabchange': function(cb) {
-                                        //                                                console.log('>>cb: ', cb);
                                         params = cb.activeTab.id.split("_");
 
                                         App.Iot.Sensors.Store.setBaseParam('element_id', params[1]);
@@ -170,8 +162,6 @@ App.Iot.Principal.listener = function(node) {
                                                         App.Iot.Sensors.Store.each(function(record) {
 
                                                             data_sensors.push(record.data.data);
-                                                            //                                                            var date_sensors = record.data.created_at.split(" ");
-                                                            //                                                    date_sensors[1] = date_sensors[1].split(".");
                                                             categories.push(record.data.created_at);
 
                                                         });
@@ -200,12 +190,6 @@ App.Iot.Principal.listener = function(node) {
                                                                 verticalAlign: 'middle'
                                                             },
                                                             plotOptions: {
-                                                                //                                                            series: {
-                                                                //                                                                label: {
-                                                                //                                                                    connectorAllowed: false
-                                                                //                                                                },
-                                                                ////                                                pointStart: 2010
-                                                                //                                                            }
                                                             },
                                                             series: [{
                                                                 name: 'Data',
@@ -218,11 +202,6 @@ App.Iot.Principal.listener = function(node) {
                                                                         maxWidth: 500
                                                                     },
                                                                     chartOptions: {
-                                                                        //                                                        legend: {
-                                                                        //                                                            layout: 'horizontal',
-                                                                        //                                                            align: 'center',
-                                                                        //                                                            verticalAlign: 'bottom'
-                                                                        //                                                        }
                                                                     }
                                                                 }]
                                                             }
@@ -231,11 +210,8 @@ App.Iot.Principal.listener = function(node) {
 
 
 
-                                                    } else {
-                                                        // the store didn't load, deal with it
                                                     }
                                                 }
-                                                // scope: this,
                                         });
 
 

@@ -9,7 +9,8 @@ class ServiceTable extends Doctrine_Table {
                 ->from('Service s')
                 ->innerJoin('s.ServiceStatus se')
                 ->innerJoin('s.ServiceType st')
-                ->innerJoin('s.User u');
+                ->innerJoin('s.User u')
+                ->innerJoin('s.RequestEvaluation re');
         $this->addFilter($q, $filters);
         if (!is_null($start)) {
             $q->offset($start);
@@ -26,6 +27,7 @@ class ServiceTable extends Doctrine_Table {
                 ->innerJoin('s.ServiceStatus se')
                 ->innerJoin('s.ServiceType st')
                 ->innerJoin('s.User u')
+                ->leftJoin('s.RequestEvaluation re')
                 ->where('service_id = ?', $service_id);
         return $q->execute();
     }

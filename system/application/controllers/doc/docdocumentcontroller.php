@@ -381,7 +381,6 @@ class DocDocumentController extends APP_Controller {
         }
 
         $docsTable = Doctrine_Core::getTable('DocDocument')->findByNodeDefault($doc_document_id);
-//        print_r($docsTable); exit();
         if ($docsTable) {
             if ($docsTable->count()) {
                 echo '({"total":"' . $docsTable->count() . '", "results":' . $this->json->encode($docsTable->toArray()) . '})';

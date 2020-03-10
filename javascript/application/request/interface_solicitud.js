@@ -11,9 +11,10 @@ App.Request.Principal = Ext.extend(Ext.TabPanel, {
         this.items = [
             new App.Request.Asset(),
             new App.Request.Service(),
-            new App.Request.Information()
+            new App.Request.Rdi()
         ];
         App.Request.ServicesStatus.Store.load();
+        App.Request.InformationStatus.Store.load();
         App.Request.Principal.superclass.initComponent.call(this);
     }
 });
@@ -22,6 +23,7 @@ App.Request.Principal = Ext.extend(Ext.TabPanel, {
 App.Request.Principal.listener = function(node) {
     if (node && node.id) {
         App.Request.Services.Store.load({ params: { node_id: node.id, start: 0, limit: App.GridLimit } });
+        App.Request.Information.Store.load({ params: { node_id: node.id, start: 0, limit: App.GridLimit } });
 
         App.Request.Solicitudes.Store.setBaseParam('node_id', node.id);
         App.Request.Solicitudes.Store.load();
@@ -783,7 +785,7 @@ App.Request.addRechazarWindow = Ext.extend(Ext.Window, {
                     name: 'request_comentario',
                     fieldLabel: App.Language.Request.rejected_by,
                     id: 'App.RequestRechazar.ComentarioAdmin',
-                    allowBlank: false
+                    allowBlank: true
                 }]
             }],
             buttons: [{

@@ -32,11 +32,7 @@ App.Asset.moduleActivate = function() {
 }
 
 App.ModuleActions[4000] = {
-    //    xtype: 'button',
     iconCls: 'equip_icon_32',
     text: App.Language.Asset.assets,
-
-    //    scale: 'large',
-    //    iconAlign: 'top',
     module: 'Asset'
 }

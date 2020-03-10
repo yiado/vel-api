@@ -43,190 +43,205 @@ abstract class BaseUser extends Doctrine_Record {
     public function setTableDefinition() {
         $this->setTableName('user');
         $this->hasColumn('user_id', 'integer', 4, array(
-             'type' => 'integer',
-             'length' => 4,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => true,
-             'autoincrement' => true,
-             ));
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => true,
+            'autoincrement' => true,
+        ));
         $this->hasColumn('user_name', 'string', 150, array(
-             'type' => 'string',
-             'length' => 150,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'notnull' => true,
-             'autoincrement' => false,
-             ));
+            'type' => 'string',
+            'length' => 150,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => true,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('user_username', 'string', 30, array(
-             'type' => 'string',
-             'length' => 30,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'notnull' => true,
-             'autoincrement' => false,
-             ));
+            'type' => 'string',
+            'length' => 30,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => true,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('user_password', 'string', 200, array(
-             'type' => 'string',
-             'length' => 200,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'notnull' => false,
-             'autoincrement' => false,
-             ));
+            'type' => 'string',
+            'length' => 200,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('user_email', 'string', 100, array(
-             'type' => 'string',
-             'length' => 100,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'notnull' => true,
-             'autoincrement' => false,
-             ));
+            'type' => 'string',
+            'length' => 100,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => true,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('user_type', 'string', 10, array(
-             'type' => 'string',
-             'length' => 10,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'notnull' => false,
-             'autoincrement' => false,
-             ));
+            'type' => 'string',
+            'length' => 10,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('language_id', 'integer', 4, array(
-             'type' => 'integer',
-             'length' => 4,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'notnull' => true,
-             'autoincrement' => false,
-             ));
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => true,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('user_expiration', 'date', null, array(
-             'type' => 'date',
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'notnull' => false,
-             'autoincrement' => false,
-             ));
+            'type' => 'date',
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('user_status', 'integer', 4, array(
-             'type' => 'integer',
-             'length' => 4,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'notnull' => true,
-             'autoincrement' => false,
-             ));
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => true,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('user_tree_full', 'integer', 4, array(
-             'type' => 'integer',
-             'length' => 4,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'notnull' => true,
-             'autoincrement' => false,
-             ));
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => true,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('user_default_module', 'integer', 4, array(
-             'type' => 'integer',
-             'length' => 4,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'notnull' => false,
-             'autoincrement' => false,
-             ));
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('user_preference', 'integer', 4, array(
-             'type' => 'integer',
-             'length' => 4,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'default' => '1',
-             'notnull' => true,
-             'autoincrement' => false,
-             ));
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'default' => '1',
+            'notnull' => true,
+            'autoincrement' => false,
+        ));
         $this->hasColumn('user_path', 'integer', 4, array(
-             'type' => 'integer',
-             'length' => 4,
-             'fixed' => false,
-             'unsigned' => false,
-             'primary' => false,
-             'notnull' => false,
-             'autoincrement' => false,
-             ));
+            'type' => 'integer',
+            'length' => 4,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
+        $this->hasColumn('user_token', 'string', 255, array(
+            'type' => 'string',
+            'length' => 255,
+            'fixed' => false,
+            'unsigned' => false,
+            'primary' => false,
+            'notnull' => false,
+            'autoincrement' => false,
+        ));
     }
+
     public function setUp() {
         parent::setUp();
         $this->hasOne('Language', array(
-             'local' => 'language_id',
-             'foreign' => 'language_id'));
+            'local' => 'language_id',
+            'foreign' => 'language_id'));
 
         $this->hasMany('AssetDocument', array(
-             'local' => 'user_id',
-             'foreign' => 'user_id'));
+            'local' => 'user_id',
+            'foreign' => 'user_id'));
 
         $this->hasMany('AssetInventory', array(
-             'local' => 'user_id',
-             'foreign' => 'user_id'));
+            'local' => 'user_id',
+            'foreign' => 'user_id'));
 
         $this->hasMany('AssetLoad', array(
-             'local' => 'user_id',
-             'foreign' => 'user_id'));
+            'local' => 'user_id',
+            'foreign' => 'user_id'));
 
         $this->hasMany('DocVersion', array(
-             'local' => 'user_id',
-             'foreign' => 'user_id'));
+            'local' => 'user_id',
+            'foreign' => 'user_id'));
 
         $this->hasMany('Log', array(
-             'local' => 'user_id',
-             'foreign' => 'user_id'));
+            'local' => 'user_id',
+            'foreign' => 'user_id'));
 
         $this->hasMany('MtnStatusLog', array(
-             'local' => 'user_id',
-             'foreign' => 'user_id'));
+            'local' => 'user_id',
+            'foreign' => 'user_id'));
 
         $this->hasMany('MtnWorkOrder', array(
-             'local' => 'user_id',
-             'foreign' => 'mtn_work_order_creator_id'));
+            'local' => 'user_id',
+            'foreign' => 'mtn_work_order_creator_id'));
 
         $this->hasMany('Plan', array(
-             'local' => 'user_id',
-             'foreign' => 'user_id'));
+            'local' => 'user_id',
+            'foreign' => 'user_id'));
 
         $this->hasMany('Request', array(
-             'local' => 'user_id',
-             'foreign' => 'user_id'));
+            'local' => 'user_id',
+            'foreign' => 'user_id'));
 
         $this->hasMany('Solicitud', array(
-             'local' => 'user_id',
-             'foreign' => 'user_id'));
+            'local' => 'user_id',
+            'foreign' => 'user_id'));
 
         $this->hasMany('SolicitudLog', array(
-             'local' => 'user_id',
-             'foreign' => 'user_id'));
+            'local' => 'user_id',
+            'foreign' => 'user_id'));
 
         $this->hasMany('UserGroupUser', array(
-             'local' => 'user_id',
-             'foreign' => 'user_id'));
-                
+            'local' => 'user_id',
+            'foreign' => 'user_id'));
+
         $this->hasMany('UserProvider', array(
-             'local' => 'user_id',
-             'foreign' => 'user_id'));
-        
+            'local' => 'user_id',
+            'foreign' => 'user_id'));
+
         $this->hasMany('Service', array(
-             'local' => 'user_id',
-             'foreign' => 'user_id'));
-        
+            'local' => 'user_id',
+            'foreign' => 'user_id'));
+
         $this->hasMany('ServiceLog', array(
-             'local' => 'user_id',
-             'foreign' => 'user_id'));
-        
+            'local' => 'user_id',
+            'foreign' => 'user_id'));
+
         $this->hasMany('ServiceType', array(
-             'local' => 'user_id',
-             'foreign' => 'user_id'));
+            'local' => 'user_id',
+            'foreign' => 'user_id'));
+        
+        $this->hasMany('RdiAdmin', array(
+            'local' => 'user_id',
+            'foreign' => 'user_id'));
     }
+
 }

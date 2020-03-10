@@ -243,9 +243,6 @@ App.Maintainers.Infrastructure.Principal = Ext.extend(Ext.TabPanel, {
                                                         App.InfraStructure.InfoConfigNuevo.Store.load();
                                                         App.InfraStructure.InfoConfig.Store.setBaseParam('node_type_id', Ext.getCmp('App.Language.Infrastructure.node_type').getValue());
                                                         App.InfraStructure.InfoConfig.Store.load();
-                                                        //                                                                        response = Ext.decode(response.responseText);
-                                                        //
-                                                        //                                                                        Ext.FlashMessage.alert(response.msg);
                                                     },
                                                     failure: function(response) {
                                                         Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
@@ -576,7 +573,6 @@ App.Maintainers.Infrastructure.Principal = Ext.extend(Ext.TabPanel, {
                                     wmamw.show();
                                 } else {
                                     Ext.Msg.alert(App.Language.Core.notification, response.msg);
-                                    //                                    Ext.FlashMessage.alert(response.msg);
                                 }
                             }
                         });
@@ -650,9 +646,6 @@ App.Maintainers.Infrastructure.Principal = Ext.extend(Ext.TabPanel, {
                                                 App.InfraStructure.DatosDinamicosDisponibles.Store.load();
                                                 App.InfraStructure.DatosDinamicosAsociados.Store.setBaseParam('infra_other_data_attribute_node_type_id', Ext.getCmp('App.InfrastructureOtherData.node_type').getValue());
                                                 App.InfraStructure.DatosDinamicosAsociados.Store.load();
-                                                //                                                                        response = Ext.decode(response.responseText);
-                                                //
-                                                //                                                                        Ext.FlashMessage.alert(response.msg);
                                             },
                                             failure: function(response) {
                                                 Ext.MessageBox.alert(App.Language.General.error, App.Language.General.please_retry_general_error);
