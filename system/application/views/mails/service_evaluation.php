@@ -14,11 +14,11 @@
             <li style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:15px;font-family:helvetica, \'helvetica neue\', arial, verdana, sans-serif;line-height:23px;Margin-bottom:15px;color:#555555;">Requerimiento: <?= $service->service_commentary; ?></li> 
         </ul></td> 
 </tr>
-<tr style="border-collapse:collapse;"> 
-    <td align="left" style="padding:0;Margin:0;padding-left:5px;padding-top:10px;padding-bottom:10px;"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:15px;font-family:helvetica, \'helvetica neue\', arial, verdana, sans-serif;line-height:23px;color:#555555;">
-            <strong>EVALUAR:</strong></p>
+<td align="left" style="padding:0;Margin:0;padding-left:5px;padding-top:10px;padding-bottom:10px;">
+        <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-align: center;font-size:15px;font-family:helvetica, \'helvetica neue\', arial, verdana, sans-serif;line-height:23px;color:#555555;">
+            <strong>¿Está conforme con el resultado del requerimiento?</strong>
+        </p>
     </td> 
-</tr>
 <tr style="border-collapse:collapse;"> 
     <td align="left" style="padding:0;Margin:0;padding-top:20px;padding-left:40px;padding-right:40px;"> 
         <table class="es-left" cellspacing="0" cellpadding="0" align="left" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;float:left;max-width: 170px;"> 
@@ -27,8 +27,8 @@
                     <table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;"> 
                         <tr style="border-collapse:collapse;"> 
                             <td style="padding:0;Margin:0;font-size:0px;" align="center">
-                                <a href="<?= base_url() . "service/evaluation/?t={$service->service_token}&opc=no&id={$service->service_id}"; ?>">
-                                <img class="adapt-img" src="https://ezvucn.stripocdn.email/content/guids/CABINET_9b10630b9354049ca9263a000ae8999b/images/79861583698623758.jpg" alt style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic;" width="95">
+                                <a href="<?= base_url() . "index.php/request/evaluation/service/{$service->service_token}/2/{$service->service_id}"; ?>">
+                                <img class="adapt-img" src="<?= base_url(); ?>style/emails/no_conforme.png" alt style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic;" width="80">
                                 </a>
                             </td> 
                         </tr> 
@@ -41,8 +41,8 @@
                     <table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;"> 
                         <tr style="border-collapse:collapse;"> 
                             <td style="padding:0;Margin:0;font-size:0px;" align="center">
-                                <a href="<?= base_url() . "service/evaluation/?t={$service->service_token}&opc=si&id={$service->service_id}"; ?>">
-                                <img class="adapt-img" src="https://ezvucn.stripocdn.email/content/guids/CABINET_9b10630b9354049ca9263a000ae8999b/images/86521583698538786.jpg" alt style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic;" width="95">
+                                <a href="<?= base_url() . "index.php/request/evaluation/service/{$service->service_token}/3/{$service->service_id}"; ?>">
+                                <img class="adapt-img" src="<?= base_url(); ?>style/emails/conforme.png" alt style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic;" width="80">
                                 </a>
                             </td> 
                         </tr> 
