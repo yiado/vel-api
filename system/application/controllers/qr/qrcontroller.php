@@ -123,7 +123,7 @@ class QrController extends APP_Controller {
         $servicios = array(
             array(
                 'service_type_id' => 0,
-                'service_type_name' => "RDI",
+                'service_type_name' => "Información",
                 'user_id' => 4,
                 'service_type_comentary' => null
             )
@@ -254,8 +254,8 @@ class QrController extends APP_Controller {
 
                 $conn->commit();
 
-                //Enviar correo de Alerta de creación de Service
-                $rdi->sendNotificationRecibido();
+                //Enviar correo de Alerta de creación de Rdi
+                $rdi->sendNotificationRecibido($node);
             } else {
                 /**
                  * Solicitud de tipo servicio
@@ -266,8 +266,8 @@ class QrController extends APP_Controller {
                 $service->service_type_id = $this->input->post('service_type_id');
                 $service->service_status_id = 1;
                 $service->request_evaluation_id = 1;
-                $service->service_organism = 'UChile';
-                $service->service_phone = 987654321;
+                //$service->service_organism = 'UChile';
+                //$service->service_phone = 987654321;
                 $service->service_commentary = $this->input->post('service_commentary');
                 $service->save();
 
@@ -283,8 +283,7 @@ class QrController extends APP_Controller {
                 $conn->commit();
 
                 //Enviar correo de Alerta de creación de Service
-                $service->sendNotificationAdministrador($node);
-                $service->sendNotificationRecibido();
+                $service->sendNotificationRecibido($node);
             }
         } catch (Exception $e) {
             //Si hay error, rollback de los cambios en la base de datos

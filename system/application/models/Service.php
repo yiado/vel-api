@@ -31,6 +31,7 @@ class Service extends BaseService {
                 ),
                 true
         );
+        $CI->load->library('NotificationUser');
         $CI->notificationuser->mail($this->User->user_email, 'Solicitud de servicio recibida', $body);
         $CI->notificationuser->mail($this->ServiceType->User->user_email, 'Nueva Solicitud de Servicio', $body);
     }
