@@ -4,7 +4,7 @@ if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
-class cron extends APP_Controller {
+class cron extends Controller {
 
     public function __construct() {
         parent::__construct();
