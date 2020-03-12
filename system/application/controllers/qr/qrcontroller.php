@@ -239,6 +239,7 @@ class QrController extends APP_Controller {
                 $rdi->node_id = $this->input->post('node_id');
                 $rdi->user_id = $user->user_id;
                 $rdi->rdi_status_id = 1;
+                $rdi->rdi_admin_id = 1;
                 $rdi->request_evaluation_id = 1;
                 $rdi->rdi_description = $this->input->post('service_commentary');
                 $rdi->save();
