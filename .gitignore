@@ -17,4 +17,4 @@ asset_doc/
 system/logs/*.php
 system/application/config/config.php
 system/application/config/database.php
-vendor/
+composer.lock/
